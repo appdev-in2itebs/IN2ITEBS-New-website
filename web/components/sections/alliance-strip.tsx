@@ -12,7 +12,7 @@ export function AllianceStrip() {
           src={p.logo as string}
           alt={p.name}
           loading="lazy"
-          className="h-7 w-auto max-w-[120px] object-contain opacity-65 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 hover:drop-shadow-[0_0_12px_oklch(var(--color-gold-soft)/0.6)]"
+          className="h-7 w-auto max-w-[120px] object-contain opacity-100 transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_12px_oklch(var(--color-gold-soft)/0.6)]"
         />
       ))}
     </div>

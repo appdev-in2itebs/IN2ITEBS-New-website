@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Container, Section } from "@/components/ui/container";
@@ -11,6 +13,8 @@ import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { PillarsSection } from "@/components/sections/pillars";
 import { stats, footerCertifications } from "@/content/site";
+import { LinkedInMark } from "@/components/ui/linkedin-mark";
+import { leadership, leaderInitials } from "@/content/leadership";
 
 export const metadata = pageMetadata("/about/", {
   title: "Who We Are",
@@ -41,21 +45,6 @@ const structureReasons = [
 /** Footprint exactly as the deck states — Blueprint §4 / proof register. */
 const deliveryCentres = ["Bengaluru", "Hyderabad", "Delhi NCR", "Bhubaneswar"];
 const salesOffices = ["Mumbai", "Chennai", "Singapore", "Dubai", "Nairobi", "Johannesburg"];
-
-const leadership = [
-  {
-    name: "Rudra Shankar Shatapathy",
-    title: "Managing Director",
-    photo: "/team/rudra-shankar-shatapathy.png",
-    bio: "Rudra has provided vision and dedicated leadership in building and aligning solutions for clients across multiple geographies, helping IT organisations expand across India, the USA, Africa and Singapore. His focus has been on simplifying the corporate world by connecting technology seamlessly to business. He holds an MBA in International Business and a B.Tech in Mechanical Engineering.",
-  },
-  {
-    name: "Parichay Joshi",
-    title: "Chief Executive Officer / Director",
-    photo: "/team/parichay-joshi.png",
-    bio: "Parichay is a sales leader with rich experience across business applications, services and IT infrastructure. He has worked across industries and customer segments, bringing in marquee deals and first-of-many engagements. He has worked extensively with customer organisations to transform them into digital enterprises by intelligently connecting people, things and businesses.",
-  },
-];
 
 export default function AboutPage() {
   return (
@@ -150,7 +139,9 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* CREDENTIALS & CERTIFICATIONS */}
+      {/* CREDENTIALS & CERTIFICATIONS — the headline credentials only. The awards themselves, the
+          certificates and the certification text live on /accreditation-awards/, which is a page of
+          its own again rather than a redirect into this one. */}
       <Section tone="light">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
@@ -170,10 +161,18 @@ export default function AboutPage() {
               </StaggerItem>
             ))}
           </Stagger>
+          <Reveal className="mt-10">
+            <Link
+              href="/accreditation-awards/"
+              className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-gold hover:underline"
+            >
+              See our awards and accreditation <ArrowUpRight aria-hidden size={17} />
+            </Link>
+          </Reveal>
         </Container>
       </Section>
 
-      {/* LEADERSHIP — approved profiles only */}
+      {/* LEADERSHIP — the shared list in content/leadership.ts, also shown on the homepage. */}
       <Section tone="white" id="leadership">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
@@ -186,20 +185,45 @@ export default function AboutPage() {
           </Reveal>
           <Stagger className="grid gap-6 md:grid-cols-2">
             {leadership.map((leader) => (
-              <StaggerItem key={leader.name} className="h-full">
+              <StaggerItem key={leader.slug} className="h-full">
                 <Card tone="white" className="flex h-full flex-col gap-5 sm:flex-row sm:gap-6">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={leader.photo}
-                    alt={leader.name}
-                    className="h-28 w-28 shrink-0 rounded-surface object-cover object-top ring-1 ring-border-subtle"
-                  />
+                  {leader.photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={leader.photo}
+                      alt={leader.name}
+                      className="h-28 w-28 shrink-0 rounded-surface bg-logo-surface object-cover object-top ring-1 ring-border-subtle"
+                    />
+                  ) : (
+                    // No cleared photograph yet — a monogram rather than a stand-in portrait.
+                    <span
+                      aria-hidden
+                      className="flex h-28 w-28 shrink-0 items-center justify-center rounded-surface bg-gold/10 text-2xl font-semibold tracking-[-0.02em] text-gold ring-1 ring-gold/25"
+                    >
+                      {leaderInitials(leader.name)}
+                    </span>
+                  )}
                   <div className="flex flex-col gap-2.5">
                     <div>
                       <h3 className="text-h3 font-bold leading-tight text-foreground">{leader.name}</h3>
                       <span className="label-caps text-gold">{leader.title}</span>
                     </div>
                     <p className="text-[0.92rem] leading-relaxed text-foreground-muted">{leader.bio}</p>
+                    {/* The homepage ribbon sends people here for the full profile, so the link it
+                        shows has to be here too. */}
+                    {leader.linkedin ? (
+                      <a
+                        href={leader.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-auto inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-gold hover:underline"
+                      >
+                        <LinkedInMark />
+                        <span>
+                          LinkedIn<span className="sr-only"> profile for {leader.name}</span>
+                        </span>
+                      </a>
+                    ) : null}
                   </div>
                 </Card>
               </StaggerItem>

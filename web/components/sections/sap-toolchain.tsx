@@ -35,7 +35,7 @@ export function SapToolchain() {
               <Icon size={22} strokeWidth={1.25} aria-hidden />
             </span>
             <div className="flex flex-col gap-1.5">
-              <span className="font-semibold text-foreground transition-colors group-hover:text-gold">{name}</span>
+              <span className="font-semibold text-foreground transition-colors group-hover:text-action">{name}</span>
               <span className="text-sm leading-snug text-foreground-muted">{role}</span>
             </div>
           </li>

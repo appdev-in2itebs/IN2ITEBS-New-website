@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import Link from "next/link";
@@ -127,8 +128,43 @@ export default function SuccessFactorsPage() {
         </Container>
       </Section>
 
-      {/* ACCELERATORS & HIGHLIGHTS */}
+      {/* THE SUITE, AS SAP DRAWS IT */}
       <Section tone="light">
+        <Container>
+          <Reveal className="mb-12 max-w-2xl">
+            <SectionHeading
+              eyebrow="The HCM suite"
+              lead="SAP Human Capital Management is a human resources management system designed around what people need, how they work, and what motivates and inspires them to be and do their best. It embeds insight and action planning directly into HR systems and processes, so improvement is continuous rather than annual."
+            >
+              Connected, empowered, <Accent>supported</Accent>.
+            </SectionHeading>
+          </Reveal>
+          {/* SAP's own HCM schematic, as the existing site's SuccessFactors page uses it. It is drawn
+              for a white ground, so it sits on a white card rather than the section tint. */}
+          <Reveal>
+            <Card tone="white">
+              <figure>
+                <Image
+                  src="/services/successfactors-hcm-suite.png"
+                  alt="The SAP Human Capital Management suite: a core of connected, empowered and supported, ringed by hiring and onboarding, culture and belonging, pay and benefits, guidance and efficiency, appreciation and impact, opportunities and growth, feedback and improvement, learning and development, and nurture and engagement — between intelligent enterprise and business transformation, over guided workflows, analytics and insights, an extensible foundation and localisation frameworks."
+                  width={1000}
+                  height={1052}
+                  sizes="(min-width: 768px) 34rem, 100vw"
+                  className="mx-auto h-auto w-full max-w-[34rem] rounded-surface bg-logo-surface"
+                />
+                <figcaption className="mx-auto mt-6 max-w-[70ch] text-center text-sm leading-relaxed text-foreground-muted">
+                  Individualised experiences and strategic solutions that let employees reach their potential — across
+                  employee experience management, core HR and payroll, talent management, and HR analytics and workforce
+                  planning.
+                </figcaption>
+              </figure>
+            </Card>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* ACCELERATORS & HIGHLIGHTS */}
+      <Section tone="white">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
             <SectionHeading

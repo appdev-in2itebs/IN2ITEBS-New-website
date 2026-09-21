@@ -54,6 +54,8 @@ export interface Office {
   country: string;
   email?: string;
   phone?: string;
+  /** City centre, for the office map. [latitude, longitude] in degrees. */
+  coords: [number, number];
 }
 
 export interface NavItem {
@@ -93,4 +95,52 @@ export interface Insight {
   date: string;
   category: string;
   excerpt: string;
+  /** The article's own image from the live site, under /public/insights. */
+  image?: string;
+  /** Exactly the day-and-month label the live listing prints, for articles that state no year. */
+  dateLabel?: string;
+  /** Where the card goes when this listing entry is not an article page on this site. */
+  href?: string;
+}
+
+export interface Testimonial {
+  slug: string;
+  /** Verbatim from the client's published quote on /customer-stories/ — never paraphrased. */
+  quote: string;
+  name: string;
+  role: string;
+  /** /testimonials/* — the speaker's own portrait, the same file the live site's slider serves. */
+  photo: string;
+  /** Slug in content/clients.ts; the section shows that client's mark beside the attribution. */
+  clientSlug: string;
+}
+
+export interface Leader {
+  slug: string;
+  name: string;
+  title: string;
+  bio: string;
+  /** /team/*, or null until a cleared photograph is supplied — the card falls back to a monogram. */
+  photo: string | null;
+  linkedin?: string;
+}
+
+export interface Award {
+  slug: string;
+  /** The award's name exactly as the existing site captions it on /accreditation-awards/. */
+  name: string;
+  /** /awards/* — the same certificate photograph that page shows, re-encoded for the web. */
+  image: string;
+  width: number;
+  height: number;
+}
+
+export interface Accreditation {
+  slug: string;
+  /** Heading verbatim from /accreditation-awards/, e.g. "ISO 9001:2008 (Quality Management)". */
+  name: string;
+  /** One paragraph per paragraph on that page, verbatim. */
+  body: string[];
+  /** /awards/* — the badge the existing page shows beside this heading. All five carry one. */
+  logo: string;
 }

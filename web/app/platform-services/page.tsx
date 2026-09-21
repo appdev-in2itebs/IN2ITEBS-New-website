@@ -30,6 +30,35 @@ const lifecycle = [
   "Integration",
 ];
 
+/** Methods and accelerators that run beneath every platform engagement. Moved here from the
+ *  homepage on 2026-09-17 at the owner's request; the names, the copy and the links are unchanged. */
+const accelerators = [
+  {
+    code: "01",
+    name: "ECC Prism™",
+    copy: "A fact-based assessment for the move from SAP ECC to S/4HANA.",
+    href: "/ecc-prism/",
+  },
+  {
+    code: "02",
+    name: "FastForward",
+    copy: "Our delivery method built on SAP Activate and accelerated by pre-built assets.",
+    href: "/delivery-excellence/#fastforward",
+  },
+  {
+    code: "03",
+    name: "Health Check 360",
+    copy: "Machine-scale diagnosis across configuration, adoption and AI readiness.",
+    href: "/sap-enterprise-solutions/health-check-360/",
+  },
+  {
+    code: "04",
+    name: "Development Factory",
+    copy: "A governed plan, build and run system for dependable delivery at scale.",
+    href: "/delivery-excellence/#factory",
+  },
+];
+
 // SAP / Salesforce / Workday cards, drawn from platformPractices (Blueprint §6).
 const cardCopy: Record<string, { eyebrow: string; bullets: string[]; cta: string }> = {
   successfactors: {
@@ -173,6 +202,42 @@ export default function PlatformServicesPage() {
                 </StaggerItem>
               );
             })}
+          </Stagger>
+        </Container>
+      </Section>
+
+      {/* METHODS AND ACCELERATORS */}
+      <Section tone="white">
+        <Container>
+          <Reveal className="mb-12 max-w-2xl">
+            <SectionHeading
+              eyebrow="Methods and accelerators"
+              lead="Our methods and accelerators turn programme complexity into explicit decisions, checkpoints and operating outcomes."
+            >
+              Built to make delivery <Accent>observable</Accent>.
+            </SectionHeading>
+          </Reveal>
+
+          <Stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {accelerators.map((item) => (
+              <StaggerItem key={item.name} className="h-full">
+                <Link href={item.href} className="group block h-full">
+                  <Card className="flex h-full flex-col">
+                    <span className="text-[0.65rem] font-semibold tabular-nums tracking-[0.14em] text-gold">
+                      {item.code}
+                    </span>
+                    <h3 className="mt-3 text-h3 font-bold text-foreground transition-colors group-hover:text-action">
+                      {item.name}
+                    </h3>
+                    <p className="mt-3 text-[0.95rem] leading-relaxed text-foreground-muted">{item.copy}</p>
+                    <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-action">
+                      Explore
+                      <ArrowUpRight size={16} strokeWidth={1.5} />
+                    </span>
+                  </Card>
+                </Link>
+              </StaggerItem>
+            ))}
           </Stagger>
         </Container>
       </Section>

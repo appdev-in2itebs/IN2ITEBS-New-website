@@ -1,10 +1,13 @@
 import type { NavItem, PracticeSummary } from "./types";
+import { servicesMenu } from "./legacy-services";
 
 /** Three-pillar architecture (Content Blueprint, Deck 2). */
 
 // SAP flagship sub-pages (the deep-dive set).
 export const sapChildren: NavItem[] = [
   { label: "SAP Overview", href: "/sap-enterprise-solutions/" },
+  { label: "RISE with SAP", href: "/sap-enterprise-solutions/rise-with-sap/" },
+  { label: "SAP GROW Fast", href: "/sap-enterprise-solutions/grow-fast/" },
   { label: "RISE vs GROW", href: "/sap-enterprise-solutions/rise-vs-grow/" },
   { label: "Migrations", href: "/sap-enterprise-solutions/migrations/" },
   { label: "SuccessFactors / HXM", href: "/sap-enterprise-solutions/successfactors/" },
@@ -132,19 +135,67 @@ export const whatWeDoMenu: NavItem[] = [
   },
 ];
 
+/** The Industries dropdown, item for item as the existing site's menu lists it, each to that page. */
+export const industriesMenu: NavItem[] = [
+  { label: "Automobiles", href: "/industries/automobiles/" },
+  { label: "FMCG", href: "/industries/fmcg/" },
+  { label: "Manufacturing", href: "/industries/manufacturing/" },
+  { label: "Textiles", href: "/industries/textiles/" },
+  { label: "Professional Services", href: "/industries/professional-services/" },
+  { label: "Heavy Engineering", href: "/industries/heavy-engineering/" },
+  { label: "Retail & Ecommerce", href: "/industries/retail-ecommerce/" },
+  { label: "Energy and Utilities", href: "/industries/energy-and-utilities/" },
+  { label: "Chemical & Fertilizers", href: "/industries/chemical-fertilizers/" },
+  { label: "Banking, Financial Services & Insurance", href: "/industries/banking/" },
+  { label: "Government & Public Enterprises", href: "/industries/government/" },
+  { label: "Pharma, Healthcare & Life Science", href: "/industries/healthcare-life-science/" },
+  { label: "Media & Telecommunications", href: "/industries/telecom/" },
+  { label: "Engineering & Constructions (ECNO)", href: "/industries/engineering-constructions-ecno/" },
+];
+
+/** The Partners dropdown, in the existing site's order; each goes to that partner's own page. */
+export const partnersMenu: NavItem[] = [
+  { label: "SAP", href: "/partners/sap/" },
+  { label: "SAP Qualtrics", href: "/partners/sap-qualtrics/" },
+  { label: "SAP Concur", href: "/partners/sap-concur/" },
+  { label: "Microsoft", href: "/partners/microsoft/" },
+  { label: "Oracle", href: "/partners/oracle/" },
+  { label: "Open Text", href: "/partners/open-text/" },
+  { label: "IBM", href: "/partners/ibm/" },
+  { label: "Newgen", href: "/partners/newgen/" },
+  { label: "HP", href: "/partners/hp/" },
+  { label: "AWS", href: "/partners/aws/" },
+];
+
+/**
+ * The primary navigation, rebuilt on 2026-09-19 to the existing in2itebs.com menu: Home, Services
+ * (its eight-group mega-menu), Industries, Partners, About, Contact and Career, with the same
+ * items under each. The landing page itself is untouched; only the header follows the old site.
+ */
 export const primaryNav: NavItem[] = [
-  { label: "Services", href: "/what-we-do/", children: whatWeDoMenu },
-  { label: "Industries", href: "/industries/" },
-  { label: "Client stories", href: "/case-studies/" },
-  { label: "Partners", href: "/partners/" },
-  { label: "Careers", href: "/careers/" },
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services/", children: servicesMenu },
+  { label: "Industries", href: "/industries/", children: industriesMenu },
+  { label: "Partners", href: "/partners/", children: partnersMenu },
   {
     label: "About",
     href: "/about/",
     children: [
-      { label: "Who We Are", href: "/about/" },
-      { label: "Why In2IT EBS", href: "/why-in2it-ebs/" },
-      { label: "Insights", href: "/insights/" },
+      { label: "Who We Are?", href: "/about/who-we-are/" },
+      { label: "Our Leadership", href: "/about/our-leadership/" },
+      { label: "Accreditation", href: "/accreditation-awards/" },
+      { label: "Customer Stories", href: "/about/customer-stories/" },
+      { label: "Blogs & Articles", href: "/insights/" },
+    ],
+  },
+  { label: "Contact", href: "/contact/" },
+  {
+    label: "Career",
+    href: "/careers/",
+    children: [
+      { label: "Our Culture", href: "/careers/our-culture/" },
+      { label: "Events & Celebrations", href: "/careers/events-celebrations/" },
+      { label: "Current Openings", href: "/careers/current-openings/" },
     ],
   },
 ];
@@ -156,6 +207,7 @@ export const footerNav = {
   company: [
     { label: "Who We Are", href: "/about/" },
     { label: "Why In2IT EBS", href: "/why-in2it-ebs/" },
+    { label: "Our Awards", href: "/accreditation-awards/" },
     { label: "Industries", href: "/industries/" },
     { label: "Clients & Case Studies", href: "/case-studies/" },
     { label: "Partners & Ecosystem", href: "/partners/" },

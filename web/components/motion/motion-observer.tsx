@@ -30,15 +30,24 @@ export function MotionObserver() {
     flags();
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries)
+        for (const entry of entries) {
+          const el = entry.target as HTMLElement;
+          // `data-reveal-repeat` keeps a reveal under observation and resets it on the way out, so
+          // the copy over the video sections plays its entrance every time you come back to them
+          // rather than once per page load. Everything else still reveals once and is dropped.
+          const repeats = el.dataset.revealRepeat !== undefined;
           if (entry.isIntersecting) {
-            (entry.target as HTMLElement).dataset.reveal = "in";
-            observer.unobserve(entry.target);
+            el.dataset.reveal = "in";
+            if (!repeats) observer.unobserve(el);
+          } else if (repeats) {
+            delete el.dataset.reveal;
           }
+        }
       },
       { rootMargin: "0px 0px -8% 0px" },
     );
-    for (const el of targets) if (el.dataset.reveal !== "in") observer.observe(el);
+    for (const el of targets)
+      if (el.dataset.reveal !== "in" || el.dataset.revealRepeat !== undefined) observer.observe(el);
     // Decorative loops keep animating only while on screen (`[data-motion-offscreen="true"]` pauses
     // them in globals.css).
     const loops = Array.from(document.querySelectorAll<HTMLElement>(".client-ribbon"));

@@ -12,3 +12,12 @@ web/.impeccable/
 
 # Source clips dropped at the repo root before encoding into web/public/video/
 /*.mp4
+
+# Local tunnel tooling: the ngrok agent and the account token behind run.bat.
+# The binary is a 12 MB download and the token is a credential — neither belongs in git.
+/tools/ngrok.exe
+/tools/ngrok.yml
+/tools/ngrok-domain.txt
+
+# Per-machine Claude Code permissions; the shared launch config stays.
+.claude/settings.local.json

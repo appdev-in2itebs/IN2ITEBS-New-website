@@ -430,7 +430,7 @@ function ResultPanel({
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-foreground transition-[transform,color] duration-200 ease-out hover:text-gold active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+          className="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-foreground transition-[transform,color] duration-200 ease-out hover:text-action active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
         >
           <RotateCcw size={15} strokeWidth={1.75} aria-hidden />
           Start over

@@ -1,65 +1,99 @@
-# In2IT EBS — Website Build
+# In2IT EBS — corporate website
 
-Working repository and documentation for the In2IT EBS production website build. This project is run as an ordered, agent-driven workflow with a human owner reviewing each stage.
+The In2IT EBS website (https://in2itebs.com), rebuilt as a Next.js 15 App Router application with
+typed in-repo content, a hardened enquiry API, and a one-click local preview with a public ngrok
+link for reviewers.
 
-**Current stage (7 September 2026):** implemented website under remediation and local QA, not approved for production release. The phased audit/transcript checklist is in [WEBSITE_REMEDIATION_PLAN.md](docs/WEBSITE_REMEDIATION_PLAN.md). Current design tokens and interaction rules are described in [DESIGN.md](DESIGN.md).
+## Repository layout
 
-Run from `web/`: `npm ci`, `npm run check`, `npm run build`, then `npm start`. The website uses **http://127.0.0.1:3107/**. Port 3000 and its ngrok tunnel belong to In2CLM and must not be changed. See [the remediation runbook](docs/REMEDIATION_RUNBOOK.md) for configuration, tests, preview limitations and rollback.
-
-## Sources of Truth
-- **Primary:** the In2IT EBS Corporate Profile deck (`In2IT EBS Corporate Profile _200526.pdf`). This is the single authoritative source. Nothing in the build may contradict or omit a meaningful point from it.
-- **Secondary:** the existing website content captured in `scraped/`. This is a UX-only reference (navigation, flow, CTA placement, SEO phrasing, service discoverability). It may improve the experience but may never override, reduce, omit, or contradict the deck.
-
-## Governance Rules
-- Do not invent facts, numbers, client names, partner claims, certifications, office addresses, case studies, awards, metrics, or service capabilities.
-- If anything is unclear, conflicting, confidential, legally sensitive, outdated, or risky — stop and ask the human owner.
-- Sensitive items (client logos, named clients, partner badges, credentials, proprietary accelerators, exact metrics, office addresses, subsidiary details, confidential claims) are tracked in `docs/LEGAL_REVIEW.md` and must be cleared by a human before launch.
-- Every stage output reports: what was completed, what needs review, assumptions made, open questions, and whether we may proceed.
-
-## Coding Gate
-Coding must not begin until `CONTENT_SOURCE_OF_TRUTH.md`, `CONTENT_PARITY_CHECKLIST.md`, `OLD_WEBSITE_UX_INSIGHTS.md`, `INFORMATION_ARCHITECTURE.md`, `COPY_GUIDELINES.md`, `DESIGN_SYSTEM.md`, `DATA_MODEL.md`, and `COMPONENT_SPEC.md` have been created and reviewed. See `docs/AGENT_WORKFLOW.md`.
-
-## The 14-Step Workflow
-1. Project Setup → 2. Content Extraction → 3. Content Parity → 4. Old Website UX Improvement → 5. Information Architecture → 6. Website Copy → 7. Design System → 8. Data Model → 9. Component Architecture → 10. Frontend Build → 11. SEO and Conversion → 12. QA and Accessibility Audit → 13. Deployment → 14. Final Human Review.
-
-Full detail, ownership, and dependencies are in `docs/AGENT_WORKFLOW.md`.
-
-## Documentation Index (`/docs`)
-The following table is a **historical Step 1 scaffold**, not the current completion ledger. Use WEBSITE_REMEDIATION_PLAN.md and REMEDIATION_RUNBOOK.md for current status; retain the original source and approval records below.
-
-| Document | Status | Owner Agent |
-| --- | --- | --- |
-| PROJECT_BRIEF.md | In Progress | Project Setup Agent |
-| CONTENT_SOURCE_OF_TRUTH.md | Pending Extraction | Content Extraction Agent |
-| CONTENT_PARITY_CHECKLIST.md | Pending Extraction | Content Parity Agent |
-| OLD_WEBSITE_UX_INSIGHTS.md | Pending Extraction | Old Website UX Agent |
-| INFORMATION_ARCHITECTURE.md | Not Started | Information Architecture Agent |
-| COPY_GUIDELINES.md | Not Started | Copywriting Agent |
-| DESIGN_SYSTEM.md | Pending Human Input | Design System Agent |
-| BRAND_ASSETS.md | Pending Human Input | Design System Agent |
-| COMPONENT_SPEC.md | Not Started | Component Architecture Agent |
-| DATA_MODEL.md | Not Started | Data Model Agent |
-| SEO_STRATEGY.md | Not Started | SEO & Conversion Agent |
-| ACCESSIBILITY_REQUIREMENTS.md | Not Started | QA & Accessibility Agent |
-| PERFORMANCE_REQUIREMENTS.md | Not Started | QA & Accessibility Agent |
-| LEGAL_REVIEW.md | Needs Review | Project Setup Agent / Human Reviewer |
-| QA_TEST_PLAN.md | Not Started | QA & Accessibility Agent |
-| DEPLOYMENT_RUNBOOK.md | Not Started | Deployment Agent |
-| ENVIRONMENT_VARIABLES.md | Not Started | Deployment Agent |
-| ANALYTICS_AND_CONVERSION.md | Not Started | SEO & Conversion Agent |
-| AGENT_WORKFLOW.md | Needs Review | Project Setup Agent |
-| OPEN_QUESTIONS.md | In Progress | Project Setup Agent |
-| FINAL_REVIEW_REPORT.md | Not Started | Final Review Agent / Human Reviewer |
-
-## Repository Layout
 ```
 .
-├── In2IT EBS Corporate Profile _200526.pdf   # PRIMARY source of truth (do not edit)
-├── scraped/                                  # SECONDARY source: existing site content (UX reference)
-├── docs/                                     # project documentation (21 files, see index above)
-├── README.md                                 # this file
-└── CHANGELOG.md                              # change log
+├── README.md                 # this file
+├── run.bat                   # Windows: build, serve on :3107 and open a public ngrok link
+├── tools/                    # ngrok config template + notes (real token is git-ignored)
+│   ├── README.md
+│   └── ngrok.example.yml
+├── .claude/launch.json       # dev-server entry for the Claude Code browser pane (port 3117)
+└── web/                      # the Next.js application (see web/README.md)
+    ├── app/                  # routes (App Router), API routes under app/api/
+    ├── components/           # layout, sections, ui, media, motion, forms, seo
+    ├── content/              # typed content modules: nav, services, clients, offices, …
+    ├── lib/                  # metadata, JSON-LD, lead API service, utilities
+    ├── public/               # brand SVGs, logos, photos, hero frame sequences, videos
+    ├── scripts/              # build check, hero-frame extraction, YouTube feed, world map
+    ├── tests/                # unit tests (node:test) and Playwright browser specs
+    └── .env.example          # every environment variable, documented
 ```
 
-## How This Repo Progresses
-Work advances one workflow step at a time, each gated by human review. Open questions awaiting the owner are collected in `docs/OPEN_QUESTIONS.md`. The next step is **Step 2 — Content Extraction**, which begins only when the human owner confirms.
+## Quick start
+
+Requires Node.js 20 or newer and npm.
+
+```bash
+cd web
+npm ci
+npm run dev        # http://127.0.0.1:3107 with hot reload
+```
+
+Production build and serve (the build refuses to run without `SITE_ENV`):
+
+```bash
+cd web
+SITE_ENV=preview npm run build
+SITE_ENV=preview npm start
+```
+
+On Windows, `run.bat` at the repository root does all of that and then opens a public link through
+ngrok. See [tools/README.md](tools/README.md) for the one-time ngrok setup.
+
+## Environment variables
+
+Copy `web/.env.example` to `web/.env.local` and fill in what you need. `.env.local` is git-ignored.
+
+| Variable | Required | Meaning |
+| --- | --- | --- |
+| `SITE_ENV` | build + start | `preview` (default for reviews) or `production` (approved releases only). |
+| `NEXT_PUBLIC_SITE_URL` | build | Public origin used for canonical URLs, sitemap and the enquiry origin allow-list. Defaults to `https://in2itebs.com`. |
+| `LEAD_WEBHOOK_URL` | for lead delivery | HTTPS endpoint that durably accepts an enquiry before returning 2xx. Unset: the form answers 503 asking the visitor to email instead, and `/api/health/` reports `leadDeliveryConfigured: false`. |
+| `LEAD_WEBHOOK_TOKEN` | for lead delivery | Bearer token sent to the webhook. |
+| `ALLOWED_ORIGINS` | optional | Extra browser origins (comma-separated) allowed to submit the enquiry form, e.g. a staging host. |
+| `TRUST_PROXY_HEADERS` | optional | `1` only behind an ingress that overwrites `X-Forwarded-*`; leave `0` otherwise (see the comments in `.env.example`). |
+
+Secrets never go in source control: not the lead webhook token, not the ngrok authtoken. Templates
+(`web/.env.example`, `tools/ngrok.example.yml`) are committed; the real files are ignored.
+
+## API routes
+
+| Route | Method | Purpose |
+| --- | --- | --- |
+| `/api/health/` | GET | Liveness for run.bat and deploy checks. Returns app name, release, `siteEnv` and whether lead delivery is configured. |
+| `/api/lead/` | POST | The enquiry form. Validates with `lib/lead-schema.ts`, enforces a browser-origin allow-list and a per-address rate limit, then forwards to the configured webhook (`lib/lead-service.ts`). |
+| `/api/gone/` | GET | Serves 410 for retired URLs listed in `content/redirects.mjs`. |
+
+Old-site URLs are redirected by `content/redirects.mjs` (wired through `next.config.mjs`), so
+existing inbound links keep working.
+
+## Quality checks
+
+Run from `web/`:
+
+| Command | What it does |
+| --- | --- |
+| `npm run check` | Prettier, ESLint, TypeScript and the unit tests. |
+| `npm test` | Unit tests only (content integrity, metadata, redirects, palette rules). |
+| `npm run test:browser` | Playwright specs against the built site on :3107 (`npm run build` first, or let Playwright start it). |
+| `npm run check:full` | Everything above plus the production build. |
+
+## Deployment notes
+
+- The app is a standard Next.js server (`next start`); it prerenders every marketing route and
+  runs the API routes on Node.
+- Set `SITE_ENV=production` and `NEXT_PUBLIC_SITE_URL` before `next build` for a real release.
+- Keep port 3107 for this site on shared machines; 3000 belongs to another project.
+
+## Brand and content
+
+- Logos and brand SVGs: `web/public/brand/`. Client, partner and certification marks: `web/public/logos/`.
+- All copy and structured data are typed modules in `web/content/`; there is no CMS.
+- The homepage hero plays WebP frame sequences on a canvas (`web/public/hero-frames/`), regenerated
+  with `web/scripts/extract-hero-frames.mjs`.

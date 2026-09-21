@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { AmbientVideo } from "@/components/media/ambient-video";
 import { Container } from "@/components/ui/container";
+import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { Words } from "@/components/motion/words";
 import { homeEcosystem as visibleEcosystem } from "@/content/partner-ecosystem";
 
 /**
@@ -16,28 +18,36 @@ export function HomePartners() {
       id="partners"
       data-partners
       aria-labelledby="home-partners-title"
-      className="on-video relative overflow-hidden border-y border-border-subtle bg-surface py-14 md:py-20"
+      className="on-video relative overflow-hidden border-y border-border-subtle bg-surface py-14 text-foreground md:py-20"
     >
       <AmbientVideo src="/video/partners-office-720.mp4" poster="/video/partners-office-poster.jpg" />
       <div aria-hidden className="video-veil pointer-events-none absolute inset-0" />
+      {/* Centring the copy (2026-09-18) moved it off the dark left third of this clip and onto the
+          bright centre, where the 20% veil alone left the eyebrow and the lead barely legible. This
+          scrim darkens only the band the copy sits in and fades out before the logo tiles, so the
+          footage behind them keeps its light. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-black/55 via-black/35 to-transparent"
+      />
       <Container className="relative">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
-          <div>
+        {/* Centred like the rest of the page. The copy over the clip replays on every return, so the
+            eyebrow, the heading and the lead each arrive again whenever the section comes back. */}
+        <Stagger repeat className="mb-10 text-center">
+          <StaggerItem>
             <p className="text-sm font-semibold text-gold">Our ecosystem</p>
-            <h2 id="home-partners-title" className="mt-3 max-w-2xl text-h2 font-semibold">
-              Our partners &amp; technology ecosystem.
+          </StaggerItem>
+          <StaggerItem>
+            <h2 id="home-partners-title" className="heading-plain mx-auto mt-3 max-w-4xl text-h2 font-semibold">
+              <Words variant="bloom">Our partners &amp; technology ecosystem.</Words>
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-foreground-muted">
+          </StaggerItem>
+          <StaggerItem>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-foreground-muted">
               Enterprise applications, cloud and specialist technologies, brought together around your business.
             </p>
-          </div>
-          <Link
-            href="/partners/"
-            className="inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-gold hover:underline"
-          >
-            Explore our partners <ArrowUpRight aria-hidden size={18} />
-          </Link>
-        </div>
+          </StaggerItem>
+        </Stagger>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {visibleEcosystem.map((partner) => (
             <li

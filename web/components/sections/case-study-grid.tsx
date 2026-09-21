@@ -100,7 +100,7 @@ function FilterButton({
       aria-pressed={active}
       className={cn(
         "min-h-11 rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
-        active ? "bg-action text-on-action" : "glass text-foreground-muted hover:border-gold-soft hover:text-gold",
+        active ? "bg-action text-on-action" : "glass text-foreground-muted hover:border-action/40 hover:text-action",
       )}
     >
       {children}

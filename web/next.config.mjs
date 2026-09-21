@@ -17,6 +17,7 @@ const nextConfig = {
     const dev = process.env.NODE_ENV === "development";
     const csp = [
       "default-src 'self'",
+      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
       `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",

@@ -12,7 +12,6 @@ import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { SapToolchain } from "@/components/sections/sap-toolchain";
-import { SapPartnerBadge } from "@/components/ui/sap-partner-badge";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/", {
   title: "SAP Enterprise Solutions",
@@ -46,10 +45,9 @@ export default function SapEnterpriseSolutionsPage() {
       <div className="border-b border-gold-soft/30 bg-surface-subtle">
         <Container>
           <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-2 py-4">
-            <li className="mr-1">
-              <SapPartnerBadge />
-            </li>
-            {["RISE with SAP", "PCE Partner", "Co-Innovation Partner"].map((c) => (
+            {/* The gold gradient badge went on 2026-09-17 at the owner's request; the credential
+                itself stays, set as a plain pill like the ones beside it. */}
+            {["SAP Gold Partner", "RISE with SAP", "PCE Partner", "Co-Innovation Partner"].map((c) => (
               <li key={c} className="glass-pill text-foreground">
                 {c}
               </li>

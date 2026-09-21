@@ -1,4 +1,4 @@
-import { primaryNav, footerNav } from "@/content/nav";
+import { primaryNav, whatWeDoMenu, footerNav } from "@/content/nav";
 import type { NavItem } from "@/content/types";
 import { SITE_URL } from "@/lib/utils";
 
@@ -22,6 +22,9 @@ function collect(items: NavItem[]) {
   }
 }
 collect(primaryNav);
+// The three-pillar menu no longer sits in the header, but its pages still exist and still need
+// their own labels (and their parents known) for breadcrumbs.
+collect(whatWeDoMenu);
 collect([...footerNav.company, ...footerNav.practices, ...footerNav.legal]);
 
 /** True when the path is a navigable page, i.e. somewhere in the primary or footer nav. */

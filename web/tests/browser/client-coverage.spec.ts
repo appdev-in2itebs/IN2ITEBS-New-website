@@ -43,7 +43,10 @@ test("complete client grid fits mobile and preserves colour on hover", async ({ 
   await page.locator('.client-ribbon-list [data-client="natural-remedies"]').scrollIntoViewIfNeeded();
   await expect.poll(() => logo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBeTruthy();
   await logo.hover();
-  await expect(logo).toHaveCSS("filter", "grayscale(0) saturate(1)");
+  // The logos are painted in full colour at all times (the grayscale-until-hover treatment went
+  // with the palette rework), so "no grayscale" is the assertion, not a literal filter string.
+  const filter = await logo.evaluate((el) => getComputedStyle(el).filter);
+  expect(filter === "none" || /grayscale\(0\)/.test(filter), `logo filter is ${filter}`).toBe(true);
   await page.locator('.client-ribbon-list [data-client="sentiss"]').scrollIntoViewIfNeeded();
   await page.screenshot({ path: "test-results/client-grid-mobile.png" });
 });

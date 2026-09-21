@@ -1,11 +1,14 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowRight } from "lucide-react";
-import { AmbientVideo } from "@/components/media/ambient-video";
+import { ArrowRight } from "lucide-react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { FrameSequence } from "@/components/media/frame-sequence";
+import { heroFrames } from "@/content/hero-frames";
+import { SPLASH_DONE } from "@/components/layout/page-loader";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import { SapPartnerBadge } from "@/components/ui/sap-partner-badge";
+import { HeroChrome } from "@/components/sections/hero-chrome";
 import { cn } from "@/lib/utils";
 
 /** Milliseconds each slide holds before the next one fades in. */
@@ -20,105 +23,167 @@ type Slide = {
   body: string;
   cta: { href: string; label: string };
   secondary: { href: string; label: string };
-  video: { src: string; narrowSrc: string; poster: string };
+  /** Which frame sequence in content/hero-frames.ts plays behind this slide (slide-1 … slide-5). */
+  frames: string;
 };
 
 const slides: Slide[] = [
   {
     id: "brand",
+    frames: "slide-1",
     label: "Enterprise transformation, under control",
     heading: ["Change with confidence.", "Run without compromise."],
     body: "In2IT EBS connects enterprise platforms, digital engineering and managed operations through one accountable transformation partner.",
     cta: { href: "/contact/", label: "Start a conversation" },
     secondary: { href: "/what-we-do/", label: "Explore our services" },
-    video: {
-      src: "/video/hero-entry-1080.mp4",
-      narrowSrc: "/video/hero-entry-720.mp4",
-      poster: "/video/hero-entry-poster.jpg",
-    },
   },
   {
     id: "sap",
+    frames: "slide-2",
     label: "SAP enterprise solutions",
     heading: ["Transform your enterprise with SAP."],
     body: "From S/4HANA and cloud migration to SuccessFactors, analytics and managed services. Connect the platform to the way your business operates.",
     cta: { href: "/sap-enterprise-solutions/", label: "Explore SAP solutions" },
     secondary: { href: "/contact/", label: "Talk to us" },
-    video: {
-      src: "/video/hero-sap-1080.mp4",
-      narrowSrc: "/video/hero-sap-720.mp4",
-      poster: "/video/hero-sap-poster.jpg",
-    },
   },
   {
     id: "applications",
+    frames: "slide-3",
     label: "Application development & maintenance",
     heading: ["Applications built around your business."],
     body: "Design, build, integrate and maintain business applications, with engineering and ongoing support connected from the start.",
     cta: { href: "/digital-data-ai/application-engineering/", label: "Explore application services" },
     secondary: { href: "/contact/", label: "Talk to us" },
-    // The source clip is 720p, so phones and desktops share one file.
-    video: {
-      src: "/video/hero-applications-720.mp4",
-      narrowSrc: "/video/hero-applications-720.mp4",
-      poster: "/video/hero-applications-poster.jpg",
-    },
   },
   {
     id: "platforms",
+    frames: "slide-4",
     label: "People, finance & customer platforms",
     heading: ["Connect people, processes and performance."],
     body: "Explore SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices for the systems your teams rely on every day.",
     cta: { href: "/platform-services/", label: "Explore our platform practices" },
     secondary: { href: "/contact/", label: "Talk to us" },
-    video: {
-      src: "/video/hero-platforms-1080.mp4",
-      narrowSrc: "/video/hero-platforms-720.mp4",
-      poster: "/video/hero-platforms-poster.jpg",
-    },
   },
   {
     id: "data-ai",
+    frames: "slide-5",
     label: "Cloud, data & AI",
     heading: ["Turn enterprise data into everyday decisions."],
     body: "Bring data, analytics, integration and AI into the flow of work, with architecture and delivery grounded in your business priorities.",
     cta: { href: "/digital-data-ai/", label: "Explore data & AI services" },
     secondary: { href: "/contact/", label: "Talk to us" },
-    video: {
-      src: "/video/hero-data-ai-1080.mp4",
-      narrowSrc: "/video/hero-data-ai-720.mp4",
-      poster: "/video/hero-data-ai-poster.jpg",
-    },
   },
 ];
 
+const slideContentVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.11,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+/** One settle for every piece of the slide, so they arrive from different sides on one clock. */
+const ENTER = { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const };
+
 /**
- * Full-screen brand hero that is itself a five-slide carousel on ambient footage (2026-09-15
- * 15:28): the brand copy on the entry clip, then the four service slides that used to follow the
- * hero in their own section, each on its own clip. It advances every 4.5 s with no controls of any
- * kind (owner's call), and holds only while the hero is offscreen, a tab is hidden, the motion
- * flag is set, or keyboard focus is inside it; reduced motion holds the first slide on its poster.
- *
- * Layers, bottom to top: the clips (only the active and the next one are mounted; the next one
- * plays hidden so it is buffered when its turn comes, and the leaving one stays under the arriving
- * one for the 700 ms cross-fade), a 20% black veil, the ambient gradient, then the copy in the
- * `.on-video` palette (the former dark theme). All five text blocks stay in the document, stacked
- * in one grid cell, so the h1 is always present; inactive ones are hidden from assistive
- * technology and inert.
+ * The copy converges on the centre from four directions (owner, 2026-09-18): the label and the
+ * first headline line drop in from above, the second line comes in from the left, the lead rises
+ * from below, and the two calls to action close in from either side. The section is
+ * `overflow-hidden`, which is what keeps the sideways travel from widening the page.
+ */
+const enterVariants = {
+  top: {
+    hidden: { opacity: 0, y: -46, filter: "blur(10px)" },
+    visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: ENTER },
+  },
+  left: {
+    hidden: { opacity: 0, x: -72, filter: "blur(10px)" },
+    visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: ENTER },
+  },
+  right: {
+    hidden: { opacity: 0, x: 72, filter: "blur(10px)" },
+    visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: ENTER },
+  },
+  bottom: {
+    hidden: { opacity: 0, y: 46, scale: 0.985, filter: "blur(10px)" },
+    visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: ENTER },
+  },
+  /* The two buttons travel a shorter distance than the headline: at the same 72px they read as
+     sliding rather than closing in. */
+  ctaLeft: {
+    hidden: { opacity: 0, x: -44, filter: "blur(8px)" },
+    visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: ENTER },
+  },
+  ctaRight: {
+    hidden: { opacity: 0, x: 44, filter: "blur(8px)" },
+    visible: { opacity: 1, x: 0, filter: "blur(0px)", transition: ENTER },
+  },
+  /* The row itself does not move; it only passes the state down and spaces the two buttons. */
+  ctaRow: {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  },
+} satisfies Record<string, Variants>;
+
+/** Under `prefers-reduced-motion` nothing travels; the same pieces simply fade up in order. */
+const staticVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.3 } },
+};
+
+/**
+ * Full-screen brand hero that is itself a five-slide carousel on ambient footage.
+ * Enhanced with staggered Framer Motion text animations, crisp legibility shadows,
+ * and interactive slide indicators.
  */
 export function BrandHero() {
   const [slide, setSlide] = useState<{ active: number; leaving: number | null }>({ active: 0, leaving: null });
   const [rotating, setRotating] = useState(false);
   const [offscreen, setOffscreen] = useState(false);
+  /** Bumped each time the hero comes back into view, to remount the copy and replay its entrance. */
+  const [replay, setReplay] = useState(0);
   const [focused, setFocused] = useState(false);
   const root = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  /** The copy holds its entrance until the loading splash over it starts to clear. */
+  const [entered, setEntered] = useState(false);
+  const enter = (role: keyof typeof enterVariants): Variants => (reduced ? staticVariants : enterVariants[role]);
+
+  useEffect(() => {
+    if (document.documentElement.dataset.splash === "done") {
+      setEntered(true);
+      return;
+    }
+    const begin = () => setEntered(true);
+    window.addEventListener(SPLASH_DONE, begin);
+    // A route that does not render the splash must not leave the hero waiting for a signal that
+    // never comes, so the entrance starts on its own shortly after mount.
+    const fallback = setTimeout(begin, 1200);
+    return () => {
+      window.removeEventListener(SPLASH_DONE, begin);
+      clearTimeout(fallback);
+    };
+  }, []);
 
   useEffect(() => {
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => setRotating(!reduced.matches);
     apply();
     reduced.addEventListener("change", apply);
-    const observer = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
+    // Coming back to the hero replays the copy. Without this the entrance runs once on load and a
+    // visitor who scrolls down and back up finds a slide that is simply already there. The previous
+    // state is kept in a ref, not read inside a `setState` updater: React may call an updater more
+    // than once, so a bump raised from inside one does not reliably land.
+    let wasOffscreen = false;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (wasOffscreen && entry.isIntersecting) setReplay((n) => n + 1);
+      wasOffscreen = !entry.isIntersecting;
+      setOffscreen(!entry.isIntersecting);
+    });
     if (root.current) observer.observe(root.current);
     return () => {
       reduced.removeEventListener("change", apply);
@@ -160,8 +225,7 @@ export function BrandHero() {
       }}
       className="on-video relative flex min-h-[100svh] overflow-hidden bg-canvas pt-36 text-foreground md:pt-40"
     >
-      {/* `isolate` keeps the clip wrappers' z-indexes inside this box, so the veil and the ambient
-          gradient that follow always paint above the footage. */}
+      {/* Clip wrappers with cross-fade opacity */}
       <div aria-hidden className="absolute inset-0 isolate">
         {mounted.map((index) => {
           const item = slides[index];
@@ -175,15 +239,18 @@ export function BrandHero() {
                 index === active ? "z-[2] opacity-100" : index === leaving ? "z-[1] opacity-100" : "z-0 opacity-0",
               )}
             >
-              <AmbientVideo src={item.video.src} narrowSrc={item.video.narrowSrc} poster={item.video.poster} />
+              <FrameSequence sequence={heroFrames[item.frames]} />
             </div>
           );
         })}
       </div>
       <div aria-hidden className="video-veil pointer-events-none absolute inset-0" />
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
-      <Container className="relative z-10 flex flex-1 flex-col justify-end gap-10 py-8 md:py-10">
-        <div className="grid max-w-[52rem]">
+
+      <HeroChrome />
+
+      <Container className="relative z-10 flex flex-1 flex-col justify-center gap-10 py-8 md:py-10">
+        <div className="mx-auto grid w-full max-w-[56rem] text-center">
           {slides.map((item, index) => {
             const isActive = index === active;
             const Heading = index === 0 ? "h1" : "h2";
@@ -198,51 +265,70 @@ export function BrandHero() {
                 aria-hidden={!isActive}
                 inert={!isActive}
                 className={cn(
-                  "col-start-1 row-start-1 transition-opacity duration-700 ease-out motion-reduce:transition-none",
+                  "col-start-1 row-start-1 transition-opacity duration-500 ease-out motion-reduce:transition-none",
                   isActive ? "opacity-100" : "pointer-events-none opacity-0",
                 )}
               >
-                {index === 0 && <SapPartnerBadge />}
-                <p className={cn("text-sm font-semibold text-gold", index === 0 && "mt-8")}>{item.label}</p>
-                <Heading
-                  id={index === 0 ? "home-hero-title" : undefined}
-                  className="mt-5 max-w-[20ch] text-[clamp(2.75rem,4.6vw,4.25rem)] font-semibold leading-[0.98] tracking-[-0.05em]"
+                <motion.div
+                  key={`content-${item.id}-${isActive}-${replay}`}
+                  variants={slideContentVariants}
+                  initial="hidden"
+                  animate={isActive && entered ? "visible" : "hidden"}
+                  className="flex flex-col items-center"
                 >
-                  {item.heading.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </Heading>
-                <p className="mt-7 max-w-[58ch] text-lg leading-relaxed text-foreground-muted md:text-xl">
-                  {item.body}
-                </p>
-                <div className="mt-9 flex flex-wrap items-center gap-4">
-                  <Button href={item.cta.href} withArrow>
-                    {item.cta.label}
-                  </Button>
-                  <Link
-                    href={item.secondary.href}
-                    className="inline-flex min-h-12 items-center gap-3 rounded-full px-4 text-sm font-semibold text-gold hover:bg-glass/70"
+                  <motion.p
+                    variants={enter("top")}
+                    className={cn(
+                      "text-xs font-semibold uppercase tracking-[0.22em] text-on-brand/85 sm:text-sm [text-shadow:_0_1px_8px_rgba(0,0,0,0.85)]",
+                    )}
                   >
-                    {item.secondary.label} <ArrowRight size={17} aria-hidden />
-                  </Link>
-                </div>
+                    {item.label}
+                  </motion.p>
+
+                  <Heading
+                    id={index === 0 ? "home-hero-title" : undefined}
+                    className="heading-plain mx-auto mt-6 max-w-[22ch] text-balance text-[clamp(2.75rem,5vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-foreground [text-shadow:_0_2px_18px_rgba(0,0,0,0.9)]"
+                  >
+                    {item.heading.map((line, lineIndex) => (
+                      <motion.span
+                        key={line}
+                        variants={enter(lineIndex === 0 ? "top" : "left")}
+                        className="block text-foreground"
+                      >
+                        {line}
+                      </motion.span>
+                    ))}
+                  </Heading>
+
+                  <motion.p
+                    variants={enter("bottom")}
+                    className="mx-auto mt-7 max-w-[56ch] text-lg leading-relaxed text-foreground [text-shadow:_0_1px_10px_rgba(0,0,0,0.9)] md:text-xl"
+                  >
+                    {item.body}
+                  </motion.p>
+
+                  <motion.div
+                    variants={enter("ctaRow")}
+                    className="mt-10 flex flex-wrap items-center justify-center gap-4"
+                  >
+                    <motion.div variants={enter("ctaLeft")}>
+                      <Button href={item.cta.href} withArrow>
+                        {item.cta.label}
+                      </Button>
+                    </motion.div>
+                    <motion.div variants={enter("ctaRight")}>
+                      <Link
+                        href={item.secondary.href}
+                        className="inline-flex min-h-12 items-center gap-3 rounded-full border border-glass/40 bg-glass/40 px-5 text-sm font-semibold text-foreground backdrop-blur-md transition-all duration-300 hover:border-glass/80 hover:bg-glass/80 hover:text-foreground"
+                      >
+                        {item.secondary.label} <ArrowRight size={17} aria-hidden />
+                      </Link>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
               </div>
             );
           })}
-        </div>
-        {/* The Discover cue sits bottom-left under the copy, clear of the fixed quick-contact button
-            in the bottom-right corner. Below `sm` the row itself ends under that button, so the cue
-            is hidden there: the page scroll is the affordance on a phone. */}
-        <div className="flex flex-wrap items-center justify-start gap-4">
-          <Link
-            href="#capabilities"
-            aria-label="Scroll to featured services"
-            className="glass-pill hidden min-h-12 items-center gap-3 px-5 text-xs font-semibold uppercase tracking-[0.14em] text-foreground-muted hover:text-gold sm:inline-flex"
-          >
-            Discover <ArrowDown size={18} aria-hidden />
-          </Link>
         </div>
       </Container>
     </section>

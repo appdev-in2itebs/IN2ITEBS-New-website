@@ -15,6 +15,9 @@ test("there is no theme switch anywhere in the header or the mobile menu", async
   await page.goto("/");
   await expect(page.getByRole("button", { name: /Switch to (dark|light) theme/ })).toHaveCount(0);
   await page.setViewportSize({ width: 375, height: 812 });
+  // The homepage header clears the hero until the first scroll (2026-09-16), so bring it in first.
+  await page.mouse.wheel(0, 600);
+  await expect(page.locator("header")).toHaveAttribute("data-at-top", "false");
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
   await expect(page.getByRole("dialog").getByRole("button", { name: /theme/ })).toHaveCount(0);
   await page.keyboard.press("Escape");
@@ -65,28 +68,31 @@ test("heading scale and client hover treatment are intact", async ({ page }) => 
   // Reduced motion holds the ribbon still for the hover; there is no pause button to press any more.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  // The service slides now live inside the hero carousel (2026-09-15 15:28), so the first exposed
-  // h2 is the small platform-practice strip; the methods heading is the display-scale one.
+  // The services directory that used to carry the display-scale h2 went on 2026-09-17, so the
+  // homepage's display heading is the hero's own h1.
   expect(
-    await page.locator("section[data-methods] h2").evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+    await page.locator("section[data-brand-hero] h1").evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
   ).toBeGreaterThan(32);
   await expect(page.getByRole("button", { name: /client ribbon|client entries/ })).toHaveCount(0);
   const logo = page.locator(".client-ribbon-list img").first();
   await logo.hover();
-  await expect(logo).toHaveCSS("filter", "grayscale(0) saturate(1)");
+  // The logos are painted in full colour at all times (the grayscale-until-hover treatment went
+  // with the palette rework), so "no grayscale" is the assertion, not a literal filter string.
+  const filter = await logo.evaluate((el) => getComputedStyle(el).filter);
+  expect(filter === "none" || /grayscale\(0\)/.test(filter), `logo filter is ${filter}`).toBe(true);
 });
-test("the quick-contact button hides while the footer is in view", async ({ page }) => {
+test("the scroll-down button hides while the footer is in view", async ({ page }) => {
   await page.goto("/about/");
-  const button = page.getByRole("button", { name: "Contact", exact: true });
+  const button = page.getByRole("button", { name: "Scroll down", exact: true });
   await expect(button).toBeVisible();
   await page.locator("footer").scrollIntoViewIfNeeded();
   await expect(button).toBeHidden();
   await page.evaluate(() => scrollTo(0, 0));
   await expect(button).toBeVisible();
 });
-test("the quick-contact button keeps keyboard focus near the footer", async ({ page }) => {
+test("the scroll-down button keeps keyboard focus near the footer", async ({ page }) => {
   await page.goto("/about/");
-  const button = page.getByRole("button", { name: "Contact", exact: true });
+  const button = page.getByRole("button", { name: "Scroll down", exact: true });
   await button.focus();
   await expect(button).toBeFocused();
   await page.locator("footer").scrollIntoViewIfNeeded();
@@ -120,6 +126,11 @@ for (const label of ["Services", "About"])
     await page.goto("/");
     // The hover handlers exist only after hydration; a single pointer move before that opens nothing.
     await page.locator("html[data-motion-ready]").waitFor();
+    // The homepage header clears the hero until the first scroll (2026-09-16).
+    await page.mouse.wheel(0, 600);
+    await expect(page.locator("header")).toHaveAttribute("data-at-top", "false");
+    // It slides in over 500ms; a boundingBox read now would point at a bar still moving.
+    await expect.poll(() => page.locator("header").evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
     const trigger = page.locator('nav[aria-label="Primary"]').getByRole("link", { name: label, exact: true });
     const box = (await trigger.boundingBox())!;
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);

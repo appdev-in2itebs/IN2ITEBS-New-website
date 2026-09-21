@@ -1,7 +1,8 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Building2, GitBranch, Network } from "lucide-react";
 import { Container, Section } from "@/components/ui/container";
 import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
@@ -34,6 +35,35 @@ const howEachPageWorks = [
   },
 ];
 
+/** Moved off the homepage on 2026-09-17: the three sectors that carry a photograph, as the
+ *  opening band of this page. Names, copy, links and artwork are unchanged. */
+const featuredIndustries = [
+  {
+    name: "Manufacturing",
+    detail: "Automotive, heavy engineering and industrial products",
+    href: "/industries/automobiles/",
+    image: "/stock/automobiles.jpg",
+    Icon: GitBranch,
+    className: "md:col-span-7 md:row-span-2",
+  },
+  {
+    name: "Energy & utilities",
+    detail: "Critical infrastructure and public enterprises",
+    href: "/industries/energy-utilities/",
+    image: "/stock/energy-utilities.jpg",
+    Icon: Network,
+    className: "md:col-span-5",
+  },
+  {
+    name: "Consumer products",
+    detail: "Food, beverage and high-velocity supply chains",
+    href: "/industries/fmcg/",
+    image: "/stock/fmcg.jpg",
+    Icon: Building2,
+    className: "md:col-span-5",
+  },
+];
+
 export default function IndustriesPage() {
   const otherSectorClients = getClientsBySectors(["Others"]);
 
@@ -46,6 +76,64 @@ export default function IndustriesPage() {
         accentWord="industries"
         subhead="Selected clients across the sectors where we've delivered SAP, Salesforce, Workday and application transformation programmes."
       />
+
+      <section
+        data-operating-context
+        className="seamless-section relative scroll-mt-20 overflow-hidden bg-surface py-24 md:py-32"
+      >
+        <div aria-hidden className="absolute -right-32 top-20 h-96 w-96 rounded-full bg-action/[0.06] blur-[100px]" />
+        <Container className="relative">
+          <Reveal className="grid gap-8 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">Operating context</p>
+              <h2 className="mt-5 max-w-[12ch] text-[clamp(2.65rem,5vw,5rem)] font-semibold leading-[0.97] tracking-[-0.05em]">
+                Enterprise experience, grounded in the real world.
+              </h2>
+            </div>
+            <div className="lg:col-span-5 lg:col-start-8 lg:pt-3">
+              <p className="max-w-[52ch] text-base leading-relaxed text-foreground-muted">
+                Transformation behaves differently on a factory floor, across a transmission network and inside a
+                regulated enterprise. Our work starts with that context.
+              </p>
+            </div>
+          </Reveal>
+
+          <Stagger className="mt-14 grid auto-rows-[19rem] gap-3 md:grid-cols-12">
+            {featuredIndustries.map((industry) => (
+              <StaggerItem key={industry.name} className={industry.className}>
+                <Link
+                  href={industry.href}
+                  className="industry-tile group relative block h-full overflow-hidden rounded-feature bg-brand"
+                >
+                  <Image
+                    src={industry.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 58vw, 100vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 bg-gradient-to-t from-brand/95 via-brand/[0.12] to-transparent transition-colors duration-300 group-hover:from-brand"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-on-brand md:p-8">
+                    <div>
+                      <industry.Icon aria-hidden size={18} strokeWidth={1.5} className="mb-4 text-gold-on-brand" />
+                      <h3 className="text-2xl font-semibold tracking-[-0.03em] md:text-3xl">{industry.name}</h3>
+                      <p className="mt-2 max-w-[38ch] text-sm leading-relaxed text-on-brand/70">{industry.detail}</p>
+                    </div>
+                    <ArrowUpRight
+                      aria-hidden
+                      size={20}
+                      className="shrink-0 transition-transform duration-200 group-hover:-translate-y-1 group-hover:translate-x-1"
+                    />
+                  </div>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </Container>
+      </section>
 
       {/* INDUSTRIES WE SERVE */}
       <Section tone="light">

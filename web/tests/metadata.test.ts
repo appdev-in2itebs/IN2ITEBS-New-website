@@ -100,7 +100,7 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
   );
   assert.deepEqual(
     study.map((i) => i.name),
-    ["Home", "Client stories", "Wipro Infrastructure Engineering"],
+    ["Home", "Clients & Case Studies", "Wipro Infrastructure Engineering"],
   );
 });
 test("nav labels do not depend on collection order", () => {

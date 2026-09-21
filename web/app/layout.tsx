@@ -7,8 +7,9 @@ import { OrganizationJsonLd } from "@/components/seo/json-ld";
 import { SITE_URL } from "@/lib/utils";
 import { RegionProvider } from "@/components/layout/region-preference";
 import { MeasurementSignals } from "@/components/layout/measurement-signals";
-import { QuickContact } from "@/components/layout/quick-contact";
+import { ScrollDown } from "@/components/layout/scroll-down";
 import { MotionObserver } from "@/components/motion/motion-observer";
+import { PageLoader } from "@/components/layout/page-loader";
 
 const plex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={plex.variable}>
       <body className="grain">
+        <PageLoader />
         <RegionProvider>
           <MotionObserver />
           <MeasurementSignals />
@@ -45,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main id="main">{children}</main>
           <Footer />
-          <QuickContact />
+          <ScrollDown />
         </RegionProvider>
       </body>
     </html>

@@ -13,13 +13,24 @@ import Image from "next/image";
 import { industries, getIndustry } from "@/content/industries";
 import { getClientsBySectors } from "@/lib/content";
 import { getIndustryBody } from "@/content/industry-bodies";
+import { legacyIndustries, getLegacyIndustry } from "@/content/legacy-industries";
+import { LegacyIndustryPage } from "@/components/sections/legacy-industry-page";
 
 export async function generateStaticParams() {
-  return industries.map((i) => ({ slug: i.slug }));
+  // The existing site's fourteen industry pages sit beside the three-pillar sector pages; where a
+  // slug is in both lists the existing site's page wins, as the menu links to it.
+  const slugs = new Set([...legacyIndustries.map((i) => i.slug), ...industries.map((i) => i.slug)]);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const legacy = getLegacyIndustry(slug);
+  if (legacy)
+    return pageMetadata(`/industries/${slug}/`, {
+      title: legacy.title ?? legacy.name,
+      description: legacy.metaDescription,
+    });
   const ind = getIndustry(slug);
   if (!ind) return pageMetadata(`/industries/${slug}/`, { title: "Industry" });
   return pageMetadata(`/industries/${slug}/`, {
@@ -30,6 +41,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const legacy = getLegacyIndustry(slug);
+  if (legacy) return <LegacyIndustryPage industry={legacy} />;
   const ind = getIndustry(slug);
   if (!ind) notFound();
 

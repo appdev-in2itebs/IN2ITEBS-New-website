@@ -62,6 +62,38 @@ const estate = [
   },
 ];
 
+/**
+ * "Types of Application Development we offer" — carried over from the existing site's ADMS page
+ * (/application-development-maintenance-services-adms-2/), which sets out six of them by name. The
+ * service map above is how an engagement is shaped; this is what is actually being built.
+ */
+const developmentTypes = [
+  {
+    title: "Custom application development",
+    body: "Designing, creating and deploying software tailored to a specific need rather than bent into shape from something general.",
+  },
+  {
+    title: "Rapid application development",
+    body: "RAD emphasises rapid prototyping and quick feedback over long, drawn-out development cycles.",
+  },
+  {
+    title: "Low-code / no-code development",
+    body: "Visual interfaces that make it simple for non-programmers to build and run programs — drag and drop snippets of code and adjust them to the business logic to create automated workflows.",
+  },
+  {
+    title: "Mobile application development",
+    body: "Software for mobile devices, optimised to take advantage of the particular features and hardware of the products it runs on.",
+  },
+  {
+    title: "Web application development",
+    body: "Applications hosted on a web server and built for a specific purpose, reachable from every internet-enabled device — phones, laptops and desktops alike.",
+  },
+  {
+    title: "Enterprise application development",
+    body: "Applications for large-scale organisations, supporting enterprise-grade features such as massive data storage and the automation of complex business processes.",
+  },
+];
+
 export default function ApplicationEngineeringPage() {
   return (
     <>
@@ -89,8 +121,23 @@ export default function ApplicationEngineeringPage() {
         </Container>
       </Section>
 
+      {/* TYPES OF APPLICATION DEVELOPMENT */}
+      <Section tone="white" id="types">
+        <Container>
+          <Reveal className="mb-12 max-w-2xl">
+            <SectionHeading
+              eyebrow="Types of application development we offer"
+              lead="Developing the software and the programs a business requires is what lets an organisation automate its operations and lift its productivity — from calculating a monthly budget to arranging sales reports. Requirements gathering, design, testing, implementation, integration: we support every step of it."
+            >
+              Six ways an application gets <Accent>built</Accent>.
+            </SectionHeading>
+          </Reveal>
+          <FeatureGrid features={developmentTypes} columns={3} />
+        </Container>
+      </Section>
+
       {/* LIFECYCLE STAGES */}
-      <Section tone="white" id="lifecycle">
+      <Section tone="light" id="lifecycle">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
             <SectionHeading
@@ -114,7 +161,7 @@ export default function ApplicationEngineeringPage() {
       </Section>
 
       {/* TECHNOLOGY ESTATE */}
-      <Section tone="light" id="technology-estate">
+      <Section tone="white" id="technology-estate">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
             <SectionHeading

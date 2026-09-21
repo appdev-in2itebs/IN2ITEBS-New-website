@@ -1,7 +1,11 @@
 import type { Office } from "./types";
 
 /** Addresses for the 4 India offices = deck (SOT-45). Emails/phones = old site.
- *  Global entity legal names = deck; their street addresses = old site (deck gave names only). */
+ *  Global entity legal names = deck; their street addresses = old site (deck gave names only).
+ *
+ *  Mumbai, Chennai and Kolkata were listed here briefly from the live site's /contact/ page and
+ *  removed again on 2026-09-17 at the owner's request. `coords` is the city centre and exists only
+ *  to place each office on the map in `components/sections/office-map.tsx`. */
 export const offices: Office[] = [
   {
     slug: "bangalore",
@@ -14,6 +18,7 @@ export const offices: Office[] = [
     country: "India",
     email: "info@in2itebs.com",
     phone: "+91 80930 07552",
+    coords: [12.9716, 77.5946],
   },
   {
     slug: "bhubaneswar",
@@ -24,6 +29,7 @@ export const offices: Office[] = [
     city: "Bhubaneswar",
     country: "India",
     email: "info@in2itebs.com",
+    coords: [20.2961, 85.8245],
   },
   {
     slug: "hyderabad",
@@ -35,6 +41,7 @@ export const offices: Office[] = [
     city: "Hyderabad",
     country: "India",
     email: "info@in2itebs.com",
+    coords: [17.385, 78.4867],
   },
   {
     slug: "delhi-ncr",
@@ -45,6 +52,7 @@ export const offices: Office[] = [
     city: "Noida",
     country: "India",
     email: "info@in2itebs.com",
+    coords: [28.5355, 77.391],
   },
   {
     slug: "singapore",
@@ -55,6 +63,7 @@ export const offices: Office[] = [
     city: "Singapore",
     country: "Singapore",
     email: "info@in2itebs.sg",
+    coords: [1.3521, 103.8198],
   },
   {
     slug: "dubai",
@@ -65,6 +74,7 @@ export const offices: Office[] = [
     city: "Dubai",
     country: "UAE",
     email: "info@in2itebs.ae",
+    coords: [25.2048, 55.2708],
   },
   {
     slug: "kenya",
@@ -75,6 +85,7 @@ export const offices: Office[] = [
     city: "Nairobi",
     country: "Kenya",
     email: "info@in2itebs.co.ke",
+    coords: [-1.2921, 36.8219],
   },
   {
     slug: "south-africa",
@@ -86,6 +97,7 @@ export const offices: Office[] = [
     country: "South Africa",
     email: "info@in2itebs.co.za",
     phone: "+27 11 873 0234",
+    coords: [-26.2178, 28.17],
   },
   {
     slug: "usa",
@@ -96,6 +108,7 @@ export const offices: Office[] = [
     city: "Austin",
     country: "USA",
     email: "info@in2itebs.com",
+    coords: [30.2672, -97.7431],
   },
 ];
 

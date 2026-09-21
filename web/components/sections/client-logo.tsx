@@ -12,7 +12,7 @@ export function ClientLogo({ client, className }: { client: Client; className?: 
         alt={client.name}
         loading="lazy"
         className={cn(
-          "h-8 w-auto max-w-[140px] object-contain opacity-55 grayscale saturate-0 transition-[filter,opacity,transform] duration-300 ease-out group-hover/logo:scale-[1.035] group-hover/logo:opacity-100 group-hover/logo:grayscale-0 group-hover/logo:saturate-100",
+          "h-8 w-auto max-w-[140px] object-contain opacity-100 transition-all duration-300 ease-out group-hover/logo:scale-[1.035]",
           className,
         )}
       />

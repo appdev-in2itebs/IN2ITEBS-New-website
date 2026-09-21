@@ -23,6 +23,11 @@ html:not([data-motion-ready]) .stage-card-featured,
 html:not([data-motion-ready]) .flow-signal {
   animation: none !important;
 }
+html:not([data-motion-ready]) .hero-media {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
 html[data-motion-paused="true"] *,
 html[data-motion-paused="true"] *::before,
 html[data-motion-paused="true"] *::after {
@@ -34,6 +39,15 @@ html[data-motion-paused="true"] .reveal {
   opacity: 1 !important;
   transform: none !important;
   animation: none !important;
+}
+/* The office-map pins arrive with a transform that also centres them on their coordinate, so they
+   need their own settled state rather than the blanket `transform: none` above — otherwise pausing
+   motion would shift every pin off its city. */
+html[data-motion-paused="true"] .map-pin,
+[data-motion-offscreen="true"] .map-pin {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) !important;
 }
 /* Keep motion on composited signals; do not continuously repaint shadows/halos. */
 [data-motion-offscreen="true"] *,
@@ -49,6 +63,15 @@ html[data-motion-paused="true"] .reveal {
 }
 html:not([data-motion-ready]) .client-ribbon {
   overflow-x: auto;
+}
+/* The leadership ribbon and the service ribbon are real scroll containers, not transform marquees:
+   the drift advances `scrollLeft` from JavaScript, so a drag, a swipe or a trackpad all move the
+   same property and never fight it. The scrollbar is hidden (`.video-ribbon-track` does that) since
+   the drift itself is the visible affordance. */
+.team-ribbon,
+.services-ribbon {
+  scroll-behavior: auto;
+  overscroll-behavior-x: contain;
 }
 .client-ribbon-list img {
   max-width: 100%;
@@ -76,15 +99,61 @@ html:not([data-motion-ready]) .client-ribbon {
   .client-ribbon-copy {
     display: none;
   }
+  /* No drift under reduced motion, so each roster is simply laid out in full. */
+  .team-ribbon,
+  .services-ribbon {
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+  .team-ribbon-list,
+  .services-ribbon-list {
+    width: 100%;
+    flex-wrap: wrap;
+    padding-right: 0;
+  }
+  .team-ribbon-copy,
+  .services-ribbon-copy {
+    display: none;
+  }
+  /* Laid out rather than travelling, the cards need a width that tiles instead of a ribbon width. */
+  .services-ribbon-list > li {
+    width: min(100%, 24rem);
+  }
   .hero-enter {
     opacity: 1 !important;
     transform: none !important;
+    animation: none !important;
+  }
+  .hero-media,
+  .hero-media-float {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
     animation: none !important;
   }
   .reveal {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+  .word-rise,
+  .type-text {
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .type-caret {
+    display: none !important;
+  }
+  .map-pin {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  .map-pin-halo {
+    animation: none !important;
   }
 }
 
@@ -114,11 +183,13 @@ html:not([data-motion-ready]) .client-ribbon {
     --color-feedback-success: 39% 0.09 155;
     --color-feedback-error: 46% 0.13 19;
 
-    /* Premium restyle (2026-09-10): gold roles and glass surfaces. */
-    --color-gold: 51.14% 0.082 83.6;
-    --color-gold-display: 57% 0.085 84;
-    --color-gold-on-brand: 72.45% 0.1 82.3;
-    --color-gold-soft: 83.98% 0.085 91;
+    /* Accent roles. Gold/amber was dropped on 2026-09-17 at the owner's request — the accent is a
+       deep teal that reads clearly on white, on the navy brand ground and over video. The token
+       names still say "gold" so the swap stays one edit; only these values decide the colour. */
+    --color-gold: 48% 0.12 196;
+    --color-gold-display: 54% 0.13 196;
+    --color-gold-on-brand: 80% 0.13 196;
+    --color-gold-soft: 72% 0.1 196;
     --color-glass: 99.2% 0.003 255;
     --color-glass-line: 100% 0 0;
     --shadow-glass: 0 1px 2px rgb(21 33 61 / 0.04), 0 20px 50px -24px rgb(21 33 61 / 0.28);
@@ -159,7 +230,7 @@ html:not([data-motion-ready]) .client-ribbon {
     --color-legacy-blue-pale: 89% 0.035 240;
     --color-legacy-grey-muted: var(--color-fg-secondary);
     --color-legacy-off-white: var(--color-bg-subtle);
-    --color-legacy-sand: 75% 0.04 95;
+    --color-legacy-sand: 80% 0.025 215;
 
     --radius-control: 0.75rem;
     --radius-surface: 1rem;
@@ -190,10 +261,10 @@ html:not([data-motion-ready]) .client-ribbon {
     --color-feedback-success: 82% 0.1 160;
     --color-feedback-error: 80% 0.115 13;
 
-    --color-gold: 72.45% 0.1 82.3;
-    --color-gold-display: 83.98% 0.085 91;
-    --color-gold-on-brand: 72.45% 0.1 82.3;
-    --color-gold-soft: 83.98% 0.085 91;
+    --color-gold: 82% 0.13 196;
+    --color-gold-display: 88% 0.1 196;
+    --color-gold-on-brand: 82% 0.13 196;
+    --color-gold-soft: 88% 0.1 196;
     --color-glass: 17.9% 0.019 270.1;
     --color-glass-line: 100% 0 0;
     --shadow-glass: 0 20px 50px -15px rgb(0 0 0 / 0.7);
@@ -611,6 +682,20 @@ html:not([data-motion-ready]) .client-ribbon {
 }
 
 @layer utilities {
+  @keyframes hero-float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(0.5deg);
+    }
+  }
+
+  .animate-float {
+    animation: hero-float 6s ease-in-out infinite;
+  }
+
   /* Fixed, non-interactive film-grain overlay for subtle paper texture */
   .grain::before {
     content: "";
@@ -831,6 +916,44 @@ html:not([data-motion-ready]) .client-ribbon {
     animation-delay: 220ms;
   }
 
+  /* The hero picture (components/sections/hero-media.tsx) arrives with the copy: it settles up from
+     a little below, sharpening from a soft blur as it comes, and then keeps a slow drift so the page
+     never quite sits still. Entrance and drift are two elements, one animation each, so neither
+     overrides the other. Reduced motion and the pre-hydration state are handled above with
+     `.hero-enter`. */
+  .hero-media {
+    opacity: 0;
+    transform: translateY(28px) scale(0.94);
+    filter: blur(14px);
+  }
+  /* The splash (components/layout/page-loader.tsx) covers the hero for its first 700ms and flags
+     `data-splash="done"` as it starts to fade; the picture waits for that, so it arrives as the
+     splash clears rather than finishing behind it. Before hydration there is no splash and no flag,
+     and the guard near the top of this file (`html:not([data-motion-ready]) .hero-media`) keeps the
+     picture simply in place. */
+  html[data-splash="done"] .hero-media {
+    animation: hero-media-in 1150ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
+  }
+  .hero-media-float {
+    animation: hero-media-float 9s ease-in-out 1400ms infinite;
+  }
+  @keyframes hero-media-in {
+    to {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+  }
+  @keyframes hero-media-float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -10px, 0);
+    }
+  }
+
   /* ---- Premium restyle: scroll-in reveals (visible-first; hidden only after hydration) ----
      The transition belongs to the revealed state only. On the base class it also runs backwards:
      at hydration every below-the-fold element would fade 1 -> 0 over 600ms plus its stagger delay,
@@ -845,6 +968,144 @@ html:not([data-motion-ready]) .client-ribbon {
   html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) {
     opacity: 0;
     transform: translateY(18px);
+  }
+
+  /* Display headings rise word by word, each from behind its own mask (`components/motion/words.tsx`).
+     The mask is the `overflow: hidden` on `.word`; the inner span is what actually moves, so the
+     words appear to come up out of the line rather than fading in on top of it.
+
+     Same visible-first contract as `.reveal`: nothing is hidden until `data-motion-ready` is set,
+     so the heading is readable before hydration and if JavaScript never runs. The space between two
+     words is a sibling of both, never a child: inside `.word` the `rise` mask collapses it and the
+     heading renders as one run-on string. */
+  .word {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  /* One easing for the whole family: a long exponential settle, so a heading decelerates into
+     place instead of sliding to a stop. The focus clears before the travel finishes, which is what
+     stops the arrival reading as a slide. */
+  .word-rise {
+    display: inline-block;
+    transition:
+      transform 900ms cubic-bezier(0.16, 0.84, 0.24, 1),
+      opacity 560ms cubic-bezier(0.33, 0, 0.2, 1),
+      filter 620ms cubic-bezier(0.33, 0, 0.2, 1);
+  }
+
+  /* `rise` is the only masked variant: the `overflow: hidden` is the mask, the inner span is what
+     moves, so the words are unveiled rather than faded in on top of the line. The other two are
+     unmasked — a blur has to spill past its box to read as depth instead of as a smudge, and a
+     word that floats up needs room above the line to float through. */
+  .words-rise .word {
+    overflow: hidden;
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .words-rise .word-rise {
+    /* 112% clears descenders (the tail of a "g") before the mask cuts them off. */
+    transform: translateY(112%);
+    opacity: 0;
+    filter: blur(4px);
+  }
+
+  /* `bloom`: the words rise free of any mask and grow the last few per cent into place, so they
+     arrive towards the reader as much as upwards. */
+  .words-bloom .word-rise {
+    transform-origin: 50% 100%;
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .words-bloom .word-rise {
+    transform: translateY(0.5em) scale(0.92);
+    opacity: 0;
+    filter: blur(8px);
+  }
+
+  /* `blur`: a focus rather than a move. Kept light — at display sizes a heavy blur smears a long
+     heading into a grey band for a third of a second. */
+  .words-blur .word-rise {
+    transition-duration: 1000ms, 620ms, 680ms;
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .words-blur .word-rise {
+    transform: translateY(0.12em) scale(1.03);
+    opacity: 0;
+    filter: blur(9px);
+  }
+
+  /* `type`: the line lifts into place and then types itself out under a caret.
+     The reveal is a `clip-path` stepped one character at a time, never a per-character split of
+     the text: the heading stays one selectable, searchable string that still wraps normally, and
+     the clip changes only what is painted. The caret is a separate element whose `left` steps on
+     the same clock, so it sits exactly at the typing edge. */
+  .words-type .type-line {
+    position: relative;
+    display: inline-block;
+  }
+  .words-type .type-text {
+    display: inline-block;
+    /* The negative insets keep italic overhang and descenders out of the clip. */
+    clip-path: inset(-0.2em -0.14em -0.3em 0);
+    /* The span has to be the one element that paints the glyphs, or the clip does nothing.
+       `main h2` normally paints its gradient through `background-clip: text` at the h2 level, and
+       those pixels do not belong to this span — clipping the span then left the heading fully
+       drawn by its parent, exactly as if there were no clip at all. So a `type` heading carries
+       `heading-plain` to stop the h2 painting, and the gradient moves down here. The gradient is
+       named rather than inherited: `background-image` is not an inherited property, so `inherit`
+       resolves against the plain `.words` span in between and comes back `none`. */
+    background-image: var(--gradient-heading);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .theme-on-brand .words-type .type-text {
+    background-image: var(--gradient-heading-on-brand);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .words-type .type-text {
+    clip-path: inset(-0.2em 100% -0.3em 0);
+    transform: translateY(0.55em);
+    opacity: 0;
+  }
+  .words-type .type-caret {
+    position: absolute;
+    top: 0.16em;
+    bottom: 0.2em;
+    left: 100%;
+    width: 0.055em;
+    /* `main h2` paints its text through `background-clip`, which leaves `currentColor`
+       transparent — the caret has to name its own colour. */
+    background-color: oklch(var(--color-gold));
+    opacity: 0;
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .words-type .type-caret {
+    left: 0;
+  }
+  .reveal[data-reveal="in"] .words-type .type-caret {
+    opacity: 1;
+    animation:
+      type-caret-blink var(--caret-blink, 900ms) steps(1, end) var(--caret-blinks, 4),
+      type-caret-out 240ms ease-out var(--caret-end, 4s) forwards;
+  }
+  @keyframes type-caret-blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes type-caret-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* When the words are the whole entrance, the block they sit in must not also travel: two moves
+     over one heading read as a wobble. Browsers without `:has()` simply keep both, which is the
+     behaviour the heading had before. */
+  html[data-motion-ready]:not([data-motion-paused="true"])
+    .reveal:not([data-reveal="in"]):has(> :is(h1, h2, h3) > .words) {
+    opacity: 1;
+    transform: none;
   }
   .stagger {
     --stagger-step: 70ms;
@@ -866,7 +1127,7 @@ html:not([data-motion-ready]) .client-ribbon {
   .video-veil {
     background-color: rgb(0 0 0 / var(--video-veil-alpha));
   }
-  /* The hero carousel runs the heavier veil; the methods section keeps the default. */
+  /* The hero carousel runs the heavier veil; it is the only video section left on the homepage. */
   [data-brand-hero] {
     --video-veil-alpha: var(--video-veil-alpha-hero);
   }
@@ -1115,5 +1376,103 @@ html:not([data-motion-ready]) .client-ribbon {
     to {
       transform: translateY(-5px);
     }
+  }
+
+  /* Office map (2026-09-16). The pins drop onto their cities in sequence rather than all at once,
+     which reads as the footprint being placed rather than a static graphic appearing. The halo is
+     on the selected pin only, so the India cluster stays legible when one of them is chosen. */
+  .map-pin {
+    animation: map-pin-drop 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--pin-delay, 0ms);
+  }
+
+  @keyframes map-pin-drop {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -190%) scale(0.55);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .map-pin-halo {
+    animation: map-pin-halo 2.4s ease-out infinite;
+  }
+
+  @keyframes map-pin-halo {
+    from {
+      opacity: 0.5;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 0;
+      transform: scale(2.8);
+    }
+  }
+}
+
+/* The homepage header (2026-09-16): the hero opens clean, and the bar slides in on the first
+   scroll. `data-at-top` is set by the header itself. Focus always wins over the hidden state, so
+   the keyboard can reach the navigation before any scrolling has happened, and a visitor who
+   prefers reduced motion gets the bar without the slide. */
+.site-header[data-over-hero="true"][data-at-top="true"]:not(:focus-within) {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: none;
+}
+/* The drawer opened from the hero's own hamburger (2026-09-21) must not drag the bar in behind
+   its backdrop: focus is inside the dialog, which would otherwise count as focus-within. The dialog
+   sits in the top layer, so the bar's transform and opacity never reach it, but pointer-events is
+   inherited and has to be restored on the dialog itself. */
+.site-header[data-over-hero="true"][data-at-top="true"][data-hero-menu="true"] {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: none;
+}
+.site-header dialog {
+  pointer-events: auto;
+}
+/* Only once the header has settled, so the first hide is instant rather than a slide-away. */
+.site-header[data-ready="true"] {
+  transition:
+    transform 500ms ease-out,
+    opacity 500ms ease-out,
+    box-shadow 300ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header[data-ready="true"] {
+    transition: none;
+  }
+}
+
+/* The floating scroll-down button: the arrow bobs inside its ring, and rests under reduced motion. */
+@keyframes scroll-down-bob {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+.scroll-down-arrow {
+  animation: scroll-down-bob 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-down-arrow {
+    animation: none;
+  }
+}
+
+@keyframes dashFlow {
+  from {
+    stroke-dashoffset: 140;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }

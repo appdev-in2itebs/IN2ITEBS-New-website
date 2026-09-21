@@ -8,7 +8,10 @@ for (const width of [320, 375, 768, 1024, 1100, 1280, 1440]) {
     await expect(page.locator("header").getByRole("link", { name: "Talk to us" })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
     if (width >= 1280) {
-      await expect(page.locator("header").getByRole("combobox", { name: "Preferred contact region" })).toBeVisible();
+      // The contact-region dropdown went with the header rebuild (owner, 2026-09-17: a flat white
+      // bar carrying the logo, the nav and "Talk to us", nothing else). The preference itself still
+      // exists — the contact form sets it — so what the header must show is the route to that form.
+      await expect(page.locator("header").getByRole("combobox")).toHaveCount(0);
       const services = page.locator("header").getByRole("link", { name: "Services", exact: true });
       await services.hover();
       const box = await page.locator("#desktop-nav-0").boundingBox();

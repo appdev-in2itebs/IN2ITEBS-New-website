@@ -44,11 +44,13 @@ test("gold and glass tokens exist in the root block and the on-video scope", () 
     assert.ok(light.includes(token), `light theme lacks ${token}`);
     assert.ok(dark.includes(token), `dark theme lacks ${token}`);
   }
-  assert.match(light, /--color-gold:\s*51\.14% 0\.082 83\.6/);
-  assert.match(light, /--color-gold-display:\s*57% 0\.085 84/);
+  // The accent was gold/amber until the owner dropped it on 2026-09-17; it is a deep teal now, and
+  // lighter over video so it stays legible on dark footage. The token names still say "gold" so the
+  // swap stays a single edit. These pins are what stop a colour change happening by accident.
+  assert.match(light, /--color-gold:\s*48% 0\.12 196/);
+  assert.match(light, /--color-gold-display:\s*54% 0\.13 196/);
   assert.match(dark, /--color-bg-canvas:\s*12\.87% 0\.008 268\.5/);
-  // Prettier normalises the authored `0.100` chroma to `0.1`; the numeric value is unchanged.
-  assert.match(dark, /--color-gold:\s*72\.45% 0\.1 82\.3/);
+  assert.match(dark, /--color-gold:\s*82% 0\.13 196/);
 });
 
 test("the on-brand scope remaps gold to the champagne tone", () => {
@@ -79,6 +81,8 @@ test("the video sections carry one 20% black veil token and the old wash layers 
   assert.ok(root.includes("--video-veil-alpha-hero: 0.55;"), "root lacks --video-veil-alpha-hero: 0.55");
   assert.ok(source.includes(".video-veil {"), ".video-veil is not defined");
   assert.ok(
+    // The hero is the only section on the heavier veil; the services directory that briefly
+    // shared it went on 2026-09-17.
     source.includes("[data-brand-hero] {\n    --video-veil-alpha: var(--video-veil-alpha-hero);"),
     "the hero does not take the heavier veil",
   );

@@ -27,7 +27,9 @@ export function PillarCards() {
               accentBySlug[pillar.slug] ?? "border-l-gold",
             )}
           >
-            <h3 className="text-h3 font-bold text-foreground transition-colors group-hover:text-gold">{pillar.name}</h3>
+            <h3 className="text-h3 font-bold text-foreground transition-colors group-hover:text-action">
+              {pillar.name}
+            </h3>
             <p className="mt-3 flex-1 text-[0.95rem] leading-relaxed text-foreground-muted">{pillar.tagline}</p>
             <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-gold">
               Explore

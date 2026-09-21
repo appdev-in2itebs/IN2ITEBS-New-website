@@ -52,6 +52,60 @@ const pillars = [
 /** Coverage across the business — Blueprint §8.10. */
 const coverage = ["Finance", "Sales", "Operations", "HR", "Supply Chain", "Procurement", "Executive reporting"];
 
+/**
+ * The detailed feature set, carried over from the existing site's /sap-sac/ page, which sets these
+ * five groups out one by one under "Detailed features are described below". The three pillars above
+ * are why you would buy it; this is what is actually in it.
+ */
+const capabilities = [
+  {
+    title: "Augmented analytics",
+    body: "Reveal relevant, accurate and actionable insight faster with artificial intelligence and machine learning.",
+    bullets: [
+      "Data science for all — machine intelligence embedded in business intelligence and planning workflows",
+      "Conversational analytics — visualisations and explanations from natural-language querying",
+      "Automated machine learning — key influencers and relationships, anomalies and remedial actions",
+      "Intelligent predictions — outcomes and forecasts at the push of a button, no data science skills required",
+    ],
+  },
+  {
+    title: "Business intelligence",
+    body: "Explore data across the organisation and deliver insight at the point of decision with intuitive self-service analytics.",
+    bullets: [
+      "Data exploration and visualisation — interactive stories, filtering and drilling regardless of volume",
+      "Efficient modelling and preparation — automated cleansing that alerts errors and categorises measures and dimensions",
+    ],
+  },
+  {
+    title: "Enterprise planning",
+    body: "Link and create financial and operational plans in one solution to drive better decisions from integrated plans.",
+    bullets: [
+      "Collaborative planning across every line of business, with strategic alignment kept intact",
+      "Intelligent planning — predictive forecasting and machine learning",
+      "Integrated financial planning — transactions, analytics and planning combined with SAP S/4HANA",
+      "Company-wide advanced analytics — versions of a planning model for budgeting, forecasting and analysis",
+    ],
+  },
+  {
+    title: "Design of analytics applications",
+    body: "Create centrally governable analytic content, from guided analytics to sophisticated planning and smart applications.",
+    bullets: [
+      "Custom interactions — business intelligence, planning and predictive united in one application",
+      "Rapid prototyping — customise, integrate and extend existing content, templates and stories",
+      "Standardised analytics content — reusable interface elements and adjustable widget behaviour",
+      "Custom widgets — tailored widgets, centrally managed composites and data-science capability",
+    ],
+  },
+  {
+    title: "Mobile and web extensions",
+    body: "Reach your analytics from an iPhone or iPad to get the most recent picture of the business anywhere.",
+    bullets: [
+      "Engaging connections — mobile-ready stories and charts with drill-down, filter on selection and inspection",
+      "Productive collaboration — chat with colleagues and manage notifications, such as a shared story, in the app",
+    ],
+  },
+];
+
 export default function AnalyticsCloudPage() {
   return (
     <>
@@ -101,6 +155,28 @@ export default function AnalyticsCloudPage() {
                 ))}
               </div>
             </Card>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* DETAILED CAPABILITIES */}
+      <Section tone="white">
+        <Container>
+          <Reveal className="mb-12 max-w-2xl">
+            <SectionHeading
+              eyebrow="Detailed capabilities"
+              lead="Analytics Cloud is one product with five distinct capability sets inside it. Knowing which of them you are buying for is most of the work of scoping a rollout."
+            >
+              What is actually <Accent>in it</Accent>.
+            </SectionHeading>
+          </Reveal>
+          <FeatureGrid features={capabilities} columns={3} bezel />
+          <Reveal className="mt-10">
+            <p className="max-w-[80ch] text-base leading-relaxed text-foreground-muted">
+              Taken together, that is complete in-memory data management and analytics, smart insight delivered in
+              context through natural-language processing, confident decisions made faster without expert intervention,
+              and affordability, availability and scalability as the estate grows.
+            </p>
           </Reveal>
         </Container>
       </Section>

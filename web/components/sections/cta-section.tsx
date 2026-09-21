@@ -44,7 +44,7 @@ export function CtaSection({
                   Prefer email?{" "}
                   <a
                     href={`mailto:${site.primaryEmail}`}
-                    className="font-semibold text-foreground underline decoration-gold/40 underline-offset-4 hover:text-gold hover:decoration-gold"
+                    className="font-semibold text-foreground underline decoration-gold/40 underline-offset-4 hover:text-action hover:decoration-gold"
                   >
                     {site.primaryEmail}
                   </a>

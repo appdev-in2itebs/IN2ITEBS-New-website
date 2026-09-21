@@ -4,7 +4,7 @@ import { PlatformPracticeLinks } from "@/components/sections/platform-practice-l
 import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
-import { PageHero } from "@/components/sections/page-hero";
+import { ThreeTiersHero } from "@/components/sections/three-tiers-hero";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { PillarCards } from "@/components/sections/pillar-cards";
 import { AllianceStrip } from "@/components/sections/alliance-strip";
@@ -32,26 +32,18 @@ const tiers = [
   },
   {
     title: "Tier 02 — Platforms & Engineering",
-    body: "Build the enterprise platform and the engineering around it across our core technologies.",
-    bullets: [
-      "SAP S/4HANA & modules",
-      "Workday",
-      "Salesforce",
-      "SAP SuccessFactors",
-      "Oracle",
-      "Microsoft",
-      "Custom engineering",
-      "Digital transformation",
-    ],
+    body: "Build and modernize core platforms and digital products with speed, scale and control.",
+    bullets: ["Enterprise systems", "Custom development", "Integration & API", "Data engineering", "Cloud & DevOps"],
   },
   {
     title: "Tier 03 — Managed Services & Sustenance",
-    body: "Run and continuously improve the landscape once it is live, with always-on operations.",
+    body: "Keep operations stable, secure and continuously optimized as your organization evolves.",
     bullets: [
-      "Application Management Services",
-      "Application support",
-      "Technical operations",
-      "Continuous improvement",
+      "Application management",
+      "Infrastructure & cloud",
+      "Security operations",
+      "Continuous optimization",
+      "24/7 global support",
     ],
   },
 ];
@@ -80,12 +72,7 @@ export default function WhatWeDoPage() {
   return (
     <>
       <BreadcrumbJsonLd path="/what-we-do/" />
-      <PageHero
-        eyebrow="What We Do"
-        headline="Three tiers."
-        accentWord="One continuous engagement."
-        subhead="Enter through Advisory, Platforms & Engineering, or Managed Services & Sustenance — and find the same delivery engine underneath, whichever door you choose."
-      />
+      <ThreeTiersHero />
 
       {/* THREE ENGAGEMENT TIERS */}
       <section aria-labelledby="practice-finder-title" className="bg-surface py-10">
