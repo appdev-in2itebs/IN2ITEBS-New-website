@@ -1416,8 +1416,9 @@ html:not([data-motion-ready]) .client-ribbon {
 /* The homepage header (2026-09-16): the hero opens clean, and the bar slides in on the first
    scroll. `data-at-top` is set by the header itself. Focus always wins over the hidden state, so
    the keyboard can reach the navigation before any scrolling has happened, and a visitor who
-   prefers reduced motion gets the bar without the slide. */
-.site-header[data-over-hero="true"][data-at-top="true"]:not(:focus-within) {
+   prefers reduced motion gets the bar without the slide. `data-pinned` (2026-09-21) is the hero's
+   hamburger calling the bar in on desktop; it stays until dismissed, whatever focus does. */
+.site-header[data-over-hero="true"][data-at-top="true"]:not(:focus-within):not([data-pinned="true"]) {
   transform: translateY(-100%);
   opacity: 0;
   pointer-events: none;

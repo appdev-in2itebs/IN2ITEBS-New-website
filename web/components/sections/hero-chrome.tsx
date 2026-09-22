@@ -5,9 +5,11 @@ import { OPEN_MENU } from "@/components/layout/header";
 
 /**
  * The chrome that sits on the hero footage before the first scroll (owner, 2026-09-21): the white
- * logo top-left and a round hamburger top-right that opens the site drawer, both inside the hero
- * so they scroll away with the footage while the real header slides in over them. The scroll cue
- * is the site-wide floating button in components/layout/scroll-down.tsx, not part of the hero.
+ * logo top-left and a round hamburger top-right, both inside the hero so they scroll away with
+ * the footage while the real header slides in over them. The hamburger opens the site drawer on
+ * a phone or tablet; on desktop it slides the header bar itself in, with the flat navigation and
+ * its dropdowns (see OPEN_MENU in components/layout/header.tsx). The scroll cue is the site-wide
+ * floating button in components/layout/scroll-down.tsx, not part of the hero.
  */
 export function HeroChrome() {
   return (

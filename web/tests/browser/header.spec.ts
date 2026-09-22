@@ -91,6 +91,40 @@ test("the keyboard reaches the navigation before any scrolling", async ({ page }
   expect(await page.locator(header).evaluate((el) => el.contains(document.activeElement))).toBe(true);
 });
 
+test("the hero hamburger calls the bar in on desktop and opens the drawer on a phone", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const bar = page.locator(header);
+  const drawer = page.locator("#mobile-navigation");
+  await expect(bar).toHaveAttribute("data-at-top", "true");
+
+  // Desktop: the bar slides in with the flat navigation; the drawer stays shut.
+  await page.getByRole("button", { name: "Open site menu" }).click();
+  await expect(bar).toHaveAttribute("data-pinned", "true");
+  await expect.poll(() => bar.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
+  await expect(bar.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Services" })).toBeVisible();
+  await expect(drawer).toBeHidden();
+
+  // Escape lets it go again, and focus lands back on the hamburger.
+  await page.keyboard.press("Escape");
+  await expect(bar).not.toHaveAttribute("data-pinned", "true");
+  await expect.poll(() => bar.evaluate((el) => getComputedStyle(el).opacity)).toBe("0");
+  await expect(page.getByRole("button", { name: "Open site menu" })).toBeFocused();
+
+  // A press outside the bar dismisses it too.
+  await page.getByRole("button", { name: "Open site menu" }).click();
+  await expect(bar).toHaveAttribute("data-pinned", "true");
+  await page.mouse.click(720, 600);
+  await expect(bar).not.toHaveAttribute("data-pinned", "true");
+
+  // Phone: the same hamburger opens the drawer, exactly as before.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open site menu" }).click();
+  await expect(drawer).toBeVisible();
+  await expect(bar).not.toHaveAttribute("data-pinned", "true");
+  await expect(drawer.getByRole("button", { name: "Close menu" })).toBeVisible();
+});
+
 test("inner pages keep the header visible at the top", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const route of ["/about/", "/contact/"]) {

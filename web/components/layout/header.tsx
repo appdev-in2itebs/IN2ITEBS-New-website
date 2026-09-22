@@ -14,11 +14,16 @@ import { cn } from "@/lib/utils";
 const desktopNav = primaryNav.filter((item) => item.href !== "/");
 
 /**
- * Window event that opens the site drawer from outside the header: the homepage hero's hamburger
- * dispatches it before the first scroll, while the bar itself is still out of the way. The detail
- * carries the element focus returns to when the drawer closes.
+ * Window event that opens the site menu from outside the header: the homepage hero's hamburger
+ * dispatches it before the first scroll, while the bar itself is still out of the way. On a phone
+ * or tablet it opens the drawer; from the desktop breakpoint up (2026-09-21) it slides the header
+ * bar itself in, so the visitor gets the flat navigation with its dropdowns rather than the
+ * drawer. The detail carries the element focus returns to when the menu closes.
  */
 export const OPEN_MENU = "in2it:open-menu";
+
+/** The header's own desktop breakpoint: the flat nav shows and the drawer button hides at `xl`. */
+const DESKTOP = "(min-width: 1280px)";
 
 /**
  * How each dropdown lays out, after the existing in2itebs.com header (2026-09-19): Services is the
@@ -42,15 +47,44 @@ export function Header() {
   /** Where focus goes back to when the drawer was opened from the hero, and whether it was. */
   const returnFocus = useRef<HTMLElement | null>(null);
   const [heroMenu, setHeroMenu] = useState(false);
+  /** The bar has been called in over the hero by its hamburger, and stays until dismissed. */
+  const [pinned, setPinned] = useState(false);
   useEffect(() => {
     const open = (event: Event) => {
       returnFocus.current = (event as CustomEvent<{ returnTo?: HTMLElement }>).detail?.returnTo ?? null;
+      if (window.matchMedia(DESKTOP).matches) {
+        // Desktop: bring the bar in and hand focus to it. The logo, not a nav trigger, so no
+        // dropdown springs open on its own.
+        setPinned(true);
+        requestAnimationFrame(() =>
+          header.current?.querySelector<HTMLElement>('a[aria-label="In2IT EBS home"]')?.focus({ preventScroll: true }),
+        );
+        return;
+      }
       setHeroMenu(true);
       setMobileOpen(true);
     };
     window.addEventListener(OPEN_MENU, open);
     return () => window.removeEventListener(OPEN_MENU, open);
   }, []);
+  /** Dismiss the called-in bar: hide it again and put focus back on the hero's hamburger. */
+  const unpin = () => {
+    setPinned(false);
+    setExpanded(null);
+    const back = returnFocus.current;
+    returnFocus.current = null;
+    if (back?.isConnected && back.getClientRects().length) back.focus({ preventScroll: true });
+  };
+  useEffect(() => {
+    if (!pinned) return;
+    // Shrinking below the desktop breakpoint hands the menu back to the drawer button.
+    const mq = window.matchMedia(DESKTOP);
+    const resize = () => {
+      if (!mq.matches) setPinned(false);
+    };
+    mq.addEventListener("change", resize);
+    return () => mq.removeEventListener("change", resize);
+  }, [pinned]);
   const triggers = useRef<Record<string, HTMLAnchorElement | null>>({});
   // Hover-open menus: the trigger wrapper is stretched to the header row so the vertical path into
   // the panel never leaves it, and a diagonal path that does leave it gets a short grace timer;
@@ -82,10 +116,14 @@ export function Header() {
     drawer.current?.close();
     setMobileOpen(false);
     setHeroMenu(false);
+    setPinned(false);
   }, [pathname]);
   useEffect(() => {
+    // A press anywhere outside the header closes an open dropdown and lets a called-in bar go.
     const outside = (event: PointerEvent) => {
-      if (!header.current?.contains(event.target as Node)) setExpanded(null);
+      if (header.current?.contains(event.target as Node)) return;
+      setExpanded(null);
+      setPinned(false);
     };
     document.addEventListener("pointerdown", outside);
     return () => document.removeEventListener("pointerdown", outside);
@@ -117,6 +155,9 @@ export function Header() {
       // in. `data-at-top` drives that; the CSS keeps it visible whenever something inside has focus,
       // so the keyboard can always reach the navigation.
       el.dataset.atTop = String(window.scrollY <= 20);
+      // Once the visitor scrolls, the bar is in on its own terms; the call-in is over, so coming
+      // back to the top hides it again as usual.
+      if (window.scrollY > 20) setPinned(false);
     };
     update();
     // The first application must not animate, or the bar paints and then slides away in front of
@@ -144,12 +185,17 @@ export function Header() {
       ref={header}
       data-over-hero={pathname === "/" ? "true" : undefined}
       data-hero-menu={heroMenu && mobileOpen ? "true" : undefined}
+      data-pinned={pinned ? "true" : undefined}
       className="site-header fixed inset-x-0 top-0 z-40 bg-surface text-foreground shadow-sm data-[scrolled=true]:shadow-glass"
       onKeyDown={(event) => {
-        if (event.key === "Escape" && expanded) {
+        if (event.key !== "Escape") return;
+        if (expanded) {
           event.preventDefault();
           triggers.current[expanded]?.focus();
           setExpanded(null);
+        } else if (pinned) {
+          event.preventDefault();
+          unpin();
         }
       }}
       onBlur={(event) => {
