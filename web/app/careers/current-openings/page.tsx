@@ -102,12 +102,7 @@ export default function CurrentOpeningsPage() {
           "We connect, explore, create, empower and grow together...",
         ]}
       />
-      <V2Section
-        id="openings"
-        eyebrow="Current Openings"
-        heading="Open roles."
-        note={`${openings.length} openings, as listed on the existing site.`}
-      >
+      <V2Section id="openings" eyebrow="Current Openings" heading="Open roles.">
         <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {openings.map((job, index) => {
             const feature = index === 0;

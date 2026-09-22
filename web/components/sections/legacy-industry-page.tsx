@@ -59,12 +59,7 @@ export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry }) {
       <V2StickyNav anchors={anchors} />
       <V2Overview eyebrow={industry.name} heading={`About ${industry.name}`} paragraphs={rest.length ? rest : [lead]} />
       {industry.sections.length ? (
-        <V2Section
-          id="solutions"
-          eyebrow={industry.name}
-          heading={industry.sectionsHeading ?? "Where we help."}
-          note={`${industry.sections.length} ${industry.sections.length === 1 ? "area" : "areas"}, from the page it came from.`}
-        >
+        <V2Section id="solutions" eyebrow={industry.name} heading={industry.sectionsHeading ?? "Where we help."}>
           <V2Bento items={items} featureFirst={!items.some((item) => item.image)} />
         </V2Section>
       ) : null}

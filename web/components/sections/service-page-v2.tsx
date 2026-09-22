@@ -62,7 +62,6 @@ export function ServicePageV2({ page }: { page: ServicePage }) {
           id="covers"
           eyebrow={group?.name ?? "Services"}
           heading={page.sectionsHeading ?? `What ${page.name} covers.`}
-          note={`${page.sections.length} ${page.sections.length === 1 ? "area" : "areas"}, each from the page it came from.`}
         >
           <V2Bento items={items} />
           {page.closing?.length ? (
