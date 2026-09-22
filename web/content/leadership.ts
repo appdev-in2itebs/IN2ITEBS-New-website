@@ -25,6 +25,9 @@ export function leaderInitials(name: string) {
  * the live site identical. Sudhansu Mishra's title moved from "AGM IT Application" to Chief
  * Operating Officer on the same pass, and Abhijit Shukla is new.
  *
+ * On 2026-09-22 the owner reordered the roster to Rudra, Abhijit, Sudhansu, Kunwar, and replaced
+ * Sudhansu's bio with new copy of their own; that entry is no longer verbatim from the live site.
+ *
  * Every leader now carries a LinkedIn profile: Rudra's from the earlier scrape, and the other
  * three supplied by the owner on 2026-09-18. They are stored as canonical `/in/<profile>/` URLs —
  * the links as sent were LinkedIn share links carrying `utm_source=share_via` tracking, which has
@@ -32,14 +35,6 @@ export function leaderInitials(name: string) {
  * page. Named leadership remains a `docs/LEGAL_REVIEW.md` item.
  */
 export const leadership: Leader[] = [
-  {
-    slug: "sudhansu-mishra",
-    name: "Sudhansu Mishra",
-    title: "Chief Operating Officer (COO)",
-    photo: "/team/sudhansu-mishra.png",
-    linkedin: "https://www.linkedin.com/in/sudhansu-s-mishra/",
-    bio: "An IT professional with 21 years' experience in Pre-Sales, Project Management, Bid Management and Tender Management.",
-  },
   {
     slug: "rudra-shankar-shatapathy",
     name: "Rudra Shankar Shatapathy",
@@ -55,6 +50,14 @@ export const leadership: Leader[] = [
     photo: "/team/abhijit-shukla.png",
     linkedin: "https://www.linkedin.com/in/abhijitshukla/",
     bio: "Abhijit Shukla serves as Chief Revenue Officer (CRO) at In2IT EBS, leading global sales, revenue growth, strategic partnerships, and market expansion. With extensive experience in enterprise technology and digital transformation, he has a proven track record of building high-performing teams and delivering customer-centric outcomes across international markets. Abhijit combines strategic vision with execution excellence to accelerate sustainable growth and strengthen the company's global footprint.",
+  },
+  {
+    slug: "sudhansu-mishra",
+    name: "Sudhansu Mishra",
+    title: "Chief Operating Officer (COO)",
+    photo: "/team/sudhansu-mishra.png",
+    linkedin: "https://www.linkedin.com/in/sudhansu-s-mishra/",
+    bio: "Sudhansu Mishra brings over 25 years of experience in IT, digital transformation, business strategy and technology leadership. He drives business growth, operational excellence and strategic initiatives at In2IT EBS, with a strong focus on building innovative, customer-centric technology solutions.",
   },
   {
     slug: "kunwar-krishna-menon",
