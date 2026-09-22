@@ -13,6 +13,19 @@ export function supabaseConfigured() {
   return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SECRET_KEY);
 }
 
+/**
+ * The project URL supabase-js wants is the bare origin (`https://<ref>.supabase.co`); it appends
+ * `/rest/v1` itself. The dashboard's Data API page shows the REST endpoint with that suffix, and
+ * that is what tends to get pasted into a secret — so the suffix and any trailing slash are dropped
+ * here rather than producing `/rest/v1/rest/v1/...` requests that fail with a 404.
+ */
+export function supabaseProjectUrl(raw: string) {
+  return raw
+    .trim()
+    .replace(/\/rest\/v1\/?$/, "")
+    .replace(/\/+$/, "");
+}
+
 let cached: SupabaseClient | null = null;
 
 export function supabaseAdmin(): SupabaseClient {
@@ -20,7 +33,7 @@ export function supabaseAdmin(): SupabaseClient {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SECRET_KEY;
   if (!url || !key) throw new Error("Supabase is not configured: set SUPABASE_URL and SUPABASE_SECRET_KEY.");
-  cached = createClient(url, key, {
+  cached = createClient(supabaseProjectUrl(url), key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return cached;

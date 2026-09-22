@@ -107,7 +107,11 @@ test("the words are held back until their section arrives, then settle in place"
 
   await page.locator("#offices").scrollIntoViewIfNeeded();
   await expect.poll(() => word.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
-  expect(await word.evaluate((el) => getComputedStyle(el).transform)).toMatch(/none|matrix\(1, 0, 0, 1, 0, 0\)/);
+  // The opacity lands at 560ms but the transform keeps easing until 900ms, so sampling it the
+  // instant the word is opaque reads a last fraction of a pixel of travel. Poll until it settles.
+  await expect
+    .poll(() => word.evaluate((el) => getComputedStyle(el).transform), { timeout: 5000 })
+    .toMatch(/none|matrix\(1, 0, 0, 1, 0, 0\)/);
 });
 
 test("reduced motion leaves every word exactly where it is", async ({ browser }) => {

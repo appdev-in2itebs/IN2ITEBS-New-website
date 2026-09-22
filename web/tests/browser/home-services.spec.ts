@@ -62,7 +62,9 @@ test("the service ribbon travels on its own and can be moved by hand in both dir
   const box = (await track.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   const started = await track.evaluate((el) => el.scrollLeft);
-  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 5000 }).toBeGreaterThan(started + 10);
+  // The window allows for a loaded first paint, as in home-team.spec.ts; at DRIFT px/s the ten
+  // pixels themselves take well under a second once the loop is running.
+  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 10000 }).toBeGreaterThan(started + 10);
 
   // A hand on the ribbon holds it, so a card is never pulled out from under a drag.
   await track.dispatchEvent("pointerdown");
