@@ -7,7 +7,7 @@ public ngrok link so anyone can review it. Everything it needs lives here.
 | --- | --- | --- |
 | `ngrok.example.yml` | yes | Template for the agent config. Copy it to `ngrok.yml` and add your token. |
 | `ngrok.yml` | **no** (git-ignored) | Your real agent config with the account authtoken. |
-| `ngrok-domain.txt` | **no** (git-ignored) | Optional. One line with a reserved ngrok hostname (no `https://`), e.g. `in2it-ebs.ngrok-free.app`, so the public link is the same every run. |
+| `ngrok-domain.txt` | yes | One line with the reserved ngrok hostname (no `https://`), so the public link is the same every run and on every machine. Not a secret. |
 | `ngrok.exe` | **no** (git-ignored) | The agent binary. `run.bat` downloads it on first run (about 33 MB). |
 
 ## First-time setup
