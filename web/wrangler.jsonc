@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "in2it-ebs-web",
+  "main": ".open-next/worker.js",
+
+  // nodejs_compat is required: lib/lead-service.ts imports node:crypto and
+  // app/api/lead/route.ts runs on the nodejs runtime. Without the flag the
+  // Worker fails to start. global_fetch_strictly_public keeps fetch() to the
+  // public internet rather than looping back into this Worker.
+  "compatibility_date": "2026-09-21",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  // Every prerendered page plus web/public/ — 1,695 files — is served straight
+  // from Cloudflare's edge, not through the Worker.
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

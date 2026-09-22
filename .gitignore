@@ -3,6 +3,9 @@ web/.next/
 web/.env*
 !web/.env.example
 web/tsconfig.tsbuildinfo
+# Cloudflare build output: the OpenNext bundle and wrangler's local state.
+web/.open-next/
+web/.wrangler/
 web/playwright-report/
 web/test-results/
 .website-backups/

@@ -1,0 +1,62 @@
+name: deploy
+
+# Runs only after `ci` has finished on main, and only if it passed. A push whose
+# checks, build or browser tests fail therefore never reaches the live site.
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+# One deploy at a time, and never cancel one midway: two quick pushes must not
+# race and leave the Worker on the older build.
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Deploy exactly the commit ci verified, not whatever main points at now.
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+
+      - name: Build the Worker bundle
+        run: npx opennextjs-cloudflare build
+        env:
+          # Read at build time. `preview` keeps the X-Robots-Tag noindex header on,
+          # so the staging URL can never compete with in2itebs.com in search.
+          SITE_ENV: preview
+          # Baked into canonical URLs, the sitemap and the enquiry origin allow-list.
+          # Set the SITE_URL repository variable to the Workers URL after the first deploy.
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://in2itebs.com' }}
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: web
+          command: deploy
+          # Uploaded as Worker secrets, never written into wrangler.jsonc or git.
+          secrets: |
+            SUPABASE_URL
+            SUPABASE_SECRET_KEY
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}

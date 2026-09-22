@@ -84,12 +84,64 @@ Run from `web/`:
 | `npm run test:browser` | Playwright specs against the built site on :3107 (`npm run build` first, or let Playwright start it). |
 | `npm run check:full` | Everything above plus the production build. |
 
-## Deployment notes
+## Deployment
 
-- The app is a standard Next.js server (`next start`); it prerenders every marketing route and
-  runs the API routes on Node.
-- Set `SITE_ENV=production` and `NEXT_PUBLIC_SITE_URL` before `next build` for a real release.
-- Keep port 3107 for this site on shared machines; 3000 belongs to another project.
+The site deploys itself. Push to `main`, and once [`ci.yml`](.github/workflows/ci.yml) is green,
+[`deploy.yml`](.github/workflows/deploy.yml) builds the Worker and ships it to Cloudflare. A push
+whose checks, build or browser tests fail never reaches the live site.
+
+```
+push to main -> ci (prettier, eslint, tsc, unit tests, build, Playwright)
+             -> deploy (opennextjs-cloudflare build -> wrangler deploy)
+             -> live, about 2-4 minutes end to end
+```
+
+Nothing is deployed by hand, and no machine has to stay switched on.
+
+### For a teammate
+
+```bash
+git clone https://github.com/appdev-in2itebs/IN2ITEBS-New-website.git
+cd IN2ITEBS-New-website/web
+npm ci
+npm run dev                 # http://127.0.0.1:3107
+# make the change, then
+npm run check               # the same gate CI runs
+git commit -am "..." && git push
+```
+
+That is the whole workflow. There is no deploy step to remember.
+
+### Configuration
+
+Repository secrets (Settings -> Secrets and variables -> Actions) — `CLOUDFLARE_API_TOKEN`,
+`CLOUDFLARE_ACCOUNT_ID`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `SUPABASE_PUBLISHABLE_KEY`. The
+Supabase pair is pushed to Cloudflare as Worker secrets by the deploy job, so the values live in
+exactly one place and never in the repository.
+
+Repository variable `SITE_URL` sets `NEXT_PUBLIC_SITE_URL` at build time; unset, it falls back to
+`https://in2itebs.com`. Set it to the Workers URL once the first deploy has printed one.
+
+`SITE_ENV` is `preview` in CI and in the deploy job, which keeps the `noindex` header on. Only an
+approved production release sets `production`, and only after `in2itebs.com` is the target.
+
+### Running the Cloudflare build locally
+
+```bash
+cd web
+npm run cf:build            # build the Worker bundle
+npm run cf:preview          # run it locally in workerd
+npx wrangler deploy --dry-run   # report the upload size
+```
+
+The Worker is currently **~2.3 MB gzipped against Cloudflare's 3 MB free-tier limit**. Check the
+dry-run size when adding dependencies; crossing 3 MB means moving to the paid plan (10 MB).
+
+### Local preview without Cloudflare
+
+`run.bat` at the repository root still builds and serves the site on port 3107 with an ngrok link,
+for reviews that should not be public. Keep port 3107 for this site on shared machines; 3000
+belongs to another project.
 
 ## Brand and content
 

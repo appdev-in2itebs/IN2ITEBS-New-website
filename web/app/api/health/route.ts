@@ -1,3 +1,5 @@
+import { supabaseConfigured } from "@/lib/supabase";
+
 export const dynamic = "force-dynamic";
 export function GET() {
   return Response.json(
@@ -7,6 +9,7 @@ export function GET() {
       status: "ok",
       siteEnv: process.env.SITE_ENV ?? "unset",
       leadDeliveryConfigured: Boolean(process.env.LEAD_WEBHOOK_URL && process.env.LEAD_WEBHOOK_TOKEN),
+      supabaseConfigured: supabaseConfigured(),
     },
     { headers: { "Cache-Control": "no-store" } },
   );
