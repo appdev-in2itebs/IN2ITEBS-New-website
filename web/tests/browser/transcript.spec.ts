@@ -72,14 +72,18 @@ for (const width of [320, 375, 1440])
   });
 test("the hero carousel mounts only the active and the next clip", async ({ page }) => {
   await page.goto("/");
-  // Five video slides since 2026-09-15 15:28; the slide backgrounds are clips, not responsive images.
+  // Five slides since 2026-09-15 15:28; the backgrounds are WebP frame sequences painted on a
+  // canvas, not <video> and not responsive images, so the mounted wrapper is `data-hero-video`
+  // rather than the `data-ambient-video` an AmbientVideo would report.
   const hero = page.locator("section[data-brand-hero]");
   await expect(hero.locator("img[srcset]")).toHaveCount(0);
-  await expect(hero.locator("[data-ambient-video]")).toHaveCount(2);
+  // Only the active clip and the one after it, so four idle sequences are never decoding at once.
+  await expect(hero.locator("[data-hero-video]")).toHaveCount(2);
   await expect(hero.locator('[data-hero-slide][data-active="true"]')).toHaveAttribute("data-hero-slide", "1", {
     timeout: 7000,
   });
-  await expect(hero.locator("[data-ambient-video]")).toHaveCount(2, { timeout: 3000 });
+  // The outgoing clip stays mounted for the crossfade, so allow it to be released before counting.
+  await expect(hero.locator("[data-hero-video]")).toHaveCount(2, { timeout: 5000 });
 });
 
 test("desktop navigation uses unified hover and focus disclosures", async ({ page }) => {
@@ -89,19 +93,25 @@ test("desktop navigation uses unified hover and focus disclosures", async ({ pag
   await page.mouse.wheel(0, 600);
   await expect(page.locator("header")).toHaveAttribute("data-at-top", "false");
   const header = page.locator("header");
+  // Services is the mega-menu's own hub page — the existing site's Services menu laid out as a
+  // page. /what-we-do/ is the separate three-engagement-tiers page and is not what this trigger
+  // points at.
   const services = header.getByRole("link", { name: "Services", exact: true });
-  await expect(services).toHaveAttribute("href", "/what-we-do/");
+  await expect(services).toHaveAttribute("href", "/services/");
   await expect(header.getByRole("button", { name: /Services navigation/ })).toHaveCount(0);
   await services.hover();
   await expect(page.locator("#desktop-nav-0")).toBeVisible();
 
+  // Panel ids follow content/nav.ts with Home filtered out, so About is the fourth trigger:
+  // Services 0, Industries 1, Partners 2, About 3, Contact 4, Career 5.
   const about = header.getByRole("link", { name: "About", exact: true });
   await about.hover();
-  const aboutMenu = page.locator("#desktop-nav-5");
+  const aboutMenu = page.locator("#desktop-nav-3");
   await expect(aboutMenu).toBeVisible();
-  await expect(aboutMenu.getByRole("link", { name: "Who We Are" })).toBeVisible();
-  await expect(aboutMenu.getByRole("link", { name: "Why In2IT EBS" })).toBeVisible();
-  await expect(aboutMenu.getByRole("link", { name: "Insights" })).toBeVisible();
+  await expect(aboutMenu.getByRole("link", { name: "Who We Are?" })).toBeVisible();
+  await expect(aboutMenu.getByRole("link", { name: "Our Leadership" })).toBeVisible();
+  await expect(aboutMenu.getByRole("link", { name: "Blogs & Articles" })).toBeVisible();
+  // Partners and Career are their own triggers, never repeated inside About.
   await expect(aboutMenu.getByRole("link", { name: "Partners" })).toHaveCount(0);
   await expect(aboutMenu.getByRole("link", { name: "Careers" })).toHaveCount(0);
   await expect(header.getByRole("button", { name: /About navigation/ })).toHaveCount(0);

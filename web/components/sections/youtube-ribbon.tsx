@@ -24,6 +24,9 @@ export function YoutubeRibbon() {
 
     let animationFrameId: number;
     let lastTime = performance.now();
+    // See home-team.tsx: `scrollLeft` snaps to whole pixels, so a sub-pixel step per frame is lost
+    // on read and the ribbon barely moves. The fraction is carried here and the total assigned.
+    let offset = el.scrollLeft;
 
     const scrollStep = (time: number) => {
       if (!el) return;
@@ -33,12 +36,15 @@ export function YoutubeRibbon() {
       // Smooth continuous scrolling speed (~30px per second). The page pause control and a hidden
       // tab stop it, the same contract the team, service and article ribbons keep.
       if (!document.hidden && document.documentElement.dataset.motionPaused !== "true") {
-        el.scrollLeft += (30 * delta) / 1000;
+        if (Math.abs(el.scrollLeft - offset) > 1.5) offset = el.scrollLeft;
+        offset += (30 * delta) / 1000;
+        el.scrollLeft = offset;
       }
 
       // Wrap around seamlessly when reaching the end of the track
       if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 4) {
         el.scrollLeft = 0;
+        offset = 0;
       }
 
       animationFrameId = requestAnimationFrame(scrollStep);

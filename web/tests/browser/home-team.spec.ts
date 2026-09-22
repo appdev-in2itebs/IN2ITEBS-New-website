@@ -53,16 +53,19 @@ test("the team ribbon drifts on its own, holds under the pointer and scrolls bot
   expect(await track.evaluate((el) => getComputedStyle(el).overflowX)).toBe("auto");
   expect(await track.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
 
-  // It advances on its own.
+  // It advances on its own, at DRIFT px/s — ten pixels take well under a second. This is the test
+  // that caught `scrollLeft += fraction` being swallowed by whole-pixel snapping, which left the
+  // ribbon moving about a pixel every few seconds; the window allows for a loaded first paint, not
+  // for the drift being slow.
   const started = await track.evaluate((el) => el.scrollLeft);
-  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 5000 }).toBeGreaterThan(started + 10);
+  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 10000 }).toBeGreaterThan(started + 10);
 
   // Hovering must not stop it (2026-09-17). A reader's pointer is almost always inside the section
   // they are reading, so gating the drift on hover meant it only ever ran once they had left.
   const box = (await track.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   const under = await track.evaluate((el) => el.scrollLeft);
-  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 5000 }).toBeGreaterThan(under + 10);
+  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 10000 }).toBeGreaterThan(under + 10);
 
   // A hand on the ribbon does hold it, so a card is never pulled out from under a drag.
   await track.dispatchEvent("pointerdown");

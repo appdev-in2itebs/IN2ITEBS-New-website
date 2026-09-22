@@ -97,18 +97,25 @@ test("the hero hamburger calls the bar in on desktop and opens the drawer on a p
   const bar = page.locator(header);
   const drawer = page.locator("#mobile-navigation");
   await expect(bar).toHaveAttribute("data-at-top", "true");
+  // The bar arms its 500ms transition only once `data-ready` is set, two frames after mount. Acting
+  // before that races the hidden state onto the screen, and the opacity assertions below then read
+  // a frame that is still settling. The homepage pulls a WebP frame sequence in behind all this, so
+  // on a cold server those two frames can be a long way apart.
+  await expect(bar).toHaveAttribute("data-ready", "true");
+  // The transition is 500ms; poll windows below allow for a loaded first paint, not just that.
+  const settled = { timeout: 15000 };
 
   // Desktop: the bar slides in with the flat navigation; the drawer stays shut.
   await page.getByRole("button", { name: "Open site menu" }).click();
   await expect(bar).toHaveAttribute("data-pinned", "true");
-  await expect.poll(() => bar.evaluate((el) => getComputedStyle(el).opacity)).toBe("1");
+  await expect.poll(() => bar.evaluate((el) => getComputedStyle(el).opacity), settled).toBe("1");
   await expect(bar.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Services" })).toBeVisible();
   await expect(drawer).toBeHidden();
 
   // Escape lets it go again, and focus lands back on the hamburger.
   await page.keyboard.press("Escape");
   await expect(bar).not.toHaveAttribute("data-pinned", "true");
-  await expect.poll(() => bar.evaluate((el) => getComputedStyle(el).opacity)).toBe("0");
+  await expect.poll(() => bar.evaluate((el) => getComputedStyle(el).opacity), settled).toBe("0");
   await expect(page.getByRole("button", { name: "Open site menu" })).toBeFocused();
 
   // A press outside the bar dismisses it too.

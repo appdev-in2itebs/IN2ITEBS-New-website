@@ -64,11 +64,16 @@ export function HomeServices() {
     if (!element) return;
     let frame: number;
     let last = performance.now();
+    let offset = element.scrollLeft;
     const step = (now: number) => {
       const elapsed = now - last;
       last = now;
       if (!document.hidden && document.documentElement.dataset.motionPaused !== "true") {
-        element.scrollLeft += (DRIFT * elapsed) / 1000;
+        // See home-team.tsx: `scrollLeft` snaps to whole pixels, so the sub-pixel step has to be
+        // carried in `offset` or the row never moves. Re-anchor when something else moved it.
+        if (Math.abs(element.scrollLeft - offset) > 1.5) offset = element.scrollLeft;
+        offset += (DRIFT * elapsed) / 1000;
+        element.scrollLeft = offset;
       }
       frame = requestAnimationFrame(step);
     };

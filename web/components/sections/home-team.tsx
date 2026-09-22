@@ -72,11 +72,22 @@ export function HomeTeam() {
     if (!element) return;
     let frame: number;
     let last = performance.now();
+    // The browser snaps `scrollLeft` to whole pixels, and DRIFT px/s across one 60fps frame is well
+    // under a pixel. `scrollLeft += fraction` therefore read the snapped value straight back and the
+    // ribbon sat still, creeping a pixel forward only when a frame ran long enough for the fraction
+    // to reach 1 — on a smooth display it looked frozen. Carry the fraction here and assign the
+    // running total instead, so the drift is smooth and frame-rate independent.
+    let offset = element.scrollLeft;
     const step = (now: number) => {
       const elapsed = now - last;
       last = now;
       if (!document.hidden && document.documentElement.dataset.motionPaused !== "true") {
-        element.scrollLeft += (DRIFT * elapsed) / 1000;
+        // The wrap rule, a drag, a wheel or a key moves the track behind this loop's back. A gap
+        // bigger than the snapping error means that happened, so re-anchor rather than yanking the
+        // ribbon back to where the drift thought it was.
+        if (Math.abs(element.scrollLeft - offset) > 1.5) offset = element.scrollLeft;
+        offset += (DRIFT * elapsed) / 1000;
+        element.scrollLeft = offset;
       }
       frame = requestAnimationFrame(step);
     };

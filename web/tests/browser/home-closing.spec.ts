@@ -115,10 +115,11 @@ test("the article strip travels right to left on its own and can be moved by han
   // Snapping would fight the drift, dragging every frame back to the nearest card edge.
   expect(await track.evaluate((el) => getComputedStyle(el).scrollSnapType)).toBe("none");
 
-  // It travels on its own, with no control to press.
+  // It travels on its own, with no control to press, at DRIFT px/s. The window allows for a loaded
+  // first paint; the drift itself covers ten pixels in well under a second once it is running.
   await expect(page.getByRole("button", { name: /articles/ })).toHaveCount(0);
   const started = await track.evaluate((el) => el.scrollLeft);
-  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 6000 }).toBeGreaterThan(started + 10);
+  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 10000 }).toBeGreaterThan(started + 10);
 
   // A hand on the strip holds it, so a card is never pulled out from under a drag.
   await track.dispatchEvent("pointerdown");
