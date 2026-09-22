@@ -1,7 +1,7 @@
 # web/ — the In2IT EBS site (Next.js 15, App Router)
 
 TypeScript · Tailwind CSS · Framer Motion · typed in-repo content (no CMS). The repository-level
-[README](../README.md) covers setup, environment variables, the API routes and the ngrok preview.
+[README](../README.md) covers setup, environment variables, the API routes and deployment.
 
 ## Commands
 

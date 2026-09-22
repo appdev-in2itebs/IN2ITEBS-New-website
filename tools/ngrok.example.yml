@@ -1,8 +1,0 @@
-# Copy this file to tools/ngrok.yml and paste your own ngrok authtoken (dashboard.ngrok.com →
-# Your Authtoken). tools/ngrok.yml is git-ignored: the token is an account credential and must
-# never be committed. run.bat reads this file when it opens the public link.
-version: "3"
-agent:
-  authtoken: YOUR_NGROK_AUTHTOKEN_HERE
-  # Its own inspector port so this agent never collides with another ngrok on this machine.
-  web_addr: 127.0.0.1:4141

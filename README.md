@@ -1,27 +1,27 @@
 # In2IT EBS — corporate website
 
 The In2IT EBS website (https://in2itebs.com), rebuilt as a Next.js 15 App Router application with
-typed in-repo content, a hardened enquiry API, and a one-click local preview with a public ngrok
-link for reviewers.
+typed in-repo content and a hardened enquiry API. It deploys itself: every push to `main` that
+passes CI ships to Cloudflare Workers.
 
 ## Repository layout
 
 ```
 .
 ├── README.md                 # this file
-├── run.bat                   # Windows: build, serve on :3107 and open a public ngrok link
-├── tools/                    # ngrok config template + notes (real token is git-ignored)
-│   ├── README.md
-│   └── ngrok.example.yml
+├── .github/workflows/        # ci.yml (checks + tests) and deploy.yml (Cloudflare)
+├── docs/                     # DNS_MIGRATION.md — putting in2itebs.com on Cloudflare
+├── supabase/migrations/      # SQL schema, applied through the Supabase SQL editor
 ├── .claude/launch.json       # dev-server entry for the Claude Code browser pane (port 3117)
 └── web/                      # the Next.js application (see web/README.md)
     ├── app/                  # routes (App Router), API routes under app/api/
     ├── components/           # layout, sections, ui, media, motion, forms, seo
     ├── content/              # typed content modules: nav, services, clients, offices, …
-    ├── lib/                  # metadata, JSON-LD, lead API service, utilities
+    ├── lib/                  # metadata, JSON-LD, lead API service, Supabase client, utilities
     ├── public/               # brand SVGs, logos, photos, hero frame sequences, videos
     ├── scripts/              # build check, hero-frame extraction, YouTube feed, world map
     ├── tests/                # unit tests (node:test) and Playwright browser specs
+    ├── wrangler.jsonc        # Cloudflare Worker configuration
     └── .env.example          # every environment variable, documented
 ```
 
@@ -43,8 +43,8 @@ SITE_ENV=preview npm run build
 SITE_ENV=preview npm start
 ```
 
-On Windows, `run.bat` at the repository root does all of that and then opens a public link through
-ngrok. See [tools/README.md](tools/README.md) for the one-time ngrok setup.
+To share work with a reviewer, push it: the deploy below puts it on a public URL. There is no local
+tunnel to start.
 
 ## Environment variables
 
@@ -59,14 +59,15 @@ Copy `web/.env.example` to `web/.env.local` and fill in what you need. `.env.loc
 | `ALLOWED_ORIGINS` | optional | Extra browser origins (comma-separated) allowed to submit the enquiry form, e.g. a staging host. |
 | `TRUST_PROXY_HEADERS` | optional | `1` only behind an ingress that overwrites `X-Forwarded-*`; leave `0` otherwise (see the comments in `.env.example`). |
 
-Secrets never go in source control: not the lead webhook token, not the ngrok authtoken. Templates
-(`web/.env.example`, `tools/ngrok.example.yml`) are committed; the real files are ignored.
+Secrets never go in source control. `web/.env.example` is the committed template; `.env.local` is
+ignored. In CI the values live in GitHub Actions secrets, and the deploy job uploads the Supabase
+pair to Cloudflare as Worker secrets — so each one exists in exactly one place.
 
 ## API routes
 
 | Route | Method | Purpose |
 | --- | --- | --- |
-| `/api/health/` | GET | Liveness for run.bat and deploy checks. Returns app name, release, `siteEnv` and whether lead delivery is configured. |
+| `/api/health/` | GET | Liveness for deploy checks. Returns app name, release, `siteEnv`, and whether lead delivery and Supabase are configured. |
 | `/api/lead/` | POST | The enquiry form. Validates with `lib/lead-schema.ts`, enforces a browser-origin allow-list and a per-address rate limit, then forwards to the configured webhook (`lib/lead-service.ts`). |
 | `/api/gone/` | GET | Serves 410 for retired URLs listed in `content/redirects.mjs`. |
 
@@ -137,11 +138,11 @@ npx wrangler deploy --dry-run   # report the upload size
 The Worker is currently **~2.3 MB gzipped against Cloudflare's 3 MB free-tier limit**. Check the
 dry-run size when adding dependencies; crossing 3 MB means moving to the paid plan (10 MB).
 
-### Local preview without Cloudflare
+### Local preview
 
-`run.bat` at the repository root still builds and serves the site on port 3107 with an ngrok link,
-for reviews that should not be public. Keep port 3107 for this site on shared machines; 3000
-belongs to another project.
+`npm run dev` for day-to-day work, or `SITE_ENV=preview npm run build && SITE_ENV=preview npm start`
+to check the production build. Both serve on port 3107 — keep that port for this site on shared
+machines; 3000 belongs to another project.
 
 ## Brand and content
 
