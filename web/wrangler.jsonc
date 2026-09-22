@@ -17,6 +17,14 @@
     "binding": "ASSETS"
   },
 
+  // SITE_ENV is read at build time for robots.txt and the X-Robots-Tag header, but the health
+  // route reports it at runtime too, and a Worker has no process environment of its own — without
+  // this it answered "unset" on a site that was clearly a preview. Keep it in step with the
+  // SITE_ENV the deploy workflow builds with.
+  "vars": {
+    "SITE_ENV": "preview"
+  },
+
   "observability": {
     "enabled": true
   }
