@@ -10,3 +10,4 @@
 *.docx binary
 *.xlsx binary
 *.zip binary
+*.exe binary
