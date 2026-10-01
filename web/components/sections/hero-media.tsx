@@ -47,6 +47,8 @@ export function HeroImage({
   priority = true,
   className,
   kind,
+  width = 1200,
+  height = 800,
 }: {
   src: string;
   alt: string;
@@ -54,6 +56,9 @@ export function HeroImage({
   className?: string;
   /** Force a treatment; otherwise the file's extension decides. */
   kind?: "photo" | "logo" | "object" | "scene";
+  /** The file's own size (object and scene), so the page reserves the right shape before it loads. */
+  width?: number;
+  height?: number;
 }) {
   if (kind === "object" || kind === "scene") {
     return (
@@ -62,8 +67,8 @@ export function HeroImage({
           <Image
             src={src}
             alt={alt}
-            width={1200}
-            height={800}
+            width={width}
+            height={height}
             sizes="(min-width: 1024px) 40vw, 100vw"
             className={cn(
               "h-auto max-h-full w-full object-contain",
@@ -125,7 +130,7 @@ export function HeroMark({ icon: Icon }: { icon: LucideIcon }) {
 /**
  * The hero pictures built from assets/hero-images/ by scripts/build-hero-images.mjs (`npm run
  * heroes`), keyed "<section>/<name>": pages/<name>, services/<slug>, industries/<slug>,
- * partners/<slug>, careers/<name>. Each entry carries its alt text and whether it is a cut-out
+ * partners/<slug>, about/<name>, careers/<name>. Each entry carries its alt text and whether it is a cut-out
  * ("object") or a studio render to blend in ("scene").
  */
 export type HeroImageKey = keyof typeof heroImages;
@@ -135,6 +140,6 @@ export function hasHeroImage(key: string): key is HeroImageKey {
 }
 
 export function HeroObject({ name }: { name: HeroImageKey }) {
-  const { src, alt, kind } = heroImages[name];
-  return <HeroImage src={src} alt={alt} kind={kind as "object" | "scene"} />;
+  const { src, alt, kind, width, height } = heroImages[name];
+  return <HeroImage src={src} alt={alt} kind={kind as "object" | "scene"} width={width} height={height} />;
 }

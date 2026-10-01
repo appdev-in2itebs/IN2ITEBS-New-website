@@ -127,7 +127,7 @@ export function HomeNews() {
           className="video-ribbon-track -mx-5 flex gap-5 overflow-x-auto px-5 pb-4 lg:-mx-8 lg:px-8"
         >
           {Array.from({ length: COPIES }, (_, copy) =>
-            insights.map((article, index) => {
+            insights.map((article) => {
               // The live listing prints a day and month on every card; only some articles state a
               // year, so fall back to that listing label rather than leaving a card undated.
               const day = badge(article.date) ?? article.dateLabel?.toUpperCase();
@@ -150,7 +150,7 @@ export function HomeNews() {
                           alt=""
                           fill
                           sizes="16.5rem"
-                          loading={index < 3 ? "eager" : "lazy"}
+                          loading="lazy"
                           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                         />
                       )}

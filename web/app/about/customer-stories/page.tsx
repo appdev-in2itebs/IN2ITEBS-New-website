@@ -1,8 +1,7 @@
-import { Heart } from "lucide-react";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Testimonials } from "@/components/sections/testimonials";
-import { HeroMark } from "@/components/sections/hero-media";
+import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Section, V2Bento, V2Rail, V2Closing, type BentoItem } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/about/customer-stories/", {
@@ -52,7 +51,7 @@ export default function CustomerStoriesPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Customer Stories" }]}
         title="Customer Stories"
         lead="Clients Feedback: what people say about working with In2IT EBS, and the customer success stories behind it."
-        media={<HeroMark icon={Heart} />}
+        media={<HeroObject name="about/customer-stories" />}
         exploreId="feedback"
       />
       <V2StickyNav

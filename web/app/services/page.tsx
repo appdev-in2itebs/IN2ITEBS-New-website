@@ -3,7 +3,8 @@ import { ArrowUpRight } from "lucide-react";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
-import { ServiceIconTile, ServiceHeroMark } from "@/components/sections/service-icon";
+import { ServiceIconTile } from "@/components/sections/service-icon";
+import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Section, V2Closing } from "@/components/sections/v2";
 import { serviceGroups } from "@/content/legacy-services";
 import type { NavItem } from "@/content/types";
@@ -42,7 +43,7 @@ export default function ServicesIndexPage() {
         path={[{ label: "Services" }]}
         title="Everything we do, in one place."
         lead="From SAP enterprise solutions and analytics to cloud, security, digital services and data & AI: the full In2IT EBS service catalogue, each with its own page."
-        media={<ServiceHeroMark icon="boxes" />}
+        media={<HeroObject name="pages/services" />}
         exploreId="groups"
       />
       <V2StickyNav

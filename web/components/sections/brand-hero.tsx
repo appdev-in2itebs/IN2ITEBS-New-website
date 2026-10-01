@@ -239,7 +239,7 @@ export function BrandHero() {
                 index === active ? "z-[2] opacity-100" : index === leaving ? "z-[1] opacity-100" : "z-0 opacity-0",
               )}
             >
-              <FrameSequence sequence={heroFrames[item.frames]} />
+              <FrameSequence sequence={heroFrames[item.frames]} urgent={index === active} />
             </div>
           );
         })}

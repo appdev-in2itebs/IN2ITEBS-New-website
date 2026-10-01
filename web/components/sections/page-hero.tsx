@@ -56,8 +56,10 @@ export function PageHero({
             ) : null}
           </Reveal>
           {media ? (
-            <Reveal delay={0.12} className="hidden lg:block">
-              <div className={cn("aspect-[5/4] w-full", frame && "glass-elevated rounded-feature p-2")}>{media}</div>
+            <Reveal delay={0.12} className="mx-auto w-full max-w-md lg:max-w-none">
+              <div className={cn("aspect-[3/2] w-full lg:aspect-[5/4]", frame && "glass-elevated rounded-feature p-2")}>
+                {media}
+              </div>
             </Reveal>
           ) : null}
         </div>

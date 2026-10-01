@@ -26,7 +26,7 @@ export default function InsightsPage() {
         headline="Perspectives on enterprise"
         accentWord="transformation"
         subhead="Points of view from our practices on SAP, SuccessFactors, AI and the technologies reshaping the enterprise."
-        media={<HeroObject name="pages/insights" />}
+        media={<HeroObject name="about/blogs-articles" />}
         frame={false}
       />
 

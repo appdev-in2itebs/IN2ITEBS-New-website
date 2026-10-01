@@ -10,7 +10,13 @@ passes CI ships to Cloudflare Workers.
 .
 ├── README.md                 # this file
 ├── .github/workflows/        # ci.yml (checks + tests) and deploy.yml (Cloudflare)
-├── docs/                     # DNS_MIGRATION.md — putting in2itebs.com on Cloudflare
+├── docs/                     # DNS_MIGRATION.md (putting in2itebs.com on Cloudflare),
+│                             # website-platform-blueprint.docx (architecture and roadmap)
+├── assets/hero-images/       # original hero artwork (PNG), one folder per site menu; see its README
+│   ├── pages/  services/  industries/  partners/  about/  careers/
+│   ├── alt-text.json         # what each picture shows
+│   ├── _pending/             # artwork not used on a page yet (not built)
+│   └── _pack-notes/          # the art packs' own notes and contact sheets
 ├── supabase/migrations/      # SQL schema, applied through the Supabase SQL editor
 ├── .claude/launch.json       # dev-server entry for the Claude Code browser pane (port 3117)
 └── web/                      # the Next.js application (see web/README.md)
@@ -18,8 +24,9 @@ passes CI ships to Cloudflare Workers.
     ├── components/           # layout, sections, ui, media, motion, forms, seo
     ├── content/              # typed content modules: nav, services, clients, offices, …
     ├── lib/                  # metadata, JSON-LD, lead API service, Supabase client, utilities
-    ├── public/               # brand SVGs, logos, photos, hero frame sequences, videos
-    ├── scripts/              # build check, hero-frame extraction, YouTube feed, world map
+    ├── public/               # brand SVGs, logos, photos, hero frame sequences, videos;
+    │                         # heroes/ is generated from assets/hero-images by `npm run heroes`
+    ├── scripts/              # build check, hero images, hero-frame extraction, YouTube feed, world map
     ├── tests/                # unit tests (node:test) and Playwright browser specs
     ├── wrangler.jsonc        # Cloudflare Worker configuration
     └── .env.example          # every environment variable, documented

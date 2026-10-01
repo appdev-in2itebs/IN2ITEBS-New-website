@@ -2,7 +2,7 @@ import { Briefcase, MapPin, ArrowUpRight } from "lucide-react";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
-import { HeroMark } from "@/components/sections/hero-media";
+import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/careers/current-openings/", {
@@ -82,7 +82,7 @@ export default function CurrentOpeningsPage() {
         path={[{ label: "Career", href: "/careers/" }, { label: "Current Openings" }]}
         title="Build a career with endless opportunities"
         lead="Are you prepared to excel in a welcoming, diverse, and open environment where you can continuously learn, develop, and make a lasting impact?"
-        media={<HeroMark icon={Briefcase} />}
+        media={<HeroObject name="careers/current-openings" />}
         cta={false}
         exploreId="openings"
       />

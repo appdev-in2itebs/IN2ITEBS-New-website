@@ -3,6 +3,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { CtaSection } from "@/components/sections/cta-section";
 import { AccreditationList, AwardsGrid } from "@/components/sections/awards";
+import { HeroObject } from "@/components/sections/hero-media";
 import { awardsIntro, awardsTitle } from "@/content/awards";
 
 export const metadata = pageMetadata("/accreditation-awards/", {
@@ -24,7 +25,13 @@ export default function AccreditationAwardsPage() {
   return (
     <>
       <BreadcrumbJsonLd path="/accreditation-awards/" name={awardsTitle} />
-      <PageHero eyebrow="Awards & recognition" headline={awardsTitle} subhead={awardsIntro} />
+      <PageHero
+        eyebrow="Awards & recognition"
+        headline={awardsTitle}
+        subhead={awardsIntro}
+        media={<HeroObject name="about/accreditation" />}
+        frame={false}
+      />
       <AwardsGrid />
       <AccreditationList />
       <CtaSection />

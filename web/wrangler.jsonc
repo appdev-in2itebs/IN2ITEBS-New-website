@@ -25,6 +25,13 @@
     "SITE_ENV": "preview"
   },
 
+  // Cloudflare Images: lets /_next/image resize each picture to the width the device asks for and
+  // re-encode it as AVIF or WebP. Without it OpenNext hands every visitor the original file, full
+  // size, through the Worker. Billed as Images transformations (5,000 unique a month free).
+  "images": {
+    "binding": "IMAGES"
+  },
+
   "observability": {
     "enabled": true
   }

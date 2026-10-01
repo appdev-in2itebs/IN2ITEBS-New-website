@@ -22,7 +22,17 @@ type State = "pending" | "poster" | "loading" | "playing" | "paused";
  * The set is chosen once on the client (`narrow` under 768px), which keeps the server markup free
  * of any frame request; only the JPEG poster is in the HTML.
  */
-export function FrameSequence({ sequence, className }: { sequence: HeroFrameSequence; className?: string }) {
+export function FrameSequence({
+  sequence,
+  className,
+  urgent = true,
+}: {
+  sequence: HeroFrameSequence;
+  className?: string;
+  /** Fetch the poster ahead of everything else: the slide on screen. The next slide, mounted early
+   *  so the cross-fade has something to show, waits its turn. */
+  urgent?: boolean;
+}) {
   const wrapper = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const [state, setState] = useState<State>("pending");
@@ -167,6 +177,7 @@ export function FrameSequence({ sequence, className }: { sequence: HeroFrameSequ
         alt=""
         width={sequence.width}
         height={sequence.height}
+        fetchPriority={urgent ? "high" : "low"}
         className="ambient-video absolute inset-0 h-full w-full object-cover"
       />
       <canvas

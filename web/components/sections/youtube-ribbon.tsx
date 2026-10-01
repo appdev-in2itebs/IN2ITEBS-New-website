@@ -99,7 +99,7 @@ export function YoutubeRibbon() {
           }}
           className="video-ribbon-track -mx-5 flex gap-5 overflow-x-auto px-5 pb-4 lg:-mx-8 lg:px-8 scrollbar-none"
         >
-          {youtubeVideos.map((video, index) => (
+          {youtubeVideos.map((video) => (
             <li key={video.id} className="w-[18.5rem] sm:w-[20rem] shrink-0 snap-start flex flex-col">
               <a
                 href={`https://www.youtube.com/watch?v=${video.id}`}
@@ -122,7 +122,7 @@ export function YoutubeRibbon() {
                     alt={video.title}
                     width={480}
                     height={360}
-                    loading={index < 3 ? "eager" : "lazy"}
+                    loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
                   />
                 </span>

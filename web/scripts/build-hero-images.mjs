@@ -4,7 +4,7 @@
 //
 // and writes web/content/hero-images.json, which the pages read to find them. Sections mirror the
 // site: pages/ (one per page, by name), services/, industries/ and partners/ (by the page's slug, so
-// a new file there shows up on its page with no code change) and careers/.
+// a new file there shows up on its page with no code change), and about/ and careers/ for those menus.
 //
 //   npm run heroes
 //
@@ -23,7 +23,7 @@ import sharp from "sharp";
 const sourceRoot = resolve("../assets/hero-images");
 const targetRoot = resolve("public/heroes");
 const manifestPath = resolve("content/hero-images.json");
-const sections = ["pages", "services", "industries", "partners", "careers"];
+const sections = ["pages", "services", "industries", "partners", "about", "careers"];
 
 const alt = JSON.parse(readFileSync(join(sourceRoot, "alt-text.json"), "utf8"));
 
@@ -88,10 +88,10 @@ for (const section of sections) {
       );
     }
     const out = join(targetRoot, section, `${name}.webp`);
-    await image.webp({ quality: 82, alphaQuality: 90, effort: 6 }).toFile(out);
+    const { width, height } = await image.webp({ quality: 82, alphaQuality: 90, effort: 6 }).toFile(out);
     const size = statSync(out).size;
     total += size;
-    manifest[key] = { src: `/heroes/${key}.webp`, alt: alt[key], kind };
+    manifest[key] = { src: `/heroes/${key}.webp`, alt: alt[key], kind, width, height };
     console.log(`${key.padEnd(62)} ${kind.padEnd(6)} ${(size / 1024).toFixed(0)} KB`);
   }
 }

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
-import { HeroImage } from "@/components/sections/hero-media";
+import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/about/who-we-are/", {
@@ -48,7 +48,7 @@ export default function WhoWeArePage() {
         path={[{ label: "About", href: "/about/" }, { label: "Who We Are?" }]}
         title="Who We Are?"
         lead="In2IT EBS is the leading authority in IT Consultancy, Cloud Computing, Managed Services, Application Development & Maintenance, Business Process Management, Technology Infrastructure Services, Program and Project Management and Future Edge Services to its Clientele in India and abroad."
-        media={<HeroImage src="/about/vision.png" alt="In2IT India" className="p-6" />}
+        media={<HeroObject name="about/who-we-are" />}
       />
       <V2StickyNav
         anchors={[

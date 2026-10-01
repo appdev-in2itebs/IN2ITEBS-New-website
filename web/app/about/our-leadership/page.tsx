@@ -1,9 +1,8 @@
-import { Users } from "lucide-react";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Reveal } from "@/components/motion/reveal";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
-import { HeroMark } from "@/components/sections/hero-media";
+import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 import { leadership } from "@/content/leadership";
 
@@ -27,7 +26,7 @@ export default function OurLeadershipPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Our Leadership" }]}
         title="Our Leadership"
         lead="Meet Our Leaders"
-        media={<HeroMark icon={Users} />}
+        media={<HeroObject name="about/our-leadership" />}
         exploreId="leaders"
       />
       <V2StickyNav
