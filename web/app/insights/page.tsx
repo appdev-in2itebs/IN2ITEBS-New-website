@@ -7,6 +7,7 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { CtaSection } from "@/components/sections/cta-section";
 import { insights } from "@/content/insights";
 
@@ -25,6 +26,8 @@ export default function InsightsPage() {
         headline="Perspectives on enterprise"
         accentWord="transformation"
         subhead="Points of view from our practices on SAP, SuccessFactors, AI and the technologies reshaping the enterprise."
+        media={<HeroObject name="pages/insights" />}
+        frame={false}
       />
 
       <Section tone="light">

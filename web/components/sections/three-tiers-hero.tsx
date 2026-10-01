@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, Accent } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
-import { ThreeTiersGraphic } from "@/components/sections/three-tiers-graphic";
+import { HeroObject } from "@/components/sections/hero-media";
 import { site } from "@/content/site";
 import type { Variants } from "framer-motion";
 
@@ -93,15 +93,12 @@ export function ThreeTiersHero() {
             </motion.div>
           </motion.div>
 
-          {/* Right 3D Infographic Object with Staggered Entrance Motion */}
-          <motion.div
-            className="lg:col-span-5"
-            initial={{ opacity: 0, x: 70, scale: 0.94 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.35, ease: "easeOut" }}
-          >
-            <ThreeTiersGraphic />
-          </motion.div>
+          {/* Right: the realistic object illustration, which brings its own entrance and drift */}
+          <div className="lg:col-span-5">
+            <div className="relative mx-auto aspect-[5/4] w-full max-w-xl">
+              <HeroObject name="pages/what-we-do" />
+            </div>
+          </div>
         </div>
       </Container>
     </section>

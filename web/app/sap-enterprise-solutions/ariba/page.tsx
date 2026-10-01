@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/ariba/", {
   title: "SAP Ariba",
@@ -56,7 +56,8 @@ export default function AribaPage() {
         headline="Source-to-Pay,"
         accentWord="automated end-to-end."
         subhead="The full SAP Ariba suite — from supplier discovery through to invoice automation — integrated natively with S/4HANA, Concur and your finance systems."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-ariba" />}
+        frame={false}
       />
 
       {/* SOURCE-TO-PAY FLOW */}

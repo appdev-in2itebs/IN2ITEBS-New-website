@@ -1,6 +1,6 @@
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { sectorIcon } from "@/components/sections/hero-motif";
-import { HeroImage, HeroMark } from "@/components/sections/hero-media";
+import { HeroImage, HeroMark, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
 import {
   V2Hero,
   V2StickyNav,
@@ -22,6 +22,7 @@ import type { LegacyIndustry } from "@/content/legacy-industries";
  */
 export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry }) {
   const title = industry.title ?? industry.name;
+  const heroKey = `industries/${industry.slug}`;
   const [lead, ...rest] = industry.intro;
   const others = industriesMenu.filter((item) => item.href !== `/industries/${industry.slug}/`);
   const anchors = [
@@ -49,7 +50,9 @@ export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry }) {
         title={title}
         lead={lead}
         media={
-          industry.image ? (
+          hasHeroImage(heroKey) ? (
+            <HeroObject name={heroKey} />
+          ) : industry.image ? (
             <HeroImage src={`/industries/${industry.slug}/${industry.image}`} alt={title} />
           ) : (
             <HeroMark icon={sectorIcon(industry.slug)} />

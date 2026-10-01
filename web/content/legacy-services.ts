@@ -8,6 +8,7 @@
  */
 
 import type { NavItem } from "./types";
+import type { HeroImageKey } from "@/components/sections/hero-media";
 
 /** Icon keys resolved in components/sections/service-icon.tsx (string keys keep this file data-only). */
 export type ServiceIconKey =
@@ -94,6 +95,9 @@ export interface ServicePage {
   closing?: string[];
   /** A local image under /public, where this site already holds the existing page's own picture. */
   image?: { src: string; alt: string };
+  /** Another page's hero picture to borrow (a key of content/hero-images.json), for a page with no
+   *  services/<slug> picture of its own. */
+  heroObject?: HeroImageKey;
   icon: ServiceIconKey;
   metaTitle?: string;
   metaDescription: string;
@@ -247,6 +251,7 @@ export const servicePages: ServicePage[] = [
     name: "SAP Enterprise Solutions",
     group: "sap-enterprise-solutions",
     icon: "boxes",
+    heroObject: "pages/sap-enterprise-solutions",
     sourceUrl: "https://in2itebs.com/sap-enterprise-solutions/",
     metaTitle: "SAP Enterprise Solutions",
     metaDescription:
@@ -374,6 +379,7 @@ export const servicePages: ServicePage[] = [
     name: "SAP Concur",
     group: "sap-enterprise-solutions",
     icon: "receipt",
+    heroObject: "pages/sap-concur",
     sourceUrl: "https://in2itebs.com/sap-concur-2/",
     metaTitle: "SAP Concur Implementation Services and Support",
     metaDescription:
@@ -390,6 +396,7 @@ export const servicePages: ServicePage[] = [
     title: "ECC Prism™ – SAP ECC Landscape Intelligence & Optimization Platform",
     group: "sap-enterprise-solutions",
     icon: "prism",
+    heroObject: "pages/ecc-prism",
     sourceUrl: "https://in2itebs.com/ecc-prism/",
     metaTitle: "ECC Prism™ – SAP ECC Landscape Intelligence & Optimization Platform",
     metaDescription:
@@ -491,6 +498,7 @@ export const servicePages: ServicePage[] = [
     title: "SAP Analytics Cloud",
     group: "analytics",
     icon: "bar-chart",
+    heroObject: "pages/sap-analytics-cloud",
     sourceUrl: "https://in2itebs.com/sap-sac/",
     metaTitle: "SAP Analytics Cloud (SAC)",
     metaDescription:
@@ -573,6 +581,7 @@ export const servicePages: ServicePage[] = [
     name: "SAP SuccessFactors",
     group: "cloud-hcm-solution",
     icon: "users",
+    heroObject: "pages/sap-successfactors",
     sourceUrl: "https://in2itebs.com/sap-success-factors/",
     metaTitle: "SAP SuccessFactors",
     metaDescription:
@@ -836,6 +845,7 @@ export const servicePages: ServicePage[] = [
     name: "Oracle",
     group: "other-enterprise-solutions",
     icon: "database",
+    heroObject: "pages/oracle",
     sourceUrl: "https://in2itebs.com/oracle-3/",
     metaTitle: "Oracle",
     metaDescription:
@@ -920,6 +930,7 @@ export const servicePages: ServicePage[] = [
     name: "Microsoft",
     group: "other-enterprise-solutions",
     icon: "grid",
+    heroObject: "pages/microsoft",
     sourceUrl: "https://in2itebs.com/microsoft/",
     image: { src: "/services/icons/microsoft.png", alt: "Microsoft" },
     metaTitle: "Microsoft",

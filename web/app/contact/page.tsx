@@ -5,6 +5,7 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { DemoForm } from "@/components/forms/demo-form";
 import { offices, regionalContacts } from "@/content/offices";
 import { footerCertifications } from "@/content/site";
@@ -46,6 +47,8 @@ export default function ContactPage() {
         accentWord="transformation"
         subhead="Start your transformation, or reach the office nearest you."
         cta={false}
+        media={<HeroObject name="pages/contact" />}
+        frame={false}
       />
 
       {/* FORM + INDIA OFFICES */}

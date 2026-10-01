@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/analytics-cloud/", {
   title: "SAP Analytics Cloud",
@@ -115,7 +115,8 @@ export default function AnalyticsCloudPage() {
         headline="The front door to your"
         accentWord="enterprise data."
         subhead="SAP Analytics Cloud brings business intelligence, planning and predictive analytics into one experience — the single front door to data across every function, connected live to your SAP and non-SAP landscape."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-analytics-cloud" />}
+        frame={false}
       />
 
       {/* VALUE PILLARS */}

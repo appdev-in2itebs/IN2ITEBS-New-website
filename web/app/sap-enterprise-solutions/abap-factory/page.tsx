@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/abap-factory/", {
   title: "ABAP Factory",
@@ -80,7 +80,8 @@ export default function AbapFactoryPage() {
         headline="ABAP delivery, on a"
         accentWord="cadence."
         subhead="An offshore service-centre model for predictable throughput — RICEFW objects scoped, built and delivered sprint after sprint, so custom development becomes a steady stream rather than a scramble."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-abap-factory" />}
+        frame={false}
       />
 
       {/* RICEFW MODEL */}

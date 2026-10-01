@@ -16,6 +16,7 @@
     "format:check": "prettier --check app components content lib tests scripts",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm test",
     "check:full": "npm run check && npm run build && npm run test:browser",
+    "heroes": "node scripts/build-hero-images.mjs",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"

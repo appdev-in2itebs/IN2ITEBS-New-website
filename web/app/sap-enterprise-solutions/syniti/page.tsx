@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/syniti/", {
   title: "Syniti Data Management",
@@ -82,7 +82,8 @@ export default function SynitiPage() {
         headline="70% of SAP transformations slip because of data, not"
         accentWord="technology."
         subhead="We run SAP migration data-first with Syniti — profiling, cleansing and governing the data your S/4HANA programme depends on, so the move lands on records you can trust."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-syniti-data" />}
+        frame={false}
       />
 
       {/* FIVE-STAGE APPROACH */}

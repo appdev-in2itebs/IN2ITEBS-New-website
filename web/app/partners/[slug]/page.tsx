@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { ServiceHeroMark } from "@/components/sections/service-icon";
-import { HeroImage } from "@/components/sections/hero-media";
+import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Bento, V2Rail, V2Closing } from "@/components/sections/v2";
 import { partnerPages, getPartnerPage } from "@/content/partner-pages";
 
@@ -23,6 +23,7 @@ export default async function PartnerPage({ params }: { params: Promise<{ slug: 
   const page = getPartnerPage(slug);
   if (!page) notFound();
   const [lead, ...rest] = page.intro;
+  const heroKey = `partners/${page.slug}`;
   const others = partnerPages.filter((other) => other.slug !== page.slug);
   const anchors = [
     { id: "overview", label: "Overview" },
@@ -39,7 +40,9 @@ export default async function PartnerPage({ params }: { params: Promise<{ slug: 
         title={page.title ?? page.name}
         lead={lead}
         media={
-          page.logo ? (
+          hasHeroImage(heroKey) ? (
+            <HeroObject name={heroKey} />
+          ) : page.logo ? (
             <HeroImage src={page.logo} alt={`${page.name} logo`} kind="logo" className="p-8" />
           ) : (
             <ServiceHeroMark icon="handshake" />

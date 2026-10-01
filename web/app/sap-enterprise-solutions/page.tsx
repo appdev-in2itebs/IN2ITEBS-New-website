@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { SapToolchain } from "@/components/sections/sap-toolchain";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/", {
@@ -38,7 +38,8 @@ export default function SapEnterpriseSolutionsPage() {
         headline="SAP, run by a"
         accentWord="Gold Partner."
         subhead="300+ consultants. 1,000+ combined years of SAP experience. A proud SAP Gold Partner."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-enterprise-solutions" />}
+        frame={false}
       />
 
       {/* CREDENTIAL STRIP */}

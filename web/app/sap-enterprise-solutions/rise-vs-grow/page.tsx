@@ -5,10 +5,10 @@ import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { ComparisonTable } from "@/components/sections/comparison-table";
 import { RiseGrowChooser } from "@/components/interactive/rise-grow-chooser";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/rise-vs-grow/", {
   title: "RISE vs GROW with SAP",
@@ -90,7 +90,8 @@ export default function RiseVsGrowPage() {
         headline="Two valid paths."
         accentWord="One honest recommendation."
         subhead="RISE with SAP and GROW with SAP are both legitimate routes to S/4HANA Cloud. We recommend based on your business profile — not internal convenience — and prove it with a structured two-week Pathway Assessment."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-rise-vs-grow" />}
+        frame={false}
       />
 
       {/* GUIDED CHOOSER — the signature tool */}

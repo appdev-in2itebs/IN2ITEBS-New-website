@@ -4,10 +4,10 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { getFeaturedClients } from "@/lib/content";
 import { caseStudies } from "@/content/case-studies";
 
@@ -26,7 +26,8 @@ export default function CaseStudiesPage() {
         headline="150+ global enterprises,"
         accentWord="one delivery standard."
         subhead="From national utilities to digital-first FMCG brands, our clients span industries and continents — each delivered against the same standard of precision, proof and on-time delivery."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/case-studies" />}
+        frame={false}
       />
 
       {/* CLIENT LOGO WALL */}

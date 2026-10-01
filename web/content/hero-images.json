@@ -1,0 +1,422 @@
+{
+  "careers/events-celebrations": {
+    "src": "/heroes/careers/events-celebrations.webp",
+    "alt": "Colleagues in sarees and suits celebrating Diwali with a flower rangoli, diyas and an award presentation",
+    "kind": "object"
+  },
+  "industries/automobiles": {
+    "src": "/heroes/industries/automobiles.webp",
+    "alt": "Engineers working on an electric vehicle chassis beside a digital design screen",
+    "kind": "object"
+  },
+  "industries/banking": {
+    "src": "/heroes/industries/banking.webp",
+    "alt": "Bankers reviewing a tablet beside a vault, card, coins and growth chart",
+    "kind": "object"
+  },
+  "industries/chemical-fertilizers": {
+    "src": "/heroes/industries/chemical-fertilizers.webp",
+    "alt": "A plant engineer and chemist at stainless steel process reactors",
+    "kind": "object"
+  },
+  "industries/energy-and-utilities": {
+    "src": "/heroes/industries/energy-and-utilities.webp",
+    "alt": "Engineers at a grid with a wind turbine, solar panels and a substation",
+    "kind": "object"
+  },
+  "industries/engineering-constructions-ecno": {
+    "src": "/heroes/industries/engineering-constructions-ecno.webp",
+    "alt": "Site engineers surveying a bridge and building structure",
+    "kind": "object"
+  },
+  "industries/fmcg": {
+    "src": "/heroes/industries/fmcg.webp",
+    "alt": "Quality staff checking packaged goods on a production conveyor",
+    "kind": "object"
+  },
+  "industries/government": {
+    "src": "/heroes/industries/government.webp",
+    "alt": "Officials with a tablet at the centre of linked public services",
+    "kind": "object"
+  },
+  "industries/healthcare-life-science": {
+    "src": "/heroes/industries/healthcare-life-science.webp",
+    "alt": "A doctor and scientist with a scanner, lab reactor and molecule model",
+    "kind": "object"
+  },
+  "industries/heavy-engineering": {
+    "src": "/heroes/industries/heavy-engineering.webp",
+    "alt": "Engineers inspecting a large turbine and gear assembly",
+    "kind": "object"
+  },
+  "industries/manufacturing": {
+    "src": "/heroes/industries/manufacturing.webp",
+    "alt": "Engineers beside a robotic arm, CNC machine and production line",
+    "kind": "object"
+  },
+  "industries/professional-services": {
+    "src": "/heroes/industries/professional-services.webp",
+    "alt": "Consultants arranging blocks on a circular planning table",
+    "kind": "object"
+  },
+  "industries/retail-ecommerce": {
+    "src": "/heroes/industries/retail-ecommerce.webp",
+    "alt": "A retail counter with products, a delivery route and a team checking orders on a tablet",
+    "kind": "object"
+  },
+  "industries/telecom": {
+    "src": "/heroes/industries/telecom.webp",
+    "alt": "A broadcast and network team with server racks, a mixing desk and a camera",
+    "kind": "object"
+  },
+  "industries/textiles": {
+    "src": "/heroes/industries/textiles.webp",
+    "alt": "Two professionals inspecting fabric rolls, swatches and a weaving machine",
+    "kind": "object"
+  },
+  "pages/about": {
+    "src": "/heroes/pages/about.webp",
+    "alt": "A globe, organisational pillars, a values compass and a rising growth chart",
+    "kind": "object"
+  },
+  "pages/advisory": {
+    "src": "/heroes/pages/advisory.webp",
+    "alt": "A precision compass over a strategic roadmap with prioritised milestones",
+    "kind": "object"
+  },
+  "pages/ai-automation": {
+    "src": "/heroes/pages/ai-automation.webp",
+    "alt": "A governed intelligence core orchestrating connected workflow modules",
+    "kind": "object"
+  },
+  "pages/application-engineering": {
+    "src": "/heroes/pages/application-engineering.webp",
+    "alt": "Modular application blocks moving through build, test and release",
+    "kind": "object"
+  },
+  "pages/careers": {
+    "src": "/heroes/pages/careers.webp",
+    "alt": "People climbing steps of books and blocks toward a flag, one helping another up",
+    "kind": "object"
+  },
+  "pages/case-studies": {
+    "src": "/heroes/pages/case-studies.webp",
+    "alt": "A tangled challenge turned by an engineered path into clean, measured outcomes",
+    "kind": "object"
+  },
+  "pages/contact": {
+    "src": "/heroes/pages/contact.webp",
+    "alt": "A support headset, globe with location markers, calendar and message devices",
+    "kind": "object"
+  },
+  "pages/delivery-excellence": {
+    "src": "/heroes/pages/delivery-excellence.webp",
+    "alt": "A controlled delivery pipeline with milestones and quality gates",
+    "kind": "object"
+  },
+  "pages/digital-data-ai": {
+    "src": "/heroes/pages/digital-data-ai.webp",
+    "alt": "Enterprise data flowing through governance into an intelligence core",
+    "kind": "object"
+  },
+  "pages/ecc-prism": {
+    "src": "/heroes/pages/ecc-prism.webp",
+    "alt": "A legacy ERP estate examined through a transformation prism",
+    "kind": "object"
+  },
+  "pages/homepage": {
+    "src": "/heroes/pages/homepage.webp",
+    "alt": "Gears, a compass, a data chip and a rising chart around a connected enterprise core",
+    "kind": "object"
+  },
+  "pages/industries": {
+    "src": "/heroes/pages/industries.webp",
+    "alt": "Automotive, energy, retail, finance and manufacturing modules linked to one digital core",
+    "kind": "object"
+  },
+  "pages/insights": {
+    "src": "/heroes/pages/insights.webp",
+    "alt": "A magnifying lens over research reports revealing a faceted idea crystal",
+    "kind": "object"
+  },
+  "pages/microsoft": {
+    "src": "/heroes/pages/microsoft.webp",
+    "alt": "Productivity, cloud, data and security modules joined into one workspace",
+    "kind": "object"
+  },
+  "pages/oracle": {
+    "src": "/heroes/pages/oracle.webp",
+    "alt": "Enterprise applications and data moving onto a secure cloud platform",
+    "kind": "object"
+  },
+  "pages/partners": {
+    "src": "/heroes/pages/partners.webp",
+    "alt": "Technology modules joined by a bridge and a partnership handshake",
+    "kind": "object"
+  },
+  "pages/platform-services": {
+    "src": "/heroes/pages/platform-services.webp",
+    "alt": "A resilient platform foundation supporting connected, monitored services",
+    "kind": "object"
+  },
+  "pages/salesforce": {
+    "src": "/heroes/pages/salesforce.webp",
+    "alt": "A customer lifecycle loop around a shared customer view",
+    "kind": "object"
+  },
+  "pages/sap-abap-factory": {
+    "src": "/heroes/pages/sap-abap-factory.webp",
+    "alt": "A production line moving software blocks through build, scan, test and release",
+    "kind": "object"
+  },
+  "pages/sap-analytics-cloud": {
+    "src": "/heroes/pages/sap-analytics-cloud.webp",
+    "alt": "A planning board with charts, a calculator, a pie chart and an upward arrow",
+    "kind": "object"
+  },
+  "pages/sap-ariba": {
+    "src": "/heroes/pages/sap-ariba.webp",
+    "alt": "A source-to-pay loop linking suppliers, contracts, invoices and payment",
+    "kind": "object"
+  },
+  "pages/sap-clean-core": {
+    "src": "/heroes/pages/sap-clean-core.webp",
+    "alt": "A protected ERP core with extensions connected through controlled gates",
+    "kind": "object"
+  },
+  "pages/sap-concur": {
+    "src": "/heroes/pages/sap-concur.webp",
+    "alt": "A suitcase, flight route, receipt scanner and invoice tray for travel and expense",
+    "kind": "object"
+  },
+  "pages/sap-enterprise-solutions": {
+    "src": "/heroes/pages/sap-enterprise-solutions.webp",
+    "alt": "Finance, supply chain, people and procurement connected to one ERP core",
+    "kind": "object"
+  },
+  "pages/sap-health-check-360": {
+    "src": "/heroes/pages/sap-health-check-360.webp",
+    "alt": "A circular diagnostic scanner followed by a remediation track",
+    "kind": "object"
+  },
+  "pages/sap-joule-ai": {
+    "src": "/heroes/pages/sap-joule-ai.webp",
+    "alt": "An intelligence sphere turning a request into a recommendation and action",
+    "kind": "object"
+  },
+  "pages/sap-migrations": {
+    "src": "/heroes/pages/sap-migrations.webp",
+    "alt": "Protected data capsules moving from legacy servers into a cloud core",
+    "kind": "object"
+  },
+  "pages/sap-rise-vs-grow": {
+    "src": "/heroes/pages/sap-rise-vs-grow.webp",
+    "alt": "Two paths to cloud ERP, a conversion route and a greenfield ramp, guided by a compass",
+    "kind": "object"
+  },
+  "pages/sap-successfactors": {
+    "src": "/heroes/pages/sap-successfactors.webp",
+    "alt": "A workforce profile linked to recruiting, learning, performance and payroll",
+    "kind": "object"
+  },
+  "pages/sap-syniti-data": {
+    "src": "/heroes/pages/sap-syniti-data.webp",
+    "alt": "Data being profiled, cleansed and matched into a trusted master record",
+    "kind": "object"
+  },
+  "pages/what-we-do": {
+    "src": "/heroes/pages/what-we-do.webp",
+    "alt": "An integrated system of advisory, engineering, data, platforms and outcomes",
+    "kind": "object"
+  },
+  "pages/why-in2it-ebs": {
+    "src": "/heroes/pages/why-in2it-ebs.webp",
+    "alt": "A shield with a check mark, an award medal, a globe and linked chain",
+    "kind": "object"
+  },
+  "pages/workday": {
+    "src": "/heroes/pages/workday.webp",
+    "alt": "People, finance and workforce planning connected in one operating model",
+    "kind": "object"
+  },
+  "partners/aws": {
+    "src": "/heroes/partners/aws.webp",
+    "alt": "AWS logo",
+    "kind": "object"
+  },
+  "partners/hp": {
+    "src": "/heroes/partners/hp.webp",
+    "alt": "HP logo",
+    "kind": "object"
+  },
+  "partners/ibm": {
+    "src": "/heroes/partners/ibm.webp",
+    "alt": "IBM logo",
+    "kind": "object"
+  },
+  "partners/microsoft": {
+    "src": "/heroes/partners/microsoft.webp",
+    "alt": "Microsoft logo",
+    "kind": "object"
+  },
+  "partners/newgen": {
+    "src": "/heroes/partners/newgen.webp",
+    "alt": "Newgen logo",
+    "kind": "object"
+  },
+  "partners/open-text": {
+    "src": "/heroes/partners/open-text.webp",
+    "alt": "OpenText logo",
+    "kind": "object"
+  },
+  "partners/oracle": {
+    "src": "/heroes/partners/oracle.webp",
+    "alt": "Oracle logo",
+    "kind": "object"
+  },
+  "partners/sap": {
+    "src": "/heroes/partners/sap.webp",
+    "alt": "SAP logo",
+    "kind": "object"
+  },
+  "partners/sap-concur": {
+    "src": "/heroes/partners/sap-concur.webp",
+    "alt": "SAP Concur logo",
+    "kind": "object"
+  },
+  "partners/sap-qualtrics": {
+    "src": "/heroes/partners/sap-qualtrics.webp",
+    "alt": "Qualtrics logo",
+    "kind": "object"
+  },
+  "services/agile-devops": {
+    "src": "/heroes/services/agile-devops.webp",
+    "alt": "An infinity loop linking code, build, test and release",
+    "kind": "scene"
+  },
+  "services/ai-machine-learning": {
+    "src": "/heroes/services/ai-machine-learning.webp",
+    "alt": "An AI chip on a circuit board linked to models and data",
+    "kind": "scene"
+  },
+  "services/application-development-maintenance-services-adms": {
+    "src": "/heroes/services/application-development-maintenance-services-adms.webp",
+    "alt": "A robotic arm building application modules on a blueprint with monitoring screens",
+    "kind": "scene"
+  },
+  "services/application-maintenance-support": {
+    "src": "/heroes/services/application-maintenance-support.webp",
+    "alt": "A monitoring screen, servers, magnifier, wrench and support headset",
+    "kind": "scene"
+  },
+  "services/big-data": {
+    "src": "/heroes/services/big-data.webp",
+    "alt": "Data streams flowing from many sources into large storage clusters",
+    "kind": "scene"
+  },
+  "services/blockchain": {
+    "src": "/heroes/services/blockchain.webp",
+    "alt": "Linked server blocks forming a secure chain with a shield and padlock",
+    "kind": "scene"
+  },
+  "services/cloud-and-infra-security": {
+    "src": "/heroes/services/cloud-and-infra-security.webp",
+    "alt": "A cloud and servers guarded by a shield, padlock, radar and firewall",
+    "kind": "scene"
+  },
+  "services/cloud-hosting-services": {
+    "src": "/heroes/services/cloud-hosting-services.webp",
+    "alt": "Cloud-hosted server racks with a performance gauge and security shield",
+    "kind": "scene"
+  },
+  "services/cloud-infrastructure-services": {
+    "src": "/heroes/services/cloud-infrastructure-services.webp",
+    "alt": "Cloud, servers, storage and network switch on one platform",
+    "kind": "scene"
+  },
+  "services/cloud-migration": {
+    "src": "/heroes/services/cloud-migration.webp",
+    "alt": "Servers moving along a conveyor through checks into the cloud",
+    "kind": "scene"
+  },
+  "services/cloud-strategy": {
+    "src": "/heroes/services/cloud-strategy.webp",
+    "alt": "A compass on a cloud roadmap with milestones and a flag",
+    "kind": "scene"
+  },
+  "services/cyber-security-enterprise-risk": {
+    "src": "/heroes/services/cyber-security-enterprise-risk.webp",
+    "alt": "A shielded server core surrounded by radar, checklist and alert modules",
+    "kind": "scene"
+  },
+  "services/data-analytics-ai": {
+    "src": "/heroes/services/data-analytics-ai.webp",
+    "alt": "Data sources flowing into a database, AI chip and analytics dashboards",
+    "kind": "scene"
+  },
+  "services/database-data-management": {
+    "src": "/heroes/services/database-data-management.webp",
+    "alt": "A central database with a funnel, records, governance shield and network",
+    "kind": "scene"
+  },
+  "services/development-maintenance": {
+    "src": "/heroes/services/development-maintenance.webp",
+    "alt": "A build line moving components from blueprint to release in a loop",
+    "kind": "scene"
+  },
+  "services/digital-services": {
+    "src": "/heroes/services/digital-services.webp",
+    "alt": "A laptop and phone on a digital journey with automation and analytics",
+    "kind": "scene"
+  },
+  "services/digital-transformation-services": {
+    "src": "/heroes/services/digital-transformation-services.webp",
+    "alt": "Legacy blocks passing through a transformation gate into connected services",
+    "kind": "scene"
+  },
+  "services/identity-and-access-management": {
+    "src": "/heroes/services/identity-and-access-management.webp",
+    "alt": "An identity badge, key, fingerprint reader and access gate",
+    "kind": "scene"
+  },
+  "services/microsoft-dynamics-365": {
+    "src": "/heroes/services/microsoft-dynamics-365.webp",
+    "alt": "Customer, finance, operations and supply chain modules linked to one core",
+    "kind": "scene"
+  },
+  "services/ms-office-365": {
+    "src": "/heroes/services/ms-office-365.webp",
+    "alt": "A laptop with documents, calendar, mail and a security badge",
+    "kind": "scene"
+  },
+  "services/other-enterprise-solutions": {
+    "src": "/heroes/services/other-enterprise-solutions.webp",
+    "alt": "Databases, devices and cloud modules connected around a central hub",
+    "kind": "scene"
+  },
+  "services/predictive-analysis": {
+    "src": "/heroes/services/predictive-analysis.webp",
+    "alt": "Forecast charts with a gauge, compass and target flag",
+    "kind": "scene"
+  },
+  "services/rise-with-sap": {
+    "src": "/heroes/services/rise-with-sap.webp",
+    "alt": "Legacy servers moving along a secure path onto a cloud ERP platform with rising growth",
+    "kind": "scene"
+  },
+  "services/robotic-process-automation": {
+    "src": "/heroes/services/robotic-process-automation.webp",
+    "alt": "Robotic arms processing documents along an automated conveyor loop",
+    "kind": "scene"
+  },
+  "services/sap-grow-fast": {
+    "src": "/heroes/services/sap-grow-fast.webp",
+    "alt": "A stopwatch, fast-track path and cloud ERP stack with a growth arrow",
+    "kind": "scene"
+  },
+  "services/security-and-risk-advisory": {
+    "src": "/heroes/services/security-and-risk-advisory.webp",
+    "alt": "A compass, checklist, padlock shield and risk matrix on a roadmap",
+    "kind": "scene"
+  }
+}

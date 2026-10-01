@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { ThreeReasons } from "@/components/sections/three-reasons";
 import { AllianceStrip } from "@/components/sections/alliance-strip";
 import { CtaSection } from "@/components/sections/cta-section";
@@ -26,6 +27,8 @@ export default function WhyIn2ITEBSPage() {
         headline="Three reasons enterprises choose us — and"
         accentWord="stay"
         subhead="Not seven generic claims. Three differentiated capabilities, each backed by evidence."
+        media={<HeroObject name="pages/why-in2it-ebs" />}
+        frame={false}
       />
 
       {/* THREE REASONS */}

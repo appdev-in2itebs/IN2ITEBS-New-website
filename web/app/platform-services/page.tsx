@@ -7,7 +7,7 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
+import { HeroObject } from "@/components/sections/hero-media";
 import { CtaSection } from "@/components/sections/cta-section";
 import { platformPractices } from "@/content/nav";
 
@@ -117,7 +117,8 @@ export default function PlatformServicesPage() {
         headline="Platform-led transformation, one accountable"
         accentWord="partner."
         subhead="Consulting, implementation and managed services across SAP, SuccessFactors, Salesforce, Workday, Oracle and Microsoft, with one accountable partner for the full lifecycle."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/platform-services" />}
+        frame={false}
       />
 
       {/* LIFECYCLE BAND */}

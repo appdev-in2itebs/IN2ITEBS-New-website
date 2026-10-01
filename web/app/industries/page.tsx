@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { CtaSection } from "@/components/sections/cta-section";
 import { industries } from "@/content/industries";
@@ -75,6 +76,8 @@ export default function IndustriesPage() {
         headline="150+ global enterprises. Across regulated, complex"
         accentWord="industries"
         subhead="Selected clients across the sectors where we've delivered SAP, Salesforce, Workday and application transformation programmes."
+        media={<HeroObject name="pages/industries" />}
+        frame={false}
       />
 
       <section

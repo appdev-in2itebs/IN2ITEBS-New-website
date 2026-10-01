@@ -4,10 +4,9 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif } from "@/components/sections/hero-motif";
-import { Compass } from "lucide-react";
 
 export const metadata = pageMetadata("/advisory/", {
   title: "Advisory Services",
@@ -100,7 +99,8 @@ export default function AdvisoryPage() {
         headline="Advisory that gets to"
         accentWord="outcomes."
         subhead="The trusted layer that defines the why and what — before platforms and engineering deliver the how."
-        media={<HeroMotif icon={Compass} />}
+        media={<HeroObject name="pages/advisory" />}
+        frame={false}
       />
 
       {/* TRANSFORMATION ADVISORY */}

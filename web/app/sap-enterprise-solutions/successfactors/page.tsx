@@ -8,9 +8,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/successfactors/", {
   title: "SAP SuccessFactors / HXM",
@@ -110,7 +110,8 @@ export default function SuccessFactorsPage() {
         headline="Human experience management,"
         accentWord="at scale."
         subhead="SAP SuccessFactors across Core HR, Talent, Cloud Payroll, Work Zone and people analytics — one human-experience platform, delivered by a deep certified consultant pool."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-successfactors" />}
+        frame={false}
       />
 
       {/* CAPABILITY MAP */}

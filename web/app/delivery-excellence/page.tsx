@@ -5,6 +5,7 @@ import { SectionHeading, Accent, Eyebrow } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import {
@@ -31,6 +32,8 @@ export default function DeliveryExcellencePage() {
         headline="Delivery"
         accentWord="excellence"
         subhead="The methodology, transition approach and factory model behind every engagement."
+        media={<HeroObject name="pages/delivery-excellence" />}
+        frame={false}
       />
 
       {/* IN2IT FASTFORWARD */}

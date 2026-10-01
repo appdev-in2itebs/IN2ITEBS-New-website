@@ -1,5 +1,5 @@
 import { ServiceHeroMark, serviceIcon } from "@/components/sections/service-icon";
-import { HeroImage } from "@/components/sections/hero-media";
+import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
 import {
   V2Hero,
   V2StickyNav,
@@ -19,6 +19,8 @@ export function ServicePageV2({ page }: { page: ServicePage }) {
   const group = getServiceGroup(page.group);
   const title = page.title ?? page.name;
   const [lead, ...rest] = page.intro;
+  const ownHero = `services/${page.slug}`;
+  const heroKey = hasHeroImage(ownHero) ? ownHero : page.heroObject;
   const siblings = group ? flattenItems(group.items).filter((item) => item.href !== `/services/${page.slug}/`) : [];
   const groupIsThisPage = group?.href === `/services/${page.slug}/`;
   const anchors = [
@@ -47,7 +49,13 @@ export function ServicePageV2({ page }: { page: ServicePage }) {
         title={title}
         lead={lead}
         media={
-          page.image ? <HeroImage src={page.image.src} alt={page.image.alt} /> : <ServiceHeroMark icon={page.icon} />
+          heroKey ? (
+            <HeroObject name={heroKey} />
+          ) : page.image ? (
+            <HeroImage src={page.image.src} alt={page.image.alt} />
+          ) : (
+            <ServiceHeroMark icon={page.icon} />
+          )
         }
       />
       <V2StickyNav anchors={anchors} />

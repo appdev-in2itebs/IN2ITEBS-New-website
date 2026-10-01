@@ -4,9 +4,9 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/salesforce/", {
   title: "Salesforce",
@@ -92,7 +92,8 @@ export default function SalesforcePage() {
         headline="Reimagining the customer"
         accentWord="experience"
         subhead="Sales, Service, Marketing, Commerce and Industry Clouds — with Salesforce as the digital backbone."
-        media={<HeroMotif icon={practiceIcon("salesforce")} />}
+        media={<HeroObject name="pages/salesforce" />}
+        frame={false}
       />
 
       {/* CAPABILITY OVERVIEW + LIFECYCLE */}

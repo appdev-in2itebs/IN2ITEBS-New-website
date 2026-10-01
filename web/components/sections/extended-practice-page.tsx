@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHero } from "./page-hero";
+import { HeroObject } from "./hero-media";
 import { Container, Section } from "@/components/ui/container";
 import { CtaSection } from "./cta-section";
 import { extendedPractices } from "@/content/extended-practices";
@@ -8,7 +9,13 @@ export function ExtendedPracticePage({ practice }: { practice: keyof typeof exte
   const content = extendedPractices[practice];
   return (
     <>
-      <PageHero eyebrow={`${content.name} practice`} headline={content.headline} subhead={content.summary} />
+      <PageHero
+        eyebrow={`${content.name} practice`}
+        headline={content.headline}
+        subhead={content.summary}
+        media={<HeroObject name={`pages/${practice}` as const} />}
+        frame={false}
+      />
       <Section>
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">

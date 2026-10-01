@@ -6,8 +6,8 @@ import { Container, Section } from "@/components/ui/container";
 import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
-import Image from "next/image";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { StatBand } from "@/components/sections/stat-band";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
@@ -54,18 +54,8 @@ export default function AboutPage() {
         eyebrow="Who we are"
         headline="Three pillars."
         accentWord="One converged enterprise."
-        media={
-          <div className="relative h-full w-full overflow-hidden rounded-[calc(var(--radius-feature)-0.5rem)]">
-            <Image
-              src="/stock/about-office.jpg"
-              alt="Inside In2IT EBS"
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        }
+        media={<HeroObject name="pages/about" />}
+        frame={false}
         subhead="We are structured for Platforms, Advisory and Digital Engineering under shared delivery, governance and account ownership — so you get one accountable partner for the whole transformation, not a patchwork of vendors."
       />
 

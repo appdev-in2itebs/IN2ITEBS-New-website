@@ -7,6 +7,7 @@ import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { CtaSection } from "@/components/sections/cta-section";
 
 export const metadata = pageMetadata("/ecc-prism/", {
@@ -34,6 +35,8 @@ export default function EccPrismPage() {
         headline="Know your ECC estate before you"
         accentWord="convert."
         subhead="ECC Prism™ is our assessment for organisations planning the move from SAP ECC to S/4HANA."
+        media={<HeroObject name="pages/ecc-prism" />}
+        frame={false}
       />
 
       {/* WHAT IT DOES */}

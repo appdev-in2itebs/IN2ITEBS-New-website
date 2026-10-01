@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/health-check-360/", {
   title: "Health Check 360",
@@ -112,7 +112,8 @@ export default function HealthCheck360Page() {
         headline="Your SuccessFactors estate,"
         accentWord="diagnosed."
         subhead="A proprietary AI diagnostic for SAP SuccessFactors — auditing configuration and adoption, benchmarking you against your peers, scoring your AI readiness and returning a quantified roadmap."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-health-check-360" />}
+        frame={false}
       />
 
       {/* THE DIAGNOSTIC */}

@@ -4,9 +4,9 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/digital-data-ai/ai-automation/", {
   title: "AI & Automation",
@@ -96,7 +96,8 @@ export default function AiAutomationPage() {
         headline="Industrial IoT, computer vision and applied AI, in one accountable"
         accentWord="team"
         subhead="End-to-end digital transformation using industrial IoT, applied AI, computer vision and ERP integration — delivered by one accountable team."
-        media={<HeroMotif icon={practiceIcon("application-development-managed-services")} />}
+        media={<HeroObject name="pages/ai-automation" />}
+        frame={false}
       />
 
       {/* CAPABILITIES */}

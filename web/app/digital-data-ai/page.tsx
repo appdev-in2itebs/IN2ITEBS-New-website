@@ -6,9 +6,9 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { cn } from "@/lib/utils";
 
 export const metadata = pageMetadata("/digital-data-ai/", {
@@ -135,7 +135,8 @@ export default function DigitalDataAiPage() {
         headline="Engineering-led innovation across application, data and"
         accentWord="intelligence"
         subhead="Modern application engineering, AI & automation, data & analytics, integration and cloud — built and run by one accountable team."
-        media={<HeroMotif icon={practiceIcon("application-development-managed-services")} />}
+        media={<HeroObject name="pages/digital-data-ai" />}
+        frame={false}
       />
 
       {/* SUB-PRACTICE GRID */}

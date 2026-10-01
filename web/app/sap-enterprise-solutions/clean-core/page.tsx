@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/sap-enterprise-solutions/clean-core/", {
   title: "Clean Core & BTP Extensions",
@@ -80,7 +80,8 @@ export default function CleanCorePage() {
         headline="Innovate alongside the core, not"
         accentWord="inside it."
         subhead="Clean-core extensibility as side-by-side innovation on SAP BTP — keeping the SAP core stable and upgrade-ready while you build exactly what the business needs."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/sap-clean-core" />}
+        frame={false}
       />
 
       {/* SUCCESSFACTORS EXTENSIONS */}

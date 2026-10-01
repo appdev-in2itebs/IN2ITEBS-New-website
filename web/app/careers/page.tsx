@@ -5,8 +5,8 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
-import Image from "next/image";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { social } from "@/content/site";
@@ -42,18 +42,8 @@ export default function CareersPage() {
         accentWord="opportunities."
         subhead="Are you ready to thrive in a welcoming, diverse and open environment where you can keep learning, growing and making a lasting impact? You've found your destination."
         cta={false}
-        media={
-          <div className="relative h-full w-full overflow-hidden rounded-[calc(var(--radius-feature)-0.5rem)]">
-            <Image
-              src="/stock/careers-team.jpg"
-              alt="The In2IT EBS team"
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        }
+        media={<HeroObject name="pages/careers" />}
+        frame={false}
       />
 
       {/* OUR CULTURE */}

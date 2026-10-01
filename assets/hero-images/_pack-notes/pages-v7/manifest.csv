@@ -1,0 +1,34 @@
+route,page,filename,concept
+/,Homepage,homepage-object-hero.png,Connected enterprise transformation ecosystem
+/what-we-do,What We Do,what-we-do-object-hero.png,Integrated consulting and delivery capability system
+/digital-data-ai,Digital Data and AI,digital-data-ai-object-hero.png,Data flowing into governed intelligence and decisions
+/application-engineering,Application Engineering,application-engineering-object-hero.png,Modular software build test and release environment
+/ai-automation,AI and Automation,ai-automation-object-hero.png,Governed intelligence automating operational workflows
+/platform-services,Platform Services,platform-services-object-hero.png,Secure scalable platform foundation with connected services
+/advisory,Advisory,advisory-object-hero.png,Strategic roadmap compass and prioritized transformation path
+/sap-enterprise-solutions,SAP Enterprise Solutions,sap-enterprise-solutions-object-hero.png,Integrated enterprise operations around a central ERP core
+/salesforce,Salesforce,salesforce-object-hero.png,Customer lifecycle and connected relationship operations
+/workday,Workday,workday-object-hero.png,Unified people finance and workforce planning
+/oracle,Oracle,oracle-object-hero.png,Enterprise data applications and cloud modernization
+/microsoft,Microsoft,microsoft-object-hero.png,Connected productivity cloud data and security ecosystem
+/ecc-prism,ECC Prism,ecc-prism-object-hero.png,Legacy ERP assessment and transformation prism
+/delivery-excellence,Delivery Excellence,delivery-excellence-object-hero.png,Controlled delivery pipeline with quality and milestones
+/why-in2it-ebs,Why In2IT EBS,why-in2it-ebs-object-hero.png,Differentiators combining expertise governance speed and outcomes
+/industries,Industries,industries-object-hero.png,Multi-industry ecosystem connected by a shared digital core
+/partners,Partners,partners-object-hero.png,Strategic technology partnership and integrated capabilities
+/about,About,about-object-hero.png,Global organization values direction and growth
+/careers,Careers,careers-object-hero.png,People development skills progression and opportunity
+/contact,Contact,contact-object-hero.png,Global support access scheduling and communication
+/insights,Insights,insights-object-hero.png,Research interpretation foresight and actionable insight
+/case-studies,Case Studies,case-studies-object-hero.png,Challenge-to-transformation-to-outcome success story
+/sap-analytics-cloud,SAP Analytics Cloud,sap-analytics-cloud-object-hero.png,Planning analytics dashboards and upward performance
+/sap-successfactors,SAP SuccessFactors,sap-successfactors-object-hero.png,Integrated workforce lifecycle talent and performance
+/sap-abap-factory,SAP ABAP Factory,sap-abap-factory-object-hero.png,Industrialized software build scan test and release line
+/sap-ariba,SAP Ariba,sap-ariba-object-hero.png,Connected source-to-pay commerce ecosystem
+/sap-clean-core,SAP Clean Core,sap-clean-core-object-hero.png,Protected ERP core with governed extensions and upgrades
+/sap-concur,SAP Concur,sap-concur-object-hero.png,Travel expense compliance reimbursement and invoices
+/sap-health-check-360,SAP Health Check 360,sap-health-check-360-object-hero.png,Comprehensive system diagnostics and remediation path
+/sap-joule-ai,SAP Joule AI,sap-joule-ai-object-hero.png,Contextual enterprise intelligence recommendations and action
+/sap-migrations,SAP Migrations,sap-migrations-object-hero.png,Validated low-risk legacy-to-cloud migration journey
+/sap-rise-vs-grow,SAP RISE vs GROW,sap-rise-vs-grow-object-hero.png,Two cloud ERP pathways with a guided choice
+/sap-syniti-data,SAP Syniti Data,sap-syniti-data-object-hero.png,Data profiling cleansing matching and trusted master output

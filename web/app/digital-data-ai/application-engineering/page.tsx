@@ -4,9 +4,9 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 
 export const metadata = pageMetadata("/digital-data-ai/application-engineering/", {
   title: "Application Engineering",
@@ -103,7 +103,8 @@ export default function ApplicationEngineeringPage() {
         headline="Custom development, integration and support across every"
         accentWord="estate"
         subhead="Custom development, integrations, post-implementation support and continuous improvement across legacy and modern application estates."
-        media={<HeroMotif icon={practiceIcon("application-development-managed-services")} />}
+        media={<HeroObject name="pages/application-engineering" />}
+        frame={false}
       />
 
       {/* SERVICE MAP */}

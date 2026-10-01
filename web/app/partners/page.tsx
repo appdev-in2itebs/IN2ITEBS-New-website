@@ -5,9 +5,9 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { PartnerEcosystem } from "@/components/sections/partner-ecosystem";
 import { partnerCategories } from "@/content/partner-ecosystem";
 import { HomePartners } from "@/components/sections/home-partners";
@@ -43,7 +43,8 @@ export default function PartnersPage() {
         headline="Strategic alliances that"
         accentWord="extend our reach."
         subhead="A partner ecosystem spanning application platforms, hyperscalers, data and specialist vendors — chosen so we can transform and run your landscape end-to-end, not piece by piece."
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroObject name="pages/partners" />}
+        frame={false}
       />
 
       {/* PARTNER ECOSYSTEM */}
