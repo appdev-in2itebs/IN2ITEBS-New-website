@@ -5,19 +5,21 @@ import { Reveal } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
 import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
+import { heroOverride, overrideMedia } from "./hero-override";
 import type { ReactNode } from "react";
 
 /** Inner-page hero: eyebrow + large display headline (with accent word) + subhead + CTA.
  *  Optional `media` renders a right-hand visual panel (e.g. <HeroMotif/> or a photo). */
-export function PageHero({
+export async function PageHero({
   eyebrow,
-  headline,
-  accentWord,
-  subhead,
+  headline: pageHeadline,
+  accentWord: pageAccent,
+  subhead: pageSubhead,
   cta = true,
-  media,
+  media: pageMedia,
   animate = false,
-  frame = true,
+  frame: pageFrame = true,
+  route,
 }: {
   eyebrow?: string;
   headline: string;
@@ -29,7 +31,16 @@ export function PageHero({
   animate?: boolean;
   /** Put the media in the glass card (the default) or straight on the page. */
   frame?: boolean;
+  /** This page's URL path, so an edit made in /admin/pages can replace the title, intro or picture. */
+  route?: string;
 }) {
+  const override = await heroOverride(route);
+  // An edited title replaces the whole headline, accent word included.
+  const headline = override?.title ?? pageHeadline;
+  const accentWord = override?.title ? undefined : pageAccent;
+  const subhead = override?.intro ?? pageSubhead;
+  const media = overrideMedia(override, pageMedia);
+  const frame = override?.imageKey ? false : pageFrame;
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-canvas pt-36 pb-20 md:pt-44 md:pb-28">
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
@@ -57,7 +68,7 @@ export function PageHero({
           </Reveal>
           {media ? (
             <Reveal delay={0.12} className="mx-auto w-full max-w-md lg:max-w-none">
-              <div className={cn("aspect-[3/2] w-full lg:aspect-[5/4]", frame && "glass-elevated rounded-feature p-2")}>
+              <div className={cn("aspect-[3/2] w-full lg:aspect-[4/3]", frame && "glass-elevated rounded-feature p-2")}>
                 {media}
               </div>
             </Reveal>

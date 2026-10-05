@@ -108,6 +108,7 @@ export default function HealthCheck360Page() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/health-check-360/" />
       <PageHero
+        route="/sap-enterprise-solutions/health-check-360/"
         eyebrow="Signature Tool · Health Check 360"
         headline="Your SuccessFactors estate,"
         accentWord="diagnosed."

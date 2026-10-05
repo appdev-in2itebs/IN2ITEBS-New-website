@@ -7,7 +7,8 @@ import { Container, Section } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
-import { offices } from "@/content/offices";
+import { offices as shippedOffices } from "@/content/offices";
+import type { Office } from "@/content/types";
 import { WORLD_BORDERS_PATH, WORLD_LAND_PATH, WORLD_LAT, WORLD_VIEWBOX } from "@/content/world-map";
 import { cn } from "@/lib/utils";
 
@@ -35,12 +36,6 @@ const FLIGHT = { duration: 1.15, ease: [0.22, 1, 0.36, 1] } as const;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
-const mainHub = offices.find((office) => office.slug === "bangalore") ?? offices[0];
-const hubPoint = project(mainHub.coords);
-
-const indiaOffices = offices.filter((office) => office.country === "India");
-const intlOffices = offices.filter((office) => office.country !== "India");
-
 /** A quadratic arc between two points, bowed away from the straight line by its own length. */
 function arcPath(x1: number, y1: number, x2: number, y2: number) {
   const distance = Math.hypot(x2 - x1, y2 - y1);
@@ -55,7 +50,7 @@ function arcPath(x1: number, y1: number, x2: number, y2: number) {
  * office in the middle of the frame. Clamped so the pan can never drag empty space into view —
  * at zoom z the plate may be offset between (1 - z) * 100% and 0%.
  */
-function cameraFor(slug: string | null) {
+function cameraFor(slug: string | null, offices: Office[]) {
   const office = slug ? offices.find((entry) => entry.slug === slug) : null;
   if (!office) return { x: 0, y: 0, zoom: 1 };
 
@@ -69,7 +64,12 @@ function cameraFor(slug: string | null) {
   };
 }
 
-export function OfficeMap() {
+/** `offices` comes from the page, so edits made in /admin/content show here; it defaults to the shipped list. */
+export function OfficeMap({ offices = shippedOffices }: { offices?: Office[] }) {
+  const mainHub = offices.find((office) => office.slug === "bangalore") ?? offices[0];
+  const hubPoint = project(mainHub.coords);
+  const indiaOffices = offices.filter((office) => office.country === "India");
+  const intlOffices = offices.filter((office) => office.country !== "India");
   const [active, setActive] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const [showRoutes, setShowRoutes] = useState(true);
@@ -83,7 +83,7 @@ export function OfficeMap() {
   // pin, but flying the map on every mouseover would make the section impossible to read.
   const shownSlug = hovered ?? active;
   const shownOffice = offices.find((office) => office.slug === shownSlug) ?? null;
-  const camera = useMemo(() => cameraFor(active), [active]);
+  const camera = useMemo(() => cameraFor(active, offices), [active, offices]);
 
   const panX = useMotionValue(0);
   const panY = useMotionValue(0);
@@ -141,7 +141,7 @@ export function OfficeMap() {
     }
 
     return sides;
-  }, [shownSlug, camera]);
+  }, [shownSlug, camera, offices]);
 
   // framer maps `x`/`y` on an SVG element to the element's attributes, not to a transform, so the
   // world group is driven straight through its own transform attribute — user units, origin 0,0,
@@ -182,7 +182,7 @@ export function OfficeMap() {
     }, 4200);
 
     return () => clearInterval(timer);
-  }, [autoTour]);
+  }, [autoTour, offices]);
 
   const select = useCallback((slug: string | null) => {
     setAutoTour(false);

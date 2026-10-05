@@ -18,3 +18,6 @@ web/.impeccable/
 
 # Per-machine Claude Code permissions; the shared launch config stays.
 .claude/settings.local.json
+
+# Word/Excel lock files, present while a document is open
+~$*

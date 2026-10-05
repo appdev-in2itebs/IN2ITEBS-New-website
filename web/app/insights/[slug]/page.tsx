@@ -5,8 +5,8 @@ import { notFound } from "next/navigation";
 import { Container, Section } from "@/components/ui/container";
 import { Eyebrow, Headline } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
-import { insights, insightArticles } from "@/content/insights";
-import { insightBodies } from "@/content/insight-bodies";
+import { insightArticles } from "@/content/insights";
+import { getArticle } from "@/lib/cms/content";
 
 export async function generateStaticParams() {
   return insightArticles.map((i) => ({ slug: i.slug }));
@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = insights.find((i) => i.slug === slug);
+  const article = await getArticle(slug);
   if (!article) return pageMetadata(`/insights/${slug}/`, { title: "Insight" });
   return pageMetadata(`/insights/${slug}/`, {
     title: article.title,
@@ -41,10 +41,10 @@ function formatDate(iso: string) {
  */
 export default async function InsightPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = insights.find((i) => i.slug === slug);
+  const article = await getArticle(slug);
   if (!article) notFound();
 
-  const body = insightBodies[article.slug];
+  const body = article.body ?? { blocks: [] };
 
   return (
     <>

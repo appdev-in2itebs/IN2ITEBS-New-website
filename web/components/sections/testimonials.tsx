@@ -9,7 +9,8 @@ import { Words } from "@/components/motion/words";
 import { useAutoplay } from "@/components/motion/use-autoplay";
 import { ClientLogo } from "@/components/sections/client-logo";
 import { clients } from "@/content/clients";
-import { testimonials } from "@/content/testimonials";
+import { testimonials as shippedTestimonials } from "@/content/testimonials";
+import type { Testimonial } from "@/content/types";
 import { cn } from "@/lib/utils";
 
 /** Milliseconds a quote holds before the row steps on by one. */
@@ -38,7 +39,7 @@ const COPIES = 2;
  * ringed, the rest sit back in greyscale until hovered, focused or chosen. Only the first copy of
  * the roster is real; the second is `aria-hidden` with untabbable links.
  */
-export function Testimonials() {
+export function Testimonials({ testimonials = shippedTestimonials }: { testimonials?: Testimonial[] }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLUListElement>(null);
   const { running, bump, sectionProps } = useAutoplay(root);
@@ -70,7 +71,7 @@ export function Testimonials() {
     sync();
     element.addEventListener("scroll", sync, { passive: true });
     return () => element.removeEventListener("scroll", sync);
-  }, []);
+  }, [testimonials.length]);
 
   const stepBy = useCallback((cards: number) => {
     const element = track.current;

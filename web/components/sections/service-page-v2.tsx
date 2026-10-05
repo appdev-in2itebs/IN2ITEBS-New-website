@@ -1,3 +1,4 @@
+import { heroPicture } from "@/components/sections/hero-override";
 import { ServiceHeroMark, serviceIcon } from "@/components/sections/service-icon";
 import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
 import {
@@ -15,7 +16,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/motion/reveal";
 
 /** Every service page the existing site's menu lists, in the approved design (components/sections/v2.tsx). */
-export function ServicePageV2({ page }: { page: ServicePage }) {
+export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: string } }) {
   const group = getServiceGroup(page.group);
   const title = page.title ?? page.name;
   const [lead, ...rest] = page.intro;
@@ -41,6 +42,7 @@ export function ServicePageV2({ page }: { page: ServicePage }) {
   return (
     <>
       <V2Hero
+        route={`/services/${page.slug}/`}
         path={[
           { label: "Services", href: "/services/" },
           ...(group && !groupIsThisPage ? [{ label: group.name, href: group.href }] : []),
@@ -48,15 +50,17 @@ export function ServicePageV2({ page }: { page: ServicePage }) {
         ]}
         title={title}
         lead={lead}
-        media={
+        media={heroPicture(
+          page.heroImage,
           heroKey ? (
             <HeroObject name={heroKey} />
           ) : page.image ? (
             <HeroImage src={page.image.src} alt={page.image.alt} />
           ) : (
             <ServiceHeroMark icon={page.icon} />
-          )
-        }
+          ),
+          title,
+        )}
       />
       <V2StickyNav anchors={anchors} />
       <V2Overview

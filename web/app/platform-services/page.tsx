@@ -113,6 +113,7 @@ export default function PlatformServicesPage() {
     <>
       <BreadcrumbJsonLd path="/platform-services/" />
       <PageHero
+        route="/platform-services/"
         eyebrow="Platform Services"
         headline="Platform-led transformation, one accountable"
         accentWord="partner."

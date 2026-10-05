@@ -37,6 +37,7 @@ export default function CareersPage() {
     <>
       <BreadcrumbJsonLd path="/careers/" />
       <PageHero
+        route="/careers/"
         eyebrow="Careers"
         headline="Build a career with endless"
         accentWord="opportunities."

@@ -10,6 +10,7 @@ export function GET() {
       siteEnv: process.env.SITE_ENV ?? "unset",
       leadDeliveryConfigured: Boolean(process.env.LEAD_WEBHOOK_URL && process.env.LEAD_WEBHOOK_TOKEN),
       supabaseConfigured: supabaseConfigured(),
+      adminSignInConfigured: supabaseConfigured() && Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY),
     },
     { headers: { "Cache-Control": "no-store" } },
   );

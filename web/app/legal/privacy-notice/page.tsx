@@ -15,6 +15,7 @@ export default function PrivacyNoticePage() {
     <>
       <BreadcrumbJsonLd path="/legal/privacy-notice/" />
       <PageHero
+        route="/legal/privacy-notice/"
         eyebrow="Legal"
         headline="Privacy"
         accentWord="Notice"

@@ -26,6 +26,7 @@ export default function AccreditationAwardsPage() {
     <>
       <BreadcrumbJsonLd path="/accreditation-awards/" name={awardsTitle} />
       <PageHero
+        route="/accreditation-awards/"
         eyebrow="Awards & recognition"
         headline={awardsTitle}
         subhead={awardsIntro}

@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { leadSchema, type Lead } from "./lead-schema";
 import { SITE_URL } from "./utils";
+import { supabaseConfigured } from "./supabase";
 /** Origins a browser may submit from: the socket origin, the public site (with and without www),
  *  the proxy-forwarded origin when TRUST_PROXY_HEADERS=1, and any ALLOWED_ORIGINS entries. */
 export function allowedOrigins(request: Request): Set<string> {
@@ -44,6 +45,32 @@ const LIMIT_PER_ADDRESS = 10,
   LIMIT_PER_EMAIL = 3,
   LIMIT_PROCESS = 120;
 export type LeadTransport = (lead: Lead, requestId: string) => Promise<void>;
+/** Saves the lead and returns its id. The default writes to Supabase when it is configured. */
+export type LeadStore = (lead: Lead, requestId: string, request: Request) => Promise<string>;
+export const supabaseLeadStore: LeadStore = async (lead, requestId, request) => {
+  const { insertLead, hashIp } = await import("./cms/store");
+  const address =
+    request.headers.get("cf-connecting-ip") ??
+    (process.env.TRUST_PROXY_HEADERS === "1" ? request.headers.get("x-forwarded-for")?.split(",")[0].trim() : null);
+  return insertLead({
+    name: lead.name,
+    email: lead.email,
+    company: lead.company,
+    message: lead.message,
+    source: "website",
+    region: lead.region,
+    interest: lead.interest,
+    offer: lead.offer,
+    assessment: lead.assessment || null,
+    request_id: requestId,
+    ip_hash: hashIp(address),
+    user_agent: request.headers.get("user-agent")?.slice(0, 300) ?? null,
+  });
+};
+async function markDelivered(id: string) {
+  const { supabaseAdmin } = await import("./supabase");
+  await supabaseAdmin().from("leads").update({ delivered: true, delivered_at: new Date().toISOString() }).eq("id", id);
+}
 export async function configuredTransport(lead: Lead, requestId: string) {
   const url = process.env.LEAD_WEBHOOK_URL;
   const token = process.env.LEAD_WEBHOOK_TOKEN;
@@ -69,7 +96,12 @@ function secureRequest(request: Request) {
     return true;
   return SITE_URL.startsWith("https:");
 }
-export async function handleLead(request: Request, transport?: LeadTransport) {
+/**
+ * Save first, then deliver (blueprint section 4): the lead is written to the database before the
+ * webhook is tried, so a webhook outage no longer loses it. Either one succeeding is a success for
+ * the visitor; both failing (or neither being configured) is a 503 with the email fallback.
+ */
+export async function handleLead(request: Request, transport?: LeadTransport, store?: LeadStore) {
   if (!request.headers.get("content-type")?.startsWith("application/json"))
     return json(415, { ok: false, error: "Use JSON." });
   const origin = request.headers.get("origin");
@@ -109,12 +141,31 @@ export async function handleLead(request: Request, transport?: LeadTransport) {
       return tooMany();
     if (parsed.data.company_url)
       return json(400, { ok: false, error: "Unable to accept this request. Please email us." });
-    if (!transport && (!process.env.LEAD_WEBHOOK_URL || !process.env.LEAD_WEBHOOK_TOKEN))
+    const webhook =
+      transport ?? (process.env.LEAD_WEBHOOK_URL && process.env.LEAD_WEBHOOK_TOKEN ? configuredTransport : undefined);
+    const save = store ?? (!transport && supabaseConfigured() ? supabaseLeadStore : undefined);
+    if (!webhook && !save)
       return json(503, { ok: false, error: "Online delivery is not configured. Please email info@in2itebs.com." });
     const requestId = randomUUID();
+    let savedId: string | null = null;
+    if (save)
+      try {
+        savedId = await save(parsed.data, requestId, request);
+      } catch {
+        console.error(JSON.stringify({ event: "lead_save_failed", requestId }));
+      }
+    let delivered = false;
+    if (webhook)
+      try {
+        await webhook(parsed.data, requestId);
+        delivered = true;
+        if (savedId) await markDelivered(savedId).catch(() => {});
+      } catch {
+        console.error(JSON.stringify({ event: "lead_delivery_failed", requestId }));
+      }
     try {
-      await (transport ?? configuredTransport)(parsed.data, requestId);
-      console.info(JSON.stringify({ event: "lead_accepted", requestId }));
+      if (!savedId && !delivered) throw new Error("not saved or delivered");
+      console.info(JSON.stringify({ event: "lead_accepted", requestId, saved: Boolean(savedId), delivered }));
       return json(
         200,
         { ok: true, requestId },
@@ -123,7 +174,6 @@ export async function handleLead(request: Request, transport?: LeadTransport) {
         },
       );
     } catch {
-      console.error(JSON.stringify({ event: "lead_delivery_failed", requestId }));
       return json(503, {
         ok: false,
         error: "We could not deliver your request. Please retry or email info@in2itebs.com.",

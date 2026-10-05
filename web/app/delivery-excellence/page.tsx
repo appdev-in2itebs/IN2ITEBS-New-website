@@ -28,6 +28,7 @@ export default function DeliveryExcellencePage() {
     <>
       <BreadcrumbJsonLd path="/delivery-excellence/" />
       <PageHero
+        route="/delivery-excellence/"
         eyebrow="Delivery Excellence"
         headline="Delivery"
         accentWord="excellence"

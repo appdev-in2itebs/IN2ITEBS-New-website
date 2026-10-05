@@ -92,6 +92,7 @@ export default function AiAutomationPage() {
     <>
       <BreadcrumbJsonLd path="/digital-data-ai/ai-automation/" />
       <PageHero
+        route="/digital-data-ai/ai-automation/"
         eyebrow="Digital, Data & AI · AI & Automation"
         headline="Industrial IoT, computer vision and applied AI, in one accountable"
         accentWord="team"

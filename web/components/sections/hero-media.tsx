@@ -12,10 +12,7 @@ import heroImages from "@/content/hero-images.json";
  * - a logo or diagram (`.png`, or `kind="logo"`) is shown whole, and its white ground is multiplied
  *   away against the light canvas, so only the mark itself is left;
  * - a realistic object illustration (`kind="object"`, or `HeroObject` below) is a transparent WebP
- *   already cut out from its ground, so it is shown whole with no mask and no blend;
- * - a scene rendered on a near-white studio ground (`kind="scene"`, set by the build script) is shown
- *   whole too, but its ground is multiplied into the canvas and its edges fade out, so no rectangle
- *   shows where the studio ground stops;
+ *   cut out and trimmed by the build script, so it is shown whole with no mask and no blend;
  * - a page with no picture gets `HeroMark`: one large icon over a soft glow, nothing rectangular.
  *
  * All of them come in through `.hero-media` (settle up, sharpen from a blur) and then drift slowly
@@ -55,26 +52,22 @@ export function HeroImage({
   priority?: boolean;
   className?: string;
   /** Force a treatment; otherwise the file's extension decides. */
-  kind?: "photo" | "logo" | "object" | "scene";
-  /** The file's own size (object and scene), so the page reserves the right shape before it loads. */
+  kind?: "photo" | "logo" | "object";
+  /** The file's own size (object), so the page reserves the right shape before it loads. */
   width?: number;
   height?: number;
 }) {
-  if (kind === "object" || kind === "scene") {
+  if (kind === "object") {
     return (
-      <Motion className={className} blend={kind === "scene"}>
+      <Motion className={className}>
         <div className="relative flex h-full w-full items-center justify-center">
           <Image
             src={src}
             alt={alt}
             width={width}
             height={height}
-            sizes="(min-width: 1024px) 40vw, 100vw"
-            className={cn(
-              "h-auto max-h-full w-full object-contain",
-              // On the image itself, so the fade reaches nothing exactly at each of its own edges.
-              kind === "scene" && "[mask-image:radial-gradient(closest-side,black_68%,transparent_100%)]",
-            )}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="h-auto max-h-full w-full object-contain"
             priority={priority}
           />
         </div>
@@ -130,8 +123,7 @@ export function HeroMark({ icon: Icon }: { icon: LucideIcon }) {
 /**
  * The hero pictures built from assets/hero-images/ by scripts/build-hero-images.mjs (`npm run
  * heroes`), keyed "<section>/<name>": pages/<name>, services/<slug>, industries/<slug>,
- * partners/<slug>, about/<name>, careers/<name>. Each entry carries its alt text and whether it is a cut-out
- * ("object") or a studio render to blend in ("scene").
+ * partners/<slug>, about/<name>, careers/<name>. Each entry carries its alt text and pixel size.
  */
 export type HeroImageKey = keyof typeof heroImages;
 
@@ -140,6 +132,6 @@ export function hasHeroImage(key: string): key is HeroImageKey {
 }
 
 export function HeroObject({ name }: { name: HeroImageKey }) {
-  const { src, alt, kind, width, height } = heroImages[name];
-  return <HeroImage src={src} alt={alt} kind={kind as "object" | "scene"} width={width} height={height} />;
+  const { src, alt, width, height } = heroImages[name];
+  return <HeroImage src={src} alt={alt} kind="object" width={width} height={height} />;
 }

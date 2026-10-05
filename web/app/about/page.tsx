@@ -14,7 +14,8 @@ import { CtaSection } from "@/components/sections/cta-section";
 import { PillarsSection } from "@/components/sections/pillars";
 import { stats, footerCertifications } from "@/content/site";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
-import { leadership, leaderInitials } from "@/content/leadership";
+import { leaderInitials } from "@/content/leadership";
+import { getCms } from "@/lib/cms/content";
 
 export const metadata = pageMetadata("/about/", {
   title: "Who We Are",
@@ -46,11 +47,13 @@ const structureReasons = [
 const deliveryCentres = ["Bengaluru", "Hyderabad", "Delhi NCR", "Bhubaneswar"];
 const salesOffices = ["Mumbai", "Chennai", "Singapore", "Dubai", "Nairobi", "Johannesburg"];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { leadership } = await getCms();
   return (
     <>
       <BreadcrumbJsonLd path="/about/" />
       <PageHero
+        route="/about/"
         eyebrow="Who we are"
         headline="Three pillars."
         accentWord="One converged enterprise."

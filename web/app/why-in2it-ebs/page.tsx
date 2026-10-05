@@ -23,6 +23,7 @@ export default function WhyIn2ITEBSPage() {
     <>
       <BreadcrumbJsonLd path="/why-in2it-ebs/" />
       <PageHero
+        route="/why-in2it-ebs/"
         eyebrow="Why In2IT EBS"
         headline="Three reasons enterprises choose us — and"
         accentWord="stay"

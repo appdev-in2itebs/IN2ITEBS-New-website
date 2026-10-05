@@ -5,6 +5,8 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow, Accent } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { HeroObject } from "@/components/sections/hero-media";
+import type { HeroEdit } from "@/components/sections/hero-override";
+import type { ReactNode } from "react";
 import { site } from "@/content/site";
 import type { Variants } from "framer-motion";
 
@@ -44,7 +46,8 @@ const headlineLineVariants: Variants = {
   },
 };
 
-export function ThreeTiersHero() {
+/** `override` and `picture` come from the page (a server component), which reads /admin/pages edits. */
+export function ThreeTiersHero({ override, picture }: { override?: HeroEdit; picture?: ReactNode }) {
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-canvas pt-36 pb-20 md:pt-44 md:pb-28">
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
@@ -56,7 +59,7 @@ export function ThreeTiersHero() {
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left Text Column with Perfect Staggered Slide-in Animation from Right */}
           <motion.div
-            className="flex max-w-2xl flex-col gap-6 lg:col-span-7"
+            className="flex max-w-2xl flex-col gap-6 lg:col-span-6"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -68,12 +71,20 @@ export function ThreeTiersHero() {
 
             {/* Headline Animated Line by Line from Right */}
             <h1 className="text-display font-display font-bold leading-[1.05] tracking-[-0.04em]">
-              <motion.span variants={headlineLineVariants} className="block">
-                Three tiers.
-              </motion.span>
-              <motion.span variants={headlineLineVariants} className="block text-action mt-1">
-                <Accent>One continuous engagement.</Accent>
-              </motion.span>
+              {override?.title ? (
+                <motion.span variants={headlineLineVariants} className="block">
+                  {override.title}
+                </motion.span>
+              ) : (
+                <>
+                  <motion.span variants={headlineLineVariants} className="block">
+                    Three tiers.
+                  </motion.span>
+                  <motion.span variants={headlineLineVariants} className="block text-action mt-1">
+                    <Accent>One continuous engagement.</Accent>
+                  </motion.span>
+                </>
+              )}
             </h1>
 
             {/* Subhead Animated Line by Line from Right */}
@@ -81,8 +92,12 @@ export function ThreeTiersHero() {
               variants={slideFromRight}
               className="max-w-measure text-lg leading-relaxed text-foreground-muted md:text-xl"
             >
-              Enter through Advisory, Platforms &amp; Engineering, or Managed Services &amp; Sustenance — and find the
-              same delivery engine underneath, whichever door you choose.
+              {override?.intro ?? (
+                <>
+                  Enter through Advisory, Platforms &amp; Engineering, or Managed Services &amp; Sustenance — and find
+                  the same delivery engine underneath, whichever door you choose.
+                </>
+              )}
             </motion.p>
 
             {/* CTA Button */}
@@ -94,9 +109,9 @@ export function ThreeTiersHero() {
           </motion.div>
 
           {/* Right: the realistic object illustration, which brings its own entrance and drift */}
-          <div className="lg:col-span-5">
-            <div className="relative mx-auto aspect-[5/4] w-full max-w-xl">
-              <HeroObject name="pages/what-we-do" />
+          <div className="lg:col-span-6">
+            <div className="relative mx-auto aspect-[4/3] w-full max-w-xl lg:max-w-none">
+              {picture ?? <HeroObject name="pages/what-we-do" />}
             </div>
           </div>
         </div>

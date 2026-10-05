@@ -9,7 +9,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroObject } from "@/components/sections/hero-media";
 import { CtaSection } from "@/components/sections/cta-section";
-import { insights } from "@/content/insights";
+import { getCms } from "@/lib/cms/content";
 
 export const metadata = pageMetadata("/insights/", {
   title: "Insights",
@@ -17,11 +17,13 @@ export const metadata = pageMetadata("/insights/", {
     "Perspectives on enterprise transformation — SAP, SuccessFactors, AI and the technologies reshaping the enterprise.",
 });
 
-export default function InsightsPage() {
+export default async function InsightsPage() {
+  const insights = (await getCms()).articles;
   return (
     <>
       <BreadcrumbJsonLd path="/insights/" />
       <PageHero
+        route="/insights/"
         eyebrow="Insights"
         headline="Perspectives on enterprise"
         accentWord="transformation"

@@ -86,6 +86,7 @@ export default function RiseVsGrowPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/rise-vs-grow/" />
       <PageHero
+        route="/sap-enterprise-solutions/rise-vs-grow/"
         eyebrow="RISE vs GROW with SAP"
         headline="Two valid paths."
         accentWord="One honest recommendation."

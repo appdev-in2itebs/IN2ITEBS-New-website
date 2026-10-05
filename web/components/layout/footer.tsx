@@ -2,7 +2,8 @@ import Link from "next/link";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
 import { ArrowUpRight } from "lucide-react";
 import { footerNav } from "@/content/nav";
-import { officeCities } from "@/content/offices";
+import { citiesFor } from "@/content/offices";
+import { getCms } from "@/lib/cms/content";
 import { footerCertifications, site, social } from "@/content/site";
 import { Logo } from "@/components/ui/logo";
 
@@ -67,7 +68,8 @@ function LinkColumn({ title, links }: { title: string; links: { label: string; h
   );
 }
 
-export function Footer() {
+export async function Footer() {
+  const officeCities = citiesFor((await getCms()).offices);
   return (
     <footer className="theme-on-brand relative bg-brand pb-20 text-on-brand">
       <div aria-hidden className="rule-gold absolute inset-x-0 top-0" />

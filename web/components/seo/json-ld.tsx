@@ -1,5 +1,5 @@
 import { social, site } from "@/content/site";
-import { offices } from "@/content/offices";
+import { getCms } from "@/lib/cms/content";
 import { SITE_URL } from "@/lib/utils";
 import { breadcrumbItems, isKnownPage, safeJsonLd } from "@/lib/json-ld";
 
@@ -8,7 +8,8 @@ function Script({ data }: { data: unknown }) {
 }
 
 /** Organization + WebSite, rendered once from the root layout. */
-export function OrganizationJsonLd() {
+export async function OrganizationJsonLd() {
+  const { offices } = await getCms();
   const headOffice = offices.find((o) => o.slug === "bangalore");
   const data = {
     "@context": "https://schema.org",

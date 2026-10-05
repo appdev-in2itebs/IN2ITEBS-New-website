@@ -72,6 +72,7 @@ export default function MigrationsPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/migrations/" />
       <PageHero
+        route="/sap-enterprise-solutions/migrations/"
         eyebrow="SAP Enterprise Solutions · Migrations"
         headline="ECC to S/4HANA, on-premise to cloud —"
         accentWord="a managed decision."

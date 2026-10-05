@@ -111,6 +111,7 @@ export default function AnalyticsCloudPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/analytics-cloud/" />
       <PageHero
+        route="/sap-enterprise-solutions/analytics-cloud/"
         eyebrow="SAP Enterprise Solutions · SAP Analytics Cloud"
         headline="The front door to your"
         accentWord="enterprise data."

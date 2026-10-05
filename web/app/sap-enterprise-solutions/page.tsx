@@ -34,6 +34,7 @@ export default function SapEnterpriseSolutionsPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/" />
       <PageHero
+        route="/sap-enterprise-solutions/"
         eyebrow="SAP Enterprise Solutions"
         headline="SAP, run by a"
         accentWord="Gold Partner."

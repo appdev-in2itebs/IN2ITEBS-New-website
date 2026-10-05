@@ -67,6 +67,7 @@ export default function GrowFastPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/grow-fast/" />
       <PageHero
+        route="/sap-enterprise-solutions/grow-fast/"
         eyebrow="SAP Enterprise Solutions · SAP GROW Fast"
         headline="Go live in weeks, not"
         accentWord="months."

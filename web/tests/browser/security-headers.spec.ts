@@ -3,7 +3,8 @@ test("security headers are present and the CSP breaks nothing", async ({ page, r
   const response = await request.get("/");
   const headers = response.headers();
   expect(headers["content-security-policy"]).toContain("default-src 'self'");
-  expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
+  expect(headers["content-security-policy"]).toContain("frame-ancestors 'self'");
+  expect(headers["x-frame-options"]).toBe("SAMEORIGIN");
   expect(headers["strict-transport-security"]).toContain("max-age=63072000");
   expect(headers["x-content-type-options"]).toBe("nosniff");
   const violations: string[] = [];

@@ -131,6 +131,7 @@ export default function DigitalDataAiPage() {
     <>
       <BreadcrumbJsonLd path="/digital-data-ai/" />
       <PageHero
+        route="/digital-data-ai/"
         eyebrow="Digital, Data & AI"
         headline="Engineering-led innovation across application, data and"
         accentWord="intelligence"

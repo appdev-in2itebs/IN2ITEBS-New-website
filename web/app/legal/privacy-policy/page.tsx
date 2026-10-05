@@ -25,6 +25,7 @@ export default function PrivacyPolicyPage() {
     <>
       <BreadcrumbJsonLd path="/legal/privacy-policy/" />
       <PageHero
+        route="/legal/privacy-policy/"
         eyebrow="Legal"
         headline="Privacy"
         accentWord="Policy"

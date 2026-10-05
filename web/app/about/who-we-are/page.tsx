@@ -45,6 +45,7 @@ export default function WhoWeArePage() {
     <>
       <BreadcrumbJsonLd path="/about/who-we-are/" name="Who We Are?" />
       <V2Hero
+        route="/about/who-we-are/"
         path={[{ label: "About", href: "/about/" }, { label: "Who We Are?" }]}
         title="Who We Are?"
         lead="In2IT EBS is the leading authority in IT Consultancy, Cloud Computing, Managed Services, Application Development & Maintenance, Business Process Management, Technology Infrastructure Services, Program and Project Management and Future Edge Services to its Clientele in India and abroad."

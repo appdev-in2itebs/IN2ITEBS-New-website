@@ -144,9 +144,14 @@ export const countries = [
 ];
 
 /** One entry per distinct mailbox; the shared info@in2itebs.com is labelled Global. */
-export const regionalContacts = Array.from(
-  new Map(offices.filter((o) => o.email).map((o) => [o.email as string, o])).values(),
-).map((o) => ({ region: o.email === "info@in2itebs.com" ? "Global" : o.name, email: o.email as string }));
+export function contactsFor(list: Office[]) {
+  return Array.from(new Map(list.filter((o) => o.email).map((o) => [o.email as string, o])).values()).map((o) => ({
+    region: o.email === "info@in2itebs.com" ? "Global" : o.name,
+    email: o.email as string,
+  }));
+}
+export const regionalContacts = contactsFor(offices);
 
 /** Cities in office order, for the footer line. */
-export const officeCities = offices.map((o) => o.city);
+export const citiesFor = (list: Office[]) => list.map((o) => o.city);
+export const officeCities = citiesFor(offices);

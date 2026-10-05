@@ -99,6 +99,7 @@ export default function ApplicationEngineeringPage() {
     <>
       <BreadcrumbJsonLd path="/digital-data-ai/application-engineering/" />
       <PageHero
+        route="/digital-data-ai/application-engineering/"
         eyebrow="Digital, Data & AI · Application Engineering"
         headline="Custom development, integration and support across every"
         accentWord="estate"

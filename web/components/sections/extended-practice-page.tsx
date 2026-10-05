@@ -10,6 +10,7 @@ export function ExtendedPracticePage({ practice }: { practice: keyof typeof exte
   return (
     <>
       <PageHero
+        route={`/${practice}/`}
         eyebrow={`${content.name} practice`}
         headline={content.headline}
         subhead={content.summary}

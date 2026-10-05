@@ -56,7 +56,7 @@ export function ScrollDown() {
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       className={cn(
-        "group fixed bottom-5 right-5 z-30 h-12 w-12 items-center justify-center rounded-full border shadow-glass backdrop-blur-md transition-[background-color,border-color,color,transform,box-shadow] duration-300 ease-out hover:-translate-y-px hover:shadow-glass-hover motion-reduce:transition-none",
+        "group fixed bottom-24 right-6 z-30 h-12 w-12 items-center justify-center rounded-full border shadow-glass backdrop-blur-md transition-[background-color,border-color,color,transform,box-shadow] duration-300 ease-out hover:-translate-y-px hover:shadow-glass-hover motion-reduce:transition-none",
         // The display class must not override the `hidden` attribute, so it only applies while shown.
         nearFooter && !focused ? "hidden" : "inline-flex",
         overHero

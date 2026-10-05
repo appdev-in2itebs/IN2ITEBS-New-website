@@ -1,3 +1,4 @@
+import { heroPicture } from "@/components/sections/hero-override";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { sectorIcon } from "@/components/sections/hero-motif";
 import { HeroImage, HeroMark, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
@@ -20,7 +21,7 @@ import type { LegacyIndustry } from "@/content/legacy-industries";
  * (content/legacy-industries.ts), its photographs and its "Our Customers" strip, in the approved
  * design (components/sections/v2.tsx).
  */
-export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry }) {
+export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry & { heroImage?: string } }) {
   const title = industry.title ?? industry.name;
   const heroKey = `industries/${industry.slug}`;
   const [lead, ...rest] = industry.intro;
@@ -39,25 +40,33 @@ export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry }) {
     body: section.body,
     bullets: section.bullets,
     offerings: section.offerings,
-    image: section.image ? `/industries/${industry.slug}/${section.image}` : undefined,
+    // A bare file name is one of the page's own photos; an edit may choose any site path or an upload.
+    image: section.image
+      ? /^(https:\/\/|\/)/.test(section.image)
+        ? section.image
+        : `/industries/${industry.slug}/${section.image}`
+      : undefined,
   }));
 
   return (
     <>
       <BreadcrumbJsonLd path={`/industries/${industry.slug}/`} name={industry.name} />
       <V2Hero
+        route={`/industries/${industry.slug}/`}
         path={[{ label: "Industries", href: "/industries/" }, { label: industry.name }]}
         title={title}
         lead={lead}
-        media={
+        media={heroPicture(
+          industry.heroImage,
           hasHeroImage(heroKey) ? (
             <HeroObject name={heroKey} />
           ) : industry.image ? (
             <HeroImage src={`/industries/${industry.slug}/${industry.image}`} alt={title} />
           ) : (
             <HeroMark icon={sectorIcon(industry.slug)} />
-          )
-        }
+          ),
+          title,
+        )}
       />
       <V2StickyNav anchors={anchors} />
       <V2Overview eyebrow={industry.name} heading={`About ${industry.name}`} paragraphs={rest.length ? rest : [lead]} />

@@ -52,6 +52,7 @@ export default function AribaPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/ariba/" />
       <PageHero
+        route="/sap-enterprise-solutions/ariba/"
         eyebrow="SAP Enterprise Solutions · Ariba"
         headline="Source-to-Pay,"
         accentWord="automated end-to-end."

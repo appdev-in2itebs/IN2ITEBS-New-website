@@ -16,6 +16,7 @@ export default function DisclaimerPage() {
     <>
       <BreadcrumbJsonLd path="/legal/disclaimer/" />
       <PageHero
+        route="/legal/disclaimer/"
         eyebrow="Legal"
         headline="Website"
         accentWord="Disclaimer"

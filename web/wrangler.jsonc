@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "in2it-ebs-web",
   "main": ".open-next/worker.js",
+  // Minified, function names kept (keep_names is on by default): the compressed Worker drops from
+  // about 3.07 MiB to 2.65 MiB, under the 3 MiB limit of the free Workers plan.
+  "minify": true,
 
   // nodejs_compat is required: lib/lead-service.ts imports node:crypto and
   // app/api/lead/route.ts runs on the nodejs runtime. Without the flag the
@@ -31,6 +34,38 @@
   "images": {
     "binding": "IMAGES"
   },
+
+  // Instant content editing (open-next.config.ts). The page cache lives in this R2 bucket; create it
+  // once in the Cloudflare dashboard (R2 -> Create bucket -> in2it-ebs-next-cache) before deploying.
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "in2it-ebs-next-cache"
+    }
+  ],
+
+  // The two Durable Objects that mark edited pages stale and re-render them in the background.
+  // Cloudflare creates them on deploy (the migration below); nothing to set up by hand.
+  "durable_objects": {
+    "bindings": [
+      { "name": "NEXT_CACHE_DO_QUEUE", "class_name": "DOQueueHandler" },
+      { "name": "NEXT_TAG_CACHE_DO_SHARDED", "class_name": "DOShardedTagCache" }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1-next-cache",
+      "new_sqlite_classes": ["DOQueueHandler", "DOShardedTagCache"]
+    }
+  ],
+
+  // The background re-render calls this same Worker.
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "in2it-ebs-web"
+    }
+  ],
 
   "observability": {
     "enabled": true

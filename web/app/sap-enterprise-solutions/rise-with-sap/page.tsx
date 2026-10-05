@@ -78,6 +78,7 @@ export default function RiseWithSapPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/rise-with-sap/" />
       <PageHero
+        route="/sap-enterprise-solutions/rise-with-sap/"
         eyebrow="SAP Enterprise Solutions · RISE with SAP"
         headline="SAP S/4HANA, the digital core of your"
         accentWord="business."

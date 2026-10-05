@@ -45,21 +45,27 @@ jobs:
           # Baked into canonical URLs, the sitemap and the enquiry origin allow-list.
           # Set the SITE_URL repository variable to the Workers URL after the first deploy.
           NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://in2itebs.com' }}
+          # Pages render with the content edits saved in /admin (lib/cms/content.ts reads Supabase).
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          # Admin sign-in (Supabase Auth). Public by design; inlined like every NEXT_PUBLIC_ value.
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
 
       # Deploy before the secrets are uploaded, not after: `wrangler secret put` addresses an
       # existing Worker, and on the very first run there is nothing to attach a secret to yet.
       # Deploying first creates it, so run one and run two behave the same.
+      # `opennextjs-cloudflare deploy` first copies the prerendered pages into the R2 page cache
+      # (NEXT_INC_CACHE_R2_BUCKET), then runs `wrangler deploy`. The API token therefore needs
+      # "Workers R2 Storage: Edit" as well as "Workers Scripts: Edit".
       - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: web
-          command: deploy
+        run: npx opennextjs-cloudflare deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      # Uploaded as Worker secrets, never written into wrangler.jsonc or git. Nothing reads them
-      # yet beyond the health route reporting whether they are set; they are in place so Phase 2
-      # does not need a deploy change. `secret bulk` reads one JSON object from stdin.
+      # Uploaded as Worker secrets, never written into wrangler.jsonc or git: the admin, the chat
+      # assistant, the apply form and lead saving read them at runtime. `secret bulk` reads one JSON
+      # object from stdin.
       - name: Upload Supabase secrets to the Worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

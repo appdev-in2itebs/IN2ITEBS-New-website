@@ -10,70 +10,12 @@ import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { HeroChrome } from "@/components/sections/hero-chrome";
 import { cn } from "@/lib/utils";
+import { homeHeroSlides, type HeroSlide } from "@/content/home-hero";
 
 /** Milliseconds each slide holds before the next one fades in. */
 const INTERVAL = 4500;
 /** Milliseconds the leaving clip stays mounted under the arriving one (the CSS fade is 700 ms). */
 const FADE = 800;
-
-type Slide = {
-  id: string;
-  label: string;
-  heading: string[];
-  body: string;
-  cta: { href: string; label: string };
-  secondary: { href: string; label: string };
-  /** Which frame sequence in content/hero-frames.ts plays behind this slide (slide-1 … slide-5). */
-  frames: string;
-};
-
-const slides: Slide[] = [
-  {
-    id: "brand",
-    frames: "slide-1",
-    label: "Enterprise transformation, under control",
-    heading: ["Change with confidence.", "Run without compromise."],
-    body: "In2IT EBS connects enterprise platforms, digital engineering and managed operations through one accountable transformation partner.",
-    cta: { href: "/contact/", label: "Start a conversation" },
-    secondary: { href: "/what-we-do/", label: "Explore our services" },
-  },
-  {
-    id: "sap",
-    frames: "slide-2",
-    label: "SAP enterprise solutions",
-    heading: ["Transform your enterprise with SAP."],
-    body: "From S/4HANA and cloud migration to SuccessFactors, analytics and managed services. Connect the platform to the way your business operates.",
-    cta: { href: "/sap-enterprise-solutions/", label: "Explore SAP solutions" },
-    secondary: { href: "/contact/", label: "Talk to us" },
-  },
-  {
-    id: "applications",
-    frames: "slide-3",
-    label: "Application development & maintenance",
-    heading: ["Applications built around your business."],
-    body: "Design, build, integrate and maintain business applications, with engineering and ongoing support connected from the start.",
-    cta: { href: "/digital-data-ai/application-engineering/", label: "Explore application services" },
-    secondary: { href: "/contact/", label: "Talk to us" },
-  },
-  {
-    id: "platforms",
-    frames: "slide-4",
-    label: "People, finance & customer platforms",
-    heading: ["Connect people, processes and performance."],
-    body: "Explore SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices for the systems your teams rely on every day.",
-    cta: { href: "/platform-services/", label: "Explore our platform practices" },
-    secondary: { href: "/contact/", label: "Talk to us" },
-  },
-  {
-    id: "data-ai",
-    frames: "slide-5",
-    label: "Cloud, data & AI",
-    heading: ["Turn enterprise data into everyday decisions."],
-    body: "Bring data, analytics, integration and AI into the flow of work, with architecture and delivery grounded in your business priorities.",
-    cta: { href: "/digital-data-ai/", label: "Explore data & AI services" },
-    secondary: { href: "/contact/", label: "Talk to us" },
-  },
-];
 
 const slideContentVariants: Variants = {
   hidden: { opacity: 0 },
@@ -140,7 +82,7 @@ const staticVariants: Variants = {
  * Enhanced with staggered Framer Motion text animations, crisp legibility shadows,
  * and interactive slide indicators.
  */
-export function BrandHero() {
+export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] }) {
   const [slide, setSlide] = useState<{ active: number; leaving: number | null }>({ active: 0, leaving: null });
   const [rotating, setRotating] = useState(false);
   const [offscreen, setOffscreen] = useState(false);
@@ -195,10 +137,12 @@ export function BrandHero() {
     if (!rotating || offscreen || focused) return;
     const timer = setInterval(() => {
       if (document.hidden || document.documentElement.dataset.motionPaused === "true") return;
+      // Held still while the admin's visual editor is editing the page.
+      if (document.documentElement.classList.contains("ve-edit")) return;
       setSlide((current) => ({ active: (current.active + 1) % slides.length, leaving: current.active }));
     }, INTERVAL);
     return () => clearInterval(timer);
-  }, [rotating, offscreen, focused]);
+  }, [rotating, offscreen, focused, slides.length]);
 
   useEffect(() => {
     if (slide.leaving === null) return;
@@ -239,7 +183,7 @@ export function BrandHero() {
                 index === active ? "z-[2] opacity-100" : index === leaving ? "z-[1] opacity-100" : "z-0 opacity-0",
               )}
             >
-              <FrameSequence sequence={heroFrames[item.frames]} urgent={index === active} />
+              <FrameSequence sequence={heroFrames[item.frames] ?? heroFrames["slide-1"]} urgent={index === active} />
             </div>
           );
         })}

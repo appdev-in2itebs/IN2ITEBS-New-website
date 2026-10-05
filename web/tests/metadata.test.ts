@@ -52,8 +52,8 @@ test("named case studies carry a summary of at most 155 characters", () => {
 });
 import sitemap from "../app/sitemap";
 import { contentUpdated } from "../content/site";
-test("every sitemap entry has a valid lastModified and the homepage is included", () => {
-  const entries = sitemap();
+test("every sitemap entry has a valid lastModified and the homepage is included", async () => {
+  const entries = await sitemap();
   assert.ok(entries.some((e) => e.url === "https://in2itebs.com/"));
   for (const entry of entries) {
     assert.ok(entry.lastModified instanceof Date && !Number.isNaN(entry.lastModified.getTime()), entry.url);
@@ -73,7 +73,7 @@ test("every inner page renders a breadcrumb trail", () => {
     const match = source.match(/pageMetadata\((["'`])([^"'`]+)\1/);
     if (!match || match[2] === "/" || match[2] === "/404/") continue;
     assert.ok(source.includes("<BreadcrumbJsonLd"), `${path.relative(process.cwd(), file)} has no BreadcrumbJsonLd`);
-    if (file.includes("[slug]")) continue;
+    if (file.includes("[")) continue; // a dynamic route ([slug], [id]) has no literal path to compare
     assert.ok(
       source.includes(`BreadcrumbJsonLd path="${match[2]}"`),
       `${path.relative(process.cwd(), file)}: breadcrumb path does not match pageMetadata path ${match[2]}`,

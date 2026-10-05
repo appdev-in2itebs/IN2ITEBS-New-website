@@ -95,6 +95,7 @@ export default function AdvisoryPage() {
     <>
       <BreadcrumbJsonLd path="/advisory/" />
       <PageHero
+        route="/advisory/"
         eyebrow="Advisory Services"
         headline="Advisory that gets to"
         accentWord="outcomes."

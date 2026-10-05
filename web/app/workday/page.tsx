@@ -65,6 +65,7 @@ export default function WorkdayPage() {
     <>
       <BreadcrumbJsonLd path="/workday/" />
       <PageHero
+        route="/workday/"
         eyebrow="Workday"
         headline="HR and finance on a single"
         accentWord="cloud."

@@ -7,7 +7,9 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroObject } from "@/components/sections/hero-media";
 import { DemoForm } from "@/components/forms/demo-form";
-import { offices, regionalContacts } from "@/content/offices";
+import { contactsFor } from "@/content/offices";
+import type { Office } from "@/content/types";
+import { getCms } from "@/lib/cms/content";
 import { footerCertifications } from "@/content/site";
 
 export const metadata = pageMetadata("/contact/", {
@@ -16,10 +18,7 @@ export const metadata = pageMetadata("/contact/", {
     "Start your transformation with In2IT EBS, or reach the office nearest you across India and our global entities.",
 });
 
-const indiaOffices = offices.filter((o) => o.kind.includes("india-office"));
-const globalEntities = offices.filter((o) => o.kind.includes("global-entity") || !o.kind.includes("india-office"));
-
-function OfficeCard({ office }: { office: (typeof offices)[number] }) {
+function OfficeCard({ office }: { office: Office }) {
   return (
     <Card tone="white" className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-1">
@@ -37,11 +36,17 @@ function OfficeCard({ office }: { office: (typeof offices)[number] }) {
   );
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Offices as edited in /admin/content.
+  const { offices } = await getCms();
+  const indiaOffices = offices.filter((o) => o.kind.includes("india-office"));
+  const globalEntities = offices.filter((o) => o.kind.includes("global-entity") || !o.kind.includes("india-office"));
+  const regionalContacts = contactsFor(offices);
   return (
     <>
       <BreadcrumbJsonLd path="/contact/" />
       <PageHero
+        route="/contact/"
         eyebrow="Contact"
         headline="Let's talk about your"
         accentWord="transformation"

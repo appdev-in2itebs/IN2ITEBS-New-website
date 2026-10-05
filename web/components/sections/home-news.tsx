@@ -9,7 +9,8 @@ import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
 import { useAutoplay } from "@/components/motion/use-autoplay";
 import { cn } from "@/lib/utils";
-import { insights } from "@/content/insights";
+import { insights as shippedInsights } from "@/content/insights";
+import type { Insight } from "@/content/types";
 
 /** Pixels a second the strip travels on its own — a read, not a ride. */
 const DRIFT = 28;
@@ -43,7 +44,7 @@ function badge(iso: string) {
  * see `useAutoplay`. Only the first copy is the real list; the rest are `aria-hidden` with
  * untabbable links, so assistive technology and the keyboard meet each article exactly once.
  */
-export function HomeNews() {
+export function HomeNews({ insights = shippedInsights }: { insights?: Insight[] }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLUListElement>(null);
   const { running, bump, sectionProps } = useAutoplay(root);

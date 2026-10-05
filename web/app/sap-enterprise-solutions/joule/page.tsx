@@ -84,6 +84,7 @@ export default function JoulePage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/joule/" />
       <PageHero
+        route="/sap-enterprise-solutions/joule/"
         eyebrow="SAP Enterprise Solutions · Joule"
         headline="SAP's generative copilot,"
         accentWord="in production."

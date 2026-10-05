@@ -106,6 +106,7 @@ export default function SuccessFactorsPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/successfactors/" />
       <PageHero
+        route="/sap-enterprise-solutions/successfactors/"
         eyebrow="SAP Enterprise Solutions · SuccessFactors / HXM"
         headline="Human experience management,"
         accentWord="at scale."

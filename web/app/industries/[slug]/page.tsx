@@ -13,7 +13,8 @@ import Image from "next/image";
 import { industries, getIndustry } from "@/content/industries";
 import { getClientsBySectors } from "@/lib/content";
 import { getIndustryBody } from "@/content/industry-bodies";
-import { legacyIndustries, getLegacyIndustry } from "@/content/legacy-industries";
+import { legacyIndustries } from "@/content/legacy-industries";
+import { getIndustry as getEditedIndustry } from "@/lib/cms/content";
 import { LegacyIndustryPage } from "@/components/sections/legacy-industry-page";
 
 export async function generateStaticParams() {
@@ -25,7 +26,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const legacy = getLegacyIndustry(slug);
+  const legacy = await getEditedIndustry(slug);
   if (legacy)
     return pageMetadata(`/industries/${slug}/`, {
       title: legacy.title ?? legacy.name,
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const legacy = getLegacyIndustry(slug);
+  const legacy = await getEditedIndustry(slug);
   if (legacy) return <LegacyIndustryPage industry={legacy} />;
   const ind = getIndustry(slug);
   if (!ind) notFound();
@@ -53,6 +54,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
     <>
       <BreadcrumbJsonLd path={`/industries/${ind.slug}/`} name={ind.name} />
       <PageHero
+        route={`/industries/${ind.slug}/`}
         eyebrow="Industries"
         headline={ind.headline}
         accentWord={ind.accentWord}

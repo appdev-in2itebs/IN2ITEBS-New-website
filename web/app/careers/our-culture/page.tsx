@@ -30,6 +30,7 @@ export default function OurCulturePage() {
     <>
       <BreadcrumbJsonLd path="/careers/our-culture/" name="Our Culture" />
       <V2Hero
+        route="/careers/our-culture/"
         path={[{ label: "Career", href: "/careers/" }, { label: "Our Culture" }]}
         title="Our Culture"
         lead="At In2IT EBS, our performance-oriented culture and responsible approach are the foundations of our success. We strive to maintain a fun and positive work environment, encouraging our employees to enjoy themselves at work and think outside the box."

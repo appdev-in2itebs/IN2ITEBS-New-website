@@ -5,6 +5,8 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { ThreeTiersHero } from "@/components/sections/three-tiers-hero";
+import { heroOverride, overrideMedia } from "@/components/sections/hero-override";
+import { HeroObject } from "@/components/sections/hero-media";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { PillarCards } from "@/components/sections/pillar-cards";
 import { AllianceStrip } from "@/components/sections/alliance-strip";
@@ -68,11 +70,13 @@ const deliveryEngine = [
   },
 ];
 
-export default function WhatWeDoPage() {
+export default async function WhatWeDoPage() {
+  const override = await heroOverride("/what-we-do/");
+  const picture = overrideMedia(override, <HeroObject name="pages/what-we-do" />);
   return (
     <>
       <BreadcrumbJsonLd path="/what-we-do/" />
-      <ThreeTiersHero />
+      <ThreeTiersHero override={override} picture={picture} />
 
       {/* THREE ENGAGEMENT TIERS */}
       <section aria-labelledby="practice-finder-title" className="bg-surface py-10">

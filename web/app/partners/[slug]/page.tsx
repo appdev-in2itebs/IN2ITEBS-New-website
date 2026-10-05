@@ -4,7 +4,9 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { ServiceHeroMark } from "@/components/sections/service-icon";
 import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Bento, V2Rail, V2Closing } from "@/components/sections/v2";
-import { partnerPages, getPartnerPage } from "@/content/partner-pages";
+import { partnerPages } from "@/content/partner-pages";
+import { getCms, getPartner } from "@/lib/cms/content";
+import { heroPicture } from "@/components/sections/hero-override";
 
 export async function generateStaticParams() {
   return partnerPages.map((page) => ({ slug: page.slug }));
@@ -12,7 +14,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const page = getPartnerPage(slug);
+  const page = await getPartner(slug);
   if (!page) return pageMetadata(`/partners/${slug}/`, { title: "Partner" });
   return pageMetadata(`/partners/${page.slug}/`, { title: page.name, description: page.metaDescription });
 }
@@ -20,11 +22,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 /** One page per partner in the Partners menu, carrying the existing site's copy, in the approved design. */
 export default async function PartnerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const page = getPartnerPage(slug);
+  const page = await getPartner(slug);
   if (!page) notFound();
   const [lead, ...rest] = page.intro;
   const heroKey = `partners/${page.slug}`;
-  const others = partnerPages.filter((other) => other.slug !== page.slug);
+  const others = (await getCms()).partners.filter((other) => other.slug !== page.slug);
   const anchors = [
     { id: "overview", label: "Overview" },
     ...(page.sections?.length ? [{ id: "areas", label: "What they offer" }] : []),
@@ -36,18 +38,21 @@ export default async function PartnerPage({ params }: { params: Promise<{ slug: 
     <>
       <BreadcrumbJsonLd path={`/partners/${page.slug}/`} name={page.name} />
       <V2Hero
+        route={`/partners/${page.slug}/`}
         path={[{ label: "Partners", href: "/partners/" }, { label: page.name }]}
         title={page.title ?? page.name}
         lead={lead}
-        media={
+        media={heroPicture(
+          page.heroImage,
           hasHeroImage(heroKey) ? (
             <HeroObject name={heroKey} />
           ) : page.logo ? (
             <HeroImage src={page.logo} alt={`${page.name} logo`} kind="logo" className="p-8" />
           ) : (
             <ServiceHeroMark icon="handshake" />
-          )
-        }
+          ),
+          `${page.name} logo`,
+        )}
       />
       <V2StickyNav anchors={anchors} />
       <V2Overview eyebrow="Partners" heading={`About ${page.name}`} paragraphs={rest.length ? rest : [lead]} />

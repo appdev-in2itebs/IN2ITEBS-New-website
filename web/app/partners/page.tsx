@@ -39,6 +39,7 @@ export default function PartnersPage() {
     <>
       <BreadcrumbJsonLd path="/partners/" />
       <PageHero
+        route="/partners/"
         eyebrow="Partners"
         headline="Strategic alliances that"
         accentWord="extend our reach."

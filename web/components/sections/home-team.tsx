@@ -8,7 +8,8 @@ import { LinkedInMark } from "@/components/ui/linkedin-mark";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
 import { useAutoplay } from "@/components/motion/use-autoplay";
-import { leadership, leaderInitials } from "@/content/leadership";
+import { leadership as shippedLeadership, leaderInitials } from "@/content/leadership";
+import type { Leader } from "@/content/types";
 import { cn } from "@/lib/utils";
 
 /** Pixels a second the roster drifts by on its own — a read, not a ride. */
@@ -38,7 +39,7 @@ const COPIES = 3;
  * assistive technology and the keyboard meet each leader exactly once while a mouse can still click
  * whichever copy happens to be on screen.
  */
-export function HomeTeam() {
+export function HomeTeam({ leadership = shippedLeadership }: { leadership?: Leader[] }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const { running, bump, sectionProps } = useAutoplay(root);

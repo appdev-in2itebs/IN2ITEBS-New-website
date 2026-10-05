@@ -4,7 +4,7 @@ import { Reveal } from "@/components/motion/reveal";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
 import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
-import { leadership } from "@/content/leadership";
+import { getCms } from "@/lib/cms/content";
 
 export const metadata = pageMetadata("/about/our-leadership/", {
   title: "Our Leadership",
@@ -17,12 +17,14 @@ export const metadata = pageMetadata("/about/our-leadership/", {
  * Director alone under "Meet Our Leaders". The profile text and photograph are that page's own
  * (shared through content/leadership.ts); the wider team lives on /about/#leadership.
  */
-export default function OurLeadershipPage() {
+export default async function OurLeadershipPage() {
+  const { leadership } = await getCms();
   const rudra = leadership.find((leader) => leader.slug === "rudra-shankar-shatapathy");
   return (
     <>
       <BreadcrumbJsonLd path="/about/our-leadership/" name="Our Leadership" />
       <V2Hero
+        route="/about/our-leadership/"
         path={[{ label: "About", href: "/about/" }, { label: "Our Leadership" }]}
         title="Our Leadership"
         lead="Meet Our Leaders"

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Container, Section } from "@/components/ui/container";
@@ -22,6 +23,7 @@ export default function CaseStudiesPage() {
     <>
       <BreadcrumbJsonLd path="/case-studies/" />
       <PageHero
+        route="/case-studies/"
         eyebrow="Clients & Case Studies"
         headline="150+ global enterprises,"
         accentWord="one delivery standard."
@@ -74,9 +76,9 @@ export default function CaseStudiesPage() {
             </SectionHeading>
             <p className="mt-6 text-[0.95rem] leading-relaxed text-foreground-muted">
               To request a named reference or the full version of an anonymised study, get in touch via our{" "}
-              <a href="/contact/" className="font-semibold text-action underline-offset-4 hover:underline">
+              <Link href="/contact/" className="font-semibold text-action underline-offset-4 hover:underline">
                 contact page
-              </a>
+              </Link>
               .
             </p>
           </Reveal>

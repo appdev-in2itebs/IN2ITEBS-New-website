@@ -78,6 +78,7 @@ export default function SynitiPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/syniti/" />
       <PageHero
+        route="/sap-enterprise-solutions/syniti/"
         eyebrow="SAP Enterprise Solutions · Syniti Data Management"
         headline="70% of SAP transformations slip because of data, not"
         accentWord="technology."

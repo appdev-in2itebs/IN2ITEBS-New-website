@@ -117,6 +117,7 @@ export default function EventsCelebrationsPage() {
     <>
       <BreadcrumbJsonLd path="/careers/events-celebrations/" name="Events & Celebrations" />
       <V2Hero
+        route="/careers/events-celebrations/"
         path={[{ label: "Career", href: "/careers/" }, { label: "Events & Celebrations" }]}
         title="Events & Celebrations"
         lead="Our offices reflect our brand that we live every day. Our employees are provided with a relaxing and creative workspace to help them get the job done!"

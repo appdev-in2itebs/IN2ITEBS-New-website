@@ -4,13 +4,17 @@ import { servicePages } from "@/content/legacy-services";
 import { partnerPages } from "@/content/partner-pages";
 import { industries } from "@/content/industries";
 import { legacyIndustries } from "@/content/legacy-industries";
-import { insights, insightArticles } from "@/content/insights";
+
 import { caseStudies } from "@/content/case-studies";
 import { contentUpdated } from "@/content/site";
 import { SITE_URL } from "@/lib/utils";
+import { getCms } from "@/lib/cms/content";
+import { livePagePaths } from "@/lib/builder/store";
 
 /** Canonical route inventory — three-pillar IA. All paths use trailing slashes. */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Articles as published in /admin/content, including ones added there.
+  const articles = (await getCms()).articles.filter((a) => !a.href);
   const staticPaths = [
     "/",
     // What We Do — pillars
@@ -58,15 +62,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...partnerPages.map((p) => `/partners/${p.slug}/`),
     ...industries.map((i) => `/industries/${i.slug}/`),
     ...legacyIndustries.map((i) => `/industries/${i.slug}/`),
-    ...insightArticles.map((p) => `/insights/${p.slug}/`),
+    ...articles.map((p) => `/insights/${p.slug}/`),
     ...caseStudies.filter((c) => c.named).map((c) => `/case-studies/${c.slug}/`),
   ];
 
-  const all = Array.from(new Set([...staticPaths, ...dynamicPaths]));
+  // Pages published from the admin's page builder.
+  const built = await livePagePaths();
+
+  const all = Array.from(new Set([...staticPaths, ...dynamicPaths, ...built]));
 
   const dateFor = (path: string) => {
     const slug = path.match(/^\/insights\/([^/]+)\/$/)?.[1];
-    const articleDate = slug ? (insights.find((i) => i.slug === slug)?.date ?? "") : "";
+    const articleDate = slug ? (articles.find((i) => i.slug === slug)?.date ?? "") : "";
     return new Date(articleDate || contentUpdated);
   };
 

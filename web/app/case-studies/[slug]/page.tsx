@@ -44,6 +44,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     <>
       <BreadcrumbJsonLd path={`/case-studies/${study.slug}/`} name={study.client} />
       <PageHero
+        route={`/case-studies/${study.slug}/`}
         eyebrow={study.industry}
         headline={study.client}
         accentWord={accentWord}

@@ -394,7 +394,9 @@ test("every component and content module is imported somewhere", () => {
   );
   const unused: string[] = [];
   for (const file of sources.keys()) {
-    if (!/[\\/](components|content)[\\/]/.test(file) || /types\.ts$/.test(file)) continue;
+    // Only the shared components/ and content/ folders: a route folder of the same name (app/admin/content/)
+    // holds pages Next.js loads by their location, never by an import.
+    if (!/^(components|content)[\\/]/.test(path.relative(process.cwd(), file)) || /types\.ts$/.test(file)) continue;
     const pattern = specifier(path.basename(file).replace(/\.(tsx?|mjs)$/, ""));
     const imported = [...sources.entries()].some(([other, source]) => other !== file && pattern.test(source));
     if (!imported) unused.push(path.relative(process.cwd(), file));

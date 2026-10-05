@@ -3,7 +3,12 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { HeroObject } from "@/components/sections/hero-media";
+import Link from "next/link";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
+import { getOpenOpenings } from "@/lib/cms/store";
+
+/** Openings come from /admin (HR edits them there), so the list is read on every visit. */
+export const dynamic = "force-dynamic";
 
 export const metadata = pageMetadata("/careers/current-openings/", {
   title: "Current Openings",
@@ -12,11 +17,12 @@ export const metadata = pageMetadata("/careers/current-openings/", {
 });
 
 /**
- * Current Openings — the existing site's /careers/ page: its hero copy and the ten listed
- * openings, with the company, location and type each card shows there. "Apply Now" goes where
- * that page sends it, the posting on in2itebs.com.
+ * Current Openings. The roles are the job_openings HR manages in /admin; "Apply Now" opens the
+ * apply form on this site. Until Supabase is configured the page falls back to the roles the
+ * existing site listed, which link to their postings on in2itebs.com.
  */
-const openings: { title: string; type: string; location: string; href: string }[] = [
+type Job = { title: string; type: string; location: string; href: string; internal?: boolean };
+const fallbackOpenings: Job[] = [
   {
     title: "SAP and Success Factors Consultant",
     type: "Walkin",
@@ -74,11 +80,22 @@ const openings: { title: string; type: string; location: string; href: string }[
   },
 ];
 
-export default function CurrentOpeningsPage() {
+export default async function CurrentOpeningsPage() {
+  const live = await getOpenOpenings().catch(() => []);
+  const openings: Job[] = live.length
+    ? live.map((o) => ({
+        title: o.title,
+        type: o.employment_type,
+        location: o.location,
+        href: `/careers/apply/${o.id}/`,
+        internal: true,
+      }))
+    : fallbackOpenings;
   return (
     <>
       <BreadcrumbJsonLd path="/careers/current-openings/" name="Current Openings" />
       <V2Hero
+        route="/careers/current-openings/"
         path={[{ label: "Career", href: "/careers/" }, { label: "Current Openings" }]}
         title="Build a career with endless opportunities"
         lead="Are you prepared to excel in a welcoming, diverse, and open environment where you can continuously learn, develop, and make a lasting impact?"
@@ -134,14 +151,23 @@ export default function CurrentOpeningsPage() {
                       {job.location}
                     </li>
                   </ul>
-                  <a
-                    href={job.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`relative mt-auto inline-flex min-h-11 items-center gap-2 pt-5 text-sm font-semibold ${feature ? "text-gold-on-brand" : "text-action"}`}
-                  >
-                    Apply Now <ArrowUpRight size={16} aria-hidden />
-                  </a>
+                  {job.internal ? (
+                    <Link
+                      href={job.href}
+                      className={`relative mt-auto inline-flex min-h-11 items-center gap-2 pt-5 text-sm font-semibold ${feature ? "text-gold-on-brand" : "text-action"}`}
+                    >
+                      Apply Now <ArrowUpRight size={16} aria-hidden />
+                    </Link>
+                  ) : (
+                    <a
+                      href={job.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`relative mt-auto inline-flex min-h-11 items-center gap-2 pt-5 text-sm font-semibold ${feature ? "text-gold-on-brand" : "text-action"}`}
+                    >
+                      Apply Now <ArrowUpRight size={16} aria-hidden />
+                    </a>
+                  )}
                 </article>
               </StaggerItem>
             );

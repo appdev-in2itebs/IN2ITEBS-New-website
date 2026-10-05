@@ -48,6 +48,7 @@ export default function CustomerStoriesPage() {
     <>
       <BreadcrumbJsonLd path="/about/customer-stories/" name="Customer Stories" />
       <V2Hero
+        route="/about/customer-stories/"
         path={[{ label: "About", href: "/about/" }, { label: "Customer Stories" }]}
         title="Customer Stories"
         lead="Clients Feedback: what people say about working with In2IT EBS, and the customer success stories behind it."

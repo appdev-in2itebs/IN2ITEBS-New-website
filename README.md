@@ -10,7 +10,8 @@ passes CI ships to Cloudflare Workers.
 .
 ├── README.md                 # this file
 ├── .github/workflows/        # ci.yml (checks + tests) and deploy.yml (Cloudflare)
-├── docs/                     # DNS_MIGRATION.md (putting in2itebs.com on Cloudflare),
+├── docs/                     # ADMIN_AND_CHATBOT_SETUP.md (connect Supabase, first admin),
+│                             # DNS_MIGRATION.md (putting in2itebs.com on Cloudflare),
 │                             # website-platform-blueprint.docx (architecture and roadmap)
 ├── assets/hero-images/       # original hero artwork (PNG), one folder per site menu; see its README
 │   ├── pages/  services/  industries/  partners/  about/  careers/

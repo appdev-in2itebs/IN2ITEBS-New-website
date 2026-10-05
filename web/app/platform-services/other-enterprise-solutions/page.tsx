@@ -48,6 +48,7 @@ export default function OtherEnterpriseSolutionsPage() {
     <>
       <BreadcrumbJsonLd path="/platform-services/other-enterprise-solutions/" />
       <PageHero
+        route="/platform-services/other-enterprise-solutions/"
         eyebrow="Platform Services · Other Enterprise Solutions"
         headline="Enterprises have to keep"
         accentWord="changing."

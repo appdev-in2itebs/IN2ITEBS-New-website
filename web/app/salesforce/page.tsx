@@ -88,6 +88,7 @@ export default function SalesforcePage() {
     <>
       <BreadcrumbJsonLd path="/salesforce/" />
       <PageHero
+        route="/salesforce/"
         eyebrow="Salesforce"
         headline="Reimagining the customer"
         accentWord="experience"

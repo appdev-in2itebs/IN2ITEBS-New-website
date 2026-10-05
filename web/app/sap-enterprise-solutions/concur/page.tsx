@@ -65,6 +65,7 @@ export default function ConcurPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/concur/" />
       <PageHero
+        route="/sap-enterprise-solutions/concur/"
         eyebrow="SAP Enterprise Solutions · Concur"
         headline="Travel, expense and invoice —"
         accentWord="under control."

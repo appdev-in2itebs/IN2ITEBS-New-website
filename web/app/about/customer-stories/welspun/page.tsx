@@ -141,6 +141,7 @@ export default function WelspunStoryPage() {
     <>
       <BreadcrumbJsonLd path="/about/customer-stories/welspun/" name="Welspun Group" />
       <V2Hero
+        route="/about/customer-stories/welspun/"
         path={[
           { label: "About", href: "/about/" },
           { label: "Customer Stories", href: "/about/customer-stories/" },

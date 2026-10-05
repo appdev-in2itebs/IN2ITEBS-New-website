@@ -76,6 +76,7 @@ export default function AbapFactoryPage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/abap-factory/" />
       <PageHero
+        route="/sap-enterprise-solutions/abap-factory/"
         eyebrow="SAP Enterprise Solutions · ABAP Factory"
         headline="ABAP delivery, on a"
         accentWord="cadence."

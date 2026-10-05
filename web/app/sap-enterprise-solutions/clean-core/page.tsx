@@ -76,6 +76,7 @@ export default function CleanCorePage() {
     <>
       <BreadcrumbJsonLd path="/sap-enterprise-solutions/clean-core/" />
       <PageHero
+        route="/sap-enterprise-solutions/clean-core/"
         eyebrow="SAP Enterprise Solutions · Clean Core & BTP"
         headline="Innovate alongside the core, not"
         accentWord="inside it."

@@ -72,6 +72,7 @@ export default function IndustriesPage() {
     <>
       <BreadcrumbJsonLd path="/industries/" />
       <PageHero
+        route="/industries/"
         eyebrow="Industries"
         headline="150+ global enterprises. Across regulated, complex"
         accentWord="industries"

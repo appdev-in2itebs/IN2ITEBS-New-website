@@ -31,6 +31,7 @@ export default function EccPrismPage() {
     <>
       <BreadcrumbJsonLd path="/ecc-prism/" name="ECC Prism™" />
       <PageHero
+        route="/ecc-prism/"
         eyebrow="SAP Enterprise Solutions"
         headline="Know your ECC estate before you"
         accentWord="convert."
