@@ -17,7 +17,16 @@ export type Faq = {
   link_label?: string | null;
 };
 
-export type SiteEntry = { title: string; summary: string; url: string; keywords: string[] };
+export type SiteEntry = {
+  title: string;
+  summary: string;
+  url: string;
+  keywords: string[];
+  /** More of the page's own text (introduction and section headings), for the AI assistant's answers. */
+  detail?: string;
+  /** Other names that count as much as the title in a search: a leader's role ("coo", "managing director"). */
+  aliases?: string[];
+};
 
 export type Opening = { id: string; title: string; location: string; employment_type: string };
 

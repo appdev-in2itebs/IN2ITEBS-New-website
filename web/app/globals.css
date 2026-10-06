@@ -136,8 +136,16 @@ html:not([data-motion-ready]) .client-ribbon {
     transform: none !important;
     transition: none !important;
   }
+  .cine-sheen {
+    display: none !important;
+  }
   .word-rise,
-  .type-text {
+  .type-text,
+  .cine-pop,
+  .cine-slide,
+  .cine-focus,
+  .cine-item,
+  .cine-dot {
     transform: none !important;
     opacity: 1 !important;
     filter: none !important;
@@ -1109,6 +1117,79 @@ html:not([data-motion-ready]) .client-ribbon {
   }
   .stagger {
     --stagger-step: 70ms;
+  }
+
+  /* ---- Cinematic entrances inside a revealed block (service cards, footer) ----
+     The block's own `.reveal` decides when; these decide how its contents arrive, one after another:
+     an icon spins up out of a blur with a sweep of light, labels slide in, text pulls into focus,
+     list items cascade with their markers popping. Each element waits for the block's stagger delay
+     (`--reveal-delay`, inherited) plus its own `--cine-d`.
+
+     Same visible-first contract as `.reveal`: nothing is hidden until `data-motion-ready` is set and
+     never while motion is paused or reduced, and the transition belongs to the revealed state only,
+     so hiding is instantaneous. Headings use <Words>, whose words wait for `--word-base`. */
+  .cine {
+    --word-base: calc(var(--reveal-delay, 0ms) + 260ms);
+  }
+  .reveal[data-reveal="in"] :is(.cine-pop, .cine-slide, .cine-focus, .cine-item, .cine-dot) {
+    transition:
+      transform 950ms cubic-bezier(0.16, 0.84, 0.24, 1),
+      opacity 650ms cubic-bezier(0.33, 0, 0.2, 1),
+      filter 750ms cubic-bezier(0.33, 0, 0.2, 1);
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--cine-d, 0ms));
+  }
+  /* The icon overshoots a touch and settles, like a badge being set down. */
+  .reveal[data-reveal="in"] .cine-pop {
+    transition-timing-function:
+      cubic-bezier(0.34, 1.45, 0.64, 1), cubic-bezier(0.33, 0, 0.2, 1), cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  .reveal[data-reveal="in"] .cine-dot {
+    transition-duration: 600ms;
+    transition-timing-function: cubic-bezier(0.34, 1.8, 0.64, 1);
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--cine-d, 0ms) + 160ms);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .cine-pop {
+    opacity: 0;
+    transform: scale(0.5) rotate(-18deg);
+    filter: blur(8px);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .cine-slide {
+    opacity: 0;
+    transform: translateX(16px);
+    filter: blur(4px);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .cine-focus {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    filter: blur(10px);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .cine-item {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(5px);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .cine-item.cine-left {
+    transform: translateX(-22px);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .cine-dot {
+    transform: scale(0);
+  }
+  /* One pass of light across an icon tile as it lands. */
+  .cine-sheen {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 30%, rgb(255 255 255 / 0.55) 50%, transparent 70%);
+    transform: translateX(-130%);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal[data-reveal="in"] .cine-sheen {
+    animation: cine-sheen 1100ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation-delay: calc(var(--reveal-delay, 0ms) + var(--cine-d, 0ms) + 450ms);
+  }
+  @keyframes cine-sheen {
+    to {
+      transform: translateX(130%);
+    }
   }
   /* The YouTube ribbon's scroll-snap track (2026-09-15 17:08): native scrolling with the scrollbar
      hidden, since the arrows and the snap points are the visible affordance. */

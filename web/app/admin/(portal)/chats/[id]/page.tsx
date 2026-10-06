@@ -6,6 +6,8 @@ import { can } from "@/lib/admin/permissions";
 import { isUuid } from "@/lib/admin/query";
 import { Card, PageTitle, secondaryBtn, when } from "@/components/admin/ui";
 import { Transcript } from "@/components/admin/transcript";
+import { DangerZone } from "@/components/admin/danger-zone";
+import { deleteChat } from "../actions";
 
 export default async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin("chats");
@@ -29,9 +31,20 @@ export default async function ChatPage({ params }: { params: Promise<{ id: strin
           ) : null
         }
       />
-      <Card className="max-w-3xl">
-        <Transcript conversationId={c.id} />
-      </Card>
+      <div className="max-w-3xl space-y-6">
+        <Card>
+          <Transcript conversationId={c.id} />
+        </Card>
+        <DangerZone
+          title="Delete"
+          explain="Removes this conversation, its messages and any CV uploaded in it. A lead or application made from it is kept."
+          action={deleteChat}
+          id={c.id}
+          label="Delete this chat permanently"
+          confirm="Delete this chat and its messages permanently? This cannot be undone."
+          back="/admin/chats/"
+        />
+      </div>
     </>
   );
 }

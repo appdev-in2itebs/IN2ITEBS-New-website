@@ -3,9 +3,9 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
 import { LEAD_STATUSES } from "@/lib/admin/permissions";
 import { PAGE_SIZE, listUrl, pageOf, searchTerm } from "@/lib/admin/query";
-import { Badge, PageTitle, Pager, Table, input, secondaryBtn, td, when } from "@/components/admin/ui";
+import { Badge, Notice, PageTitle, Pager, Table, input, secondaryBtn, td, when } from "@/components/admin/ui";
 
-type Search = { q?: string; status?: string; source?: string; page?: string };
+type Search = { q?: string; status?: string; source?: string; page?: string; deleted?: string };
 
 export default async function LeadsPage({ searchParams }: { searchParams: Promise<Search> }) {
   await requireAdmin("leads");
@@ -37,6 +37,7 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
           </a>
         }
       />
+      {sp.deleted ? <Notice tone="ok">Deleted permanently: {sp.deleted}.</Notice> : null}
       <form className="mb-5 grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]" role="search">
         <input name="q" defaultValue={q} placeholder="Search name, email or company" className={input} />
         <select name="status" defaultValue={status ?? ""} className={input} aria-label="Status">

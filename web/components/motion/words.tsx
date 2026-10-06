@@ -99,7 +99,11 @@ export function Words({
       {words.map((word, index) => (
         <Fragment key={`${word}-${index}`}>
           <span className="word">
-            <span className="word-rise" style={{ transitionDelay: `${delay(index)}ms` }}>
+            <span
+              className="word-rise"
+              // `--word-base` lets a container hold the whole heading back (a card waiting its turn).
+              style={{ transitionDelay: `calc(var(--word-base, 0ms) + ${delay(index)}ms)` }}
+            >
               {word}
             </span>
           </span>

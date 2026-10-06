@@ -1,4 +1,8 @@
 import { getSettings } from "@/lib/cms/store";
+import { ASSISTANT_LANGUAGES } from "@/lib/cms/settings";
+import { llmConfigured } from "@/lib/assistant/llm";
+import { SARVAM_LANGUAGES } from "@/lib/voice/providers";
+import { sarvamConfigured } from "@/lib/voice/sarvam";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,7 +13,8 @@ export const dynamic = "force-dynamic";
  * /admin/settings shows up within about 60 seconds.
  */
 export async function GET() {
-  const { announcement, chatbot, contact } = await getSettings();
+  const { announcement, chatbot, contact, assistant } = await getSettings();
+  const ai = assistant.aiEnabled && llmConfigured();
   return Response.json(
     {
       announcement,
@@ -18,6 +23,19 @@ export async function GET() {
         name: chatbot.name,
         greeting: chatbot.greeting,
         quickReplies: chatbot.quickReplies,
+      },
+      assistant: {
+        ai,
+        languages: assistant.languages
+          .filter((code) => code in ASSISTANT_LANGUAGES)
+          .map((code) => ({ code, label: ASSISTANT_LANGUAGES[code] })),
+        voiceInput: assistant.voiceInput,
+        voiceOutput: assistant.voiceOutput,
+        voiceMode: assistant.voiceMode,
+        endOfSpeechMs: assistant.endOfSpeechMs,
+        // "server": Sarvam listens and speaks for these languages; everything else uses the browser.
+        voice: assistant.voiceProvider === "sarvam" && sarvamConfigured() ? "server" : "browser",
+        serverVoiceLanguages: Object.keys(SARVAM_LANGUAGES),
       },
       contact: { email: contact.email, phone: contact.phone },
     },

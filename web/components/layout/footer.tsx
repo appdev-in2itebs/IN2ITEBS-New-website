@@ -1,9 +1,9 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
+import { Words } from "@/components/motion/words";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
-import { ArrowUpRight } from "lucide-react";
 import { footerNav } from "@/content/nav";
-import { citiesFor } from "@/content/offices";
-import { getCms } from "@/lib/cms/content";
 import { footerCertifications, site, social } from "@/content/site";
 import { Logo } from "@/components/ui/logo";
 
@@ -46,13 +46,18 @@ const socials = [
   },
 ];
 
+/** Entrance order within a footer block (globals.css, "Cinematic entrances"): milliseconds after it. */
+const cine = (ms: number) => ({ "--cine-d": `${ms}ms` }) as CSSProperties;
+
 function LinkColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
-    <div>
-      <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-on-brand">{title}</h3>
+    <div className="cine">
+      <h3 style={cine(0)} className="cine-slide text-xs font-semibold uppercase tracking-[0.18em] text-gold-on-brand">
+        {title}
+      </h3>
       <ul className="mt-5 space-y-2">
-        {links.map((link) => (
-          <li key={link.href}>
+        {links.map((link, index) => (
+          <li key={link.href} style={cine(160 + index * 70)} className="cine-item cine-left">
             {/* `inline-flex` plus a minimum height gives each link a 24px tap target on a phone
                 (WCAG 2.2 SC 2.5.8); the text itself is only 18px tall. */}
             <Link
@@ -68,75 +73,75 @@ function LinkColumn({ title, links }: { title: string; links: { label: string; h
   );
 }
 
-export async function Footer() {
-  const officeCities = citiesFor((await getCms()).offices);
+export function Footer() {
   return (
     <footer className="theme-on-brand relative bg-brand pb-20 text-on-brand">
       <div aria-hidden className="rule-gold absolute inset-x-0 top-0" />
       <div className="container py-16 md:py-20">
         <div className="grid gap-12 border-b border-on-brand/20 pb-14 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <Logo variant="white" asLink={false} className="h-14 w-auto" />
+          <Reveal className="cine lg:col-span-5">
+            <div style={cine(0)} className="cine-focus">
+              <Logo variant="white" asLink={false} className="h-14 w-auto" />
+            </div>
             <p className="mt-6 max-w-sm text-lg font-medium leading-relaxed tracking-[-0.02em] text-on-brand">
-              Enterprise transformation for organisations that cannot afford operational ambiguity.
+              <Words variant="blur">
+                Enterprise transformation for organisations that cannot afford operational ambiguity.
+              </Words>
             </p>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-on-brand/[0.58]">
+            <p style={cine(650)} className="cine-focus mt-4 max-w-sm text-sm leading-relaxed text-on-brand/[0.58]">
               SAP Gold Partner with delivery across 30+ countries and adjacent strength in advisory, data, AI and
               digital engineering.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-6 lg:col-start-7">
-            <LinkColumn title="Company" links={footerNav.company.slice(0, 5)} />
-            <LinkColumn title="Capabilities" links={footerNav.practices} />
-            <LinkColumn title="Resources" links={[...footerNav.company.slice(5), ...footerNav.legal]} />
-          </div>
+          <Stagger className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-6 lg:col-start-7">
+            <StaggerItem>
+              <LinkColumn title="Company" links={footerNav.company.slice(0, 5)} />
+            </StaggerItem>
+            <StaggerItem>
+              <LinkColumn title="Capabilities" links={footerNav.practices} />
+            </StaggerItem>
+            <StaggerItem>
+              <LinkColumn title="Resources" links={[...footerNav.company.slice(5), ...footerNav.legal]} />
+            </StaggerItem>
+          </Stagger>
         </div>
 
         <div className="grid gap-8 border-b border-on-brand/20 py-7 lg:grid-cols-[1fr_auto] lg:items-center">
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            {footerCertifications.map((certification) => (
+          <Reveal className="flex flex-wrap gap-x-5 gap-y-2">
+            {footerCertifications.map((certification, index) => (
               <span
                 key={certification}
-                className="text-xs font-semibold uppercase tracking-[0.14em] text-gold-on-brand"
+                style={cine(index * 90)}
+                className="cine-item text-xs font-semibold uppercase tracking-[0.14em] text-gold-on-brand"
               >
                 {certification}
               </span>
             ))}
-          </div>
+          </Reveal>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {socials.map(({ href, label, bg, icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                title={label}
-                className={`inline-flex h-11 w-11 items-center justify-center rounded-full ${bg} shadow-md transition-transform hover:scale-110`}
-              >
-                {icon}
-              </a>
+          <Reveal className="flex flex-wrap items-center gap-3">
+            {socials.map(({ href, label, bg, icon }, index) => (
+              <span key={label} style={cine(250 + index * 110)} className="cine-pop inline-flex">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  title={label}
+                  className={`inline-flex h-11 w-11 items-center justify-center rounded-full ${bg} shadow-md transition-transform hover:scale-110`}
+                >
+                  {icon}
+                </a>
+              </span>
             ))}
-          </div>
+          </Reveal>
         </div>
 
         <div className="flex flex-col justify-between gap-5 pt-7 text-xs text-on-brand/[0.52] md:flex-row md:items-center">
           <p>
             © {site.copyrightYear} {site.legalName}. All rights reserved.
           </p>
-          <Link
-            href="/contact/"
-            className="group inline-flex min-h-11 items-center gap-3 text-sm font-semibold text-on-brand"
-          >
-            {officeCities.join(" · ")}
-            <ArrowUpRight
-              aria-hidden
-              size={15}
-              className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            />
-          </Link>
         </div>
       </div>
     </footer>

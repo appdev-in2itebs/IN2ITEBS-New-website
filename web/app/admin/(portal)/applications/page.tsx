@@ -3,9 +3,9 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
 import { APPLICATION_STATUSES } from "@/lib/admin/permissions";
 import { PAGE_SIZE, isUuid, listUrl, pageOf, searchTerm } from "@/lib/admin/query";
-import { Badge, PageTitle, Pager, Table, input, secondaryBtn, td, when } from "@/components/admin/ui";
+import { Badge, Notice, PageTitle, Pager, Table, input, secondaryBtn, td, when } from "@/components/admin/ui";
 
-type Search = { q?: string; status?: string; opening?: string; page?: string };
+type Search = { q?: string; status?: string; opening?: string; page?: string; deleted?: string };
 
 export default async function ApplicationsPage({ searchParams }: { searchParams: Promise<Search> }) {
   await requireAdmin("applications");
@@ -36,6 +36,7 @@ export default async function ApplicationsPage({ searchParams }: { searchParams:
         title="Applications"
         intro="Candidates who applied on the website. Open one to read the details and download the CV."
       />
+      {sp.deleted ? <Notice tone="ok">Deleted permanently: {sp.deleted}.</Notice> : null}
       <form className="mb-5 grid gap-3 sm:grid-cols-[1fr_auto_auto_auto]" role="search">
         <input name="q" defaultValue={q} placeholder="Search name, email or role" className={input} />
         <select name="opening" defaultValue={opening ?? ""} className={input} aria-label="Opening">

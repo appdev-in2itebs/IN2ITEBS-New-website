@@ -10,7 +10,13 @@ export async function editablePaths(): Promise<string[]> {
   const built = new Set(await livePagePaths());
   return (await sitemap())
     .map((entry) => new URL(entry.url).pathname)
-    .filter((p) => p !== "/" && !/^\/insights\/[^/]+\/$/.test(p) && !built.has(p))
+    .filter(
+      (p) =>
+        p !== "/" &&
+        !/^\/insights\/[^/]+\/$/.test(p) &&
+        !/^\/careers\/current-openings\/[^/]+\/$/.test(p) &&
+        !built.has(p),
+    )
     .sort();
 }
 

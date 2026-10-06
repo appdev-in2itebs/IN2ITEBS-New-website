@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * A job application from /careers/apply/<opening>/: the CV goes to the private `resumes` bucket and
+ * A job application from a job post (/careers/current-openings/<opening>/#apply): the CV goes to the private `resumes` bucket and
  * the details to job_applications, where HR sees them in /admin/applications.
  */
 export async function POST(request: Request) {

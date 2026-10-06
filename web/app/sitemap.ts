@@ -10,6 +10,7 @@ import { contentUpdated } from "@/content/site";
 import { SITE_URL } from "@/lib/utils";
 import { getCms } from "@/lib/cms/content";
 import { livePagePaths } from "@/lib/builder/store";
+import { getOpenOpenings } from "@/lib/cms/store";
 
 /** Canonical route inventory — three-pillar IA. All paths use trailing slashes. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -68,8 +69,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Pages published from the admin's page builder.
   const built = await livePagePaths();
+  // Every open job post (written in /admin/openings).
+  const jobs = (await getOpenOpenings().catch(() => [])).map((o) => `/careers/current-openings/${o.id}/`);
 
-  const all = Array.from(new Set([...staticPaths, ...dynamicPaths, ...built]));
+  const all = Array.from(new Set([...staticPaths, ...dynamicPaths, ...built, ...jobs]));
 
   const dateFor = (path: string) => {
     const slug = path.match(/^\/insights\/([^/]+)\/$/)?.[1];

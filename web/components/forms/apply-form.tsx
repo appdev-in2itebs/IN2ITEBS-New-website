@@ -17,7 +17,12 @@ export function ApplyForm({ openingId, title }: { openingId: string; title: stri
     setError("");
     const form = new FormData(event.currentTarget);
     const cv = form.get("cv");
-    if (cv instanceof File && cv.size > 5 * 1024 * 1024) return setError("The CV must be 5 MB or smaller.");
+    if (cv instanceof File && cv.size > 5 * 1024 * 1024)
+      return setError(
+        `Your CV is ${(cv.size / 1024 / 1024).toFixed(1)} MB. The CV must be under 5 MB: please upload a smaller PDF or Word file.`,
+      );
+    if (cv instanceof File && cv.size > 0 && !/\.(pdf|docx?)$/i.test(cv.name))
+      return setError("Please upload your CV as a PDF, DOC or DOCX file under 5 MB.");
     setState("sending");
     try {
       const res = await fetch("/api/apply/", { method: "POST", body: form });

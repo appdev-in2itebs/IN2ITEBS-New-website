@@ -1,11 +1,10 @@
-import { Briefcase, MapPin, ArrowUpRight } from "lucide-react";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { HeroObject } from "@/components/sections/hero-media";
-import Link from "next/link";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 import { getOpenOpenings } from "@/lib/cms/store";
+import { OpeningsBrowser, type JobCard } from "@/components/sections/openings-browser";
+import { daysSince } from "@/lib/careers";
 
 /** Openings come from /admin (HR edits them there), so the list is read on every visit. */
 export const dynamic = "force-dynamic";
@@ -17,11 +16,12 @@ export const metadata = pageMetadata("/careers/current-openings/", {
 });
 
 /**
- * Current Openings. The roles are the job_openings HR manages in /admin; "Apply Now" opens the
- * apply form on this site. Until Supabase is configured the page falls back to the roles the
- * existing site listed, which link to their postings on in2itebs.com.
+ * Current Openings. The roles are the job_openings HR manages in /admin/openings: searchable and
+ * filterable, grouped by department, each opening its full job post with the apply form. Until
+ * Supabase is configured the page falls back to the roles the existing site listed, which link to
+ * their postings on in2itebs.com.
  */
-type Job = { title: string; type: string; location: string; href: string; internal?: boolean };
+type Job = { title: string; type: string; location: string; href: string };
 const fallbackOpenings: Job[] = [
   {
     title: "SAP and Success Factors Consultant",
@@ -82,15 +82,29 @@ const fallbackOpenings: Job[] = [
 
 export default async function CurrentOpeningsPage() {
   const live = await getOpenOpenings().catch(() => []);
-  const openings: Job[] = live.length
+  const now = Date.now();
+  const jobs: JobCard[] = live.length
     ? live.map((o) => ({
+        id: o.id,
         title: o.title,
-        type: o.employment_type,
+        department: o.department,
         location: o.location,
-        href: `/careers/apply/${o.id}/`,
-        internal: true,
+        experience: o.experience,
+        type: o.employment_type,
+        days: daysSince(o.posted_at, now),
+        skills: o.skills,
       }))
-    : fallbackOpenings;
+    : fallbackOpenings.map((j) => ({
+        id: j.href + j.title,
+        title: j.title,
+        department: null,
+        location: j.location,
+        experience: "",
+        type: j.type,
+        days: 0,
+        skills: "",
+        href: j.href,
+      }));
   return (
     <>
       <BreadcrumbJsonLd path="/careers/current-openings/" name="Current Openings" />
@@ -120,59 +134,7 @@ export default async function CurrentOpeningsPage() {
         ]}
       />
       <V2Section id="openings" eyebrow="Current Openings" heading="Open roles.">
-        <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {openings.map((job, index) => {
-            const feature = index === 0;
-            return (
-              <StaggerItem key={job.title} className="h-full">
-                <article
-                  className={
-                    feature
-                      ? "theme-on-brand relative flex h-full flex-col overflow-hidden rounded-feature bg-brand p-7 text-on-brand"
-                      : "group relative flex h-full flex-col overflow-hidden rounded-feature border border-border-subtle/70 bg-surface p-7 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-gold-soft/70 hover:shadow-glass-hover"
-                  }
-                >
-                  {feature ? (
-                    <div aria-hidden className="pointer-events-none absolute inset-0 hero-ambient opacity-70" />
-                  ) : null}
-                  <span className={feature ? "label-caps relative text-gold-on-brand" : "label-caps text-gold"}>
-                    {job.type}
-                  </span>
-                  <h3 className="relative mt-4 text-h3 font-bold">{job.title}</h3>
-                  <ul
-                    className={`relative mt-4 space-y-2 text-[0.92rem] ${feature ? "text-on-brand/80" : "text-foreground-muted"}`}
-                  >
-                    <li className="flex items-center gap-2.5">
-                      <Briefcase size={16} aria-hidden className={feature ? "text-gold-on-brand" : "text-gold"} /> In2IT
-                      EBS Pvt Ltd.
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <MapPin size={16} aria-hidden className={feature ? "text-gold-on-brand" : "text-gold"} />{" "}
-                      {job.location}
-                    </li>
-                  </ul>
-                  {job.internal ? (
-                    <Link
-                      href={job.href}
-                      className={`relative mt-auto inline-flex min-h-11 items-center gap-2 pt-5 text-sm font-semibold ${feature ? "text-gold-on-brand" : "text-action"}`}
-                    >
-                      Apply Now <ArrowUpRight size={16} aria-hidden />
-                    </Link>
-                  ) : (
-                    <a
-                      href={job.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`relative mt-auto inline-flex min-h-11 items-center gap-2 pt-5 text-sm font-semibold ${feature ? "text-gold-on-brand" : "text-action"}`}
-                    >
-                      Apply Now <ArrowUpRight size={16} aria-hidden />
-                    </a>
-                  )}
-                </article>
-              </StaggerItem>
-            );
-          })}
-        </Stagger>
+        <OpeningsBrowser jobs={jobs} />
       </V2Section>
       <V2Rail
         eyebrow="Career"

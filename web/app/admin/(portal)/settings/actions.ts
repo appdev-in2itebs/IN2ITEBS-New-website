@@ -25,7 +25,8 @@ function valueFrom(key: SettingKey, form: FormData) {
 export async function saveSettings(form: FormData) {
   const admin = await requireAdmin("settings");
   const key = String(form.get("key")) as SettingKey;
-  if (!(key in settingSchemas)) redirect("/admin/settings/");
+  // The assistant's settings have their own page (/admin/assistant).
+  if (!(key in settingSchemas) || key === "assistant") redirect("/admin/settings/");
   const parsed = settingSchemas[key].safeParse(valueFrom(key, form));
   if (!parsed.success)
     redirect(

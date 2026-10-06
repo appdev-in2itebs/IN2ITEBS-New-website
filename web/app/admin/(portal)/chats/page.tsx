@@ -2,12 +2,12 @@ import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
 import { PAGE_SIZE, listUrl, pageOf } from "@/lib/admin/query";
-import { PageTitle, Pager, Table, secondaryBtn, td, when } from "@/components/admin/ui";
+import { Notice, PageTitle, Pager, Table, secondaryBtn, td, when } from "@/components/admin/ui";
 
 export default async function ChatsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; leads?: string }>;
+  searchParams: Promise<{ page?: string; leads?: string; deleted?: string }>;
 }) {
   await requireAdmin("chats");
   const sp = await searchParams;
@@ -28,6 +28,7 @@ export default async function ChatsPage({
         title="Chat transcripts"
         intro="Conversations with the website assistant. Read them to see what visitors ask, then add or improve answers under Chatbot FAQs."
       />
+      {sp.deleted ? <Notice tone="ok">Deleted permanently: {sp.deleted}.</Notice> : null}
       <form className="mb-5 flex items-center gap-3">
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="leads" value="1" defaultChecked={onlyLeads} className="h-4 w-4" />

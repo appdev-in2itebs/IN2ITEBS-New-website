@@ -93,7 +93,7 @@ export default async function AboutPage() {
       </Section>
 
       {/* GLOBAL FOOTPRINT — 4 delivery centres + 6 sales offices */}
-      <Section tone="white">
+      <Section tone="white" id="footprint">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
             <SectionHeading

@@ -6,7 +6,10 @@ import { LEAD_STATUSES } from "@/lib/admin/permissions";
 import { isUuid } from "@/lib/admin/query";
 import { Badge, Card, Field, Notice, PageTitle, input, primaryBtn, secondaryBtn, when } from "@/components/admin/ui";
 import { Transcript } from "@/components/admin/transcript";
-import { updateLead } from "../actions";
+import { deleteLead, eraseByEmail, updateLead } from "../actions";
+import { AiDetails } from "@/components/admin/ai-details";
+import { DangerZone } from "@/components/admin/danger-zone";
+import { can } from "@/lib/admin/permissions";
 
 const regions: Record<string, string> = { IN: "India", KE: "Kenya", ZA: "South Africa", ME: "Middle East" };
 
@@ -17,7 +20,7 @@ export default async function LeadPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ saved?: string; error?: string }>;
 }) {
-  await requireAdmin("leads");
+  const admin = await requireAdmin("leads");
   const { id } = await params;
   const sp = await searchParams;
   if (!isUuid(id)) notFound();
@@ -59,6 +62,7 @@ export default async function LeadPage({
             <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-muted">Requirement</h2>
             <p className="mt-2 whitespace-pre-line text-foreground">{lead.message || "—"}</p>
           </Card>
+          <AiDetails summary={lead.ai_summary} details={lead.details} language={lead.language} />
           <Card>
             <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
               {facts
@@ -71,6 +75,17 @@ export default async function LeadPage({
                 ))}
             </dl>
           </Card>
+          <DangerZone
+            title="Delete"
+            explain="Removes this lead and its chat conversation from the database for good. This cannot be undone."
+            action={deleteLead}
+            id={lead.id}
+            label="Delete this lead permanently"
+            confirm={`Delete the lead from ${lead.name} and its chat permanently? This cannot be undone.`}
+            email={can(admin.role, "users") ? lead.email : null}
+            eraseAction={eraseByEmail}
+            back="/admin/leads/"
+          />
           {lead.conversation_id ? (
             <Card>
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground-muted">

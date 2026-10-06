@@ -23,6 +23,8 @@ const nextConfig = {
       // Uploaded images live in the Supabase "media" bucket (the admin previews them directly).
       "img-src 'self' data: blob: https://*.supabase.co",
       "font-src 'self' data:",
+      // The chat assistant plays its spoken replies (MP3 from /api/voice/tts) from blob: URLs.
+      "media-src 'self' blob:",
       `connect-src 'self'${dev ? " ws: wss:" : ""}`,
       // 'self', not 'none': the admin's visual editor and page builder show this site's own pages
       // in a frame. No other site may frame them.
@@ -41,7 +43,9 @@ const nextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          // The chat assistant's microphone button needs the microphone on this site's own pages
+          // (and nowhere else); the camera and location stay off.
+          { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=()" },
           ...(siteEnv === "production" ? [] : [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }]),
         ],
       },

@@ -20,6 +20,7 @@ export async function getSettings(): Promise<Settings> {
     announcement: readSetting("announcement", raw.announcement),
     contact: readSetting("contact", raw.contact),
     chatbot: readSetting("chatbot", raw.chatbot),
+    assistant: readSetting("assistant", raw.assistant),
   };
 }
 
@@ -40,13 +41,31 @@ export async function getActiveFaqs(): Promise<Faq[]> {
   return data ?? [];
 }
 
-export type OpeningRow = Opening & { description: string; requirements: string; department: string | null };
+/**
+ * One job opening as HR writes it in /admin/openings, laid out on the site like the Keka job post:
+ * overview, Job Description (description), Key Responsibilities, Required Qualifications
+ * (requirements) and Key Skills. Responsibilities and qualifications are one item per line; skills
+ * are separated by commas or lines.
+ */
+export type OpeningRow = Opening & {
+  description: string;
+  requirements: string;
+  department: string | null;
+  overview: string;
+  experience: string;
+  responsibilities: string;
+  skills: string;
+  posted_at: string;
+};
+
+const OPENING_COLUMNS =
+  "id, title, location, employment_type, description, requirements, department, overview, experience, responsibilities, skills, posted_at";
 
 export async function getOpenOpenings(): Promise<OpeningRow[]> {
   if (!supabaseConfigured()) return [];
   const { data } = await supabaseAdmin()
     .from("job_openings")
-    .select("id, title, location, employment_type, description, requirements, department")
+    .select(OPENING_COLUMNS)
     .eq("status", "open")
     .order("sort_order")
     .order("created_at", { ascending: false });
@@ -57,7 +76,7 @@ export async function getOpening(id: string): Promise<OpeningRow | null> {
   if (!supabaseConfigured() || !/^[0-9a-f-]{36}$/i.test(id)) return null;
   const { data } = await supabaseAdmin()
     .from("job_openings")
-    .select("id, title, location, employment_type, description, requirements, department, status")
+    .select(`${OPENING_COLUMNS}, status`)
     .eq("id", id)
     .maybeSingle();
   return data && data.status === "open" ? data : null;

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, type LucideIcon } from "lucide-react";
+import type { CSSProperties } from "react";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { Words } from "@/components/motion/words";
 import { cn } from "@/lib/utils";
 
 /**
@@ -24,6 +26,12 @@ export interface BentoItem {
   linkLabel?: string;
 }
 
+/** Entrance order inside a card (globals.css, "Cinematic entrances"): milliseconds after the card. */
+const cine = (ms: number) => ({ "--cine-d": `${ms}ms` }) as CSSProperties;
+/** Text arrives after the icon and the title; list items follow it one by one. */
+const TEXT_AT = 420;
+const itemAt = (index: number) => cine(TEXT_AT + 120 + Math.min(index, 10) * 90);
+
 /** Bento placement: the first card is the widest, the second fills the row, the rest tile. */
 function span(index: number, total: number) {
   if (total === 1) return "lg:col-span-12";
@@ -40,17 +48,18 @@ function span(index: number, total: number) {
 function Bullets({ items, onDark = false }: { items: string[]; onDark?: boolean }) {
   return (
     <ul className="mt-4 space-y-2.5">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <li
           key={item}
+          style={itemAt(index)}
           className={cn(
-            "flex gap-3 text-[0.95rem] leading-relaxed",
+            "cine-item cine-left flex gap-3 text-[0.95rem] leading-relaxed",
             onDark ? "text-on-brand/80" : "text-foreground-muted",
           )}
         >
           <span
             aria-hidden
-            className={cn("mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full", onDark ? "bg-gold-on-brand" : "bg-gold")}
+            className={cn("cine-dot mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full", onDark ? "bg-gold-on-brand" : "bg-gold")}
           />
           <span>{item}</span>
         </li>
@@ -65,7 +74,11 @@ function Offerings({ items, onDark = false }: { items: NonNullable<BentoItem["of
   return (
     <ol className="mt-4 space-y-3">
       {items.map((item, index) => (
-        <li key={item.label} className="flex gap-3 text-[0.95rem] leading-relaxed">
+        <li
+          key={item.label}
+          style={itemAt(index)}
+          className="cine-item cine-left flex gap-3 text-[0.95rem] leading-relaxed"
+        >
           <span
             aria-hidden
             className={cn("w-7 shrink-0 pt-px text-xs font-semibold", onDark ? "text-gold-on-brand" : "text-gold")}
@@ -87,7 +100,7 @@ export function V2Card({ item, index, feature }: { item: BentoItem; index: numbe
   return (
     <article
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-feature border border-border-subtle/70 bg-surface p-7 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 hover:border-gold-soft/70 hover:shadow-glass-hover md:p-8",
+        "cine group relative flex h-full flex-col overflow-hidden rounded-feature border border-border-subtle/70 bg-surface p-7 transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 hover:border-gold-soft/70 hover:shadow-glass-hover md:p-8",
         feature && "theme-on-brand border-transparent bg-brand text-on-brand",
       )}
     >
@@ -107,28 +120,36 @@ export function V2Card({ item, index, feature }: { item: BentoItem; index: numbe
       <div className="relative flex items-start justify-between gap-4">
         {item.iconImage ? (
           <span
+            style={cine(0)}
             className={cn(
-              "inline-flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-control",
+              "cine-pop relative inline-flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-control",
               feature ? "bg-on-brand/95 p-1.5" : "bg-logo-surface p-1.5 ring-1 ring-border-subtle",
             )}
           >
             <Image src={item.iconImage} alt="" width={56} height={56} className="h-full w-full object-contain" />
+            <span aria-hidden className="cine-sheen" style={cine(0)} />
           </span>
         ) : Icon ? (
           <span
+            style={cine(0)}
             className={cn(
-              "inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-control",
+              "cine-pop relative inline-flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-control",
               feature ? "bg-on-brand/10 text-gold-on-brand ring-1 ring-on-brand/15" : "icon-tile",
             )}
           >
             <Icon size={26} strokeWidth={1.5} />
+            <span aria-hidden className="cine-sheen" style={cine(0)} />
           </span>
         ) : (
           <span />
         )}
         <span
           aria-hidden
-          className={cn("label-caps pt-1 tabular-nums", feature ? "text-gold-on-brand" : "text-foreground-muted")}
+          style={cine(120)}
+          className={cn(
+            "cine-slide label-caps pt-1 tabular-nums",
+            feature ? "text-gold-on-brand" : "text-foreground-muted",
+          )}
         >
           {String(index + 1).padStart(2, "0")}
         </span>
@@ -141,16 +162,17 @@ export function V2Card({ item, index, feature }: { item: BentoItem; index: numbe
       >
         {item.href ? (
           <Link href={item.href} className="transition-colors hover:text-gold">
-            {item.title}
+            <Words>{item.title}</Words>
           </Link>
         ) : (
-          item.title
+          <Words>{item.title}</Words>
         )}
       </h3>
       {item.body ? (
         <p
+          style={cine(TEXT_AT)}
           className={cn(
-            "relative mt-4 text-[0.95rem] leading-relaxed",
+            "cine-focus relative mt-4 text-[0.95rem] leading-relaxed",
             feature ? "text-on-brand/85 md:text-base" : "text-foreground-muted",
           )}
         >
@@ -162,8 +184,9 @@ export function V2Card({ item, index, feature }: { item: BentoItem; index: numbe
       {item.href ? (
         <Link
           href={item.href}
+          style={cine(TEXT_AT + 300)}
           className={cn(
-            "relative mt-auto inline-flex min-h-11 items-center gap-2 pt-6 text-sm font-semibold",
+            "cine-focus relative mt-auto inline-flex min-h-11 items-center gap-2 pt-6 text-sm font-semibold",
             feature ? "text-gold-on-brand" : "text-action",
           )}
         >

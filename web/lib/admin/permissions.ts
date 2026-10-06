@@ -22,6 +22,7 @@ export const SECTIONS = {
   builder: { label: "Page builder", href: "/admin/builder/", roles: ["admin", "editor"] },
   content: { label: "Website content", href: "/admin/content/", roles: ["admin", "editor"] },
   media: { label: "Media library", href: "/admin/media/", roles: ["admin", "editor"] },
+  assistant: { label: "AI assistant", href: "/admin/assistant/", roles: ["admin", "editor"] },
   faqs: { label: "Chatbot FAQs", href: "/admin/faqs/", roles: ["admin", "editor"] },
   settings: { label: "Site settings", href: "/admin/settings/", roles: ["admin", "editor"] },
   pages: { label: "Page heroes", href: "/admin/pages/", roles: ["admin", "editor"] },

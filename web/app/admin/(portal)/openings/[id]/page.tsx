@@ -3,10 +3,14 @@ import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
 import { isUuid } from "@/lib/admin/query";
-import { Card, Field, Notice, PageTitle, input, primaryBtn } from "@/components/admin/ui";
-import { saveOpening } from "../actions";
+import { Card, Field, Notice, PageTitle, input, primaryBtn, secondaryBtn } from "@/components/admin/ui";
+import { ConfirmSubmit } from "@/components/admin/confirm-submit";
+import { deleteOpening, saveOpening } from "../actions";
 
-/** Create (/admin/openings/new/) or edit one opening. */
+/**
+ * Create (/admin/openings/new/) or edit one opening. The fields follow the job posts on the
+ * in2itebs Keka careers page; the website shows them the same way on /careers/current-openings/.
+ */
 export default async function OpeningForm({
   params,
   searchParams,
@@ -29,12 +33,22 @@ export default async function OpeningForm({
       <Link href="/admin/openings/" className="mb-3 inline-block text-sm text-action hover:underline">
         ← All openings
       </Link>
-      <PageTitle title={isNew ? "Add an opening" : `Edit: ${o!.title}`} />
+      <PageTitle
+        title={isNew ? "Add an opening" : `Edit: ${o!.title}`}
+        intro="Shown on the website under Career → Current Openings as a full job post with an Apply button. The AI assistant also screens candidates on these details."
+        actions={
+          !isNew && o!.status === "open" ? (
+            <Link href={`/careers/current-openings/${o!.id}/`} target="_blank" className={secondaryBtn}>
+              View on the website
+            </Link>
+          ) : null
+        }
+      />
       {error ? <Notice tone="warn">{error}</Notice> : null}
-      <Card className="max-w-3xl">
-        <form action={saveOpening} className="space-y-4">
-          <input type="hidden" name="id" value={isNew ? "" : o!.id} />
-          <Field label="Job title *">
+      <form action={saveOpening} className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <input type="hidden" name="id" value={isNew ? "" : o!.id} />
+        <Card className="space-y-5">
+          <Field label="Job title *" hint="For example: SAP ABAP Consultant (Onsite)">
             <input
               name="title"
               required
@@ -44,8 +58,77 @@ export default async function OpeningForm({
               className={input}
             />
           </Field>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Employment type *">
+          <Field label="Job overview" hint="Two or three sentences at the top of the post: the role in a nutshell.">
+            <textarea name="overview" rows={3} maxLength={1500} defaultValue={o?.overview ?? ""} className={input} />
+          </Field>
+          <Field label="Job description" hint="The role and the team. Blank lines start new paragraphs.">
+            <textarea
+              name="description"
+              rows={6}
+              maxLength={8000}
+              defaultValue={o?.description ?? ""}
+              className={input}
+            />
+          </Field>
+          <Field label="Key responsibilities" hint="One per line; each line becomes a bullet point.">
+            <textarea
+              name="responsibilities"
+              rows={7}
+              maxLength={8000}
+              defaultValue={o?.responsibilities ?? ""}
+              className={input}
+            />
+          </Field>
+          <Field label="Required qualifications" hint="One per line; each line becomes a bullet point.">
+            <textarea
+              name="requirements"
+              rows={6}
+              maxLength={8000}
+              defaultValue={o?.requirements ?? ""}
+              className={input}
+            />
+          </Field>
+          <Field
+            label="Key skills"
+            hint="Separated by commas or one per line; shown as tags. Example: ABAP, OData, CDS Views"
+          >
+            <textarea name="skills" rows={3} maxLength={2000} defaultValue={o?.skills ?? ""} className={input} />
+          </Field>
+        </Card>
+
+        <div className="space-y-6">
+          <Card className="space-y-4">
+            <Field label="Location(s) *" hint="For example: Bangalore, Bhubaneswar">
+              <input
+                name="location"
+                required
+                minLength={2}
+                maxLength={200}
+                defaultValue={o?.location ?? ""}
+                className={input}
+              />
+            </Field>
+            <Field label="Experience" hint="For example: 3+ Years, or 2 to 5 Years">
+              <input name="experience" maxLength={60} defaultValue={o?.experience ?? ""} className={input} />
+            </Field>
+            <Field label="Department" hint="Openings are grouped by department on the website.">
+              <input
+                name="department"
+                maxLength={120}
+                list="departments"
+                defaultValue={o?.department ?? ""}
+                className={input}
+              />
+              <datalist id="departments">
+                <option value="SAP" />
+                <option value="Finance & Accounts" />
+                <option value="Technology" />
+                <option value="Human Resources" />
+                <option value="Sales & Marketing" />
+                <option value="Delivery" />
+              </datalist>
+            </Field>
+            <Field label="Job type *">
               <input
                 name="employment_type"
                 required
@@ -61,59 +144,50 @@ export default async function OpeningForm({
                 <option value="Walk-in" />
               </datalist>
             </Field>
-            <Field label="Department">
-              <input name="department" maxLength={120} defaultValue={o?.department ?? ""} className={input} />
-            </Field>
             <Field label="Status">
               <select name="status" defaultValue={o?.status ?? "open"} className={input}>
-                <option value="open">Open (shown on the site)</option>
+                <option value="open">Open (shown on the website)</option>
                 <option value="closed">Closed (hidden)</option>
               </select>
             </Field>
-          </div>
-          <Field label="Location(s) *" hint="For example: Bangalore, Bhubaneshwar">
-            <input
-              name="location"
-              required
-              minLength={2}
-              maxLength={200}
-              defaultValue={o?.location ?? ""}
-              className={input}
-            />
-          </Field>
-          <Field label="About the role" hint="Shown on the apply page. Line breaks are kept.">
-            <textarea
-              name="description"
-              rows={7}
-              maxLength={8000}
-              defaultValue={o?.description ?? ""}
-              className={input}
-            />
-          </Field>
-          <Field label="What we are looking for" hint="Skills, experience and qualifications.">
-            <textarea
-              name="requirements"
-              rows={7}
-              maxLength={8000}
-              defaultValue={o?.requirements ?? ""}
-              className={input}
-            />
-          </Field>
-          <Field label="Order" hint="Lower numbers are listed first.">
-            <input
-              name="sort_order"
-              type="number"
-              min={0}
-              max={10000}
-              defaultValue={o?.sort_order ?? 100}
-              className={`${input} max-w-32`}
-            />
-          </Field>
-          <button type="submit" className={primaryBtn}>
-            {isNew ? "Add opening" : "Save changes"}
+            <Field label="Order" hint="Lower numbers come first within a department.">
+              <input
+                name="sort_order"
+                type="number"
+                min={0}
+                max={10000}
+                defaultValue={o?.sort_order ?? 100}
+                className={`${input} max-w-32`}
+              />
+            </Field>
+            {!isNew ? (
+              <label className="flex items-start gap-2 text-sm">
+                <input type="checkbox" name="repost" className="mt-0.5 h-4 w-4" />
+                <span>
+                  Post again today
+                  <span className="block text-xs text-foreground-muted">
+                    The website shows how long ago a job was posted; this resets it to today.
+                  </span>
+                </span>
+              </label>
+            ) : null}
+          </Card>
+          <button type="submit" className={`${primaryBtn} w-full`}>
+            {isNew ? "Publish opening" : "Save changes"}
           </button>
+        </div>
+      </form>
+      {!isNew ? (
+        <form action={deleteOpening} className="mt-8">
+          <input type="hidden" name="id" value={o!.id} />
+          <ConfirmSubmit
+            message={`Delete the opening "${o!.title}" for good? Applications already received are kept.`}
+            className="text-sm font-semibold text-red-800 hover:underline"
+          >
+            Delete this opening
+          </ConfirmSubmit>
         </form>
-      </Card>
+      ) : null}
     </>
   );
 }

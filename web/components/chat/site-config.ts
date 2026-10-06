@@ -4,6 +4,16 @@
 export type SiteConfig = {
   announcement: { enabled: boolean; text: string; linkUrl: string; linkLabel: string };
   chatbot: { enabled: boolean; name: string; greeting: string; quickReplies: string[] };
+  assistant?: {
+    ai: boolean;
+    languages: { code: string; label: string }[];
+    voiceInput: boolean;
+    voiceOutput: boolean;
+    voiceMode?: boolean;
+    endOfSpeechMs?: number;
+    voice?: "server" | "browser";
+    serverVoiceLanguages?: string[];
+  };
   contact: { email: string; phone: string };
 };
 

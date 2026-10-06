@@ -66,19 +66,27 @@ jobs:
       # Uploaded as Worker secrets, never written into wrangler.jsonc or git: the admin, the chat
       # assistant, the apply form and lead saving read them at runtime. `secret bulk` reads one JSON
       # object from stdin.
-      - name: Upload Supabase secrets to the Worker
+      - name: Upload Supabase and AI secrets to the Worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          # The AI assistant's model key (build.nvidia.com). Optional: without it the chat answers
+          # from the Chatbot FAQs.
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          # The assistant's voice (Sarvam AI: speech to text and text to speech). Optional: without it
+          # the chat uses the browser's own voice.
+          SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SECRET_KEY" ]; then
             echo "Supabase secrets are not set; skipping. The site runs without them."
             exit 0
           fi
-          # jq builds the JSON so the values are escaped rather than pasted into a string, and
-          # neither is echoed.
-          jq -n --arg url "$SUPABASE_URL" --arg key "$SUPABASE_SECRET_KEY" \
-            '{SUPABASE_URL: $url, SUPABASE_SECRET_KEY: $key}' \
+          # jq builds the JSON so the values are escaped rather than pasted into a string, and none
+          # is echoed. An empty optional key is left out, so it never wipes a key set earlier.
+          jq -n --arg url "$SUPABASE_URL" --arg key "$SUPABASE_SECRET_KEY" --arg nv "$NVIDIA_API_KEY" --arg sv "$SARVAM_API_KEY" \
+            '{SUPABASE_URL: $url, SUPABASE_SECRET_KEY: $key}
+             + (if $nv == "" then {} else {NVIDIA_API_KEY: $nv} end)
+             + (if $sv == "" then {} else {SARVAM_API_KEY: $sv} end)' \
             | npx wrangler secret bulk

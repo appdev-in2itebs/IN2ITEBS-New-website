@@ -2,10 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
-import { APPLICATION_STATUSES } from "@/lib/admin/permissions";
+import { APPLICATION_STATUSES, can } from "@/lib/admin/permissions";
 import { isUuid } from "@/lib/admin/query";
 import { Badge, Card, Field, Notice, PageTitle, input, primaryBtn, secondaryBtn, when } from "@/components/admin/ui";
-import { updateApplication } from "../actions";
+import { AiDetails } from "@/components/admin/ai-details";
+import { DangerZone } from "@/components/admin/danger-zone";
+import { eraseByEmail } from "../../leads/actions";
+import { Transcript } from "@/components/admin/transcript";
+import { deleteApplication, updateApplication } from "../actions";
 
 export default async function ApplicationPage({
   params,
@@ -14,7 +18,7 @@ export default async function ApplicationPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ saved?: string; error?: string }>;
 }) {
-  await requireAdmin("applications");
+  const admin = await requireAdmin("applications");
   const { id } = await params;
   const sp = await searchParams;
   if (!isUuid(id)) notFound();
@@ -30,6 +34,7 @@ export default async function ApplicationPage({
     ["Notice period", app.notice_period],
     ["Expected CTC", app.expected_ctc],
     ["LinkedIn", app.linkedin_url],
+    ["Source", app.source === "chatbot" ? "Chat assistant" : app.source === "website" ? "Careers page" : app.source],
     ["Applied", when(app.created_at)],
     ["Consent given", app.consent_at ? when(app.consent_at) : null],
   ];
@@ -79,10 +84,30 @@ export default async function ApplicationPage({
                 ))}
             </dl>
           </Card>
+          <AiDetails summary={app.ai_summary} details={app.details} fitScore={app.fit_score} language={app.language} />
           {app.cover_note ? (
             <Card>
               <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-muted">Cover note</h2>
               <p className="mt-2 whitespace-pre-line text-foreground">{app.cover_note}</p>
+            </Card>
+          ) : null}
+          <DangerZone
+            title="Delete"
+            explain="Removes this application, the CV file and the chat conversation from the database and storage for good. This cannot be undone."
+            action={deleteApplication}
+            id={app.id}
+            label="Delete this application permanently"
+            confirm={`Delete ${app.name}'s application, CV and chat permanently? This cannot be undone.`}
+            email={can(admin.role, "users") ? app.email : null}
+            eraseAction={eraseByEmail}
+            back="/admin/applications/"
+          />
+          {app.conversation_id ? (
+            <Card>
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-foreground-muted">
+                Chat transcript
+              </h2>
+              <Transcript conversationId={app.conversation_id} />
             </Card>
           ) : null}
         </div>
