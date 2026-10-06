@@ -189,3 +189,86 @@ test("a link called 'here' gets the section's name", () => {
     /\[Global footprint: Where we are \(office map\)\]\(\/#offices\)/,
   );
 });
+
+test("a busy model API (429) is retried, so a crowd of visitors still gets answers", async () => {
+  const { complete } = await import("../lib/assistant/llm");
+  const real = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = (async () => {
+    calls++;
+    if (calls === 1) return new Response("busy", { status: 429, headers: { "retry-after": "0" } });
+    return new Response(JSON.stringify({ choices: [{ message: { content: "Hello" } }] }), { status: 200 });
+  }) as typeof fetch;
+  try {
+    const out = await complete({ model: "m", messages: [{ role: "user", content: "hi" }] });
+    assert.equal(out.message.content, "Hello");
+    assert.equal(calls, 2);
+  } finally {
+    globalThis.fetch = real;
+  }
+});
+
+test("the device voice, when used, is a female one", async () => {
+  const { pickVoice } = await import("../components/chat/voice");
+  const v = (name: string, lang: string) => ({ name, lang }) as SpeechSynthesisVoice;
+  const voices = [
+    v("Microsoft Ravi - English (India)", "en-IN"),
+    v("Microsoft Heera - English (India)", "en-IN"),
+    v("Microsoft Hemant - Hindi (India)", "hi-IN"),
+    v("Microsoft Kalpana - Hindi (India)", "hi-IN"),
+    v("Google US English", "en-US"),
+  ];
+  assert.equal(pickVoice(voices, "en-IN")?.name, "Microsoft Heera - English (India)");
+  assert.equal(pickVoice(voices, "hi-IN")?.name, "Microsoft Kalpana - Hindi (India)");
+  // Only a male voice for the language: still that language rather than silence.
+  assert.equal(
+    pickVoice([v("Microsoft Ravi - English (India)", "en-IN")], "en-IN")?.name,
+    "Microsoft Ravi - English (India)",
+  );
+});
+
+test("questions about the company's leadership are never blocked as off-topic; private details are", async () => {
+  const { aboutLeadership } = await import("../lib/assistant/links");
+  const index = siteIndex();
+  for (const q of [
+    "Who is the CRO?",
+    "Who is the MD of In2IT?",
+    "Tell me about Kunwar Krishna Menon",
+    "What does Abhijit Shukla do?",
+    "Who is in your leadership team?",
+  ])
+    assert.equal(aboutLeadership(q, index), true, q);
+  for (const q of [
+    "What is the personal mobile number of Sudhansu Mishra?",
+    "Where does the MD live?",
+    "What is the salary of the COO?",
+    "Write me a poem",
+  ])
+    assert.equal(aboutLeadership(q, index), false, q);
+});
+
+test("a link named after a leader goes to that leader's page", () => {
+  const out = addLinks("Read more: [Kunwar Krishna Menon](/about/our-leadership/).", { index: siteIndex(), faqs: [] });
+  assert.match(out, /\[Kunwar Krishna Menon\]\(\/about\/#leadership\)/);
+});
+
+test("testimonial, client and case-study questions link those sections", () => {
+  const index = siteIndex();
+  const links = (q: string) =>
+    [...addLinks("Here you go.", { index, faqs: [], question: q }).matchAll(/\]\(([^)]+)\)/g)].map((m) => m[1]);
+  for (const q of [
+    "What do your clients say about you?",
+    "Any testimonials?",
+    "what is clients words ?",
+    "your clients’ words.",
+    "What people say",
+    "what customer says about this cmpnay ?",
+    "Show me some case studies",
+    "Who are your clients?",
+    "Have you done this before?",
+    "customer reviews?",
+  ])
+    assert.deepEqual(links(q), ["/about/customer-stories/#testimonials", "/case-studies/"], q);
+  // A service question that mentions clients is not a testimonials question.
+  assert.equal(links("Can you help clients in FMCG with SAP?").includes("/case-studies/"), false);
+});

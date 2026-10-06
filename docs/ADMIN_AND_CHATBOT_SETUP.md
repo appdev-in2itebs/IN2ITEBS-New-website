@@ -296,3 +296,36 @@ recognition model and the voice-conversation button; **Preview voice** plays a s
 language before you save. More providers (for example ElevenLabs, Azure, or NVIDIA's speech models
 through a small relay server) can be added to the same list later.
 
+
+## 12. Many visitors at once (capacity)
+
+**The website itself scales on its own.** It runs on Cloudflare Workers: every visitor's request is
+served by Cloudflare's network nearest to them, and Cloudflare starts as many copies as the traffic
+needs. There is no server or load balancer to manage, and one visitor's chat never waits for
+another's. Each chat conversation is separate (its own row in Supabase).
+
+**The limits are the AI services behind it,** which every chat message and spoken reply calls:
+
+| Service | Calls | What happens when it is busy |
+|---|---|---|
+| NVIDIA (the AI) | about 2 per chat message (answer + note-taking; 3 when it searches) | Retried after a short pause; then the fallback model; then the visitor still gets the basic FAQ answer |
+| Sarvam (voice) | 1 per spoken question, 1 per spoken sentence of the reply | Retried after a short pause; the reply is then read by the browser's own voice; if listening fails, the visitor is told the voice service is busy and can type |
+| Cloudflare Workers | 1 per page or chat message | Free plan: 100,000 requests a day |
+
+NVIDIA's free API key (build.nvidia.com) is for trying models out and is rate-limited per account
+(roughly 40 requests a minute), which is about 15–20 chat messages a minute across all visitors.
+Beyond that, answers fall back to the FAQs. For real traffic:
+
+1. **NVIDIA:** move to a paid/production endpoint (NVIDIA AI Enterprise, or a NIM hosted by a cloud
+   provider) and set `NVIDIA_BASE_URL` (Cloudflare secret) to its address; no code change. Any
+   OpenAI-compatible endpoint works.
+2. **Sarvam:** check the plan's requests-per-minute on the Sarvam dashboard and upgrade if voice is
+   used heavily.
+3. **Cloudflare:** Workers Paid ($5 a month) for 10 million requests a month and more CPU time per
+   request.
+4. **Abuse protection:** each visitor may send 20 chat messages a minute. For a hard limit across
+   Cloudflare's whole network, add a Rate Limiting rule in Cloudflare (Security → WAF → Rate
+   limiting rules) on `/api/chat/` and `/api/voice/`.
+
+Busy moments are logged as `llm_busy` and `voice_busy` in Cloudflare (Workers → in2it-ebs-web →
+Logs), so you can see when it is time to upgrade.

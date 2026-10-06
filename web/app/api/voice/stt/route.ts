@@ -55,7 +55,15 @@ export async function POST(request: Request) {
     });
     return json(200, { ok: true, text: result.text, language: result.language });
   } catch (e) {
-    console.error(JSON.stringify({ event: "stt_failed", error: e instanceof VoiceError ? e.message : "error" }));
+    const message = e instanceof VoiceError ? e.message : "error";
+    console.error(JSON.stringify({ event: "stt_failed", error: message }));
+    // Too many people talking at once: say so, rather than blaming the visitor's recording.
+    if (/HTTP (429|5\d\d)/.test(message))
+      return json(503, {
+        ok: false,
+        busy: true,
+        error: "The voice service is busy right now. Please try again in a moment, or type your question.",
+      });
     return json(502, { ok: false, error: "I couldn't understand the recording. Please try again or type." });
   }
 }

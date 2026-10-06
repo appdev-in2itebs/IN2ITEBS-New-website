@@ -88,6 +88,8 @@ function cvProblem(file: File): string | null {
 
 const STORE = "in2it-chat-v2";
 const LANG_STORE = "in2it-chat-lang";
+/** "1" when the visitor muted the chat's voice; remembered on this device. */
+const MUTE_STORE = "in2it-chat-muted";
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 const phoneOk = (v: string) => /^[+()\d\s-]{6,20}$/.test(v);
 
@@ -110,9 +112,10 @@ export function ChatWidget() {
   const [step, setStep] = useState<number | null>(null);
   const [details, setDetails] = useState<Partial<Record<StepKey, string>>>({});
   const [lang, setLang] = useState("en-IN");
-  const [voiceOut, setVoiceOut] = useState(false);
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  /** Replies are read aloud as they arrive, until the visitor mutes the chat. */
+  const [muted, setMuted] = useState(false);
   const [uploading, setUploading] = useState<number | null>(null);
   const [voiceModeOn, setVoiceModeOn] = useState(false);
   const serverSpeaker = useRef<ServerSpeaker | null>(null);
@@ -133,8 +136,14 @@ export function ChatWidget() {
   const voiceModeAvailable = mic && speaker && site?.assistant?.voiceMode !== false;
   const endOfSpeech = site?.assistant?.endOfSpeechMs ?? 1500;
 
+  /** Which message the Listen button is reading (its button shows Stop), or null. */
+  const [reading, setReading] = useState<number | null>(null);
+  const readTurn = useRef(0);
+
   /** Silences whichever voice is speaking. */
   const hush = useCallback(() => {
+    readTurn.current++;
+    setReading(null);
     streamSpeaker.current?.stop();
     streamSpeaker.current = null;
     serverSpeaker.current?.stop();
@@ -152,6 +161,7 @@ export function ChatWidget() {
         setMessages(saved.messages);
         setConversationId(saved.conversationId ?? null);
       }
+      if (localStorage.getItem(MUTE_STORE) === "1") setMuted(true);
       const l = localStorage.getItem(LANG_STORE);
       if (l) setLang(l);
     } catch {}
@@ -186,26 +196,30 @@ export function ChatWidget() {
 
   const push = (m: Message) => setMessages((all) => [...all, m]);
 
-  /** Speaks a reply: Sarvam's voice where it supports the language, else the browser's. */
+  /**
+   * Speaks a reply: Sarvam's voice where it supports the language, else the browser's. Whatever is
+   * already speaking stops first, so two voices never play over each other; a later Listen click
+   * retires an earlier one, which then never falls back to another voice.
+   */
   const say = useCallback(
-    async (text: string) => {
+    async (text: string, index: number | null = null) => {
+      hush();
+      const mine = ++readTurn.current;
+      setReading(index);
       setSpeaking(true);
       try {
         if (serverVoice) {
           serverSpeaker.current ??= new ServerSpeaker();
-          try {
-            await serverSpeaker.current.speak(text, lang);
-            return;
-          } catch {
-            // The server voice failed: fall back to the browser's.
-          }
-        }
-        if (canSpeak()) await new Promise<void>((resolve) => speak(text, lang, resolve));
+          await serverSpeaker.current.speak(text, lang);
+        } else if (canSpeak()) await new Promise<void>((resolve) => speak(text, lang, resolve));
       } finally {
-        setSpeaking(false);
+        if (mine === readTurn.current) {
+          setSpeaking(false);
+          setReading(null);
+        }
       }
     },
-    [lang, serverVoice],
+    [lang, serverVoice, hush],
   );
 
   // ---------------------------------------------------------------- the rule-based form (AI off)
@@ -279,7 +293,9 @@ export function ChatWidget() {
     }
     setBusy(true);
     // Spoken to, it speaks back (voice conversation always); otherwise only when the speaker is on.
-    const speakIt = opts.voice || (!opts.silent && speaker && (voiceOut || opts.spoken));
+    // Every reply is spoken as it is written, in the admin's voice, unless the visitor muted the
+    // chat; voice conversation always speaks.
+    const speakIt = Boolean(opts.voice) || (!opts.silent && speaker && !muted);
     const voice = speakIt
       ? new StreamSpeaker(lang, serverVoice, () => {
           setSpeaking(true);
@@ -584,15 +600,19 @@ export function ChatWidget() {
               <button
                 type="button"
                 onClick={() => {
-                  if (voiceOut) hush();
-                  setVoiceOut((v) => !v);
+                  const next = !muted;
+                  if (next) hush();
+                  setMuted(next);
+                  try {
+                    localStorage.setItem(MUTE_STORE, next ? "1" : "0");
+                  } catch {}
                 }}
-                aria-pressed={voiceOut}
-                aria-label={voiceOut ? "Stop reading replies aloud" : "Read replies aloud"}
-                title={voiceOut ? "Replies are read aloud" : "Read replies aloud"}
+                aria-pressed={muted}
+                aria-label={muted ? "Unmute: read replies aloud" : "Mute the voice"}
+                title={muted ? "Voice is off: replies are not read aloud" : "Voice is on: replies are read aloud"}
                 className="rounded-full p-1.5 hover:bg-on-brand/10"
               >
-                {voiceOut ? <Volume2 size={18} aria-hidden /> : <VolumeX size={18} aria-hidden />}
+                {muted ? <VolumeX size={18} aria-hidden /> : <Volume2 size={18} aria-hidden />}
               </button>
             ) : null}
             <button
@@ -617,14 +637,24 @@ export function ChatWidget() {
                 >
                   {m.from === "bot" ? <ChatText text={m.text} /> : m.text}
                 </div>
-                {m.from === "bot" && speaker && !voiceOut ? (
-                  <button
-                    type="button"
-                    onClick={() => say(m.text)}
-                    className="-mt-1 inline-flex items-center gap-1 text-[11px] text-foreground-muted hover:text-action"
-                  >
-                    <Volume2 size={12} aria-hidden /> Listen
-                  </button>
+                {m.from === "bot" && speaker ? (
+                  reading === i ? (
+                    <button
+                      type="button"
+                      onClick={hush}
+                      className="-mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-action"
+                    >
+                      <VolumeX size={12} aria-hidden /> Stop
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => say(m.text, i)}
+                      className="-mt-1 inline-flex items-center gap-1 text-[11px] text-foreground-muted hover:text-action"
+                    >
+                      <Volume2 size={12} aria-hidden /> Listen
+                    </button>
+                  )
                 ) : null}
                 {m.actions?.map((a, k) =>
                   a.type === "cv_upload" ? (

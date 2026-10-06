@@ -115,7 +115,9 @@ export function VoiceMode({
       setHint(
         /not-allowed|NotAllowed|Permission/i.test(msg)
           ? "Please allow the microphone for this site (the icon in the address bar), then tap the circle."
-          : "I couldn't hear that clearly. Tap the circle to try again.",
+          : /busy/i.test(msg)
+            ? "The voice service is busy right now. Tap the circle to try again in a moment, or type your question."
+            : "I couldn't hear that clearly. Tap the circle to try again.",
       );
     }
   }, [ask, hear, onClose]);

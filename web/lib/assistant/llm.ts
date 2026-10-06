@@ -15,11 +15,54 @@ export type ToolSpec = {
   function: { name: string; description: string; parameters: Record<string, unknown> };
 };
 
-const ENDPOINT = "https://integrate.api.nvidia.com/v1/chat/completions";
+/** NVIDIA's hosted API by default; NVIDIA_BASE_URL points it at a dedicated or self-hosted NIM. */
+const endpoint = () =>
+  `${(process.env.NVIDIA_BASE_URL || "https://integrate.api.nvidia.com/v1").replace(/\/+$/, "")}/chat/completions`;
 
 export const llmConfigured = () => Boolean(process.env.NVIDIA_API_KEY);
 
 export class LlmError extends Error {}
+
+/** How many times a busy answer (429, 5xx) is tried again, and the most it may wait in all. */
+const RETRIES = 2;
+const RETRY_BUDGET_MS = 4_000;
+
+/**
+ * One request to the model API. When many visitors talk at once the API answers 429 (too many
+ * requests) or 503 (busy): the call waits a moment (the server's Retry-After, or a short backoff
+ * with jitter so concurrent callers spread out) and tries again, within a small time budget, before
+ * the caller moves on to the fallback model.
+ */
+async function post(body: Record<string, unknown>, accept: string, timeoutMs: number): Promise<Response> {
+  const started = Date.now();
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(endpoint(), {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.NVIDIA_API_KEY}`,
+        "Content-Type": "application/json",
+        Accept: accept,
+      },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    const busy = res.status === 429 || res.status >= 500;
+    if (!busy || attempt >= RETRIES) {
+      if (busy)
+        console.warn(
+          JSON.stringify({ event: "llm_busy", status: res.status, model: body.model, attempts: attempt + 1 }),
+        );
+      return res;
+    }
+    const retryAfter = Number(res.headers.get("retry-after"));
+    const wait =
+      Math.min(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 400 * 2 ** attempt, 2_000) +
+      Math.random() * 300;
+    if (Date.now() - started + wait > RETRY_BUDGET_MS) return res;
+    void res.body?.cancel();
+    await new Promise((r) => setTimeout(r, wait));
+  }
+}
 
 export async function complete(input: {
   model: string;
@@ -41,14 +84,8 @@ export async function complete(input: {
   let last: unknown;
   for (const model of models) {
     try {
-      const res = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.NVIDIA_API_KEY}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
+      const res = await post(
+        {
           model,
           messages: input.messages,
           tools: input.tools?.length ? input.tools : undefined,
@@ -56,9 +93,10 @@ export async function complete(input: {
           max_tokens: input.maxTokens ?? 700,
           stream: false,
           ...reasoningOptions(model, input.thinking ?? false),
-        }),
-        signal: AbortSignal.timeout(input.timeoutMs ?? 25_000),
-      });
+        },
+        "application/json",
+        input.timeoutMs ?? 25_000,
+      );
       if (!res.ok) throw new LlmError(`${model}: HTTP ${res.status}`);
       const data = (await res.json()) as {
         choices?: { message?: { content?: string | null; tool_calls?: ToolCall[] } }[];
@@ -114,14 +152,8 @@ export async function streamComplete(
   for (const model of models) {
     let wrote = false;
     try {
-      const res = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.NVIDIA_API_KEY}`,
-          "Content-Type": "application/json",
-          Accept: "text/event-stream",
-        },
-        body: JSON.stringify({
+      const res = await post(
+        {
           model,
           messages: input.messages,
           tools: input.tools?.length ? input.tools : undefined,
@@ -130,9 +162,10 @@ export async function streamComplete(
           stream: true,
           stream_options: { include_usage: true },
           ...reasoningOptions(model, input.thinking ?? false),
-        }),
-        signal: AbortSignal.timeout(input.timeoutMs ?? 30_000),
-      });
+        },
+        "text/event-stream",
+        input.timeoutMs ?? 30_000,
+      );
       if (!res.ok || !res.body) throw new LlmError(`${model}: HTTP ${res.status}`);
       const reader = res.body.getReader();
       const decoder = new TextDecoder();

@@ -63,7 +63,7 @@ export async function extract(input: {
   "declined_cv": true if they say they cannot or will not upload a CV,
   "summary": two lines, in English, summarising only what the visitor actually said (the notes and the conversation); never add anything they did not say,
   "fit_score": ${role ? "0-100, how well the candidate's experience fits the role's requirements" : "null"},
-  "on_topic": ${a.guardrailsEnabled ? `false only if the visitor's reply asks for something outside the allowed topics or inside the blocked topics below (an answer to the assistant's own question, a greeting or thanks is always on topic; a company that wants In2IT EBS to build or run something for it is on topic)` : "true"},
+  "on_topic": ${a.guardrailsEnabled ? `false only if the visitor's reply asks for something outside the allowed topics or inside the blocked topics below (an answer to the assistant's own question, a greeting or thanks is always on topic; a company that wants In2IT EBS to build or run something for it is on topic; a question about In2IT EBS's own leadership or team, such as who the MD, COO or CRO is or a leader's background, is on topic; questions about its clients, testimonials (what clients say), case studies or past projects are on topic; only asking for someone's private details such as a personal phone number, home address, family or salary is off topic)` : "true"},
   "off_topic_reason": "a few words on why, when on_topic is false"
 }
 

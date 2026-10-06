@@ -2,6 +2,8 @@ import { z } from "zod";
 import { getSettings, hashIp } from "@/lib/cms/store";
 import { badOrigin, clientAddress, json, rateLimited, readJson } from "@/lib/api-guard";
 import { SARVAM_VOICES } from "@/lib/voice/providers";
+import { getAdmin } from "@/lib/admin/session";
+import { can } from "@/lib/admin/permissions";
 import { VoiceError, sarvamConfigured, sarvamSpeak, sarvamSupports } from "@/lib/voice/sarvam";
 
 export const runtime = "nodejs";
@@ -10,7 +12,7 @@ export const dynamic = "force-dynamic";
 const body = z.object({
   text: z.string().trim().min(1).max(800),
   language: z.string().max(10),
-  /** The admin's "Preview voice" may try another voice; visitors get the chosen one. */
+  /** Admin → AI assistant's "Preview voice" only (a signed-in admin): another voice or speed to try. */
   voice: z.string().max(40).optional(),
   pace: z.number().min(0.8).max(1.3).optional(),
 });
@@ -30,16 +32,22 @@ export async function POST(request: Request) {
   const { assistant } = await getSettings();
   if (!sarvamConfigured() || !sarvamSupports(parsed.data.language))
     return json(503, { ok: false, error: "Server voice is not available for this language." });
+  // One voice for the whole website: the one chosen in Admin → AI assistant, for the chat's Listen
+  // button and voice conversation alike. Only a signed-in admin previewing may ask for another.
+  const wantsOther = parsed.data.voice !== undefined || parsed.data.pace !== undefined;
+  const admin = wantsOther ? await getAdmin().catch(() => null) : null;
+  const preview = !!admin && can(admin.role, "assistant");
   const voice =
-    parsed.data.voice && (SARVAM_VOICES as readonly string[]).includes(parsed.data.voice)
+    preview && parsed.data.voice && (SARVAM_VOICES as readonly string[]).includes(parsed.data.voice)
       ? parsed.data.voice
       : assistant.voiceName;
+  const pace = preview && parsed.data.pace !== undefined ? parsed.data.pace : assistant.voicePace;
   try {
     const mp3 = await sarvamSpeak({
       text: parsed.data.text,
       language: parsed.data.language,
       voice,
-      pace: parsed.data.pace ?? assistant.voicePace,
+      pace,
     });
     return new Response(new Blob([mp3 as Uint8Array<ArrayBuffer>], { type: "audio/mpeg" }), {
       headers: { "Content-Type": "audio/mpeg", "Cache-Control": "no-store" },

@@ -21,7 +21,9 @@ const SETS = [
   { name: "w1280", width: 1280, quality: 72 },
   { name: "w768", width: 768, quality: 68 },
 ];
-const source = path.resolve("..", "Herosection Video");
+// HERO_SOURCE points at another folder of video1.mp4 … video5.mp4 (e.g. the clips with the Gemini
+// sparkle removed, 2026-10-06).
+const source = path.resolve(process.env.HERO_SOURCE ?? path.join("..", "Herosection Video"));
 const out = path.resolve("public", "hero-frames");
 const slides = [1, 2, 3, 4, 5];
 const manifest = [];

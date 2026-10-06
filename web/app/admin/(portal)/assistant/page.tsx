@@ -3,7 +3,13 @@ import { requireAdmin } from "@/lib/admin/session";
 import { getSettings } from "@/lib/cms/store";
 import { ASSISTANT_LANGUAGES } from "@/lib/cms/settings";
 import { llmConfigured } from "@/lib/assistant/llm";
-import { SARVAM_LANGUAGES, SARVAM_STT_MODELS, SARVAM_VOICES, VOICE_PROVIDERS } from "@/lib/voice/providers";
+import {
+  SARVAM_LANGUAGES,
+  SARVAM_STT_MODELS,
+  SARVAM_VOICES,
+  SARVAM_FEMALE_VOICES,
+  VOICE_PROVIDERS,
+} from "@/lib/voice/providers";
 import { sarvamConfigured } from "@/lib/voice/sarvam";
 import { VoicePreview } from "@/components/admin/voice-preview";
 import { Card, Field, Notice, PageTitle, input, primaryBtn, secondaryBtn } from "@/components/admin/ui";
@@ -243,13 +249,23 @@ export default async function AssistantPage({
               )}
             </p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Voice (Sarvam)">
+              <Field label="Voice (Sarvam)" hint="Used everywhere: the chat's Listen button and voice conversation">
                 <select name="voiceName" defaultValue={a.voiceName} className={input}>
-                  {SARVAM_VOICES.map((v) => (
-                    <option key={v} value={v}>
-                      {v[0].toUpperCase() + v.slice(1)}
-                    </option>
-                  ))}
+                  {/* One voice for the whole site: the chat's Listen button and voice conversation. */}
+                  <optgroup label="Female voices">
+                    {SARVAM_FEMALE_VOICES.map((v) => (
+                      <option key={v} value={v}>
+                        {v[0].toUpperCase() + v.slice(1)} (female)
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Male voices">
+                    {SARVAM_VOICES.filter((v) => !SARVAM_FEMALE_VOICES.includes(v)).map((v) => (
+                      <option key={v} value={v}>
+                        {v[0].toUpperCase() + v.slice(1)} (male)
+                      </option>
+                    ))}
+                  </optgroup>
                 </select>
               </Field>
               <Field label="Speed" hint="0.8 slower · 1 normal · 1.3 faster">

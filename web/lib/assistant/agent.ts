@@ -4,7 +4,7 @@ import { complete, streamComplete, type LlmMessage } from "./llm";
 import type { Turn } from "./conversation";
 import type { AgentState } from "./knowledge";
 import { extract } from "./extract";
-import { addLinks } from "./links";
+import { aboutLeadership, addLinks } from "./links";
 import { TOOL_SPECS, missing, runTool, saveLead, submitApplication, type ToolContext, type UiAction } from "./tools";
 
 /**
@@ -55,7 +55,8 @@ export async function runAgent(input: {
     const ex = await extraction;
     if (ex.purpose && !(st.purpose === "job" && ex.purpose === "sales" && st.openingId)) st.purpose = ex.purpose;
     st.offTopic = undefined;
-    if (a.guardrailsEnabled && !ex.onTopic) {
+    // Questions about the company's leadership and team are always in scope (lib/assistant/links.ts).
+    if (a.guardrailsEnabled && !ex.onTopic && !aboutLeadership(input.message, input.ctx.index)) {
       st.offTopic = ex.offTopicReason || "outside what In2IT EBS helps with";
       st.offTopicCount = (st.offTopicCount ?? 0) + 1;
       console.info(JSON.stringify({ event: "assistant_off_topic", count: st.offTopicCount }));

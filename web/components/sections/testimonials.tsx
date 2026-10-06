@@ -116,6 +116,7 @@ export function Testimonials({ testimonials = shippedTestimonials }: { testimoni
   return (
     <section
       ref={root}
+      id="testimonials"
       data-testimonials
       aria-labelledby="testimonials-title"
       aria-roledescription="carousel"

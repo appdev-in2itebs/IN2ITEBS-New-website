@@ -111,25 +111,42 @@ export function speakable(text: string) {
     .trim();
 }
 
-/** Reads text aloud in the chosen language, with the closest voice the device has. */
+// The device's voices do not say their gender, but their names do. The website speaks with one female
+// voice (Sarvam's, chosen in the admin); when the device must speak instead, it picks a female one too.
+const FEMALE_VOICE =
+  /female|woman|heera|neerja|kalpana|swara|aarohi|ananya|pallavi|shruti|zira|aria|jenny|sonia|libby|natasha|clara|samantha|veena|lekha|karen|moira|tessa|fiona|victoria|allison|susan|hazel|google (us english|हिन्दी|বাংলা|தமிழ்|తెలుగు|मराठी|ગુજરાતી|ಕನ್ನಡ|മലയാളം)/i;
+const MALE_VOICE =
+  /\bmale\b|ravi|prabhat|hemant|madhur|valluvar|mohan|david|mark|guy|ryan|daniel|rishi|george|james|thomas|fred|alex|aaron|arthur|oliver/i;
+
+/** The device voice for a language: a female one where there is one, never a known male one first. */
+export function pickVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechSynthesisVoice | null {
+  const base = lang.split("-")[0].toLowerCase();
+  const exact = voices.filter((v) => v.lang.toLowerCase().replace("_", "-") === lang.toLowerCase());
+  const near = voices.filter((v) => v.lang.toLowerCase().startsWith(base));
+  for (const group of [exact, near]) {
+    const female = group.find((v) => FEMALE_VOICE.test(v.name));
+    if (female) return female;
+    const notMale = group.find((v) => !MALE_VOICE.test(v.name));
+    if (notMale) return notMale;
+  }
+  return exact[0] ?? near[0] ?? null;
+}
+
+/** Reads text aloud in the chosen language, with the closest (female) voice the device has. */
 export function speak(text: string, lang: string, onEnd?: () => void) {
   if (!canSpeak()) return;
   const synth = window.speechSynthesis;
   synth.cancel();
-  const voices = synth.getVoices();
-  const base = lang.split("-")[0];
-  const voice =
-    voices.find((v) => v.lang.toLowerCase() === lang.toLowerCase()) ??
-    voices.find((v) => v.lang.toLowerCase().startsWith(base)) ??
-    null;
+  const voice = pickVoice(synth.getVoices(), lang);
   // Long replies are spoken sentence by sentence: some browsers stop speaking after about 15 seconds.
   const parts = speakable(text).match(/[^.!?।]+[.!?।]*/g) ?? [];
+  if (!parts.length) onEnd?.();
   parts.forEach((part, i) => {
     const u = new SpeechSynthesisUtterance(part.trim());
     u.lang = lang;
     if (voice) u.voice = voice;
     u.rate = 1;
-    if (i === parts.length - 1 && onEnd) u.onend = onEnd;
+    if (i === parts.length - 1 && onEnd) u.onend = u.onerror = () => onEnd();
     synth.speak(u);
   });
 }
@@ -381,42 +398,69 @@ export class ServerSpeaker {
   private controller: AbortController | null = null;
   private stopped = false;
 
+  /** Which speak() is current: a newer call (or stop) retires every older one. */
+  private generation = 0;
+
+  /**
+   * Speaks `text` in the server voice, one sentence or two at a time. Only one reply ever plays:
+   * a new speak() or stop() silences the previous one, and a cancelled request is never mistaken
+   * for a failure (that used to start the browser's voice on top of the new one). Only when the
+   * server voice really fails is that one piece read by the browser's voice instead.
+   */
   async speak(text: string, lang: string, opts: { voice?: string; pace?: number } = {}): Promise<void> {
     this.stop();
+    const mine = ++this.generation;
     this.stopped = false;
+    const live = () => mine === this.generation && !this.stopped;
     const controller = new AbortController();
     this.controller = controller;
     const fetchPiece = async (piece: string): Promise<string | null> => {
-      const res = await fetch("/api/voice/tts/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: piece, language: lang, voice: opts.voice, pace: opts.pace }),
-        signal: controller.signal,
-      });
-      if (!res.ok) throw new Error("voice unavailable");
-      return URL.createObjectURL(await res.blob());
+      try {
+        const res = await fetch("/api/voice/tts/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: piece, language: lang, voice: opts.voice, pace: opts.pace }),
+          signal: controller.signal,
+        });
+        return res.ok ? URL.createObjectURL(await res.blob()) : null;
+      } catch {
+        return null;
+      }
     };
     const pieces = speechChunks(text);
     let next = pieces.length ? fetchPiece(pieces[0]) : null;
-    for (let i = 0; i < pieces.length && !this.stopped; i++) {
+    for (let i = 0; i < pieces.length; i++) {
       const url = await next;
+      if (!live()) {
+        if (url) URL.revokeObjectURL(url);
+        break;
+      }
       next = i + 1 < pieces.length ? fetchPiece(pieces[i + 1]) : null;
-      if (!url || this.stopped) break;
-      await new Promise<void>((resolve) => {
-        const a = new Audio(url);
-        this.audio = a;
-        a.onended = a.onerror = () => {
-          URL.revokeObjectURL(url);
-          resolve();
-        };
-        a.play().catch(() => resolve());
-      });
+      if (url) await this.play(url);
+      else if (canSpeak()) await new Promise<void>((resolve) => speak(pieces[i], lang, resolve));
+      if (!live()) break;
     }
-    next?.then((u) => u && URL.revokeObjectURL(u)).catch(() => {});
+    next?.then((u) => u && URL.revokeObjectURL(u));
+  }
+
+  private play(url: string) {
+    return new Promise<void>((resolve) => {
+      const a = new Audio(url);
+      this.audio = a;
+      a.onended =
+        a.onerror =
+        a.onpause =
+          () => {
+            URL.revokeObjectURL(url);
+            resolve();
+          };
+      a.play().catch(() => resolve());
+    });
   }
 
   stop() {
     this.stopped = true;
+    this.generation++;
     this.controller?.abort();
     this.controller = null;
     if (this.audio) {
@@ -424,6 +468,7 @@ export class ServerSpeaker {
       this.audio.src = "";
       this.audio = null;
     }
+    stopSpeaking();
   }
 }
 
@@ -440,6 +485,8 @@ export class StreamSpeaker {
   private stopped = false;
   private busy = false;
   private started = false;
+  /** Bumped by every halt, so a loop that was waiting on audio from before knows to give up. */
+  private generation = 0;
   private audio: HTMLAudioElement | null = null;
   private controller = new AbortController();
   private finish: () => void = () => {};
@@ -494,6 +541,8 @@ export class StreamSpeaker {
 
   private halt() {
     this.stopped = true;
+    this.generation++;
+    this.busy = false;
     this.controller.abort();
     this.audio?.pause();
     this.audio = null;
@@ -514,8 +563,10 @@ export class StreamSpeaker {
   private async pump() {
     if (this.busy) return;
     this.busy = true;
+    const mine = this.generation;
+    const live = () => mine === this.generation && !this.stopped;
     let prefetched: { text: string; url: Promise<string | null> } | null = null;
-    while (!this.stopped && this.queue.length) {
+    while (live() && this.queue.length) {
       const text = speakable(this.queue.shift() ?? "");
       if (!text) continue;
       if (!this.started) {
@@ -527,12 +578,15 @@ export class StreamSpeaker {
         prefetched = null;
         const nextText = this.queue[0] ? speakable(this.queue[0]) : "";
         if (nextText) prefetched = { text: nextText, url: this.fetchAudio(nextText) };
-        if (url && !this.stopped) await this.play(url);
-        else if (!url && !this.stopped && canSpeak()) await new Promise<void>((r) => speak(text, this.lang, r));
+        if (!live()) break;
+        if (url) await this.play(url);
+        else if (canSpeak()) await new Promise<void>((r) => speak(text, this.lang, r));
       } else if (canSpeak()) {
         await new Promise<void>((r) => speak(text, this.lang, r));
       }
     }
+    // A halted loop leaves the speaker to whatever started after it.
+    if (mine !== this.generation) return;
     this.busy = false;
     if (this.stopped || (this.ended && !this.queue.length)) this.finish();
   }
@@ -541,10 +595,13 @@ export class StreamSpeaker {
     return new Promise<void>((resolve) => {
       const a = new Audio(url);
       this.audio = a;
-      a.onended = a.onerror = () => {
-        URL.revokeObjectURL(url);
-        resolve();
-      };
+      a.onended =
+        a.onerror =
+        a.onpause =
+          () => {
+            URL.revokeObjectURL(url);
+            resolve();
+          };
       a.play().catch(() => resolve());
     });
   }

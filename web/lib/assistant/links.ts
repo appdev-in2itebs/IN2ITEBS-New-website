@@ -37,6 +37,15 @@ export const SECTIONS: { ask: RegExp; links: Page[] }[] = [
     ],
   },
   {
+    // "In our clients' words — What people say." (Customer Stories, #testimonials) and the
+    // Clients & Case Studies page.
+    ask: /\b(testimonials?|reviews?|feedback|(clients?|customers?|clines?)['’]? words|what (do |does |are |is )?(your |the |a |our )?(clients?|customers?|people) (says?|saying|said|thinks?)|(clients?|customers?) (says?|said|thinks?)|customer stories|success stor(y|ies)|case stud(y|ies)|references?|(your|existing|current|major|top|big|some) (clients|customers)|client list|clientele|who (are|were) your (clients|customers)|worked with|past projects?|projects you (have )?done|done (this|it) before|portfolio)\b|ग्राहक|केस स्टडी/i,
+    links: [
+      { title: "What people say", url: "/about/customer-stories/#testimonials" },
+      { title: "Clients & Case Studies", url: "/case-studies/" },
+    ],
+  },
+  {
     ask: /\b(footprint|locations?|located|offices?|branch(es)?|countr(y|ies)|cit(y|ies)|presen(ce|t)|based (in|out of)|operate (in|from)|worldwide|around the world|where (are|is) (you|your|the|in2it)|address|headquarter(s|ed)?|hq|delivery cent(re|er)s?)\b|कहाँ|ऑफिस|कार्यालय/i,
     links: [
       { title: "Global footprint: Where we are (office map)", url: "/#offices" },
@@ -49,6 +58,25 @@ export const SECTIONS: { ask: RegExp; links: Page[] }[] = [
     links: [{ title: "Contact page", url: "/contact/" }],
   },
 ];
+
+/** Asking for someone's private details: never unblocked by `aboutLeadership`. */
+const PRIVATE_ASK =
+  /\b(personal|private|mobile|cell|phone|number|whats ?app|home|house|address|lives?|family|wife|husband|children|kids|salary|income|net worth|age|born|married|religion|caste|email)\b/i;
+
+/**
+ * True for a question about the company's own leadership or team ("who is the COO?", "tell me about
+ * Abhijit Shukla"): the website shows them, so it is always in scope, whatever the guardrail lists
+ * say. A request for anyone's private details is not covered.
+ */
+export function aboutLeadership(message: string, index: SiteEntry[]): boolean {
+  if (PRIVATE_ASK.test(message)) return false;
+  if (SECTIONS[0].ask.test(message)) return true;
+  const names = index
+    .filter((e) => e.url.startsWith("/about/") && e.title !== "Leadership team")
+    .flatMap((e) => e.title.split(/\s+/))
+    .filter((w) => w.length >= 4);
+  return names.some((n) => new RegExp(`\\b${escape(n)}\\b`, "i").test(message));
+}
 
 /** Every page that may be linked, by the name an answer would use, longest names first. */
 export function linkablePages(index: SiteEntry[]): Page[] {
@@ -85,6 +113,14 @@ export function addLinks(
   out = out.replace(/\[(?:here|click here|this page|link)\]\((\/[^)\s]*)\)/gi, (m, url: string) => {
     const name = byUrl.get(url) ?? SECTIONS.flatMap((s) => s.links).find((l) => l.url === url)?.title;
     return name ? `[${name}](${url})` : m;
+  });
+
+  // A link named after a known page or person but pointing elsewhere goes to the right page
+  // ("[Kunwar Krishna Menon](/about/our-leadership/)" → his section on /about/).
+  const byTitle = new Map(pages.map((p) => [p.title.toLowerCase(), p.url]));
+  out = out.replace(/\[([^\]\n]+)\]\((\/[^)\s]*)\)/g, (m, name: string, url: string) => {
+    const right = byTitle.get(name.trim().toLowerCase());
+    return right && right !== url ? `[${name}](${right})` : m;
   });
 
   // "[Name](/path/) (/path/)": the second, bare copy goes.

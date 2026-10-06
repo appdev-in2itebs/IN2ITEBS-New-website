@@ -72,4 +72,7 @@ export const SARVAM_VOICES = [
   "soham",
 ] as const;
 
+/** The female voices among them (the rest are male); the website's default is the first, Priya. */
+export const SARVAM_FEMALE_VOICES: readonly string[] = SARVAM_VOICES.slice(0, SARVAM_VOICES.indexOf("aditya"));
+
 export const SARVAM_STT_MODELS = ["saarika:v2.5", "saaras:v3", "saarika:flash"] as const;

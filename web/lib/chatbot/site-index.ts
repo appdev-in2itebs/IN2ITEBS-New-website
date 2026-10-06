@@ -3,6 +3,7 @@ import { legacyIndustries, type LegacyIndustry } from "@/content/legacy-industri
 import { partnerPages, type PartnerPage } from "@/content/partner-pages";
 import { offices as shippedOffices } from "@/content/offices";
 import { leadership as shippedLeadership } from "@/content/leadership";
+import { caseStudies } from "@/content/case-studies";
 import type { Leader, Office } from "@/content/types";
 import { tokens, type SiteEntry } from "./engine";
 
@@ -100,6 +101,14 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
       url: leaderUrl(leader, i),
       keywords: [...tokens(leader.name), "leadership"],
       aliases: [...tokens(leader.title.replace(/\(.*?\)/g, "")), ...titleShort(leader.title)],
+    });
+  // Named case studies have a page of their own (the anonymised ones are only on /case-studies/).
+  for (const c of caseStudies.filter((s) => s.named))
+    entries.push({
+      title: c.client,
+      summary: clip(c.summary ?? c.outcome ?? c.scenario),
+      url: `/case-studies/${c.slug}/`,
+      keywords: [...tokens(c.client), ...tokens(c.industry), ...tokens(c.featuredSolution), "case", "study", "project"],
     });
   entries.push({
     title: "Leadership team",
