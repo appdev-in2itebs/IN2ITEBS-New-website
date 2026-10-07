@@ -103,13 +103,20 @@ export function listen(
 
 /** Plain text for speaking: no markdown, links read as their words, no emoji. */
 export function speakable(text: string) {
-  return text
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    .replace(/[*_`#>]/g, "")
-    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  return (
+    text
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      // Page addresses and web links are for the eye, never read out: "[/about/#leadership]", "(/contact/)".
+      .replace(/\[\/[^\]\s]*\]|\(\/[^)\s]*\)|https?:\/\/\S+|(^|\s)\/[a-z0-9\-/#]+\/(?=\s|$|[.,!?])/gi, "$1")
+      .replace(/[*_`#>]/g, "")
+      .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, "")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
 }
+
+import { languageOfText } from "@/lib/voice/script-language";
+import { pronounce } from "@/lib/voice/pronounce";
 
 // The device's voices do not say their gender, but their names do. The website speaks with one female
 // voice (Sarvam's, chosen in the admin); when the device must speak instead, it picks a female one too.
@@ -133,8 +140,10 @@ export function pickVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechS
 }
 
 /** Reads text aloud in the chosen language, with the closest (female) voice the device has. */
-export function speak(text: string, lang: string, onEnd?: () => void) {
+export function speak(raw: string, lang: string, onEnd?: () => void) {
   if (!canSpeak()) return;
+  // The device's voice says the company's name properly too.
+  const text = pronounce(raw, lang);
   const synth = window.speechSynthesis;
   synth.cancel();
   const voice = pickVoice(synth.getVoices(), lang);
@@ -194,6 +203,24 @@ const PART_MS = 25_000;
  * Long speech is split into parts of about 25 seconds at a pause, each a complete file, because
  * Sarvam takes 30 seconds per request; the parts are transcribed in order and joined.
  */
+/** The room's background as the detector measures it: its usual level and how much it wobbles. */
+export type Background = { noise: number; wobble: number };
+
+/** How long each turn only listens to the room before speech may start it. */
+const WARM_UP_MS = 400;
+
+/**
+ * The microphone, set up for speech: echo cancellation (so the assistant's own voice is not heard),
+ * noise suppression, and no automatic gain, which turns the room up as soon as the visitor stops,
+ * looks like more speech and keeps the turn open. (Tried for far-away speakers on 2026-10-07: it did
+ * not make quiet speech any easier to understand, so it stays off.)
+ */
+export function openMic(): Promise<MediaStream> {
+  return navigator.mediaDevices.getUserMedia({
+    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: false, channelCount: 1 },
+  });
+}
+
 export function recordUtterance(
   opts: {
     endSilenceMs?: number;
@@ -201,20 +228,52 @@ export function recordUtterance(
     maxMs?: number;
     onLevel?: (level: number) => void;
     onSpeech?: () => void;
+    /**
+     * Listening while the assistant is talking, for the visitor to cut in (voice conversation): the
+     * mic stays open with no time limit, speech must be clearer and longer to count (how much depends
+     * on the sensitivity), and the last second or so before it is kept, so the first words are not lost.
+     */
+    bargeIn?: "low" | "medium" | "high";
+    /**
+     * A microphone already open (voice conversation keeps one for the whole call): no new permission
+     * prompt or start-up delay per turn, and it is left open afterwards.
+     */
+    stream?: MediaStream;
+    /** How far away speech may come from (Admin → Voice → Microphone range); "far" hears softer voices. */
+    range?: "close" | "normal" | "far";
+    /**
+     * How loud (dB) the visitor speaks, from earlier turns of the call: speech 12 dB or more quieter
+     * than that (people talking further away, a TV) does not start a turn.
+     */
+    voiceDb?: number;
+    /** Told, at the end, how loud (dB) the visitor spoke this turn, for the next turn's voiceDb. */
+    onSpeechLevel?: (db: number) => void;
+    /** The room's background from the previous turn of the call, so it is not learnt from zero again. */
+    background?: Background;
+    /** Told, at the end, the room's background, to pass to the next turn. */
+    onBackground?: (background: Background) => void;
   } = {},
 ): Recording {
-  const { endSilenceMs = 1500, waitMs = 10_000, maxMs = 120_000 } = opts;
+  const { endSilenceMs = 1500, maxMs = 120_000 } = opts;
+  const waitMs = opts.bargeIn ? Infinity : (opts.waitMs ?? 10_000);
+  // [minimum rise above the background, rise in multiples of its wobble, 40 ms ticks of speech needed]
+  const strictness: Record<string, [number, number, number]> = {
+    low: [30, 8, 10],
+    medium: [22, 6, 7],
+    high: [15, 5, 4],
+  };
+  // A normal turn: how far above the room's background speech must rise, by microphone range.
+  const ranges: Record<string, [number, number, number]> = { close: [20, 6, 4], normal: [14, 5, 3], far: [9, 4, 3] };
+  const [rise, wobbles, ticks] = (opts.bargeIn && strictness[opts.bargeIn]) || ranges[opts.range ?? "normal"];
   let finishFn: (keep: boolean) => void = () => {};
   const result = new Promise<Blob[] | null>((resolve, reject) => {
-    navigator.mediaDevices
-      .getUserMedia({
-        // No automatic gain: it turns the room up as soon as the visitor stops, which looks like
-        // more speech and keeps the turn open.
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: false, channelCount: 1 },
-      })
+    (opts.stream ? Promise.resolve(opts.stream) : openMic())
       .then((stream) => {
         const type = recordingType();
-        const parts: Blob[] = [];
+        // Each part of the recording, numbered, so the ones from before the visitor cut in can be dropped.
+        const parts: { no: number; blob: Blob }[] = [];
+        let partNo = 0;
+        let keepFrom = 0;
         let recorder: MediaRecorder;
         let partStart = performance.now();
         let pending = 0;
@@ -223,10 +282,11 @@ export function recordUtterance(
 
         const startPart = () => {
           const chunks: Blob[] = [];
+          const no = ++partNo;
           const r = new MediaRecorder(stream, type ? { mimeType: type } : undefined);
           r.ondataavailable = (ev) => ev.data.size && chunks.push(ev.data);
           r.onstop = () => {
-            if (chunks.length) parts.push(new Blob(chunks, { type: r.mimeType || type || "audio/webm" }));
+            if (chunks.length) parts.push({ no, blob: new Blob(chunks, { type: r.mimeType || type || "audio/webm" }) });
             pending--;
             if (done && pending === 0) wrapUp();
           };
@@ -243,6 +303,7 @@ export function recordUtterance(
         analyser.smoothingTimeConstant = 0.2;
         ctx.createMediaStreamSource(stream).connect(analyser);
         const bins = new Uint8Array(analyser.frequencyBinCount);
+        const dbBins = new Float32Array(analyser.frequencyBinCount);
         const hz = ctx.sampleRate / analyser.fftSize;
         const lo = Math.max(1, Math.floor(300 / hz));
         const hi = Math.min(bins.length - 1, Math.ceil(3400 / hz));
@@ -250,8 +311,14 @@ export function recordUtterance(
         const started = performance.now();
         // The room's background: its average level and how much it normally wobbles, learnt from
         // the moments nobody is speaking. Speech must rise clearly above both.
-        let noise = -1;
-        let wobble = 2;
+        let noise = opts.background?.noise ?? -1;
+        let wobble = opts.background?.wobble ?? 2;
+        // The speech band's power in decibels, smoothed, and the visitor's average while speaking.
+        let db = -100;
+        // How loud the visitor's speech is as it begins (the loudest moment of its first half second):
+        // compared with how other speech begins, which is like with like.
+        let onsetDb = -Infinity;
+        let spokeAt = 0;
         let level = 0;
         let above = 0;
         let spoke = false;
@@ -266,9 +333,15 @@ export function recordUtterance(
 
         const wrapUp = () => {
           clearInterval(timer);
-          stream.getTracks().forEach((tr) => tr.stop());
+          if (!opts.stream) stream.getTracks().forEach((tr) => tr.stop());
           void ctx.close();
-          resolve(keep && spoke && parts.length ? parts : null);
+          const kept = parts
+            .filter((x) => x.no >= keepFrom)
+            .sort((x, y) => x.no - y.no)
+            .map((x) => x.blob);
+          if (spoke && onsetDb > -Infinity) opts.onSpeechLevel?.(onsetDb);
+          if (noise >= 0) opts.onBackground?.({ noise, wobble });
+          resolve(keep && spoke && kept.length ? kept : null);
         };
         const finish = (k: boolean) => {
           if (done) return;
@@ -281,14 +354,31 @@ export function recordUtterance(
 
         const timer = setInterval(() => {
           analyser.getByteFrequencyData(bins);
+          analyser.getFloatFrequencyData(dbBins);
           let sum = 0;
-          for (let i = lo; i <= hi; i++) sum += bins[i];
+          let power = 0;
+          for (let i = lo; i <= hi; i++) {
+            sum += bins[i];
+            power += 10 ** (dbBins[i] / 10);
+          }
           const energy = sum / (hi - lo + 1);
           level = level * 0.6 + energy * 0.4;
+          db = db * 0.6 + 10 * Math.log10(power / (hi - lo + 1) + 1e-12) * 0.4;
           const now = performance.now();
+          // The first moments of a turn: the analyser is still settling (its level climbs from zero,
+          // which looked like someone starting to speak), so only the background is learnt.
+          if (now - started < WARM_UP_MS) {
+            noise = noise < 0 ? level : opts.background ? noise : noise + (level - noise) * 0.35;
+            opts.onLevel?.(0);
+            return;
+          }
           if (noise < 0) noise = level;
-          const startAt = noise + Math.max(14, wobble * 5);
-          const keepAt = noise + Math.max(8, wobble * 3);
+          const startAt = noise + Math.max(rise, wobble * wobbles);
+          // Still speaking: a softer, farther voice dips lower mid-sentence, so "far" keeps it open longer.
+          const [keepRise, keepWobbles] = { close: [10, 3.5], normal: [8, 3], far: [5, 2.5] }[
+            opts.range ?? "normal"
+          ] ?? [8, 3];
+          const keepAt = noise + Math.max(keepRise, wobble * keepWobbles);
           // Learn the background only from quiet moments: quickly at first, slowly afterwards.
           if (level < keepAt) {
             const rate = now - started < 600 ? 0.25 : 0.04;
@@ -311,17 +401,30 @@ export function recordUtterance(
           opts.onLevel?.(Math.max(0, Math.min(1, (level - noise) / 60)));
 
           if (!spoke) {
-            // About 120 ms of clear speech starts the turn; a click or a bump does not.
-            above = level > startAt ? above + 1 : 0;
-            if (above >= 3) {
+            // About 120 ms of clear speech starts the turn (longer when cutting in); a click does not.
+            // Clearly above the background, and (later in a call) not much quieter than the visitor.
+            const loudEnough = opts.voiceDb === undefined || db > opts.voiceDb - 10;
+            above = level > startAt && loudEnough ? above + 1 : 0;
+            if (above >= ticks) {
               spoke = true;
+              spokeAt = now;
+              onsetDb = db;
               lastVoice = now;
+              // Cutting in: keep this part and, if it only just began, the one before it.
+              if (opts.bargeIn) keepFrom = now - partStart < 600 ? partNo - 1 : partNo;
               opts.onSpeech?.();
             } else if (now - started > waitMs) return finish(false);
+            else if (opts.bargeIn && now - partStart > 1500) {
+              // While waiting, start a fresh part every 1.5 s, so little of the assistant's voice is kept.
+              recorder.stop();
+              startPart();
+            }
             return;
           }
+          if (now - spokeAt < 500) onsetDb = Math.max(onsetDb, db);
           if (level > startAt) {
             speech = speech ? speech * 0.9 + level * 0.1 : level;
+
             lastClear = now;
           }
           // Still speaking: above the background, and not far below their own voice. A room that got
@@ -353,20 +456,25 @@ export function recordUtterance(
 }
 
 /** Sends the recording (all its parts, in order) to the server (Sarvam) and returns the words. */
-export async function transcribe(audio: Blob | Blob[], lang: string): Promise<string> {
-  const parts = Array.isArray(audio) ? audio : [audio];
-  const words: string[] = [];
-  for (const part of parts) {
-    if (part.size < 800) continue;
-    const form = new FormData();
-    form.set("audio", part, "speech");
-    form.set("language", lang);
-    const res = await fetch("/api/voice/stt/", { method: "POST", body: form });
-    const data = (await res.json().catch(() => ({}))) as { text?: string; error?: string };
-    if (!res.ok) throw new Error(data.error ?? "Speech recognition failed.");
-    if (data.text?.trim()) words.push(data.text.trim());
-  }
-  return words.join(" ");
+/** What the visitor said, and the language Sarvam heard it in (our code, e.g. "or-IN"), if it said. */
+export type Heard = { text: string; language: string | null };
+
+export async function transcribe(audio: Blob | Blob[], lang: string): Promise<Heard> {
+  const parts = (Array.isArray(audio) ? audio : [audio]).filter((part) => part.size >= 800);
+  // All parts at once (a long answer, or the second before the visitor cut in), joined in order.
+  const heard = await Promise.all(
+    parts.map(async (part) => {
+      const form = new FormData();
+      form.set("audio", part, "speech");
+      form.set("language", lang);
+      const res = await fetch("/api/voice/stt/", { method: "POST", body: form });
+      const data = (await res.json().catch(() => ({}))) as { text?: string; language?: string | null; error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Speech recognition failed.");
+      return { text: data.text?.trim() ?? "", language: data.language ?? null };
+    }),
+  );
+  const said = heard.filter((h) => h.text);
+  return { text: said.map((h) => h.text).join(" "), language: said.findLast((h) => h.language)?.language ?? null };
 }
 
 /** A reply split into pieces of a sentence or two, so the first one can play at once. */
@@ -419,7 +527,12 @@ export class ServerSpeaker {
         const res = await fetch("/api/voice/tts/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: piece, language: lang, voice: opts.voice, pace: opts.pace }),
+          body: JSON.stringify({
+            text: piece,
+            language: languageOfText(piece, lang),
+            voice: opts.voice,
+            pace: opts.pace,
+          }),
           signal: controller.signal,
         });
         return res.ok ? URL.createObjectURL(await res.blob()) : null;
@@ -437,7 +550,8 @@ export class ServerSpeaker {
       }
       next = i + 1 < pieces.length ? fetchPiece(pieces[i + 1]) : null;
       if (url) await this.play(url);
-      else if (canSpeak()) await new Promise<void>((resolve) => speak(pieces[i], lang, resolve));
+      else if (canSpeak())
+        await new Promise<void>((resolve) => speak(pieces[i], languageOfText(pieces[i], lang), resolve));
       if (!live()) break;
     }
     next?.then((u) => u && URL.revokeObjectURL(u));
@@ -489,6 +603,8 @@ export class StreamSpeaker {
   private generation = 0;
   private audio: HTMLAudioElement | null = null;
   private controller = new AbortController();
+  /** Audio already asked for, by sentence: fetched the moment a sentence is complete. */
+  private early = new Map<string, Promise<string | null>>();
   private finish: () => void = () => {};
   readonly done: Promise<void>;
 
@@ -513,6 +629,17 @@ export class StreamSpeaker {
       this.queue.push(sentence);
       this.buffer = this.buffer.slice(sentence.length);
     }
+    // The very first words go as soon as there is a phrase, at a comma, rather than a whole sentence,
+    // so the visitor hears the answer begin sooner.
+    if (!this.started && !this.queue.length && this.buffer.length >= 60) {
+      const at = this.buffer.slice(25).search(/[,;:]\s/);
+      if (at >= 0) {
+        const cut = 25 + at + 1;
+        this.queue.push(this.buffer.slice(0, cut));
+        this.buffer = this.buffer.slice(cut);
+      }
+    }
+    this.fetchEarly();
     void this.pump();
   }
 
@@ -520,6 +647,7 @@ export class StreamSpeaker {
     if (this.buffer.trim()) this.queue.push(this.buffer);
     this.buffer = "";
     this.ended = true;
+    this.fetchEarly();
     void this.pump();
   }
 
@@ -546,14 +674,27 @@ export class StreamSpeaker {
     this.controller.abort();
     this.audio?.pause();
     this.audio = null;
+    // Audio fetched for sentences that will not be spoken now.
+    for (const url of this.early.values()) void url.then((u) => u && URL.revokeObjectURL(u));
+    this.early.clear();
     if (!this.server) stopSpeaking();
+  }
+
+  /** Starts fetching the audio of every queued sentence not asked for yet (server voice). */
+  private fetchEarly() {
+    if (!this.server || this.stopped) return;
+    for (const raw of this.queue) {
+      const text = speakable(raw);
+      if (text && !this.early.has(text)) this.early.set(text, this.fetchAudio(text));
+    }
   }
 
   private fetchAudio(text: string): Promise<string | null> {
     return fetch("/api/voice/tts/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text.slice(0, 780), language: this.lang }),
+      // Each piece in the language it is written in (the reply may have switched to Odia, say).
+      body: JSON.stringify({ text: text.slice(0, 780), language: languageOfText(text, this.lang) }),
       signal: this.controller.signal,
     })
       .then(async (res) => (res.ok ? URL.createObjectURL(await res.blob()) : null))
@@ -565,7 +706,6 @@ export class StreamSpeaker {
     this.busy = true;
     const mine = this.generation;
     const live = () => mine === this.generation && !this.stopped;
-    let prefetched: { text: string; url: Promise<string | null> } | null = null;
     while (live() && this.queue.length) {
       const text = speakable(this.queue.shift() ?? "");
       if (!text) continue;
@@ -574,15 +714,13 @@ export class StreamSpeaker {
         this.onStart?.();
       }
       if (this.server) {
-        const url = prefetched && prefetched.text === text ? await prefetched.url : await this.fetchAudio(text);
-        prefetched = null;
-        const nextText = this.queue[0] ? speakable(this.queue[0]) : "";
-        if (nextText) prefetched = { text: nextText, url: this.fetchAudio(nextText) };
+        const url = await (this.early.get(text) ?? this.fetchAudio(text));
+        this.early.delete(text);
         if (!live()) break;
         if (url) await this.play(url);
-        else if (canSpeak()) await new Promise<void>((r) => speak(text, this.lang, r));
+        else if (canSpeak()) await new Promise<void>((r) => speak(text, languageOfText(text, this.lang), r));
       } else if (canSpeak()) {
-        await new Promise<void>((r) => speak(text, this.lang, r));
+        await new Promise<void>((r) => speak(text, languageOfText(text, this.lang), r));
       }
     }
     // A halted loop leaves the speaker to whatever started after it.

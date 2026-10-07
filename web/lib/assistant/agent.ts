@@ -4,7 +4,7 @@ import { complete, streamComplete, type LlmMessage } from "./llm";
 import type { Turn } from "./conversation";
 import type { AgentState } from "./knowledge";
 import { extract } from "./extract";
-import { aboutLeadership, addLinks } from "./links";
+import { aboutLeadership, addLinks, withoutAddresses } from "./links";
 import { TOOL_SPECS, missing, runTool, saveLead, submitApplication, type ToolContext, type UiAction } from "./tools";
 
 /**
@@ -29,9 +29,14 @@ export async function runAgent(input: {
   onText?: (delta: string) => void;
   onReplace?: (text: string) => void;
   channel?: "text" | "voice";
+  /** Stops the answer part-way, when the visitor cuts in (voice conversation). */
+  signal?: AbortSignal;
+  /** The visitor's language is translated to and from English by the caller: answer in English. */
+  translated?: boolean;
 }): Promise<{ text: string; actions: UiAction[]; model: string; tokensIn: number; tokensOut: number }> {
   const a = input.settings.assistant;
   const st = input.ctx.state;
+  const languageBefore = st.preferredLanguage;
   const actions: UiAction[] = [];
   const t0 = Date.now();
 
@@ -53,10 +58,19 @@ export async function runAgent(input: {
   /** Applies the notes and takes the saving decisions. Returns true when the turn must be refused outright. */
   const applyNotes = async (): Promise<boolean> => {
     const ex = await extraction;
+    // "Talk to me in Odia": kept for the rest of the conversation, until they ask for another.
+    if (ex.preferredLanguage) st.preferredLanguage = ex.preferredLanguage;
     if (ex.purpose && !(st.purpose === "job" && ex.purpose === "sales" && st.openingId)) st.purpose = ex.purpose;
     st.offTopic = undefined;
     // Questions about the company's leadership and team are always in scope (lib/assistant/links.ts).
-    if (a.guardrailsEnabled && !ex.onTopic && !aboutLeadership(input.message, input.ctx.index)) {
+    // Asking to change language ("speak English now") is always in scope too.
+    if (
+      a.guardrailsEnabled &&
+      !ex.onTopic &&
+      !ex.preferredLanguage &&
+      !st.languageSwitch &&
+      !aboutLeadership(input.message, input.ctx.index)
+    ) {
       st.offTopic = ex.offTopicReason || "outside what In2IT EBS helps with";
       st.offTopicCount = (st.offTopicCount ?? 0) + 1;
       console.info(JSON.stringify({ event: "assistant_off_topic", count: st.offTopicCount }));
@@ -109,7 +123,15 @@ export async function runAgent(input: {
           ? { role: "user", content: `[Note from the website, not typed by the visitor] ${t.content}` }
           : { role: t.role, content: t.content },
     ),
-    { role: "user", content: input.message },
+    {
+      role: "user",
+      // The visitor asked for a language: a reminder right beside their words (for the model only, not
+      // saved) keeps the answer in it even when they type in English.
+      content:
+        st.preferredLanguage && !input.translated
+          ? `${input.message}\n\n(Reply in ${(ASSISTANT_LANGUAGES[st.preferredLanguage] ?? "English").replace(/ \(.*\)$/, "")}.)`
+          : input.message,
+    },
   ];
   let model = a.model;
   let tokensIn = 0;
@@ -127,6 +149,7 @@ export async function runAgent(input: {
         temperature: a.temperature,
         maxTokens: a.thinking ? 2000 : 900,
         thinking: a.thinking,
+        signal: input.signal,
       },
       (delta) => {
         streamed += delta;
@@ -143,6 +166,7 @@ export async function runAgent(input: {
         temperature: a.temperature,
         maxTokens: 900,
         thinking: false,
+        signal: input.signal,
       });
       if (res.message.content?.trim() && !res.message.tool_calls?.length) {
         streamed += res.message.content;
@@ -176,7 +200,18 @@ export async function runAgent(input: {
   // The notes taken while the reply was written.
   if (!sequential && (await applyNotes())) return refused(a.offTopicReply);
   let final = text;
-  if (!sequential && st.offTopic) final = await translate(a.offTopicReply, input.ctx.language, a);
+  // Translated conversations stay in English here; the caller translates the whole answer once.
+  const writeIn = input.translated ? "en-IN" : input.ctx.language;
+  if (!sequential && st.offTopic) final = await translate(a.offTopicReply, writeIn, a);
+  // A request to talk in a language that the model still refused: confirm it plainly, in that language.
+  if (st.languageSwitch && final.includes(a.offTopicReply.slice(0, 40))) {
+    const name = (ASSISTANT_LANGUAGES[st.languageSwitch] ?? "English").replace(/ \(.*\)$/, "");
+    final = await translate(
+      `Of course! I will talk with you in ${name} from now on. How can I help you today?`,
+      input.translated ? "en-IN" : st.languageSwitch,
+      a,
+    );
+  }
   final = await keepHonest(final, input.ctx, actions, st);
   if (!final) final = fallbackText(actions);
   if (final !== text) input.onReplace?.(final);
@@ -185,8 +220,11 @@ export async function runAgent(input: {
     final = addLinks(final, {
       index: input.ctx.index,
       faqs: input.ctx.faqs,
-      question: st.purpose ? undefined : input.message,
+      // No "Read more" for a request to change language: it is not a question about the website.
+      question: st.purpose || st.languageSwitch || st.preferredLanguage !== languageBefore ? undefined : input.message,
     });
+  // Spoken answers carry no links or page addresses, even if the model wrote some.
+  if (input.channel === "voice") final = withoutAddresses(final);
   settleCvButton(actions, final, st);
   console.info(
     JSON.stringify({
@@ -204,8 +242,8 @@ export async function runAgent(input: {
   }
 }
 
-/** The admin's out-of-scope message in the visitor's language (English needs no model call). */
-async function translate(message: string, language: string, a: Settings["assistant"]): Promise<string> {
+/** A fixed message in the visitor's language (English needs no model call). */
+export async function translate(message: string, language: string, a: Settings["assistant"]): Promise<string> {
   if (language === "en-IN") return message;
   try {
     const res = await complete({

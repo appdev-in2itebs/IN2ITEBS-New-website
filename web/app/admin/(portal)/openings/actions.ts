@@ -78,3 +78,27 @@ export async function deleteOpening(form: FormData) {
   }
   redirect("/admin/openings/?saved=1");
 }
+
+/**
+ * The openings ticked in the list, all at once: shown on the website ("open"), taken off it
+ * ("close"), or deleted for good (applications already received keep the role's title).
+ */
+export async function bulkOpenings(form: FormData) {
+  const admin = await requireAdmin("openings");
+  const ids = form.getAll("ids").map(String).filter(isUuid);
+  const action = String(form.get("bulk") ?? "");
+  if (!ids.length) redirect("/admin/openings/?none=1");
+  const db = supabaseAdmin().from("job_openings");
+  if (action === "delete") await db.delete().in("id", ids);
+  else if (action === "open" || action === "close")
+    await db
+      .update({ status: action === "open" ? "open" : "closed", updated_at: new Date().toISOString() })
+      .in("id", ids);
+  else redirect("/admin/openings/");
+  for (const id of ids) {
+    await audit(admin, action === "delete" ? "delete" : action === "open" ? "reopen" : "close", "opening", id);
+    revalidatePath(`/careers/current-openings/${id}/`);
+  }
+  refresh();
+  redirect(`/admin/openings/?saved=${ids.length}`);
+}

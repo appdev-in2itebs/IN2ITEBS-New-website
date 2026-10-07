@@ -145,12 +145,18 @@ html:not([data-motion-ready]) .client-ribbon {
   .cine-slide,
   .cine-focus,
   .cine-item,
-  .cine-dot {
+  .cine-dot,
+  .text-rule,
+  .text-sweep {
     transform: none !important;
     opacity: 1 !important;
     filter: none !important;
     clip-path: none !important;
     transition: none !important;
+  }
+  .text-sweep {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
   }
   .type-caret {
     display: none !important;
@@ -1190,6 +1196,47 @@ html:not([data-motion-ready]) .client-ribbon {
     to {
       transform: translateX(130%);
     }
+  }
+
+  /* ---- Text reveals (the overview text on service, industry and partner pages) ----
+     The gold rule beside the text draws down from the top, the lead paragraph comes into focus word
+     by word (<Words variant="blur">), and the paragraphs after it are unveiled line by line: a soft
+     edge in a mask sweeps down over them, so each line appears as the edge passes. The text is a
+     normal paragraph throughout (selectable, searchable); only what is painted changes. Same
+     visible-first contract as .reveal: nothing is hidden before hydration or with motion reduced. */
+  .text-rule {
+    transform-origin: top;
+  }
+  .reveal[data-reveal="in"] .text-rule {
+    transition: transform 1100ms cubic-bezier(0.16, 0.84, 0.24, 1);
+    transition-delay: calc(var(--reveal-delay, 0ms) + 120ms);
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .text-rule {
+    transform: scaleY(0);
+  }
+  .text-sweep {
+    /* The mask is 2.5× the paragraph's height: its top 40% (opaque) covers the paragraph when shown,
+       its bottom 40% (clear) when hidden, and the soft band between them is the sweeping edge. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 40%, transparent 60%, transparent 100%);
+    -webkit-mask-size: 100% 250%;
+    mask-size: 100% 250%;
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+  .reveal[data-reveal="in"] .text-sweep {
+    transition:
+      -webkit-mask-position 1500ms cubic-bezier(0.45, 0, 0.2, 1),
+      mask-position 1500ms cubic-bezier(0.45, 0, 0.2, 1),
+      transform 1100ms cubic-bezier(0.16, 0.84, 0.24, 1),
+      opacity 700ms ease-out;
+    transition-delay: calc(var(--reveal-delay, 0ms) + var(--sweep-delay, 400ms));
+  }
+  html[data-motion-ready]:not([data-motion-paused="true"]) .reveal:not([data-reveal="in"]) .text-sweep {
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+    transform: translateY(10px);
+    opacity: 0.4;
   }
   /* The YouTube ribbon's scroll-snap track (2026-09-15 17:08): native scrolling with the scrollbar
      hidden, since the arrows and the snap points are the visible affordance. */

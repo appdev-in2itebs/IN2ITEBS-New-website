@@ -33,7 +33,12 @@ const RETRY_BUDGET_MS = 4_000;
  * with jitter so concurrent callers spread out) and tries again, within a small time budget, before
  * the caller moves on to the fallback model.
  */
-async function post(body: Record<string, unknown>, accept: string, timeoutMs: number): Promise<Response> {
+async function post(
+  body: Record<string, unknown>,
+  accept: string,
+  timeoutMs: number,
+  signal?: AbortSignal,
+): Promise<Response> {
   const started = Date.now();
   for (let attempt = 0; ; attempt++) {
     const res = await fetch(endpoint(), {
@@ -44,7 +49,8 @@ async function post(body: Record<string, unknown>, accept: string, timeoutMs: nu
         Accept: accept,
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(timeoutMs),
+      // Stopped early when the caller gives up (a visitor who cut in), or after the time limit.
+      signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(timeoutMs)]) : AbortSignal.timeout(timeoutMs),
     });
     const busy = res.status === 429 || res.status >= 500;
     if (!busy || attempt >= RETRIES) {
@@ -58,7 +64,7 @@ async function post(body: Record<string, unknown>, accept: string, timeoutMs: nu
     const wait =
       Math.min(Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 400 * 2 ** attempt, 2_000) +
       Math.random() * 300;
-    if (Date.now() - started + wait > RETRY_BUDGET_MS) return res;
+    if (Date.now() - started + wait > RETRY_BUDGET_MS || signal?.aborted) return res;
     void res.body?.cancel();
     await new Promise((r) => setTimeout(r, wait));
   }
@@ -74,6 +80,8 @@ export async function complete(input: {
   timeoutMs?: number;
   /** Let a reasoning model think before answering: smarter, slower, and it can run out of tokens. */
   thinking?: boolean;
+  /** Cancels the call, e.g. when the visitor interrupts the answer. */
+  signal?: AbortSignal;
 }): Promise<{
   message: Extract<LlmMessage, { role: "assistant" }>;
   model: string;
@@ -96,6 +104,7 @@ export async function complete(input: {
         },
         "application/json",
         input.timeoutMs ?? 25_000,
+        input.signal,
       );
       if (!res.ok) throw new LlmError(`${model}: HTTP ${res.status}`);
       const data = (await res.json()) as {
@@ -116,6 +125,7 @@ export async function complete(input: {
       };
     } catch (e) {
       last = e;
+      if (input.signal?.aborted) throw e;
     }
   }
   throw last instanceof Error ? last : new LlmError("model unavailable");
@@ -165,6 +175,7 @@ export async function streamComplete(
         },
         "text/event-stream",
         input.timeoutMs ?? 30_000,
+        input.signal,
       );
       if (!res.ok || !res.body) throw new LlmError(`${model}: HTTP ${res.status}`);
       const reader = res.body.getReader();
@@ -239,8 +250,8 @@ export async function streamComplete(
       };
     } catch (e) {
       last = e;
-      // Words already reached the visitor: do not start again on another model.
-      if (wrote) throw e;
+      // Words already reached the visitor, or the call was cancelled: do not start again on another model.
+      if (wrote || input.signal?.aborted) throw e;
     }
   }
   throw last instanceof Error ? last : new LlmError("model unavailable");

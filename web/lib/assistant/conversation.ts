@@ -65,9 +65,18 @@ export async function saveTurn(
   if (!convo.id || !supabaseConfigured()) return;
   const db = supabaseAdmin();
   const now = new Date();
-  const { offTopic: _offTopic, note: _note, ...state } = convo.state;
+  // Per-turn flags are not remembered.
+  const {
+    offTopic: _offTopic,
+    note: _note,
+    interrupted: _interrupted,
+    languageSwitch: _languageSwitch,
+    ...state
+  } = convo.state;
   void _offTopic;
   void _note;
+  void _interrupted;
+  void _languageSwitch;
   await Promise.all([
     db.from("chat_messages").insert([
       { conversation_id: convo.id, role: "user", content: turn.user.slice(0, 4000), created_at: now.toISOString() },

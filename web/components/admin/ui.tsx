@@ -63,14 +63,14 @@ export function Badge({ children }: { children: string }) {
   );
 }
 
-export function Table({ head, children, empty }: { head: string[]; children: ReactNode; empty?: boolean }) {
+export function Table({ head, children, empty }: { head: ReactNode[]; children: ReactNode; empty?: boolean }) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-border-subtle bg-surface">
       <table className="w-full text-left text-sm">
         <thead className="bg-brand text-on-brand">
           <tr>
-            {head.map((h) => (
-              <th key={h} className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">
+            {head.map((h, i) => (
+              <th key={i} className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wider">
                 {h}
               </th>
             ))}

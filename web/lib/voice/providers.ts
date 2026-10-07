@@ -75,4 +75,8 @@ export const SARVAM_VOICES = [
 /** The female voices among them (the rest are male); the website's default is the first, Priya. */
 export const SARVAM_FEMALE_VOICES: readonly string[] = SARVAM_VOICES.slice(0, SARVAM_VOICES.indexOf("aditya"));
 
-export const SARVAM_STT_MODELS = ["saarika:v2.5", "saaras:v3", "saarika:flash"] as const;
+/**
+ * Sarvam's speech recognition models. saaras:v3 is the fastest with the same accuracy (measured
+ * 2026-10-07: about 0.15 s quicker in English, Odia and Tamil). saarika:flash was withdrawn by Sarvam.
+ */
+export const SARVAM_STT_MODELS = ["saaras:v3", "saarika:v2.5"] as const;

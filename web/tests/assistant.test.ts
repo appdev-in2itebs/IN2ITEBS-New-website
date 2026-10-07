@@ -272,3 +272,112 @@ test("testimonial, client and case-study questions link those sections", () => {
   // A service question that mentions clients is not a testimonials question.
   assert.equal(links("Can you help clients in FMCG with SAP?").includes("/case-studies/"), false);
 });
+
+test("the language of a text is read from its script", async () => {
+  const { languageOfText } = await import("../lib/voice/script-language");
+  assert.equal(languageOfText("ଆପଣଙ୍କ ସେବା କଣ?", "en-IN"), "or-IN");
+  assert.equal(languageOfText("आप कौन सी सेवाएं देते हैं?", "en-IN"), "hi-IN");
+  assert.equal(languageOfText("तुम्ही कोणत्या सेवा देता?", "mr-IN"), "mr-IN");
+  assert.equal(languageOfText("நீங்கள் என்ன சேவைகள் வழங்குகிறீர்கள்?", "en-IN"), "ta-IN");
+  assert.equal(languageOfText("What services do you offer?", "hi-IN"), "en-IN");
+  assert.equal(languageOfText("Quels services proposez-vous ?", "fr-FR"), "fr-FR");
+  // Brand names in English inside an Odia reply do not make it English.
+  assert.equal(languageOfText("ଆମେ SAP S/4HANA ସେବା ଦେଉ।", "en-IN"), "or-IN");
+});
+
+test("asking to talk in a language is noted; nonsense is not", () => {
+  assert.equal(parse('{"preferred_language": "or-IN"}', openings).preferredLanguage, "or-IN");
+  assert.equal(parse('{"preferred_language": "klingon"}', openings).preferredLanguage, null);
+  assert.equal(parse('{"purpose": "sales"}', openings).preferredLanguage, null);
+});
+
+test("voice gets a compact prompt; an interruption and a requested language are told to the model", async () => {
+  const { systemPrompt } = await import("../lib/assistant/knowledge");
+  const { applyEdits } = await import("../lib/cms/content");
+  const { defaultSettings } = await import("../lib/cms/settings");
+  const base = {
+    settings: defaultSettings,
+    cms: applyEdits([]),
+    faqs: [],
+    openings: [],
+    language: "or-IN",
+    pageUrl: "/",
+  };
+  const text = systemPrompt({ ...base, state: {}, channel: "text" });
+  const voice = systemPrompt({ ...base, state: { interrupted: true, preferredLanguage: "or-IN" }, channel: "voice" });
+  assert.ok(voice.length < text.length * 0.8, `voice ${voice.length} vs text ${text.length}`);
+  assert.match(voice, /cut in while you were still answering/);
+  assert.match(voice, /Reply in ଓଡ଼ିଆ \(Odia\): the visitor asked you to talk in it/);
+  assert.doesNotMatch(text, /cut in while you were still answering/);
+});
+
+test("spoken answers never read out page addresses", async () => {
+  const { withoutAddresses } = await import("../lib/assistant/links");
+  const { speakable } = await import("../components/chat/voice");
+  const said =
+    "Sudhansu Mishra is our COO. [/about/#leadership] See [Leadership](/about/#leadership) or https://example.com/x (/contact/).";
+  assert.equal(withoutAddresses(said), "Sudhansu Mishra is our COO. See Leadership or.");
+  for (const t of [said, "Visit /contact/ for more."]) assert.doesNotMatch(speakable(t), /\/|https?:/);
+});
+
+test("asking to talk in a language is recognised at once; merely naming one is not", async () => {
+  const { requestedLanguage } = await import("../lib/assistant/language");
+  const asks: [string, string][] = [
+    ["Can you talk in Odia language?", "or-IN"],
+    ["Can you talk to me in Odia?", "or-IN"],
+    ["Odia please", "or-IN"],
+    ["ଓଡ଼ିଆରେ କୁହନ୍ତୁ", "or-IN"],
+    ["Hindi mein baat karo", "hi-IN"],
+    ["reply in hindi", "hi-IN"],
+    ["Please speak in English now.", "en-IN"],
+    ["speak tamil", "ta-IN"],
+    ["I want to talk in English", "en-IN"],
+    ["Can you talk to me in Telugu?", "te-IN"],
+    ["తెలుగులో మాట్లాడండి", "te-IN"],
+    ["Teluguలో మాట్లాడండి", "te-IN"],
+    ["Telugu lo matladandi", "te-IN"],
+    ["தமிழில் பேசுங்கள்", "ta-IN"],
+    ["ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ", "kn-IN"],
+    ["മലയാളത്തിൽ സംസാരിക്കൂ", "ml-IN"],
+    ["বাংলায় কথা বলুন", "bn-IN"],
+    ["ગુજરાતીમાં વાત કરો", "gu-IN"],
+    ["ਪੰਜਾਬੀ ਵਿੱਚ ਗੱਲ ਕਰੋ", "pa-IN"],
+    ["मराठीत बोला", "mr-IN"],
+    ["Odia re kuha", "or-IN"],
+  ];
+  for (const [q, code] of asks) assert.equal(requestedLanguage(q), code, q);
+  for (const q of [
+    "What is Odia?",
+    "Do you have an office in Odisha?",
+    "Who is the COO?",
+    "Is Telugu spoken in Hyderabad?",
+  ])
+    assert.equal(requestedLanguage(q), null, q);
+});
+
+test("English needs no translating first; Odia typed in English letters does", async () => {
+  const { looksEnglish } = await import("../lib/assistant/language");
+  assert.equal(looksEnglish("Who is the COO?"), true);
+  assert.equal(looksEnglish("Can you tell me about your SAP services?"), true);
+  assert.equal(looksEnglish("mote gote application amo office pain koriba ra thila"), false);
+  assert.equal(looksEnglish("ଆପଣମାନେ କେଉଁ ସେବା ଦିଅନ୍ତି?"), false);
+  assert.equal(looksEnglish("Hindi mein baat karo"), false);
+});
+
+test("a workplace office is not a question about where the company's offices are", () => {
+  const index = siteIndex();
+  const links = (q: string) =>
+    [...addLinks("Ok.", { index, faqs: [], question: q }).matchAll(/\]\(([^)]+)\)/g)].map((m) => m[1]);
+  assert.equal(links("I had to do an application for an office.").includes("/#offices"), false);
+  assert.equal(links("Do you have an office in Dubai?")[0], "/#offices");
+  assert.equal(links("Where is your head office?")[0], "/#offices");
+});
+
+test("the voice says the company's name properly in every language", async () => {
+  const { pronounce } = await import("../lib/voice/pronounce");
+  assert.equal(pronounce("Welcome to In2IT EBS.", "en-IN"), "Welcome to Into I-T, E-B-S.");
+  assert.equal(pronounce("I am the In2IT Assistant", "en-IN"), "I am the Into I-T Assistant");
+  assert.equal(pronounce("In2IT EBSକୁ ସ୍ୱାଗତ", "or-IN"), "ଇନ୍-ଟୁ ଆଇ-ଟି, ଇ-ବି-ଏସ୍କୁ ସ୍ୱାଗତ");
+  assert.match(pronounce("IN2ITEBS में स्वागत", "hi-IN"), /^इन-टू आई-टी, ई-बी-एस में/);
+  assert.equal(pronounce("No name here.", "te-IN"), "No name here.");
+});

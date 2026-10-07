@@ -282,7 +282,7 @@ export default async function AssistantPage({
             </div>
             <Field
               label="Pause before the assistant replies (seconds)"
-              hint="How long a visitor may stop talking before their turn ends. Raise it if people get cut off mid-sentence; lower it for quicker replies. 1.5 is a good default; short answers such as yes or a name end sooner."
+              hint="How long a visitor may stop talking before their turn ends. Raise it if people get cut off mid-sentence; lower it for quicker replies. 1.2 is a good default; short answers such as yes or a name end sooner."
             >
               <input
                 type="number"
@@ -294,12 +294,22 @@ export default async function AssistantPage({
                 className={`${input} max-w-28`}
               />
             </Field>
+            <Field
+              label="Microphone range"
+              hint="How far from the microphone visitors can be and still be heard. Close: only clear, nearby speech (noisy offices, shops). Normal: about an arm's length (recommended). Far: softer voices up to about 2 m (quiet rooms, laptops on a desk)."
+            >
+              <select name="micRange" defaultValue={a.micRange} className={`${input} max-w-xs`}>
+                <option value="close">Close (noisy places)</option>
+                <option value="normal">Normal (recommended)</option>
+                <option value="far">Far (quiet rooms)</option>
+              </select>
+            </Field>
             <Field label="Speech recognition model (Sarvam)">
               <select name="sttModel" defaultValue={a.sttModel} className={input}>
                 {SARVAM_STT_MODELS.map((m) => (
                   <option key={m} value={m}>
                     {m}
-                    {m === "saarika:v2.5" ? " (recommended)" : m === "saarika:flash" ? " (fastest)" : ""}
+                    {m === "saaras:v3" ? " (recommended, fastest)" : ""}
                   </option>
                 ))}
               </select>
@@ -309,6 +319,52 @@ export default async function AssistantPage({
               <input type="checkbox" name="voiceMode" defaultChecked={a.voiceMode} className="h-4 w-4" />
               Voice conversation button: talk back and forth hands-free, like a phone call
             </label>
+            <div className="rounded-control border border-border-subtle p-3">
+              <label className="flex items-center gap-2 text-sm font-semibold">
+                <input type="checkbox" name="bargeIn" defaultChecked={a.bargeIn} className="h-4 w-4" />
+                Let visitors interrupt by speaking
+              </label>
+              <p className="mt-1 text-xs text-foreground-muted">
+                Like a real phone call: if the visitor starts talking while the assistant is answering, it stops at once
+                and answers the new question. Works with the Sarvam voice.
+              </p>
+              <Field
+                label="Interruption sensitivity"
+                hint="Low: only clear, louder speech interrupts (best when visitors use loudspeakers). High: even quiet speech interrupts (best with headphones)."
+              >
+                <select name="bargeInSensitivity" defaultValue={a.bargeInSensitivity} className={`${input} max-w-xs`}>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium (recommended)</option>
+                  <option value="high">High</option>
+                </select>
+              </Field>
+            </div>
+            <div className="rounded-control border border-border-subtle p-3">
+              <label className="flex items-center gap-2 text-sm font-semibold">
+                <input type="checkbox" name="autoLanguage" defaultChecked={a.autoLanguage} className="h-4 w-4" />
+                Reply in the visitor&rsquo;s own language
+              </label>
+              <p className="mt-1 text-xs text-foreground-muted">
+                The assistant detects the language the visitor speaks or writes (Odia, Hindi, Tamil, Bengali and the
+                other Indian languages) and replies and speaks in it. If they ask (&ldquo;talk to me in Odia&rdquo;), it
+                switches and stays in that language for the conversation.
+              </p>
+              <label className="mt-3 flex items-center gap-2 text-sm font-semibold">
+                <input
+                  type="checkbox"
+                  name="nativeTranslation"
+                  defaultChecked={a.nativeTranslation}
+                  className="h-4 w-4"
+                />
+                Natural Indian-language replies (Sarvam translation)
+              </label>
+              <p className="mt-1 text-xs text-foreground-muted">
+                For Odia, Hindi, Telugu, Tamil and the other Indian languages, the visitor&rsquo;s message is translated
+                into English for the AI and its answer is translated back by Sarvam, whose models are made for Indian
+                languages. Answers read naturally, and messages typed in English letters (&ldquo;mote gote
+                application&hellip;&rdquo;) are understood. Adds a second or two per answer.
+              </p>
+            </div>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" name="voiceInput" defaultChecked={a.voiceInput} className="h-4 w-4" />
               Microphone: visitors can speak instead of typing

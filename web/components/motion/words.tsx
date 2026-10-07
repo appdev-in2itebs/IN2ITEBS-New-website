@@ -47,11 +47,14 @@ export function Words({
   variant = "rise",
   /** Milliseconds between the first word and the second, before the cap below applies. */
   step = 74,
+  /** The longest the last word waits (ms): a heading arrives at once; a lead paragraph may take a beat. */
+  maxCascade = MAX_CASCADE,
 }: {
   children: string;
   className?: string;
   variant?: WordsVariant;
   step?: number;
+  maxCascade?: number;
 }) {
   // `type` is not a cascade: the whole line is one element, revealed by a clip that steps one
   // character at a time. Nothing is split, so selection, find-in-page and wrapping are untouched —
@@ -92,7 +95,7 @@ export function Words({
   // three-word heading launches in 150ms and a seven-word one in 440ms — the long one then reads
   // as laboured next to the short one. Capping the span and easing the distribution keeps one
   // rhythm across the page: the first word always leads, the last always lands together with it.
-  const last = Math.min(step * (words.length - 1), MAX_CASCADE);
+  const last = Math.min(step * (words.length - 1), maxCascade);
   const delay = (index: number) => (words.length < 2 ? 0 : Math.round(last * (index / (words.length - 1)) ** 0.8));
   return (
     <span className={cn("words", `words-${variant}`, className)}>

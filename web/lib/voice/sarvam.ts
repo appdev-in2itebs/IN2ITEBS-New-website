@@ -94,3 +94,55 @@ export async function sarvamSpeak(input: {
     throw new VoiceError(`text-to-speech HTTP ${res.status}: ${data.error?.message?.slice(0, 200) ?? ""}`);
   return Uint8Array.from(atob(data.audios[0]), (c) => c.charCodeAt(0));
 }
+
+/**
+ * Translation between English and the Indian languages (Sarvam's models are made for them; the chat
+ * model's own Odia, Telugu… reads unnaturally). Messages from the visitor go to English with
+ * mayura:v1, which also detects the language and understands it typed in English letters ("mote gote
+ * application …"); the assistant's English answers go out with sarvam-translate:v1, which writes
+ * fluent text and keeps markdown links working. Returns null when it cannot (the caller falls back).
+ */
+export async function sarvamTranslate(input: {
+  text: string;
+  /** Our language codes ("or-IN"…), or "auto" to detect the visitor's language. */
+  from: string;
+  to: string;
+}): Promise<{ text: string; from: string | null } | null> {
+  const code = (c: string) => (c === "auto" ? "auto" : (SARVAM_LANGUAGES[c] ?? c));
+  const toEnglish = input.to === "en-IN";
+  const limit = toEnglish ? 1000 : 2000;
+  // A long answer goes in paragraphs (each within the model's limit), translated side by side.
+  const pieces = input.text.length <= limit ? [input.text] : input.text.split(/\n{2,}/);
+  if (pieces.some((p) => p.length > limit)) return null;
+  try {
+    const out = await Promise.all(
+      pieces.map(async (piece) => {
+        if (!piece.trim()) return { text: piece, from: null as string | null };
+        const body = JSON.stringify({
+          input: piece,
+          source_language_code: code(input.from),
+          target_language_code: code(input.to),
+          model: toEnglish ? "mayura:v1" : "sarvam-translate:v1",
+        });
+        const res = await sarvamFetch("/translate", () => ({
+          method: "POST",
+          headers: { "api-subscription-key": process.env.SARVAM_API_KEY ?? "", "Content-Type": "application/json" },
+          body,
+        }));
+        const data = (await res.json().catch(() => ({}))) as {
+          translated_text?: string;
+          source_language_code?: string;
+        };
+        if (!res.ok || !data.translated_text) throw new VoiceError(`translate HTTP ${res.status}`);
+        const from = data.source_language_code
+          ? (Object.entries(SARVAM_LANGUAGES).find(([, v]) => v === data.source_language_code)?.[0] ?? null)
+          : null;
+        return { text: data.translated_text, from };
+      }),
+    );
+    return { text: out.map((o) => o.text).join("\n\n"), from: out.find((o) => o.from)?.from ?? null };
+  } catch (e) {
+    console.warn(JSON.stringify({ event: "translate_failed", error: e instanceof Error ? e.message : "error" }));
+    return null;
+  }
+}

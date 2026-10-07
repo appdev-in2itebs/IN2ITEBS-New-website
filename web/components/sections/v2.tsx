@@ -8,7 +8,7 @@ import { Words } from "@/components/motion/words";
 import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { heroOverride, overrideMedia } from "./hero-override";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 export { V2Card, V2Bento, type BentoItem } from "./v2-cards";
 
@@ -179,19 +179,31 @@ export function V2Overview({
             ) : null}
             {children}
           </Reveal>
-          <Reveal delay={0.08} className="lg:col-span-7">
-            <div className="relative border-l-2 border-gold/60 pl-6 md:pl-8">
-              {paragraphs.map((paragraph, index) => (
-                <p
-                  key={paragraph}
-                  className={cn(
-                    "max-w-[70ch] leading-relaxed text-foreground-muted",
-                    index === 0 ? "text-lg font-medium text-foreground md:text-xl" : "mt-5 text-base",
-                  )}
-                >
-                  {paragraph}
-                </p>
-              ))}
+          {/* The text arrives as you scroll to it: the gold rule draws down, the lead paragraph comes into
+              focus word by word, and the rest are unveiled line by line (globals.css, "Text reveals"). */}
+          <Reveal delay={0.08} className="text-reveal lg:col-span-7">
+            <div className="relative pl-6 md:pl-8">
+              <span aria-hidden className="text-rule absolute inset-y-0 left-0 w-0.5 bg-gold/60" />
+              {paragraphs.map((paragraph, index) =>
+                index === 0 ? (
+                  <p
+                    key={paragraph}
+                    className="max-w-[70ch] text-lg font-medium leading-relaxed text-foreground md:text-xl"
+                  >
+                    <Words variant="blur" step={22} maxCascade={900}>
+                      {paragraph}
+                    </Words>
+                  </p>
+                ) : (
+                  <p
+                    key={paragraph}
+                    style={{ "--sweep-delay": `${500 + index * 220}ms` } as CSSProperties}
+                    className="text-sweep mt-5 max-w-[70ch] text-base leading-relaxed text-foreground-muted"
+                  >
+                    {paragraph}
+                  </p>
+                ),
+              )}
             </div>
           </Reveal>
         </div>

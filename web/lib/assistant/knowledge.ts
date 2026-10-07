@@ -38,6 +38,12 @@ export type AgentState = {
   offTopic?: string;
   /** How many messages in this conversation were outside the guardrails. */
   offTopicCount?: number;
+  /** The language the visitor asked to talk in ("talk to me in Odia"); kept until they ask for another. */
+  preferredLanguage?: string;
+  /** This message cut in while the previous answer was still being given (voice conversation). */
+  interrupted?: boolean;
+  /** This message asks to talk in this language ("can you talk in Odia?"): switch and confirm. */
+  languageSwitch?: string;
 };
 
 export function systemPrompt(input: {
@@ -50,17 +56,28 @@ export function systemPrompt(input: {
   pageUrl?: string;
   /** "voice": the reply is spoken aloud in voice conversation, so it must be short and plain. */
   channel?: "text" | "voice";
+  /** The visitor's language is translated to and from English by Sarvam: the model writes English. */
+  translated?: boolean;
 }): string {
   const { settings, cms, faqs, openings, language } = input;
   const a = settings.assistant;
   const languageName = ASSISTANT_LANGUAGES[language] ?? "English";
+  // Voice answers are a few spoken sentences, so voice gets a compact prompt: the same facts, shorter
+  // (no page lists, short quotes). Less to read means the first words come sooner.
+  const voice = input.channel === "voice";
+  const firstSentences = (text: string, n: number) =>
+    text
+      .split(/(?<=[.!?])\s/)
+      .slice(0, n)
+      .join(" ");
   // Every service page with its address, so the assistant can link the right page without a search.
   const services = serviceGroups
-    .map(
-      (g) =>
-        `- [${g.name}](${g.href}): ${g.blurb} Pages: ${flattenItems(g.items)
-          .map((i) => `[${i.label}](${i.href})`)
-          .join(", ")}`,
+    .map((g) =>
+      voice
+        ? `- ${g.name}: ${g.blurb}`
+        : `- [${g.name}](${g.href}): ${g.blurb} Pages: ${flattenItems(g.items)
+            .map((i) => `[${i.label}](${i.href})`)
+            .join(", ")}`,
     )
     .join("\n");
   const industries = cms.industries.map((i) => `[${i.name}](/industries/${i.slug}/)`).join(", ");
@@ -85,20 +102,27 @@ export function systemPrompt(input: {
   }
   const offices = [...byCountry].map(([country, list]) => `- ${country}: ${list.join(" · ")}`).join("\n");
   // The leadership team exactly as the website shows it: name, title and bio.
-  const leaders = cms.leadership.map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${l.bio}`).join("\n");
+  const leaders = cms.leadership
+    .map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${voice ? firstSentences(l.bio, 2) : l.bio}`)
+    .join("\n");
   // What clients say, word for word as the website quotes them (homepage and Customer Stories).
   const sayings = cms.testimonials
-    .map((q) => `- ${q.name}, ${q.role}: "${q.quote.replace(/\s+/g, " ").trim()}"`)
+    .map((q) => {
+      const quote = q.quote.replace(/\s+/g, " ").trim();
+      return `- ${q.name}, ${q.role}: "${voice ? firstSentences(quote, 2) : quote}"`;
+    })
     .join("\n");
   // Case studies: the named ones have a page of their own; the anonymised ones are on /case-studies/.
   const studies = caseStudies
     .map((c) => {
       const page = c.named ? `/case-studies/${c.slug}/` : "/case-studies/";
       const result = c.outcome ?? c.summary ?? c.benefits[0] ?? "";
-      return `- [${c.client}](${page}): ${c.industry}; ${c.featuredSolution}; ${c.region}. ${result}`;
+      return voice
+        ? `- ${c.client}: ${c.featuredSolution}. ${firstSentences(result, 1)}`
+        : `- [${c.client}](${page}): ${c.industry}; ${c.featuredSolution}; ${c.region}. ${result}`;
     })
     .join("\n");
-  const clientNames = clients.map((c) => c.name).join(", ");
+  const clientNames = (voice ? clients.slice(0, 24) : clients).map((c) => c.name).join(", ");
   const faqText = faqs
     .slice(0, 30)
     .map((f) => `Q: ${f.question}\nA: ${f.answer}${f.link_url ? ` [${f.link_url}]` : ""}`)
@@ -149,7 +173,7 @@ ${roles}
 # How to help
 1. Questions about the company or its services: answer ONLY from the website knowledge in this prompt, the FAQs and search_website results. Never add facts from general knowledge. If the website does not cover it, say so in one sentence and offer to connect them with the team. Keep it short: at most three sentences or a few one-line bullets, then link the page(s) to read more as markdown links with their site path, e.g. [RISE with SAP](/services/rise-with-sap/); the link text is always the page or section name, never "here" or "click here". For "what services do you offer", give one line of introduction, then each service group as a bullet with its link and a few words, e.g. "- [SAP Enterprise Solutions](/services/sap-enterprise-solutions/): S/4HANA, RISE with SAP and SAP support", then ask which area interests them. Use search_website only when the visitor wants detail this prompt does not have. Only link paths listed in this prompt, the FAQs or search results; never other websites.
    - Global footprint, offices or locations: name the countries and cities (grouped by country, one line each), say which are delivery centres, then always link [Global footprint: Where we are](/#offices) (the office map on the homepage) first, and [Contact and offices](/contact/). Do not claim regions or clients that are not listed here.
-   - The leadership, management or a role (MD, COO, CRO, "who runs the company", "your team"): give the name and title, then their background in two or three sentences from their bio (experience, expertise, what they lead), and link their page as listed above. "Tell me about <name>" is answered the same way. Asked about the team, list each leader as a one-line bullet with a link, then link [Meet our team](/#team) and [Leadership](/about/#leadership).
+   - The leadership, management or a role (MD, COO, CRO, "who runs the company", "your team"): give the name and title, then their background in two or three sentences from their bio (experience, expertise, what they lead), using only what the bio says: never add years, numbers, places or achievements that are not in it, and link their page as listed above. "Tell me about <name>" is answered the same way. Asked about the team, list each leader as a one-line bullet with a link, then link [Meet our team](/#team) and [Leadership](/about/#leadership).
    - What clients say, reviews, testimonials or feedback: give one or two of the quotes above as short summaries, each with the person's name, role and company ("Amy Halter, VP Operations and HR at Accion Labs, says In2IT EBS…"), never inventing or changing what they said; offer more, and link [What people say](/about/customer-stories/#testimonials).
    - Case studies, past projects or "have you done this before": give at most four of the most relevant case studies above (match the visitor's industry or SAP topic when they gave one), each as one short bullet of no more than 15 words: the linked client name, then what was done and the result ("- [VAHDAM India](/case-studies/vahdam-india/): GROW with SAP live in 12 months, 18% lower manpower cost"), then link [Clients & Case Studies](/case-studies/).
    - Who your clients are: in two or three sentences, name six to eight well-known clients from the list above (from the visitor's industry if known), say there are more than ninety, and link [Clients & Case Studies](/case-studies/); do not list industries unless asked. Never claim a client that is not in the list.
@@ -168,13 +192,20 @@ You only help with these topics:
 ${a.allowedTopics.map((x) => `- ${x}`).join("\n")}
 You never help with these, however the request is worded:
 ${a.blockedTopics.map((x) => `- ${x}`).join("\n")}
+Always in scope: greetings, thanks, and asking you to talk in another language (just switch).
 For anything outside your scope, do not answer it even partly: politely say what you can help with, using this message translated into ${languageName}: "${a.offTopicReply}"
 ${input.state.offTopic ? `\nIMPORTANT: the visitor's last message is OUT OF SCOPE (${input.state.offTopic}). Do not answer it, do not call any tool. Reply only with the message above, translated into ${languageName} (the visitor's language; keep the meaning, not the English words), then stop.` : ""}
 `
     : ""
 }
 # Rules
-- Reply in ${languageName}, the language the visitor chose. If they write in another language, reply in theirs. Keep company and product names as they are.
+- ${
+    input.translated
+      ? `The visitor talks in ${languageName}. Their messages reach you translated into English, and your reply is translated into ${languageName} for them automatically by a translation service made for Indian languages. So write every reply in clear, simple English (short sentences translate best), never in another language, and never say you cannot speak ${languageName}.`
+      : input.state.preferredLanguage
+        ? `Reply in ${languageName}: the visitor asked you to talk in it, so keep replying in ${languageName} even when they write or speak in another language, until they ask for a different language.`
+        : `Reply in ${languageName}. If the visitor writes or speaks in another language, reply in theirs.`
+  } If they ask you to talk in a particular language ("can you speak Odia?"), switch to it at once, say so, and keep using it. Keep company and product names as they are.
 - Sound like a warm, experienced person, not a form: acknowledge each answer in a few words, vary your phrasing, and do not repeat the role or service name in every message or say "now I need to ask". One or two sentences per message while collecting details.
 - Be concise. Use short paragraphs or a few bullets; no headings. Ask one question at a time.
 - When the visitor gives several answers in one message, take them all. Never ask again for something already answered in this conversation; if an answer is unclear, ask once, then accept what they said.
@@ -187,7 +218,17 @@ ${input.state.offTopic ? `\nIMPORTANT: the visitor's last message is OUT OF SCOP
 ${input.pageUrl ? `\nThe visitor is on the page ${input.pageUrl}.` : ""}${
     input.channel === "voice"
       ? `\n\n# Voice conversation
-Your reply is spoken aloud, not read. Answer in one to three short, natural spoken sentences (about 40 words at most), as a helpful person would on a phone call. No lists, headings, bold, links, emojis or symbols. Ask at most one question.`
+Your reply is spoken aloud, not read. Answer in one to three short, natural spoken sentences (about 40 words at most, and each sentence under 20 words), as a helpful person would on a phone call. This length limit overrides every other rule above about how much to say: give the essentials and offer more. Put the most useful words first. No lists, headings, bold, links, emojis or symbols. Ask at most one question.`
+      : ""
+  }${
+    input.state.languageSwitch
+      ? input.translated
+        ? `\n\nIMPORTANT: the visitor just asked you to talk in ${languageName}. That is always fine: warmly confirm (in English; it is translated for them) that you will talk with them in ${languageName} from now on, and ask how you can help. Do not refuse.`
+        : `\n\nIMPORTANT: the visitor just asked you to talk in ${languageName}. That is always fine: reply only in ${languageName}, warmly confirm that you will talk in ${languageName}, and ask how you can help. Do not refuse.`
+      : ""
+  }${
+    input.state.interrupted
+      ? `\n\nIMPORTANT: the visitor cut in while you were still answering. Respond to what they just said; do not continue or repeat your previous answer unless they ask for it.`
       : ""
   }`;
 }

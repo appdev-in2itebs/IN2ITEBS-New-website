@@ -1,4 +1,4 @@
-import type { Settings } from "@/lib/cms/settings";
+import { ASSISTANT_LANGUAGES, type Settings } from "@/lib/cms/settings";
 import type { OpeningRow } from "@/lib/cms/store";
 import { complete } from "./llm";
 import type { AgentState } from "./knowledge";
@@ -23,6 +23,8 @@ export type Extraction = {
   /** False when the message is outside what the assistant may help with (the guardrails). */
   onTopic: boolean;
   offTopicReason: string;
+  /** A language the visitor asked the assistant to use ("talk to me in Odia"), as our code, e.g. "or-IN". */
+  preferredLanguage: string | null;
 };
 
 const EMPTY: Extraction = {
@@ -36,6 +38,7 @@ const EMPTY: Extraction = {
   fitScore: null,
   onTopic: true,
   offTopicReason: "",
+  preferredLanguage: null,
 };
 
 export async function extract(input: {
@@ -63,8 +66,13 @@ export async function extract(input: {
   "declined_cv": true if they say they cannot or will not upload a CV,
   "summary": two lines, in English, summarising only what the visitor actually said (the notes and the conversation); never add anything they did not say,
   "fit_score": ${role ? "0-100, how well the candidate's experience fits the role's requirements" : "null"},
-  "on_topic": ${a.guardrailsEnabled ? `false only if the visitor's reply asks for something outside the allowed topics or inside the blocked topics below (an answer to the assistant's own question, a greeting or thanks is always on topic; a company that wants In2IT EBS to build or run something for it is on topic; a question about In2IT EBS's own leadership or team, such as who the MD, COO or CRO is or a leader's background, is on topic; questions about its clients, testimonials (what clients say), case studies or past projects are on topic; only asking for someone's private details such as a personal phone number, home address, family or salary is off topic)` : "true"},
-  "off_topic_reason": "a few words on why, when on_topic is false"
+  "on_topic": ${a.guardrailsEnabled ? `false only if the visitor's reply asks for something outside the allowed topics or inside the blocked topics below (an answer to the assistant's own question, a greeting or thanks is always on topic; a company that wants In2IT EBS to build or run something for it is on topic; a question about In2IT EBS's own leadership or team, such as who the MD, COO or CRO is or a leader's background, is on topic; questions about its clients, testimonials (what clients say), case studies or past projects are on topic; asking the assistant to talk in another language is on topic; only asking for someone's private details such as a personal phone number, home address, family or salary is off topic)` : "true"},
+  "off_topic_reason": "a few words on why, when on_topic is false",
+  "preferred_language": the code of the language the visitor asks the assistant to talk in (e.g. "can you talk in Odia", "Hindi mein baat karo", "speak English please"), one of ${Object.entries(
+    ASSISTANT_LANGUAGES,
+  )
+    .map(([code, name]) => `${code} = ${name.replace(/ \(.*\)$/, "")}`)
+    .join(", ")}; null if they did not ask to change language
 }
 
 ${a.guardrailsEnabled ? `Allowed topics: ${a.allowedTopics.join(" | ")}\nBlocked topics: ${a.blockedTopics.join(" | ")}\n` : ""}Business enquiry checklist: ${a.leadQuestions.join(" | ")}
@@ -85,7 +93,8 @@ Visitor's reply: """${input.message.slice(0, 2000)}"""`;
       temperature: 0,
       maxTokens: 700,
       thinking: false,
-      timeoutMs: 15_000,
+      // The answer waits for these notes (guardrails, saving), so a stalled call gives up soon.
+      timeoutMs: 8_000,
     });
     return parse(res.message.content ?? "", openings);
   } catch {
@@ -128,5 +137,9 @@ export function parse(text: string, openings: { id: string }[]): Extraction {
     // Only an explicit false blocks a message: a missing or malformed answer lets it through.
     onTopic: raw.on_topic !== false,
     offTopicReason: s(raw.off_topic_reason, 200),
+    preferredLanguage:
+      typeof raw.preferred_language === "string" && raw.preferred_language in ASSISTANT_LANGUAGES
+        ? raw.preferred_language
+        : null,
   };
 }

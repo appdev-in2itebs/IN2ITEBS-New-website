@@ -33,6 +33,10 @@ export async function GET() {
         voiceOutput: assistant.voiceOutput,
         voiceMode: assistant.voiceMode,
         endOfSpeechMs: assistant.endOfSpeechMs,
+        bargeIn: assistant.bargeIn,
+        bargeInSensitivity: assistant.bargeInSensitivity,
+        autoLanguage: assistant.autoLanguage,
+        micRange: assistant.micRange,
         // "server": Sarvam listens and speaks for these languages; everything else uses the browser.
         voice: assistant.voiceProvider === "sarvam" && sarvamConfigured() ? "server" : "browser",
         serverVoiceLanguages: Object.keys(SARVAM_LANGUAGES),

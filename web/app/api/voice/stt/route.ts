@@ -45,12 +45,15 @@ export async function POST(request: Request) {
   try {
     const model = (SARVAM_STT_MODELS as readonly string[]).includes(assistant.sttModel)
       ? assistant.sttModel
-      : "saarika:v2.5";
-    // The chosen language guides recognition; English lets Sarvam detect a switch to another language.
+      : "saaras:v3";
+    // With "Reply in the visitor's own language" on, Sarvam detects the spoken language itself (Odia,
+    // Hindi, Tamil… or English), so a visitor can simply start talking in theirs. Otherwise the chosen
+    // language guides recognition, and English still lets Sarvam notice a switch.
+    const detect = assistant.autoLanguage || !sarvamSupports(language) || language === "en-IN";
     const result = await sarvamTranscribe({
       audio,
       filename: `speech.${ext}`,
-      language: sarvamSupports(language) && language !== "en-IN" ? language : "unknown",
+      language: detect ? "unknown" : language,
       model,
     });
     return json(200, { ok: true, text: result.text, language: result.language });

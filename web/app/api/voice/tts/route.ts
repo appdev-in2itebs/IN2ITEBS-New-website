@@ -3,6 +3,7 @@ import { getSettings, hashIp } from "@/lib/cms/store";
 import { badOrigin, clientAddress, json, rateLimited, readJson } from "@/lib/api-guard";
 import { SARVAM_VOICES } from "@/lib/voice/providers";
 import { getAdmin } from "@/lib/admin/session";
+import { pronounce } from "@/lib/voice/pronounce";
 import { can } from "@/lib/admin/permissions";
 import { VoiceError, sarvamConfigured, sarvamSpeak, sarvamSupports } from "@/lib/voice/sarvam";
 
@@ -44,7 +45,8 @@ export async function POST(request: Request) {
   const pace = preview && parsed.data.pace !== undefined ? parsed.data.pace : assistant.voicePace;
   try {
     const mp3 = await sarvamSpeak({
-      text: parsed.data.text,
+      // The company's name said properly ("Into I-T, E-B-S"), in this language's own script.
+      text: pronounce(parsed.data.text, parsed.data.language),
       language: parsed.data.language,
       voice,
       pace,

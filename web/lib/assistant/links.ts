@@ -46,7 +46,8 @@ export const SECTIONS: { ask: RegExp; links: Page[] }[] = [
     ],
   },
   {
-    ask: /\b(footprint|locations?|located|offices?|branch(es)?|countr(y|ies)|cit(y|ies)|presen(ce|t)|based (in|out of)|operate (in|from)|worldwide|around the world|where (are|is) (you|your|the|in2it)|address|headquarter(s|ed)?|hq|delivery cent(re|er)s?)\b|कहाँ|ऑफिस|कार्यालय/i,
+    // "Offices", "your office", "an office in Dubai"; not a workplace ("an application for our office").
+    ask: /\b(footprint|locations?|located|offices|(your|head|main|regional|registered|corporate|nearest) office|office (in|at|near|address(es)?|locations?)|branch(es)?|countr(y|ies)|cit(y|ies)|presen(ce|t)|based (in|out of)|operate (in|from)|worldwide|around the world|where (are|is) (you|your|the|in2it)|address|headquarter(s|ed)?|hq|delivery cent(re|er)s?)\b|कहाँ|ऑफिस|कार्यालय/i,
     links: [
       { title: "Global footprint: Where we are (office map)", url: "/#offices" },
       { title: "Global footprint", url: "/about/#footprint" },
@@ -171,4 +172,13 @@ export function addLinks(
     if (best?.url) out = `${out.trimEnd()}\n\nRead more: [${best.title.replace(/ partnership$/, "")}](${best.url})`;
   }
   return out;
+}
+
+/** A spoken answer: links become their words, and bare page addresses and web links go. */
+export function withoutAddresses(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/\s*\[\/[^\]\s]*\]|\s*\(\/[^)\s]*\)|\s*https?:\/\/\S+/gi, "")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
 }

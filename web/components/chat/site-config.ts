@@ -11,6 +11,10 @@ export type SiteConfig = {
     voiceOutput: boolean;
     voiceMode?: boolean;
     endOfSpeechMs?: number;
+    bargeIn?: boolean;
+    bargeInSensitivity?: "low" | "medium" | "high";
+    autoLanguage?: boolean;
+    micRange?: "close" | "normal" | "far";
     voice?: "server" | "browser";
     serverVoiceLanguages?: string[];
   };

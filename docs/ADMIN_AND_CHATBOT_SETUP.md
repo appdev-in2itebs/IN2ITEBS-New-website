@@ -297,6 +297,57 @@ language before you save. More providers (for example ElevenLabs, Azure, or NVID
 through a small relay server) can be added to the same list later.
 
 
+### Languages and greetings
+
+The chat starts in **English** on every new visit. When it opens, the greeting (Admin → Chatbot) is
+read aloud too, unless the visitor muted the voice. A visitor can switch language at any time, by the
+language menu, by typing or by saying it ("talk in Odia", "Telugu please", "తెలుగులో మాట్లాడండి",
+"Hindi mein baat karo"); the chat then answers and speaks in that language for the rest of the
+visit. **Voice conversation speaks first**: "Hi! Shall we talk in English, or would you prefer Hindi,
+Odia, Tamil or another language?" (the languages named come from the website's list and those the
+Sarvam voice can speak), and carries on in whichever the visitor answers.
+
+**Natural Indian-language replies** (Admin → AI assistant → Voice, on by default; needs the
+Sarvam key). The AI model writes excellent English but clumsy Odia, Telugu and the like. With this on,
+for the 10 Indian languages Sarvam supports, the visitor's message is translated into English by
+Sarvam (it also understands a language typed in English letters, e.g. "mote gote application …"),
+the AI answers in English with all its website knowledge, and Sarvam translates the answer back into
+fluent Odia, Hindi, Telugu… (links keep working). It adds about 2–3 seconds per answer in those
+languages; English conversations are unaffected.
+
+### Talking like a real phone call
+
+**Admin → AI assistant → Voice** has two switches for voice conversation:
+
+- **Let visitors interrupt by speaking** (off by default: in offices with background talk it stopped
+  answers nobody meant to interrupt). When on, while the assistant is thinking or talking, the microphone
+  stays open. As soon as the visitor speaks, it stops mid-sentence, drops the rest of its answer and
+  answers what they just said. Only the part it actually said is kept in the transcript.
+  **Interruption sensitivity**: *Low* needs clear, louder speech (best when visitors use
+  loudspeakers, so the assistant does not "hear itself"); *High* reacts to quieter speech (best with
+  headphones); *Medium* suits most people. Tapping the circle always interrupts too.
+- **Reply in the visitor's own language** (on by default). Sarvam detects the language the visitor speaks (Odia,
+  Hindi, Tamil, Telugu, Kannada, Malayalam, Marathi, Bengali, Gujarati, Punjabi or English). The
+  answer comes back in that language and is spoken in it, and typed messages are followed the same
+  way. If the visitor asks ("can you talk to me in Odia?", "Hindi mein baat karo"), the assistant
+  switches and stays in that language for the conversation, until they ask for another. The chat's
+  language menu follows along.
+
+**Microphone range** (same card): *Close* ignores quieter, farther speech (noisy offices, shops);
+*Normal* (recommended) suits a visitor at their phone or laptop; *Far* lets softer voices start and
+keep a turn going. It sets how loud speech must be to count; it cannot make a voice that is too faint
+understandable. Speech recognition needs the visitor within about a metre for good accuracy, and a
+headset works best everywhere.
+
+**Background noise and other people talking.** The assistant waits until the visitor has finished
+speaking, then answers. It learns the room's background noise when the call starts and keeps it from
+turn to turn, so fans, AC and traffic do not start a turn. After the visitor's first question it also
+knows how loud *they* sound, and speech about 10 dB quieter (colleagues talking a few metres away, a TV)
+is ignored. Noise that still gets through but holds no words is dropped without an answer.
+
+Voice answers use a shorter version of the assistant's instructions and are kept to a few spoken
+sentences, so they start quickly. Spoken answers never read out links or page addresses.
+
 ## 12. Many visitors at once (capacity)
 
 **The website itself scales on its own.** It runs on Cloudflare Workers: every visitor's request is

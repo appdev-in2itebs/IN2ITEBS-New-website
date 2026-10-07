@@ -112,6 +112,17 @@ export function ChatWidget() {
   const [step, setStep] = useState<number | null>(null);
   const [details, setDetails] = useState<Partial<Record<StepKey, string>>>({});
   const [lang, setLang] = useState("en-IN");
+  // The latest values, for code that runs across many renders (voice conversation goes on talking
+  // while the chat re-renders): without these it kept the conversation and language it started with.
+  const conversationRef = useRef<string | null>(null);
+  conversationRef.current = conversationId;
+  const langRef = useRef(lang);
+  langRef.current = lang;
+  const busyRef = useRef(false);
+  /** The visitor picked a language in the menu since their last message: it becomes their choice. */
+  const languagePicked = useRef(false);
+  /** The greeting was just shown and is still to be spoken. */
+  const greetPending = useRef(false);
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   /** Replies are read aloud as they arrive, until the visitor mutes the chat. */
@@ -134,7 +145,7 @@ export function ChatWidget() {
   const mic = ai && Boolean(site?.assistant?.voiceInput) && (serverVoice ? canRecord() : canListen());
   const speaker = ai && Boolean(site?.assistant?.voiceOutput) && (serverVoice || canSpeak());
   const voiceModeAvailable = mic && speaker && site?.assistant?.voiceMode !== false;
-  const endOfSpeech = site?.assistant?.endOfSpeechMs ?? 1500;
+  const endOfSpeech = site?.assistant?.endOfSpeechMs ?? 1200;
 
   /** Which message the Listen button is reading (its button shows Stop), or null. */
   const [reading, setReading] = useState<number | null>(null);
@@ -162,7 +173,8 @@ export function ChatWidget() {
         setConversationId(saved.conversationId ?? null);
       }
       if (localStorage.getItem(MUTE_STORE) === "1") setMuted(true);
-      const l = localStorage.getItem(LANG_STORE);
+      // A language chosen (or asked for) lasts for this visit; a new visit starts in English.
+      const l = sessionStorage.getItem(LANG_STORE);
       if (l) setLang(l);
     } catch {}
   }, []);
@@ -183,8 +195,10 @@ export function ChatWidget() {
       setVoiceModeOn(false);
       return;
     }
-    if (config && messages.length === 0)
+    if (config && messages.length === 0) {
       setMessages([{ from: "bot", text: config.greeting, suggestions: config.quickReplies }]);
+      greetPending.current = true;
+    }
     const t = setTimeout(() => inputRef.current?.focus(), 50);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
@@ -221,6 +235,39 @@ export function ChatWidget() {
     },
     [lang, serverVoice, hush],
   );
+
+  // The greeting, spoken once it is on screen (opening the chat is a click, so the browser allows it).
+  useEffect(() => {
+    if (!open || !greetPending.current || !config || !speaker || muted || voiceModeOn) return;
+    greetPending.current = false;
+    void say(config.greeting, 0);
+  }, [open, config, speaker, muted, voiceModeOn, say]);
+
+  /**
+   * Voice conversation's first words: a greeting that asks whether to carry on in English or another
+   * language (or, when one is already chosen, greets in it). Shown in the chat and spoken; resolves
+   * when it has been said.
+   */
+  const introText = useRef<{ lang: string; text: Promise<string | null> } | null>(null);
+  const fetchIntro = useCallback((language: string) => {
+    introText.current = {
+      lang: language,
+      text: fetch(`/api/voice/intro/?language=${encodeURIComponent(language)}`)
+        .then(async (res) => ((await res.json()) as { text?: string }).text ?? null)
+        .catch(() => null),
+    };
+  }, []);
+  // Ready before the visitor taps the voice button, so the call starts talking at once.
+  useEffect(() => {
+    if (open && site?.assistant?.voiceMode) fetchIntro(lang);
+  }, [open, lang, site, fetchIntro]);
+  const introduce = useCallback(async () => {
+    if (introText.current?.lang !== langRef.current) fetchIntro(langRef.current);
+    const text =
+      (await introText.current?.text) ?? "Hi! Shall we talk in English, or would you prefer another language?";
+    setMessages((all) => [...all, { from: "bot", text }]);
+    await say(text);
+  }, [say, fetchIntro]);
 
   // ---------------------------------------------------------------- the rule-based form (AI off)
 
@@ -280,10 +327,21 @@ export function ChatWidget() {
 
   async function send(
     raw: string,
-    opts: { spoken?: boolean; silent?: boolean; voice?: boolean; onSpeaking?: () => void } = {},
+    opts: {
+      spoken?: boolean;
+      silent?: boolean;
+      voice?: boolean;
+      onSpeaking?: () => void;
+      /** The language speech recognition heard (Sarvam), sent so the reply can follow it. */
+      spokenLanguage?: string | null;
+      /** Cancels the answer part-way: the visitor cut in (voice conversation). */
+      signal?: AbortSignal;
+      /** This message cut in while the previous answer was still being given. */
+      interrupted?: boolean;
+    } = {},
   ): Promise<VoiceReply> {
     const text = raw.trim();
-    if (!text || busy) return null;
+    if (!text || busyRef.current) return null;
     setInput("");
     hush();
     push({ from: "user", text });
@@ -291,6 +349,7 @@ export function ChatWidget() {
       await answerStep(/^skip$/i.test(text) ? "" : text);
       return null;
     }
+    busyRef.current = true;
     setBusy(true);
     // Spoken to, it speaks back (voice conversation always); otherwise only when the speaker is on.
     // Every reply is spoken as it is written, in the admin's voice, unless the visitor muted the
@@ -315,17 +374,23 @@ export function ChatWidget() {
       );
     };
     try {
+      const languageChosen = languagePicked.current;
+      languagePicked.current = false;
       const res = await fetch("/api/chat/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: text,
-          conversationId,
+          conversationId: conversationRef.current,
           pageUrl: location.pathname,
-          language: lang,
+          language: langRef.current,
           channel: opts.voice ? "voice" : "text",
           stream: true,
+          spokenLanguage: opts.spokenLanguage ?? undefined,
+          languageChosen: languageChosen || undefined,
+          interrupted: opts.interrupted || undefined,
         }),
+        signal: opts.signal,
       });
       if (!res.ok || !res.body) {
         const data = await res.json().catch(() => ({}));
@@ -338,7 +403,8 @@ export function ChatWidget() {
       const decoder = new TextDecoder();
       let buffer = "";
       let done: { conversationId?: string | null; reply: Record<string, unknown> } | null = null;
-      for (;;) {
+      // Read until the answer is complete ("done"), not until the server finishes its own work after it.
+      while (!done) {
         const chunk = await reader.read();
         if (chunk.done) break;
         buffer += decoder.decode(chunk.value, { stream: true });
@@ -353,14 +419,18 @@ export function ChatWidget() {
             error?: string;
             conversationId?: string | null;
             reply?: Record<string, unknown>;
+            language?: string;
           };
           try {
             ev = JSON.parse(line);
           } catch {
             continue;
           }
-          if (ev.t === "start" && ev.conversationId) setConversationId(ev.conversationId);
-          else if (ev.t === "delta" && ev.text) {
+          if (ev.t === "start") {
+            if (ev.conversationId) setConversationId(ev.conversationId);
+            // The language this answer is in (the visitor's own, or the one they asked for).
+            if (ev.language) followLanguage(ev.language);
+          } else if (ev.t === "delta" && ev.text) {
             show(shown + ev.text);
             voice?.push(ev.text);
           } else if (ev.t === "replace" && typeof ev.text === "string") {
@@ -370,7 +440,11 @@ export function ChatWidget() {
             voice?.stop();
             push({ from: "bot", text: ev.error ?? "Sorry, something went wrong. Please try again." });
             return null;
-          } else if (ev.t === "done" && ev.reply) done = { conversationId: ev.conversationId, reply: ev.reply };
+          } else if (ev.t === "done" && ev.reply) {
+            done = { conversationId: ev.conversationId, reply: ev.reply };
+            if (ev.language) followLanguage(ev.language);
+            break;
+          }
         }
       }
       if (!done) {
@@ -408,9 +482,15 @@ export function ChatWidget() {
       return { text: r.text, needsCv: actions.some((a) => a.type === "cv_upload"), speech: voice?.done };
     } catch {
       voice?.stop();
+      if (opts.signal?.aborted) {
+        // The visitor cut in: the words shown so far stay, marked as cut off; no error.
+        if (shown) show(`${shown.trimEnd()} …`);
+        return null;
+      }
       push({ from: "bot", text: "I could not reach the server. Please check your connection and try again." });
       return null;
     } finally {
+      busyRef.current = false;
       setBusy(false);
     }
   }
@@ -425,7 +505,7 @@ export function ChatWidget() {
     setListening(true);
     if (serverVoice) {
       // Records until the visitor stops talking, then Sarvam turns it into text.
-      const rec = recordUtterance({ endSilenceMs: endOfSpeech });
+      const rec = recordUtterance({ endSilenceMs: endOfSpeech, range: site?.assistant?.micRange ?? "normal" });
       recording.current = rec;
       rec.result
         .then(async (parts) => {
@@ -433,9 +513,9 @@ export function ChatWidget() {
           setListening(false);
           if (!parts) return push({ from: "bot", text: MIC_ERRORS["no-speech"] });
           setInput("…");
-          const said = await transcribe(parts, lang);
+          const said = await transcribe(parts, langRef.current);
           setInput("");
-          if (said) void send(said, { spoken: true });
+          if (said.text) void send(said.text, { spoken: true, spokenLanguage: said.language });
           else push({ from: "bot", text: MIC_ERRORS["no-speech"] });
         })
         .catch((e: Error) => {
@@ -505,10 +585,21 @@ export function ChatWidget() {
 
   function chooseLanguage(code: string) {
     setLang(code);
+    languagePicked.current = true;
     try {
-      localStorage.setItem(LANG_STORE, code);
+      sessionStorage.setItem(LANG_STORE, code);
     } catch {}
     hush();
+  }
+
+  /** The assistant answered in another language (the visitor's own, or one they asked for): follow it. */
+  function followLanguage(code: string) {
+    if (code === langRef.current || !languages.some((l) => l.code === code)) return;
+    langRef.current = code;
+    setLang(code);
+    try {
+      sessionStorage.setItem(LANG_STORE, code);
+    } catch {}
   }
 
   if (!config) return null;
@@ -543,8 +634,12 @@ export function ChatWidget() {
               serverVoice={serverVoice}
               endSilenceMs={endOfSpeech}
               name={config.name}
-              ask={(text, onSpeaking) => send(text, { spoken: true, voice: true, onSpeaking })}
+              bargeIn={site?.assistant?.bargeIn === true}
+              bargeInSensitivity={site?.assistant?.bargeInSensitivity ?? "medium"}
+              micRange={site?.assistant?.micRange ?? "normal"}
+              ask={(text, onSpeaking, more) => send(text, { spoken: true, voice: true, onSpeaking, ...more })}
               stopSpeaking={hush}
+              introduce={introduce}
               onClose={(note) => {
                 setVoiceModeOn(false);
                 hush();

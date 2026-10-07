@@ -153,13 +153,37 @@ export const assistantSchema = z.object({
   /** Sarvam's speaker for replies (bulbul:v3). */
   voiceName: z.string().trim().min(2).max(40).default("priya"),
   /** Sarvam's speech recognition model. */
-  sttModel: z.string().trim().min(3).max(40).default("saarika:v2.5"),
+  sttModel: z.string().trim().min(3).max(40).default("saaras:v3"),
   /** Speaking speed, 0.8 (slower) to 1.3 (faster). */
   voicePace: z.number().min(0.8).max(1.3).default(1),
   /** How long the visitor may pause before their turn ends (ms): longer lets people think mid-sentence. */
-  endOfSpeechMs: z.number().int().min(1000).max(4000).default(1500),
+  endOfSpeechMs: z.number().int().min(1000).max(4000).default(1200),
   /** The hands-free voice conversation button (talk back and forth, like a phone call). */
   voiceMode: z.boolean().default(true),
+  /**
+   * Voice conversation: the visitor can cut in by speaking while the assistant is answering. Off by
+   * default (2026-10-07): in rooms with background talk or speakers it stopped answers that nobody
+   * meant to interrupt. Off, the assistant finishes its answer and then listens; tapping interrupts.
+   */
+  bargeIn: z.boolean().default(false),
+  /** How readily speech counts as cutting in: "low" needs clear, louder speech (best on loudspeakers). */
+  bargeInSensitivity: z.enum(["low", "medium", "high"]).default("medium"),
+  /**
+   * How far from the microphone a visitor may be and still be heard: "close" ignores quieter, farther
+   * speech (noisy places); "far" picks up softer voices about 2 m away (quiet rooms, laptops).
+   */
+  micRange: z.enum(["close", "normal", "far"]).default("normal"),
+  /**
+   * Replies in the language the visitor speaks or writes (Odia, Hindi, Tamil…), detected
+   * automatically, and switches when they ask ("talk to me in Odia"); the voice follows.
+   */
+  autoLanguage: z.boolean().default(true),
+  /**
+   * Indian languages are translated by Sarvam: the visitor's message into English for the model, and
+   * the model's English answer into their language. Far more natural than the model writing Odia,
+   * Telugu… itself, and it understands them typed in English letters. Needs SARVAM_API_KEY.
+   */
+  nativeTranslation: z.boolean().default(true),
 });
 
 export const settingSchemas = {

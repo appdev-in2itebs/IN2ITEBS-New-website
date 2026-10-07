@@ -8,6 +8,9 @@ import { systemPrompt } from "@/lib/assistant/knowledge";
 import { runAgent } from "@/lib/assistant/agent";
 import { chatContext } from "@/lib/assistant/context";
 import { loadConversation, saveTurn } from "@/lib/assistant/conversation";
+import { languageOfText } from "@/lib/voice/script-language";
+import { looksEnglish, requestedLanguage } from "@/lib/assistant/language";
+import { sarvamConfigured, sarvamSupports, sarvamTranslate } from "@/lib/voice/sarvam";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,16 +24,22 @@ const body = z.object({
   channel: z.enum(["text", "voice"]).optional(),
   /** Stream the reply as it is written (newline-delimited JSON events). */
   stream: z.boolean().optional(),
+  /** The language speech recognition heard the message in (voice), e.g. "or-IN". */
+  spokenLanguage: z.string().max(10).nullish(),
+  /** The visitor picked the language in the chat's menu since their last message. */
+  languageChosen: z.boolean().optional(),
+  /** This message cut in while the previous answer was still being given (voice conversation). */
+  interrupted: z.boolean().optional(),
 });
 
 /** Most messages one conversation may have before the visitor is pointed to email instead. */
 const MAX_MESSAGES = 120;
 
 type Event =
-  | { t: "start"; conversationId: string | null }
+  | { t: "start"; conversationId: string | null; language?: string }
   | { t: "delta"; text: string }
   | { t: "replace"; text: string }
-  | { t: "done"; conversationId: string | null; reply: unknown }
+  | { t: "done"; conversationId: string | null; reply: unknown; language?: string }
   | { t: "error"; error: string };
 
 /**
@@ -52,6 +61,10 @@ export async function POST(request: Request) {
   const language = input.language && input.language in ASSISTANT_LANGUAGES ? input.language : "en-IN";
   const userAgent = request.headers.get("user-agent")?.slice(0, 300) ?? null;
 
+  // Stops the answer when the visitor goes away mid-answer (they cut in by voice, or closed the chat).
+  const stop = new AbortController();
+  request.signal?.addEventListener("abort", () => stop.abort());
+
   const turn = async (emit: (e: Event) => void) => {
     const [ctx, convoOrNull] = await Promise.all([
       chatContext(),
@@ -70,7 +83,38 @@ export async function POST(request: Request) {
           t: "error",
           error: `This conversation is very long. Please email ${settings.contact.email} and our team will help.`,
         });
-      emit({ t: "start", conversationId: convo.id });
+      // The reply's language: one the visitor asked for ("talk to me in Odia", or picked in the menu)
+      // wins; otherwise, with "Reply in the visitor's own language" on, the language of this message
+      // (its script; speech recognition tells Hindi from Marathi); otherwise the menu's language.
+      const st = convo.state;
+      if (input.languageChosen) st.preferredLanguage = language;
+      // "Can you talk in Odia?": switch now, so this very reply is written and spoken in Odia.
+      const asked = settings.assistant.autoLanguage ? requestedLanguage(input.message) : null;
+      if (asked) st.preferredLanguage = asked;
+      st.languageSwitch = asked ?? undefined;
+      let replyLanguage = language;
+      if (settings.assistant.autoLanguage) {
+        const written = languageOfText(input.message, language);
+        const heard = input.spokenLanguage && input.spokenLanguage in ASSISTANT_LANGUAGES ? input.spokenLanguage : null;
+        const ofMessage = heard && /^(hi|mr)-IN$/.test(written) && /^(hi|mr)-IN$/.test(heard) ? heard : written;
+        replyLanguage = st.preferredLanguage ?? ofMessage;
+      }
+      st.interrupted = Boolean(input.interrupted);
+      emit({ t: "start", conversationId: convo.id, language: replyLanguage });
+      let partial = "";
+      // An Indian language: Sarvam translates the visitor's message into English for the model and the
+      // model's English answer back, which reads far more naturally than the model's own Odia, Telugu…
+      // and understands messages typed in English letters ("mote gote application …").
+      const translated =
+        settings.assistant.nativeTranslation &&
+        sarvamConfigured() &&
+        replyLanguage !== "en-IN" &&
+        sarvamSupports(replyLanguage);
+      let modelMessage = input.message;
+      if (translated && !looksEnglish(input.message)) {
+        const english = await sarvamTranslate({ text: input.message, from: "auto", to: "en-IN" });
+        if (english?.text.trim()) modelMessage = english.text;
+      }
       try {
         const result = await runAgent({
           settings,
@@ -80,16 +124,17 @@ export async function POST(request: Request) {
               cms,
               faqs,
               openings,
-              language,
+              language: replyLanguage,
               state: s,
               pageUrl: input.pageUrl,
               channel: input.channel,
+              translated,
             }),
           history: convo.history,
-          message: input.message,
+          message: modelMessage,
           ctx: {
             conversationId: convo.id,
-            language,
+            language: replyLanguage,
             state: convo.state,
             index,
             faqs,
@@ -98,8 +143,31 @@ export async function POST(request: Request) {
             userAgent,
           },
           channel: input.channel,
-          onText: (text) => emit({ t: "delta", text }),
-          onReplace: (text) => emit({ t: "replace", text }),
+          // A translated answer is shown once it is translated, not word by word in English.
+          onText: (text) => {
+            partial += text;
+            if (!translated) emit({ t: "delta", text });
+          },
+          onReplace: (text) => {
+            partial = text;
+            if (!translated) emit({ t: "replace", text });
+          },
+          signal: stop.signal,
+          translated,
+        });
+        if (translated) {
+          const out = await sarvamTranslate({ text: result.text, from: "en-IN", to: replyLanguage });
+          if (out?.text.trim()) result.text = out.text;
+          emit({ t: "delta", text: result.text });
+        }
+        // The visitor gets the answer first; the transcript is saved after, so a slow database
+        // never keeps them waiting (the stream stays open until the save is done).
+        emit({
+          t: "done",
+          conversationId: convo.id,
+          reply: { text: result.text, actions: result.actions, ai: true },
+          // The conversation's language from now on (it changes when the visitor asks for another).
+          language: convo.state.preferredLanguage ?? replyLanguage,
         });
         await saveTurn(
           convo,
@@ -110,14 +178,23 @@ export async function POST(request: Request) {
             tokensIn: result.tokensIn,
             tokensOut: result.tokensOut,
           },
-          { language, purpose: convo.state.purpose ?? null },
+          { language: replyLanguage, purpose: convo.state.purpose ?? null },
+        ).catch((e) =>
+          console.error(
+            JSON.stringify({ event: "save_turn_failed", error: e instanceof Error ? e.message : "unknown" }),
+          ),
         );
-        return emit({
-          t: "done",
-          conversationId: convo.id,
-          reply: { text: result.text, actions: result.actions, ai: true },
-        });
+        return;
       } catch (e) {
+        if (stop.signal.aborted) {
+          // Cut off by the visitor: keep what was said so far, so the next answer knows.
+          await saveTurn(
+            convo,
+            { user: input.message, assistant: `${partial.trim()} …`.trim(), model: settings.assistant.model },
+            { language: replyLanguage, purpose: convo.state.purpose ?? null },
+          ).catch(() => {});
+          return;
+        }
         console.error(JSON.stringify({ event: "assistant_failed", error: e instanceof Error ? e.message : "unknown" }));
         // The model is unreachable: answer from the FAQs instead of failing the visitor.
       }
@@ -145,7 +222,8 @@ export async function POST(request: Request) {
     const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
     const writer = writable.getWriter();
     const encoder = new TextEncoder();
-    const emit = (e: Event) => void writer.write(encoder.encode(`${JSON.stringify(e)}\n`)).catch(() => {});
+    // When the visitor goes away, writing fails: stop the model too.
+    const emit = (e: Event) => void writer.write(encoder.encode(`${JSON.stringify(e)}\n`)).catch(() => stop.abort());
     void turn(emit)
       .catch(() => emit({ t: "error", error: "Sorry, something went wrong. Please try again." }))
       .finally(() => void writer.close().catch(() => {}));
