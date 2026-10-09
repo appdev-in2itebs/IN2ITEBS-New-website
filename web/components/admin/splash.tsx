@@ -106,11 +106,12 @@ function buildScene() {
       .replace("START", `${cx.toFixed(1)} ${cy.toFixed(1)}`)
       .replace("END", `${cx.toFixed(1)} ${cy.toFixed(1)}`);
     const p = piece(MARK[0], MARK[1], MARK[2], MARK[3], `splash-shard ${sh.k}`, {
-      /* path() coordinates are relative to the element's own box, so the box sits at the stage origin
-         and the offset path places the shard's centroid (its transform-origin) on the orbit. */
-      left: 0,
-      top: 0,
+      /* The inline left/top is the shard's natural place in the mark (the fallback for browsers
+         without CSS Motion Path). Where offset-path is supported, admin.css parks the box at the
+         stage origin, because path() coordinates are relative to the element's own box, and the
+         path then places the shard's centroid (its transform-origin) on the orbit. */
       clipPath: sh.clip,
+      WebkitClipPath: sh.clip,
       transformOrigin: `${sh.centroid[0] * 100}% ${sh.centroid[1] * 100}%`,
       offsetPath: `path("${d}")`,
       offsetAnchor: "auto",
