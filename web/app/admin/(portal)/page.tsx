@@ -1,9 +1,57 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
+import { Bot, ImagePlus, Inbox, LayoutTemplate, Paintbrush, Plus, UserRoundSearch } from "lucide-react";
 import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
-import { can } from "@/lib/admin/permissions";
+import { can, type Section } from "@/lib/admin/permissions";
 import { Badge, Card, Notice, PageTitle, Stat, Table, td, when } from "@/components/admin/ui";
 import { AdminSplash, SPLASH_MS } from "@/components/admin/splash";
+
+/** What people come to the admin to do, one tap away (each shown only to roles that may open it). */
+const ACTIONS: { section: Section; href: string; label: string; icon: ReactNode }[] = [
+  {
+    section: "site",
+    href: "/admin/site/",
+    label: "Edit website",
+    icon: <Paintbrush size={22} strokeWidth={2} aria-hidden />,
+  },
+  {
+    section: "openings",
+    href: "/admin/openings/new/",
+    label: "Post a job",
+    icon: <Plus size={22} strokeWidth={2} aria-hidden />,
+  },
+  {
+    section: "leads",
+    href: "/admin/leads/?status=new",
+    label: "New leads",
+    icon: <Inbox size={22} strokeWidth={2} aria-hidden />,
+  },
+  {
+    section: "applications",
+    href: "/admin/applications/?status=new",
+    label: "New applications",
+    icon: <UserRoundSearch size={22} strokeWidth={2} aria-hidden />,
+  },
+  {
+    section: "builder",
+    href: "/admin/builder/",
+    label: "Build a page",
+    icon: <LayoutTemplate size={22} strokeWidth={2} aria-hidden />,
+  },
+  {
+    section: "media",
+    href: "/admin/media/",
+    label: "Upload pictures",
+    icon: <ImagePlus size={22} strokeWidth={2} aria-hidden />,
+  },
+  {
+    section: "assistant",
+    href: "/admin/assistant/",
+    label: "AI assistant",
+    icon: <Bot size={22} strokeWidth={2} aria-hidden />,
+  },
+];
 
 /** Rows in a table, optionally where column = value, or column >= since. */
 async function count(table: string, where?: { eq?: [string, string]; since?: [string, string] }) {
@@ -59,6 +107,7 @@ export default async function AdminDashboard({
     hr ? { label: "Open roles", value: openRoles, href: "/admin/openings/" } : null,
     chats ? { label: "Chats this week", value: recentChats, href: "/admin/chats/" } : null,
   ].filter((s) => s !== null);
+  const actions = ACTIONS.filter((a) => can(admin.role, a.section));
 
   return (
     <div style={splash ? ({ "--splash-wait": `${SPLASH_MS}ms` } as React.CSSProperties) : undefined}>
@@ -74,6 +123,19 @@ export default async function AdminDashboard({
           <Stat key={s.label} label={s.label} value={s.value} href={s.href} index={i + 1} />
         ))}
       </div>
+      {actions.length ? (
+        <section className="aura-card aura-rise mt-6 p-5" style={{ "--i": 5 } as React.CSSProperties}>
+          <p className="aura-overline mb-3">Quick actions</p>
+          <div className="admin-actions">
+            {actions.map((a) => (
+              <Link key={a.href} href={a.href} className="admin-action">
+                <span className="aura-tile">{a.icon}</span>
+                {a.label}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {sales ? (
           <section className="aura-rise" style={{ "--i": 6 } as React.CSSProperties}>

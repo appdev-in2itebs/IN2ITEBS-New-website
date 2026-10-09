@@ -928,6 +928,53 @@
   font: var(--aura-text-label-sm);
   color: var(--aura-ink-500);
 }
+/* Menu groups (Customers, Hiring, Website…): each under its section label, the AURA overline. */
+.aura-admin .admin-nav-group + .admin-nav-group {
+  margin-top: var(--aura-space-4);
+}
+.aura-admin .admin-nav-label {
+  padding: 0 var(--aura-space-3) var(--aura-space-1);
+}
+
+/* Dashboard quick actions: AURA secondary actions, a row of glossy icon tiles, each with its label. */
+.aura-admin .admin-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: var(--aura-space-3);
+}
+.aura-admin .admin-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--aura-space-2);
+  min-height: var(--aura-touch);
+  padding: var(--aura-space-3) var(--aura-space-2);
+  border-radius: var(--aura-r-xl);
+  color: var(--aura-ink-700);
+  font: var(--aura-text-label-sm);
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color var(--aura-dur-fast),
+    transform var(--aura-dur-fast) var(--aura-ease-out-expo);
+}
+.aura-admin .admin-action:hover {
+  background: var(--aura-surface);
+  color: var(--aura-ink-900);
+  transform: translateY(var(--aura-hover-lift));
+}
+.aura-admin .admin-action:active {
+  transform: scale(var(--aura-press-scale));
+}
+.aura-admin .admin-action:focus-visible {
+  outline: none;
+  box-shadow: var(--aura-focus-ring);
+}
+.aura-admin .admin-action .aura-tile {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--aura-r-lg);
+}
 
 /* Floating glass pill (phones) */
 .aura-admin .admin-pill {

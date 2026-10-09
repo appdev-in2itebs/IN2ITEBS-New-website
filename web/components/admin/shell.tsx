@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { ExternalLink, LogOut } from "lucide-react";
-import { SECTIONS, can, type Section } from "@/lib/admin/permissions";
+import { GROUPS, SECTIONS, can, type Section } from "@/lib/admin/permissions";
 import type { AdminUser } from "@/lib/admin/session";
 import { signOut } from "@/app/admin/login/actions";
 import { AdminNav, type NavItem } from "./nav";
@@ -27,9 +27,11 @@ function initials(admin: AdminUser) {
  * 28px corners, a glass sidebar of icon tiles on desktop and a floating glass pill on phones.
  */
 export function AdminShell({ admin, children }: { admin: AdminUser; children: ReactNode }) {
+  // The menu: what this role may open, minus the parts reached from another page (Page heroes).
   const items: NavItem[] = (Object.keys(SECTIONS) as Section[])
-    .filter((s) => can(admin.role, s))
-    .map((key) => ({ key, label: SECTIONS[key].label, href: SECTIONS[key].href }));
+    .filter((s) => can(admin.role, s) && !("menu" in SECTIONS[s] && SECTIONS[s].menu === false))
+    .map((key) => ({ key, label: SECTIONS[key].label, href: SECTIONS[key].href, group: SECTIONS[key].group }));
+  const groups = Object.entries(GROUPS).map(([key, label]) => ({ key, label }));
   const first = admin.name?.trim().split(/\s+/)[0];
   const today = new Intl.DateTimeFormat("en-IN", {
     weekday: "long",
@@ -87,7 +89,7 @@ export function AdminShell({ admin, children }: { admin: AdminUser; children: Re
       <div className="admin-panel">
         <div className="admin-panel-inner">
           <aside className="admin-side aura-glass">
-            <AdminNav items={items} variant="side" />
+            <AdminNav items={items} variant="side" groups={groups} />
             <div className="admin-side-foot">
               <p className="truncate font-semibold text-foreground">{admin.name || admin.email}</p>
               <p className="capitalize">{admin.role}</p>
