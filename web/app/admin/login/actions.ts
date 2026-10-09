@@ -28,7 +28,8 @@ export async function signIn(_: LoginState, form: FormData): Promise<LoginState>
     await auth.auth.signOut();
     return { error: "This account does not have access to the admin. Ask an administrator to add you." };
   }
-  redirect("/admin/");
+  // ?welcome=1 plays the In2IT brand splash once over the dashboard (components/admin/splash.tsx).
+  redirect("/admin/?welcome=1");
 }
 
 export async function signOut() {

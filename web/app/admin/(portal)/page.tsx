@@ -3,6 +3,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin/session";
 import { can } from "@/lib/admin/permissions";
 import { Badge, Card, Notice, PageTitle, Stat, Table, td, when } from "@/components/admin/ui";
+import { AdminSplash, SPLASH_MS } from "@/components/admin/splash";
 
 /** Rows in a table, optionally where column = value, or column >= since. */
 async function count(table: string, where?: { eq?: [string, string]; since?: [string, string] }) {
@@ -13,9 +14,16 @@ async function count(table: string, where?: { eq?: [string, string]; since?: [st
   return n ?? 0;
 }
 
-export default async function AdminDashboard({ searchParams }: { searchParams: Promise<{ denied?: string }> }) {
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ denied?: string; welcome?: string }>;
+}) {
   const admin = await requireAdmin("dashboard");
-  const { denied } = await searchParams;
+  const { denied, welcome } = await searchParams;
+  // Straight after sign-in the In2IT brand splash plays over the page, and the page's own entrance
+  // choreography waits for it (every .aura-rise delays by --splash-wait).
+  const splash = welcome === "1";
   const db = supabaseAdmin();
   const week = new Date(Date.now() - 7 * 86_400_000).toISOString();
   const sales = can(admin.role, "leads");
@@ -44,23 +52,31 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
       : { data: [] },
   ]);
 
+  const stats = [
+    sales ? { label: "New leads", value: newLeads, href: "/admin/leads/?status=new" } : null,
+    sales ? { label: "All leads", value: allLeads, href: "/admin/leads/" } : null,
+    hr ? { label: "New applications", value: newApps, href: "/admin/applications/?status=new" } : null,
+    hr ? { label: "Open roles", value: openRoles, href: "/admin/openings/" } : null,
+    chats ? { label: "Chats this week", value: recentChats, href: "/admin/chats/" } : null,
+  ].filter((s) => s !== null);
+
   return (
-    <>
+    <div style={splash ? ({ "--splash-wait": `${SPLASH_MS}ms` } as React.CSSProperties) : undefined}>
+      {splash ? <AdminSplash /> : null}
       <PageTitle
-        title={`Welcome${admin.name ? `, ${admin.name.split(" ")[0]}` : ""}`}
+        title="Welcome"
+        accent={admin.name ? admin.name.split(" ")[0] : undefined}
         intro="What has come in from the website."
       />
       {denied ? <Notice tone="warn">Your role does not include that section.</Notice> : null}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {sales ? <Stat label="New leads" value={newLeads} href="/admin/leads/?status=new" /> : null}
-        {sales ? <Stat label="All leads" value={allLeads} href="/admin/leads/" /> : null}
-        {hr ? <Stat label="New applications" value={newApps} href="/admin/applications/?status=new" /> : null}
-        {hr ? <Stat label="Open roles" value={openRoles} href="/admin/openings/" /> : null}
-        {chats ? <Stat label="Chats this week" value={recentChats} href="/admin/chats/" /> : null}
+        {stats.map((s, i) => (
+          <Stat key={s.label} label={s.label} value={s.value} href={s.href} index={i + 1} />
+        ))}
       </div>
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {sales ? (
-          <section>
+          <section className="aura-rise" style={{ "--i": 6 } as React.CSSProperties}>
             <h2 className="mb-3 text-lg font-semibold">Latest leads</h2>
             <Table head={["Received", "Name", "Source", "Status"]} empty={!leads.data?.length}>
               {leads.data?.map((l) => (
@@ -82,7 +98,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
           </section>
         ) : null}
         {hr ? (
-          <section>
+          <section className="aura-rise" style={{ "--i": 7 } as React.CSSProperties}>
             <h2 className="mb-3 text-lg font-semibold">Latest applications</h2>
             <Table head={["Received", "Candidate", "Role", "Status"]} empty={!apps.data?.length}>
               {apps.data?.map((a) => (
@@ -110,6 +126,6 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
           </Card>
         ) : null}
       </div>
-    </>
+    </div>
   );
 }

@@ -13,8 +13,7 @@ export type { PictureOption };
 
 type Value = Record<string, unknown>;
 
-const inputCls =
-  "mt-1 block w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-foreground focus:border-action focus:outline-none";
+const inputCls = "aura-input";
 const smallBtn =
   "rounded-md border border-border-subtle px-2 py-1 text-xs font-semibold text-foreground hover:border-action hover:text-action disabled:opacity-40";
 

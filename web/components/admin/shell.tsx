@@ -1,66 +1,103 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { ExternalLink, LogOut } from "lucide-react";
 import { SECTIONS, can, type Section } from "@/lib/admin/permissions";
 import type { AdminUser } from "@/lib/admin/session";
 import { signOut } from "@/app/admin/login/actions";
+import { AdminNav, type NavItem } from "./nav";
 
-/** The admin portal frame: a navy sidebar with the sections this role may open, and the page. */
+/** "Good morning" / "Good afternoon" / "Good evening" by the office clock (Asia/Kolkata). */
+function greeting(now = new Date()) {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-IN", { hour: "numeric", hour12: false, timeZone: "Asia/Kolkata" }).format(now),
+  );
+  return hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+}
+
+function initials(admin: AdminUser) {
+  const source = admin.name?.trim() || admin.email;
+  const parts = source.split(/[\s@._-]+/).filter(Boolean);
+  return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "")).toUpperCase() || "A";
+}
+
+/**
+ * The admin portal frame in the AURA language: a cinematic navy header band (official pale-blue
+ * logo, greeting with the italic accent name, glass controls), a white panel rising over it with
+ * 28px corners, a glass sidebar of icon tiles on desktop and a floating glass pill on phones.
+ */
 export function AdminShell({ admin, children }: { admin: AdminUser; children: ReactNode }) {
-  const sections = (Object.keys(SECTIONS) as Section[]).filter((s) => can(admin.role, s));
+  const items: NavItem[] = (Object.keys(SECTIONS) as Section[])
+    .filter((s) => can(admin.role, s))
+    .map((key) => ({ key, label: SECTIONS[key].label, href: SECTIONS[key].href }));
+  const first = admin.name?.trim().split(/\s+/)[0];
+  const today = new Intl.DateTimeFormat("en-IN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    timeZone: "Asia/Kolkata",
+  }).format(new Date());
+
   return (
-    <div className="flex min-h-svh bg-canvas">
-      <aside className="theme-on-brand hidden w-60 shrink-0 flex-col bg-brand text-on-brand md:flex">
-        <Link href="/admin/" className="flex items-center gap-2 px-5 py-5">
-          <Image src="/brand/in2it-ebs-white.svg" alt="In2IT EBS" width={120} height={30} className="h-7 w-auto" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-on-brand/70">Admin</span>
-        </Link>
-        <nav aria-label="Admin" className="flex-1 space-y-0.5 px-3">
-          {sections.map((s) => (
+    <div className="min-h-svh">
+      <header className="admin-header">
+        <div className="admin-header-row">
+          <Link href="/admin/" className="admin-header-brand aura-rise">
+            <Image src="/brand/in2it-ebs-logo-pale.png" alt="In2IT EBS" width={1364} height={425} priority />
+            <span>Admin</span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <div className="admin-who aura-rise" style={{ "--i": 1 } as React.CSSProperties}>
+              <b>{admin.name || admin.email}</b>
+              <small>{admin.role}</small>
+            </div>
             <Link
-              key={s}
-              href={SECTIONS[s].href}
-              className="block rounded-lg px-3 py-2 text-sm font-medium text-on-brand/80 hover:bg-on-brand/10 hover:text-on-brand"
+              href="/"
+              target="_blank"
+              className="aura-glass-circle aura-press aura-rise"
+              style={{ "--i": 2 } as React.CSSProperties}
+              aria-label="View the website"
+              title="View the website"
             >
-              {SECTIONS[s].label}
+              <ExternalLink size={19} strokeWidth={1.9} aria-hidden />
             </Link>
-          ))}
-        </nav>
-        <div className="border-t border-on-brand/15 px-5 py-4 text-xs">
-          <p className="truncate font-semibold">{admin.name || admin.email}</p>
-          <p className="capitalize text-on-brand/70">{admin.role}</p>
-          <div className="mt-3 flex gap-3">
-            <Link href="/" className="underline-offset-2 hover:underline" target="_blank">
-              View site
-            </Link>
-            <form action={signOut}>
-              <button type="submit" className="underline-offset-2 hover:underline">
-                Sign out
+            <form action={signOut} className="aura-rise" style={{ "--i": 3 } as React.CSSProperties}>
+              <button type="submit" className="aura-glass-circle aura-press" aria-label="Sign out" title="Sign out">
+                <LogOut size={19} strokeWidth={1.9} aria-hidden />
               </button>
             </form>
+            <span className="admin-avatar aura-rise" style={{ "--i": 4 } as React.CSSProperties} aria-hidden>
+              {initials(admin)}
+            </span>
           </div>
         </div>
-      </aside>
-      <div className="flex min-w-0 flex-1 flex-col">
-        {/* Phones: the same sections as a scrolling strip. */}
-        <nav aria-label="Admin" className="theme-on-brand flex gap-1 overflow-x-auto bg-brand px-3 py-2 md:hidden">
-          {sections.map((s) => (
-            <Link
-              key={s}
-              href={SECTIONS[s].href}
-              className="shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium text-on-brand/80"
-            >
-              {SECTIONS[s].label}
-            </Link>
-          ))}
-          <form action={signOut}>
-            <button type="submit" className="shrink-0 px-3 py-1.5 text-xs text-on-brand/80">
-              Sign out
-            </button>
-          </form>
-        </nav>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 md:px-8">{children}</main>
+        <div className="admin-greeting aura-rise" style={{ "--i": 2 } as React.CSSProperties}>
+          <h2>
+            {greeting()}
+            {first ? (
+              <>
+                , <em>{first}</em>
+              </>
+            ) : null}
+          </h2>
+          <p>{today} · Converged Intelligence</p>
+        </div>
+      </header>
+
+      <div className="admin-panel">
+        <div className="admin-panel-inner">
+          <aside className="admin-side aura-glass">
+            <AdminNav items={items} variant="side" />
+            <div className="admin-side-foot">
+              <p className="truncate font-semibold text-foreground">{admin.name || admin.email}</p>
+              <p className="capitalize">{admin.role}</p>
+            </div>
+          </aside>
+          <main className="min-w-0">{children}</main>
+        </div>
       </div>
+
+      <AdminNav items={items} variant="pill" />
     </div>
   );
 }
