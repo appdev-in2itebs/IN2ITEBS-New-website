@@ -264,7 +264,8 @@ export function ChatWidget() {
   const introduce = useCallback(async () => {
     if (introText.current?.lang !== langRef.current) fetchIntro(langRef.current);
     const text =
-      (await introText.current?.text) ?? "Hi! Shall we talk in English, or would you prefer another language?";
+      (await introText.current?.text) ??
+      "Hello, and welcome to In2IT EBS! I am your AI assistant. Which language would you like to talk in: English or another language?";
     setMessages((all) => [...all, { from: "bot", text }]);
     await say(text);
   }, [say, fetchIntro]);
@@ -376,76 +377,93 @@ export function ChatWidget() {
     try {
       const languageChosen = languagePicked.current;
       languagePicked.current = false;
-      const res = await fetch("/api/chat/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: text,
-          conversationId: conversationRef.current,
-          pageUrl: location.pathname,
-          language: langRef.current,
-          channel: opts.voice ? "voice" : "text",
-          stream: true,
-          spokenLanguage: opts.spokenLanguage ?? undefined,
-          languageChosen: languageChosen || undefined,
-          interrupted: opts.interrupted || undefined,
-        }),
-        signal: opts.signal,
-      });
-      if (!res.ok || !res.body) {
-        const data = await res.json().catch(() => ({}));
-        voice?.stop();
-        push({ from: "bot", text: data.error ?? "Sorry, something went wrong. Please try again." });
-        return null;
-      }
-      // The answer arrives as it is written: one JSON event per line.
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
+      const ask = () =>
+        fetch("/api/chat/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: text,
+            conversationId: conversationRef.current,
+            pageUrl: location.pathname,
+            language: langRef.current,
+            channel: opts.voice ? "voice" : "text",
+            stream: true,
+            spokenLanguage: opts.spokenLanguage ?? undefined,
+            languageChosen: languageChosen || undefined,
+            interrupted: opts.interrupted || undefined,
+          }),
+          signal: opts.signal,
+        });
       let done: { conversationId?: string | null; reply: Record<string, unknown> } | null = null;
-      // Read until the answer is complete ("done"), not until the server finishes its own work after it.
-      while (!done) {
-        const chunk = await reader.read();
-        if (chunk.done) break;
-        buffer += decoder.decode(chunk.value, { stream: true });
-        let nl: number;
-        while ((nl = buffer.indexOf("\n")) >= 0) {
-          const line = buffer.slice(0, nl).trim();
-          buffer = buffer.slice(nl + 1);
-          if (!line) continue;
-          let ev: {
-            t: string;
-            text?: string;
-            error?: string;
-            conversationId?: string | null;
-            reply?: Record<string, unknown>;
-            language?: string;
-          };
-          try {
-            ev = JSON.parse(line);
-          } catch {
-            continue;
-          }
-          if (ev.t === "start") {
-            if (ev.conversationId) setConversationId(ev.conversationId);
-            // The language this answer is in (the visitor's own, or the one they asked for).
-            if (ev.language) followLanguage(ev.language);
-          } else if (ev.t === "delta" && ev.text) {
-            show(shown + ev.text);
-            voice?.push(ev.text);
-          } else if (ev.t === "replace" && typeof ev.text === "string") {
-            show(ev.text);
-            voice?.replace(ev.text);
-          } else if (ev.t === "error") {
-            voice?.stop();
-            push({ from: "bot", text: ev.error ?? "Sorry, something went wrong. Please try again." });
-            return null;
-          } else if (ev.t === "done" && ev.reply) {
-            done = { conversationId: ev.conversationId, reply: ev.reply };
-            if (ev.language) followLanguage(ev.language);
-            break;
+      // A passing hiccup (a deploy rolling out, a busy moment upstream) is retried once, quietly,
+      // before the visitor is told something went wrong.
+      attempts: for (let attempt = 0; attempt < 2 && !done; attempt++) {
+        const last = attempt === 1;
+        if (last) await new Promise((r) => setTimeout(r, 1200));
+        const res = await ask().catch((e) => {
+          if (opts.signal?.aborted || last) throw e;
+          return null;
+        });
+        if (!res || !res.ok || !res.body) {
+          if (!last && (!res || res.status >= 500)) continue;
+          const data = res ? await res.json().catch(() => ({})) : {};
+          voice?.stop();
+          push({ from: "bot", text: data.error ?? "Sorry, something went wrong. Please try again." });
+          return null;
+        }
+        // The answer arrives as it is written: one JSON event per line.
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        // Read until the answer is complete ("done"), not until the server finishes its own work after it.
+        while (!done) {
+          const chunk = await reader.read();
+          if (chunk.done) break;
+          buffer += decoder.decode(chunk.value, { stream: true });
+          let nl: number;
+          while ((nl = buffer.indexOf("\n")) >= 0) {
+            const line = buffer.slice(0, nl).trim();
+            buffer = buffer.slice(nl + 1);
+            if (!line) continue;
+            let ev: {
+              t: string;
+              text?: string;
+              error?: string;
+              conversationId?: string | null;
+              reply?: Record<string, unknown>;
+              language?: string;
+            };
+            try {
+              ev = JSON.parse(line);
+            } catch {
+              continue;
+            }
+            if (ev.t === "start") {
+              if (ev.conversationId) setConversationId(ev.conversationId);
+              // The language this answer is in (the visitor's own, or the one they asked for).
+              if (ev.language) followLanguage(ev.language);
+            } else if (ev.t === "delta" && ev.text) {
+              show(shown + ev.text);
+              voice?.push(ev.text);
+            } else if (ev.t === "replace" && typeof ev.text === "string") {
+              show(ev.text);
+              voice?.replace(ev.text);
+            } else if (ev.t === "error") {
+              // Nothing shown yet: try once more before giving up.
+              if (!last && !shown) continue attempts;
+              voice?.stop();
+              push({ from: "bot", text: ev.error ?? "Sorry, something went wrong. Please try again." });
+              return null;
+            } else if (ev.t === "done" && ev.reply) {
+              done = { conversationId: ev.conversationId, reply: ev.reply };
+              if (ev.language) followLanguage(ev.language);
+              break;
+            }
           }
         }
+        // The stream ended with nothing said: worth one more try too.
+        if (!done && !shown && !last) continue;
+        break;
       }
       if (!done) {
         voice?.stop();

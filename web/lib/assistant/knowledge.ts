@@ -223,7 +223,7 @@ Your reply is spoken aloud, not read. Answer in one to three short, natural spok
   }${
     input.state.languageSwitch
       ? input.translated
-        ? `\n\nIMPORTANT: the visitor just asked you to talk in ${languageName}. That is always fine: warmly confirm (in English; it is translated for them) that you will talk with them in ${languageName} from now on, and ask how you can help. Do not refuse.`
+        ? `\n\nIMPORTANT: the visitor just asked you to talk in ${languageName}. That is always fine. Reply with exactly this (in English; it is translated for them): "Of course! We will talk in ${languageName} from now on. How may I help you?" Do not refuse.`
         : `\n\nIMPORTANT: the visitor just asked you to talk in ${languageName}. That is always fine: reply only in ${languageName}, warmly confirm that you will talk in ${languageName}, and ask how you can help. Do not refuse.`
       : ""
   }${

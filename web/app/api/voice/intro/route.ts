@@ -4,6 +4,7 @@ import { badOrigin, json } from "@/lib/api-guard";
 import { translate } from "@/lib/assistant/agent";
 import { llmConfigured } from "@/lib/assistant/llm";
 import { SARVAM_LANGUAGES } from "@/lib/voice/providers";
+import { sarvamConfigured, sarvamTranslate } from "@/lib/voice/sarvam";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -36,19 +37,28 @@ export async function GET(request: Request) {
   const named = [...preferred.filter((c) => spoken.includes(c)), ...spoken.filter((c) => !preferred.includes(c))]
     .slice(0, 3)
     .map(englishName);
-  // Short, so the visitor can answer within a few seconds: "…or would you prefer Hindi, Odia, Tamil or
-  // another language?"
-  const choices = named.length ? `, or would you prefer ${named.join(", ")} or another language` : "";
+  // Short, so the visitor can answer within a few seconds: "…English, Hindi, Odia, Tamil or another
+  // language?"
+  const choices = named.length ? `, ${named.join(", ")} or another language` : "";
 
   const english =
     language === "en-IN"
-      ? `Hi! Shall we talk in English${choices}?`
-      : `Hi! We can talk in ${englishName(language)}. How can I help you today?`;
+      ? `Hello, and welcome to In2IT EBS! I am your AI assistant. ${choices ? `Which language would you like to talk in: English${choices}?` : "Shall we talk in English?"}`
+      : `Hello, and welcome to In2IT EBS! I am your AI assistant, and we can talk in ${englishName(language)}. How can I help you today?`;
 
   const key = `${language}:${english}`;
   let text = cache.get(key);
   if (!text) {
-    text = language === "en-IN" || !llmConfigured() ? english : await translate(english, language, assistant);
+    // Sarvam translates Indian languages most naturally (and in her feminine forms); the AI model
+    // covers the rest.
+    const bySarvam =
+      language !== "en-IN" && sarvamConfigured() && language in SARVAM_LANGUAGES
+        ? (await sarvamTranslate({ text: english, from: "en-IN", to: language }))?.text
+        : undefined;
+    text =
+      language === "en-IN"
+        ? english
+        : bySarvam || (llmConfigured() ? await translate(english, language, assistant) : english);
     if (text !== english || language === "en-IN") cache.set(key, text);
   }
   return json(200, { ok: true, text, language: text === english ? "en-IN" : language });

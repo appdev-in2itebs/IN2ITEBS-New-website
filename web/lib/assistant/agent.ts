@@ -207,7 +207,7 @@ export async function runAgent(input: {
   if (st.languageSwitch && final.includes(a.offTopicReply.slice(0, 40))) {
     const name = (ASSISTANT_LANGUAGES[st.languageSwitch] ?? "English").replace(/ \(.*\)$/, "");
     final = await translate(
-      `Of course! I will talk with you in ${name} from now on. How can I help you today?`,
+      `Of course! We will talk in ${name} from now on. How may I help you?`,
       input.translated ? "en-IN" : st.languageSwitch,
       a,
     );
@@ -252,7 +252,7 @@ export async function translate(message: string, language: string, a: Settings["
       messages: [
         {
           role: "user",
-          content: `Translate into ${ASSISTANT_LANGUAGES[language] ?? language}. Reply with the translation only, keeping "In2IT EBS", SAP and AI as they are:\n\n${message}`,
+          content: `Translate into ${ASSISTANT_LANGUAGES[language] ?? language}. Reply with the translation only, keeping "In2IT EBS", SAP and AI as they are. The speaker is a woman (the website's voice is female): use feminine forms wherever the language marks gender, and the polite, respectful form of "you":\n\n${message}`,
         },
       ],
       maxTokens: 400,

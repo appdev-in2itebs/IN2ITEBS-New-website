@@ -34,11 +34,18 @@ export function VoicePreview() {
     const pace = Number((form?.elements.namedItem("voicePace") as HTMLInputElement | null)?.value || 1);
     setState("loading");
     try {
-      const res = await fetch("/api/voice/tts/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: SAMPLES[lang], language: lang, voice, pace }),
-      });
+      const speak = () =>
+        fetch("/api/voice/tts/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: SAMPLES[lang], language: lang, voice, pace }),
+        });
+      // A passing hiccup (a deploy rolling out, Sarvam busy for a moment) gets one more try.
+      let res = await speak().catch(() => null);
+      if (!res?.ok) {
+        await new Promise((r) => setTimeout(r, 1200));
+        res = await speak();
+      }
       if (!res.ok) throw new Error();
       const url = URL.createObjectURL(await res.blob());
       const a = new Audio(url);

@@ -123,6 +123,8 @@ export async function sarvamTranslate(input: {
           source_language_code: code(input.from),
           target_language_code: code(input.to),
           model: toEnglish ? "mayura:v1" : "sarvam-translate:v1",
+          // The website speaks with a female voice: "I can help" takes her forms (सकती, ସହାୟିକା…).
+          ...(toEnglish ? {} : { speaker_gender: "Female" }),
         });
         const res = await sarvamFetch("/translate", () => ({
           method: "POST",
