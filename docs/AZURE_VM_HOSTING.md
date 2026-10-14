@@ -86,6 +86,30 @@ on the VM except deploy. The VM's host key is pinned in the workflow. Cloudflare
 
 Change an admin's password on the VM: `/srv/in2it/set-admin-password.sh email@in2itebs.com`.
 
+## In2Recruit on the same VM
+
+Moved from the InsForge cloud on 2026-10-14. Repo: https://github.com/In2ITEBSLtd/In2Recruit.
+
+| What | Where |
+| --- | --- |
+| App | https://recruit.57-159-30-28.sslip.io (later recruit.in2itebs.com); pm2 app `in2recruit`, 127.0.0.1:3200 |
+| Code | `/srv/recruit/app` -> `releases/<ts>` (3 kept); env in `/srv/recruit/shared/.env.local` |
+| Backend | self-hosted InsForge in Docker, `/srv/insforge` (`docker compose ps|logs`), API on 127.0.0.1:7130, dashboard https://insforge.57-159-30-28.sslip.io (login: `ROOT_ADMIN_USERNAME/PASSWORD` in `/srv/insforge/.env`) |
+| Database | Postgres 15 in the `insforge-postgres-1` container, 127.0.0.1:5442; `/srv/recruit/apply-migrations.sh <release>` applies the repo's SQL in order and records it |
+| CV text extraction | Apache Tika container `in2recruit-tika` on 127.0.0.1:9998 (same image the cloud used) |
+| Scheduled jobs | `/srv/recruit/cron.sh <route>` from appuser's crontab: offer-watchdog every 15 min, feedback-scan hourly, expiry/preboarding/consistency nightly, digests 03:30 UTC; log in `/srv/recruit/logs/cron.log` |
+| Deploys | `.github/workflows/deploy.yml` in the repo: check job, then SSH to the VM with the `VM_SSH_KEY` secret (forced command `/srv/recruit/ci-deploy.sh`) |
+| Backups | included in the nightly `/srv/in2it/backup.sh` (InsForge dump, files, config) |
+
+Fresh-install notes: the repo's migrations were written against the cloud database, so three things were
+set by hand before they applied cleanly: the `role_permissions(role, resource)` unique index must exist before
+`001`, `user_profiles.auth_user_id` is `text` (not uuid) and `user_profiles.role` is the `app_role` enum
+(created by hand with every role value in use). One migration (`20261001065249`) was applied as a patched
+copy that skips tables which never had the `authenticated_workspace` policy.
+
+Still to do: paste the OpenRouter key into `/srv/recruit/shared/.env.local` (AI resume extraction), copy
+real data from the cloud project if any, point `recruit.in2itebs.com` at the VM.
+
 ## Redeploy by hand
 
 From the repo root, with the deploy key in `~/.ssh/azure_in2it`:
