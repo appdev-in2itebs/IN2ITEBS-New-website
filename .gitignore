@@ -22,3 +22,4 @@ web/.impeccable/
 
 # Word/Excel lock files, present while a document is open
 ~$*
+web/next-env.d.ts
