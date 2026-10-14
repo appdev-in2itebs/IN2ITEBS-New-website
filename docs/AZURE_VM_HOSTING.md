@@ -23,7 +23,9 @@ would try to load their assets over HTTPS and fail.
 
 | Path | What |
 | --- | --- |
-| `/srv/in2it/app/web` | the built application (`.env.local` holds the secrets) |
+| `/srv/in2it/app/web` | the running release (`app` is a symlink into `releases/<timestamp>`; the three newest are kept for rollback) |
+| `/srv/in2it/shared/.env.local` | the website's settings and secrets, copied into every release |
+| `/srv/backups/<date>/` | nightly backups (database dump, uploaded files, config), 14 days kept; `backup.sh` runs at 02:15 UTC |
 | `/srv/in2it/ecosystem.config.cjs` | pm2 app `in2it-web`, Next.js on 127.0.0.1:3107 |
 | `/srv/in2it/logs/` | app output, errors and the TLS log |
 | `/etc/nginx/sites-available/in2it` | nginx: 80 → 443 redirect, TLS, static assets, proxy to 3107 |
@@ -56,8 +58,16 @@ Admin sign-ins were recreated (Supabase passwords cannot be exported); the tempo
 `.website-runtime/vm-admin-temporary-passwords.txt` on the machine that ran the copy. Public sign-up is
 disabled; new admins are added in Studio (Authentication) plus a row in `admin_users`.
 
-Back up with `docker exec supabase-db pg_dump -U postgres postgres | gzip > backup.sql.gz` plus
-`/srv/supabase/volumes/storage`.
+Backups run nightly (`/srv/in2it/backup.sh`, log in `/srv/in2it/logs/backup.log`) into `/srv/backups`.
+Restore the database with `gunzip -c postgres.sql.gz | docker exec -i supabase-db psql -U postgres -d postgres`
+and the files with `tar -xzf storage.tar.gz -C /srv/supabase/volumes`. Copying `/srv/backups` off the VM
+(for example to Azure Blob Storage) is still to be set up. `housekeeping.sh` prunes Docker images and old
+releases weekly; the VM has 4 GB of swap for builds.
+
+Rollback: `ln -sfn releases/<older> /srv/in2it/app && pm2 reload in2it-web`.
+
+Never run `npm run dev` on the VM: it is a development server. Since 2026-10-14 dev builds go to
+`.next-dev` so they cannot overwrite a production build, but the dev server would still fight pm2 for the port.
 
 ## Deploys from GitHub (CI/CD)
 

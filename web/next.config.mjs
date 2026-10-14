@@ -19,6 +19,9 @@ if (process.env.NODE_ENV === "production" && siteEnv !== "production" && siteEnv
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // `next dev` writes into its own folder so it can never overwrite a production build in .next
+  // (running it on the server once took the live site down with "Could not find a production build").
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   reactStrictMode: true,
   poweredByHeader: false,
   trailingSlash: true,

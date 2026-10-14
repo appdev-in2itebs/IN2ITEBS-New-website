@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
 import { redirects } from "@/content/redirects.mjs";
-import { HOME_KEY, type Block, type BuiltPage, type PageDoc } from "./blocks";
+import { HOME_KEY, isSlug, type Block, type BuiltPage, type PageDoc } from "./blocks";
 
 /**
  * Pages made in the admin's page builder, stored as cms_entries rows in the "page" collection: the
@@ -19,7 +19,9 @@ function asBuilt(data: unknown): BuiltPage | null {
 
 /** The live copy of the published page at /<slug>/, or null. One query per render. */
 export const getLivePage = cache(async (slug: string): Promise<PageDoc | null> => {
-  if (!supabaseConfigured()) return null;
+  // Scanners request paths like /var/log/nginx/error.log; nothing like that can be a page, so the
+  // database is not asked.
+  if (!supabaseConfigured() || !isSlug(slug)) return null;
   const { data, error } = await supabaseAdmin()
     .from("cms_entries")
     .select("key, data")

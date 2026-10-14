@@ -493,10 +493,18 @@ export function slugify(text: string) {
     .join("/");
 }
 
+/** The shape of a page address: lowercase words joined by hyphens, up to three parts separated by /. */
+export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*){0,2}$/;
+
+/** True for a string that could be a page address; URLs that cannot be one need no database lookup. */
+export function isSlug(value: string) {
+  return value.length <= 200 && SLUG_PATTERN.test(value);
+}
+
 /** A problem with an address, or null. `taken` holds every address the site already serves. */
 export function slugProblem(slug: string, taken: Set<string>): string | null {
   if (!slug) return "Give the page an address.";
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*){0,2}$/.test(slug))
+  if (!isSlug(slug))
     return "The address may use lowercase letters, numbers and hyphens, with up to three parts separated by /.";
   if (RESERVED.has(slug.split("/")[0])) return `"/${slug}/" is reserved for the website itself.`;
   if (taken.has(`/${slug}/`)) return `The website already has a page at /${slug}/.`;
