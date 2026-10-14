@@ -16,8 +16,17 @@ export type MediaItem = {
 
 export const MEDIA_MAX_BYTES = 5 * 1024 * 1024;
 
+/**
+ * The origin browsers fetch uploaded files from. Self-hosted Supabase on the VM is reached by the
+ * server at a private address (SUPABASE_URL), while its storage is published at the site's own public
+ * origin (SUPABASE_PUBLIC_URL); the hosted service has one address for both, so the latter is optional.
+ */
+export function supabasePublicUrl() {
+  return supabaseProjectUrl(process.env.SUPABASE_PUBLIC_URL || process.env.SUPABASE_URL || "");
+}
+
 export function mediaBase() {
-  return `${supabaseProjectUrl(process.env.SUPABASE_URL ?? "")}/storage/v1/object/public/media/`;
+  return `${supabasePublicUrl()}/storage/v1/object/public/media/`;
 }
 
 /** True for the URL of a file in this project's media bucket (and nothing else on the internet). */

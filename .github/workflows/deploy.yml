@@ -1,92 +1,54 @@
 name: deploy
 
-# Runs only after `ci` has finished on main, and only if it passed. A push whose
-# checks, build or browser tests fail therefore never reaches the live site.
+# Deploys to the Azure VM (57.159.30.28) after `ci` has passed on main. A push whose checks, build or
+# browser tests fail never reaches the live site. Can also be started by hand from the Actions tab.
 on:
   workflow_run:
     workflows: [ci]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
 
-# One deploy at a time, and never cancel one midway: two quick pushes must not
-# race and leave the Worker on the older build.
+# One deploy at a time, never cancelled midway: two quick pushes must not race and leave the VM on
+# the older build.
 concurrency:
-  group: deploy-cloudflare
+  group: deploy-vm
   cancel-in-progress: false
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: web
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           # Deploy exactly the commit ci verified, not whatever main points at now.
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: web/package-lock.json
+      - name: Pack the commit
+        run: git archive --format=tar.gz -o site.tar.gz HEAD web supabase
 
-      - run: npm ci
-
-      - name: Build the Worker bundle
-        run: npx opennextjs-cloudflare build
+      # The VM_SSH_KEY secret is a private key whose public half is in appuser's authorized_keys on
+      # the VM with a forced command: it can only hand over the tarball and run /srv/in2it/deploy.sh
+      # (npm ci, next build, pm2 reload). The VM's host key is pinned here so a DNS or IP hijack
+      # cannot receive the code.
+      - name: Deploy to the Azure VM
         env:
-          # Read at build time. `preview` keeps the X-Robots-Tag noindex header on,
-          # so the staging URL can never compete with in2itebs.com in search.
-          SITE_ENV: preview
-          # Baked into canonical URLs, the sitemap and the enquiry origin allow-list.
-          # Set the SITE_URL repository variable to the Workers URL after the first deploy.
-          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || 'https://in2itebs.com' }}
-          # Pages render with the content edits saved in /admin (lib/cms/content.ts reads Supabase).
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
-          # Admin sign-in (Supabase Auth). Public by design; inlined like every NEXT_PUBLIC_ value.
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
-
-      # Deploy before the secrets are uploaded, not after: `wrangler secret put` addresses an
-      # existing Worker, and on the very first run there is nothing to attach a secret to yet.
-      # Deploying first creates it, so run one and run two behave the same.
-      # `opennextjs-cloudflare deploy` first copies the prerendered pages into the R2 page cache
-      # (NEXT_INC_CACHE_R2_BUCKET), then runs `wrangler deploy`. The API token therefore needs
-      # "Workers R2 Storage: Edit" as well as "Workers Scripts: Edit".
-      - name: Deploy to Cloudflare Workers
-        run: npx opennextjs-cloudflare deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
-      # Uploaded as Worker secrets, never written into wrangler.jsonc or git: the admin, the chat
-      # assistant, the apply form and lead saving read them at runtime. `secret bulk` reads one JSON
-      # object from stdin.
-      - name: Upload Supabase and AI secrets to the Worker
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
-          # The AI assistant's model key (build.nvidia.com). Optional: without it the chat answers
-          # from the Chatbot FAQs.
-          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
-          # The assistant's voice (Sarvam AI: speech to text and text to speech). Optional: without it
-          # the chat uses the browser's own voice.
-          SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
+          VM_SSH_KEY: ${{ secrets.VM_SSH_KEY }}
         run: |
-          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SECRET_KEY" ]; then
-            echo "Supabase secrets are not set; skipping. The site runs without them."
-            exit 0
+          if [ -z "$VM_SSH_KEY" ]; then
+            echo "::error::The VM_SSH_KEY repository secret is not set (Settings -> Secrets and variables -> Actions)."
+            exit 1
           fi
-          # jq builds the JSON so the values are escaped rather than pasted into a string, and none
-          # is echoed. An empty optional key is left out, so it never wipes a key set earlier.
-          jq -n --arg url "$SUPABASE_URL" --arg key "$SUPABASE_SECRET_KEY" --arg nv "$NVIDIA_API_KEY" --arg sv "$SARVAM_API_KEY" \
-            '{SUPABASE_URL: $url, SUPABASE_SECRET_KEY: $key}
-             + (if $nv == "" then {} else {NVIDIA_API_KEY: $nv} end)
-             + (if $sv == "" then {} else {SARVAM_API_KEY: $sv} end)' \
-            | npx wrangler secret bulk
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$VM_SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          echo "57.159.30.28 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF3sz0kV0/7Llfmwl+xM+mBErNiXCC0UEVuPA4mPueeb" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -o ServerAliveInterval=30 -o StrictHostKeyChecking=yes appuser@57.159.30.28 < site.tar.gz
+
+      - name: Check the live site
+        run: |
+          sleep 5
+          curl -sk --max-time 20 https://57-159-30-28.sslip.io/api/health/ | tee health.json
+          grep -q '"status":"ok"' health.json
+        continue-on-error: true

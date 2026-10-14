@@ -1,6 +1,15 @@
 import { redirects as redirectMap, goneSources } from "./content/redirects.mjs";
 
 const siteEnv = process.env.SITE_ENV;
+
+// Where uploaded media is served from: the hosted project (https://<ref>.supabase.co) or, on the VM,
+// the site's own origin in front of self-hosted Supabase. Read at build time like the rest of this file.
+const mediaOrigin = (process.env.SUPABASE_PUBLIC_URL || process.env.SUPABASE_URL || "https://x.supabase.co")
+  .trim()
+  .replace(/\/rest\/v1\/?$/, "")
+  .replace(/\/+$/, "");
+const mediaHost = new URL(mediaOrigin).hostname;
+const mediaProtocol = new URL(mediaOrigin).protocol.replace(":", "");
 if (process.env.NODE_ENV === "production" && siteEnv !== "production" && siteEnv !== "preview") {
   throw new Error(
     "SITE_ENV must be set to 'production' or 'preview' for next build and next start. " +
@@ -21,7 +30,7 @@ const nextConfig = {
       `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
       // Uploaded images live in the Supabase "media" bucket (the admin previews them directly).
-      "img-src 'self' data: blob: https://*.supabase.co",
+      `img-src 'self' data: blob: https://*.supabase.co ${mediaOrigin}`,
       "font-src 'self' data:",
       // The chat assistant plays its spoken replies (MP3 from /api/voice/tts) from blob: URLs.
       "media-src 'self' blob:",
@@ -54,7 +63,10 @@ const nextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     // Images uploaded in /admin/media: served from the public bucket, resized by next/image.
-    remotePatterns: [{ protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/media/**" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "*.supabase.co", pathname: "/storage/v1/object/public/media/**" },
+      { protocol: mediaProtocol, hostname: mediaHost, pathname: "/storage/v1/object/public/media/**" },
+    ],
   },
   async redirects() {
     return redirectMap;

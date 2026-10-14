@@ -2,16 +2,16 @@
 
 The In2IT EBS website (https://in2itebs.com), rebuilt as a Next.js 15 App Router application with
 typed in-repo content and a hardened enquiry API. It deploys itself: every push to `main` that
-passes CI ships to Cloudflare Workers.
+passes CI ships to the Azure VM (see docs/AZURE_VM_HOSTING.md).
 
 ## Repository layout
 
 ```
 .
 ├── README.md                 # this file
-├── .github/workflows/        # ci.yml (checks + tests) and deploy.yml (Cloudflare)
+├── .github/workflows/        # ci.yml (checks + tests) and deploy.yml (Azure VM over SSH)
 ├── docs/                     # ADMIN_AND_CHATBOT_SETUP.md (connect Supabase, first admin),
-│                             # DNS_MIGRATION.md (putting in2itebs.com on Cloudflare),
+│                             # AZURE_VM_HOSTING.md (the VM, Supabase, go-live), DNS_MIGRATION.md (Cloudflare, historical),
 │                             # website-platform-blueprint.docx (architecture and roadmap)
 ├── assets/hero-images/       # original hero artwork (PNG), one folder per site menu; see its README
 │   ├── pages/  services/  industries/  partners/  about/  careers/

@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { supabaseAdmin } from "@/lib/supabase";
 import { audit, getAdmin } from "@/lib/admin/session";
 import { can } from "@/lib/admin/permissions";
-import { MEDIA_MAX_BYTES, imageInfo } from "@/lib/cms/media";
+import { MEDIA_MAX_BYTES, imageInfo, mediaBase } from "@/lib/cms/media";
 
 export const dynamic = "force-dynamic";
 
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       problems.push(`${file.name}: upload failed`);
       continue;
     }
-    const url = db.storage.from("media").getPublicUrl(path).data.publicUrl;
+    const url = `${mediaBase()}${path}`;
     const name = file.name
       .replace(/\.[^.]+$/, "")
       .replace(/[-_]+/g, " ")
