@@ -113,8 +113,16 @@ model the app shipped with (`google/gemma-4-26b-a4b-it`, paid) is refused; the `
 extraction routes (free models are rate-limited per day). To use the original model, add credits at
 openrouter.ai and change the model in the app's AI settings page.
 
-Still to do: copy real users and data from the InsForge cloud project (needs its API key or dashboard
-access; passwords cannot be exported), and point `in2recruit.in2itebs.com` at the VM.
+Data: copied from the InsForge cloud project on 2026-10-14 with `/srv/recruit/sync-from-cloud.py`
+(cloud URL and API key in `/srv/recruit/shared/cloud.env`). It syncs the cloud's catalogs first (enum
+types, tables, columns, constraints, indexes, all functions, triggers, policies, RLS flags), then every
+public table, then `auth.users` including password hashes (so existing passwords keep working), then the
+files through the storage API, and reloads PostgREST. Re-runnable: it truncates and reloads. After the
+first run 17 duplicate constraints created by the migrations (`*_fkey` twins of the cloud's `*_fkey1`)
+had to be dropped, otherwise PostgREST reports two relationships between the same tables.
+
+App address: https://in2recruit.57-159-30-28.sslip.io (`recruit.` redirects). Still to do: point
+`in2recruit.in2itebs.com` at the VM, then delete the InsForge cloud project.
 
 ## Redeploy by hand
 
