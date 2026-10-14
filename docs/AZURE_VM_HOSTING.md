@@ -107,8 +107,14 @@ set by hand before they applied cleanly: the `role_permissions(role, resource)` 
 (created by hand with every role value in use). One migration (`20261001065249`) was applied as a patched
 copy that skips tables which never had the `authenticated_workspace` policy.
 
-Still to do: paste the OpenRouter key into `/srv/recruit/shared/.env.local` (AI resume extraction), copy
-real data from the cloud project if any, point `recruit.in2itebs.com` at the VM.
+AI: the OpenRouter key is in `/srv/recruit/shared/.env.local`. The OpenRouter account has no credits, so the
+model the app shipped with (`google/gemma-4-26b-a4b-it`, paid) is refused; the `ai_settings` row and
+`OPENROUTER_MODEL` are set to `dots-studio/dots-3-note-preview:free`, which passed the workbench and JD
+extraction routes (free models are rate-limited per day). To use the original model, add credits at
+openrouter.ai and change the model in the app's AI settings page.
+
+Still to do: copy real users and data from the InsForge cloud project (needs its API key or dashboard
+access; passwords cannot be exported), and point `in2recruit.in2itebs.com` at the VM.
 
 ## Redeploy by hand
 
