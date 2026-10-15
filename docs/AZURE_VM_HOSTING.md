@@ -94,7 +94,7 @@ Moved from the InsForge cloud on 2026-10-14. Repo: https://github.com/In2ITEBSLt
 | --- | --- |
 | App | https://recruit.57-159-30-28.sslip.io (later recruit.in2itebs.com); pm2 app `in2recruit`, 127.0.0.1:3200 |
 | Code | `/srv/recruit/app` -> `releases/<ts>` (3 kept); env in `/srv/recruit/shared/.env.local` |
-| Backend | self-hosted InsForge in Docker, `/srv/insforge` (`docker compose ps|logs`), API on 127.0.0.1:7130, dashboard https://insforge.57-159-30-28.sslip.io (login: `ROOT_ADMIN_USERNAME/PASSWORD` in `/srv/insforge/.env`) |
+| Backend | self-hosted InsForge in Docker, `/srv/insforge` (`docker-compose.restart.yml` override makes Postgres restart on reboot) (`docker compose ps|logs`), API on 127.0.0.1:7130, dashboard https://insforge.57-159-30-28.sslip.io (login: `ROOT_ADMIN_USERNAME/PASSWORD` in `/srv/insforge/.env`) |
 | Database | Postgres 15 in the `insforge-postgres-1` container, 127.0.0.1:5442; `/srv/recruit/apply-migrations.sh <release>` applies the repo's SQL in order and records it |
 | CV text extraction | Apache Tika container `in2recruit-tika` on 127.0.0.1:9998 (same image the cloud used) |
 | Scheduled jobs | `/srv/recruit/cron.sh <route>` from appuser's crontab: offer-watchdog every 15 min, feedback-scan hourly, expiry/preboarding/consistency nightly, digests 03:30 UTC; log in `/srv/recruit/logs/cron.log` |
