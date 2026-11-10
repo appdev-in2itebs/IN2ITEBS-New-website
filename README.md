@@ -61,7 +61,7 @@ Copy `web/.env.example` to `web/.env.local` and fill in what you need. `.env.loc
 | Variable | Required | Meaning |
 | --- | --- | --- |
 | `SITE_ENV` | build + start | `preview` (default for reviews) or `production` (approved releases only). |
-| `NEXT_PUBLIC_SITE_URL` | build | Public origin used for canonical URLs, sitemap and the enquiry origin allow-list. Defaults to `https://in2itebs.com`. |
+| `NEXT_PUBLIC_SITE_URL` | build | Public origin used for canonical URLs, sitemap and the enquiry origin allow-list. Defaults to `https://www.in2itebs.com`. |
 | `LEAD_WEBHOOK_URL` | for lead delivery | HTTPS endpoint that durably accepts an enquiry before returning 2xx. Unset: the form answers 503 asking the visitor to email instead, and `/api/health/` reports `leadDeliveryConfigured: false`. |
 | `LEAD_WEBHOOK_TOKEN` | for lead delivery | Bearer token sent to the webhook. |
 | `ALLOWED_ORIGINS` | optional | Extra browser origins (comma-separated) allowed to submit the enquiry form, e.g. a staging host. |

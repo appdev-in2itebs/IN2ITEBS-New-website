@@ -1,6 +1,8 @@
 import { redirects as redirectMap, goneSources } from "./content/redirects.mjs";
 
 const siteEnv = process.env.SITE_ENV;
+const indexingEnabled =
+  siteEnv === "production" || (process.env.NODE_ENV === "production" && process.env.CI !== "true");
 
 // Where uploaded media is served from: the hosted project (https://<ref>.supabase.co) or, on the VM,
 // the site's own origin in front of self-hosted Supabase. Read at build time like the rest of this file.
@@ -58,7 +60,7 @@ const nextConfig = {
           // The chat assistant's microphone button needs the microphone on this site's own pages
           // (and nowhere else); the camera and location stay off.
           { key: "Permissions-Policy", value: "camera=(), microphone=(self), geolocation=()" },
-          ...(siteEnv === "production" ? [] : [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }]),
+          ...(indexingEnabled ? [] : [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }]),
         ],
       },
     ];

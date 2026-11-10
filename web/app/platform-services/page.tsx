@@ -79,7 +79,7 @@ const cardCopy: Record<string, { eyebrow: string; bullets: string[]; cta: string
   sap: {
     eyebrow: "Flagship practice",
     bullets: [
-      "SAP Gold Partner, 300+ consultants and 1,000+ combined years of SAP experience",
+      "SAP Gold Partner across S/4HANA, SuccessFactors, Ariba, Concur, analytics and BTP",
       "S/4HANA, SuccessFactors, Ariba, Concur and SAP Analytics Cloud",
       "Datasphere, BTP clean-core extensions and Joule activation",
     ],

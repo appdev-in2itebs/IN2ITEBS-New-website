@@ -246,7 +246,7 @@ export const legacyIndustries: LegacyIndustry[] = [
       "In2IT EBS provides SAP solutions for textile firms: end-to-end planning, production and configuration, quality, inventory, CRM, finance and purchase management.",
     image: "pexels-pixabay-236748-1024x615.jpg",
     intro: [
-      "Run Projects More Profitably with Professional Services Solutions Firms are rethinking business models to drive growth and engage the best talent. In2IT EBS provides SAP solution that enables firms to drive new growth, deliver digital services, engage the best talent, and become intelligent enterprises through our deep industry process expertise, next-gen best practices, and integration across the industry value chain",
+      "Textile and apparel businesses can connect material planning, production, quality, inventory, sales, finance and purchasing in one operating model.",
     ],
     sectionsHeading: "Solutions we provide",
     sections: [
@@ -590,7 +590,7 @@ export const legacyIndustries: LegacyIndustry[] = [
       "Leading energy and utility companies plan to capture new business opportunities by driving consumer outcomes, increasing productivity and empowering an innovation culture, with RISE with SAP from In2IT EBS.",
     intro: [
       "In times of economic crises, winning companies are those that are quick to innovate business processes, advance new business models, and create differentiating outcomes for their customers. Intelligent enterprises that cope best with uncertainty will come out on top in the next normal. The RISE with SAP offering is a stepping stone on the journey to the Intelligent Enterprise. In2IT EBS offering SAP S/4HANA, the Intelligent ERP in the cloud, delivers unprecedented automation around best-practice and next-practice business process standards that give you the flexibility to optimize and transform your business",
-      "Leading energy and utility companies plan to capture new business opportunities by driving consumer outcomes, increasing productivity, and empowering an innovation culture. Leaders focus on these four strategic priorities:",
+      "Energy and utility organisations focus on seven operational and technology priorities:",
     ],
     sectionsHeading: "What are the strategic priorities in your industry?",
     sections: [
@@ -771,7 +771,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     sections: [
       {
         title: "Solutions We Offer",
-        body: "In2IT EBS's solutions for the metals and mining industry can help you address your critical challenges with the following:",
+        body: "In2IT EBS supports telecommunications organisations through consulting, systems integration and solution rollout services.",
       },
     ],
     customers: ["bookmyshow.png", "medianet.png", "mxplayer.png"],

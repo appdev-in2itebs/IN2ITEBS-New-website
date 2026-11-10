@@ -8,8 +8,7 @@ import { awardsIntro, awardsTitle } from "@/content/awards";
 
 export const metadata = pageMetadata("/accreditation-awards/", {
   title: awardsTitle,
-  description:
-    "SAP partner awards and the quality credentials behind them — ISO 20000-1, ISO 9001, ISO 27001, STPI accreditation and NASSCOM membership.",
+  description: "Published SAP partner awards and organisational memberships from In2IT EBS records.",
 });
 
 /**

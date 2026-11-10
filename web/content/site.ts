@@ -3,7 +3,6 @@ import type { Region, Stat } from "./types";
 /** Headline figures — Deck 2 (Corporate Capability, May 2026) via the Features Plan; SOT-02 of the first deck says 350+ employees. Owner to confirm one source (audit M7). */
 export const stats: Stat[] = [
   { value: "10+", label: "Years of experience" },
-  { value: "380+", label: "Employees" },
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered" },
   { value: "14+", label: "Industry verticals" },
@@ -12,17 +11,10 @@ export const stats: Stat[] = [
   { value: "10+", label: "Proprietary accelerators" },
 ];
 
-export const footerCertifications = [
-  "CMMI",
-  "ISO 9001",
-  "ISO 27001",
-  "SAP Gold Partner",
-  "RISE with SAP",
-  "PCE Partner",
-];
+export const footerCertifications = ["ISO 9001", "ISO/IEC 27001", "SAP Gold Partner"];
 
 /** Bump when site copy changes; feeds sitemap lastModified for pages without their own date. */
-export const contentUpdated = "2026-09-08";
+export const contentUpdated = "2026-11-10";
 
 export const regions: Region[] = [
   { code: "IN", name: "India", email: "info@in2itebs.com" },
@@ -40,7 +32,8 @@ export const social = {
 
 export const site = {
   name: "In2IT EBS",
-  legalName: "In2IT Enterprise Business Services",
+  legalName: "In2IT Enterprise Business Services Private Limited",
+  cin: "U72900KA2016PTC147788",
   tagline: "Converged Intelligence",
   description:
     "10+ years of enterprise transformation, delivered globally. SAP Gold Partner with adjacent strength across Salesforce, Workday, Oracle, Microsoft, cloud and application services.",

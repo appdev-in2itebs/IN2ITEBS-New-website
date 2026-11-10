@@ -1,10 +1,11 @@
 import type { Client } from "@/content/types";
 import { ClientLogo } from "./client-logo";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
+import { clientEvidenceApproved } from "@/content/compliance";
 
 /** Static grid of client logos for industry pages. */
 export function ClientWall({ clients }: { clients: Client[] }) {
-  if (!clients.length) return null;
+  if (!clientEvidenceApproved || !clients.length) return null;
   return (
     <Stagger className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {clients.map((c) => (

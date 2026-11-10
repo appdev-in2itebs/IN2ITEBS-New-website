@@ -37,7 +37,7 @@ export const testimonials: Testimonial[] = [
   {
     slug: "trilegal",
     quote:
-      "Trileagal is consistently recognised as the best Indian law firm for the quality for their services and client satisfaction. We are recognised for our sheer commitment to diversity, equality and sustainability and to bring best of employee experience we have decided to go for HR Digital Transformation with SAP SuccessFactors. We chosen In2IT EBS as our trusted implementation partner and by enabling the partnership from the day 1 In2IT EBS team has took the ownership of the project, turn it around, tackling the stringent deadline and made this HR Digital Transformation journey successful.",
+      "Trilegal is consistently recognised as the best Indian law firm for the quality for their services and client satisfaction. We are recognised for our sheer commitment to diversity, equality and sustainability and to bring best of employee experience we have decided to go for HR Digital Transformation with SAP SuccessFactors. We chosen In2IT EBS as our trusted implementation partner and by enabling the partnership from the day 1 In2IT EBS team has took the ownership of the project, turn it around, tackling the stringent deadline and made this HR Digital Transformation journey successful.",
     name: "Kavita Mathur",
     role: "Chief People Officer at Trilegal",
     photo: "/testimonials/kavita-mathur.jpg",

@@ -10,9 +10,10 @@ import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { caseStudies, getCaseStudy } from "@/content/case-studies";
+import { clientEvidenceApproved } from "@/content/compliance";
 
 export async function generateStaticParams() {
-  return caseStudies.filter((c) => c.named).map((c) => ({ slug: c.slug }));
+  return clientEvidenceApproved ? caseStudies.filter((c) => c.named).map((c) => ({ slug: c.slug })) : [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const study = getCaseStudy(slug);
-  if (!study || !study.named) notFound();
+  if (!clientEvidenceApproved || !study || !study.named) notFound();
 
   // First word of the featured solution becomes the headline accent.
   const accentWord = study.featuredSolution.split(" ")[0];

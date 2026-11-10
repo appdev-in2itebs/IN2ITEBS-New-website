@@ -14,7 +14,7 @@ import { CtaSection } from "@/components/sections/cta-section";
 export const metadata = pageMetadata("/sap-enterprise-solutions/grow-fast/", {
   title: "SAP GROW Fast",
   description:
-    "Go live on SAP S/4HANA Cloud in weeks, not months — fixed scope, fixed price and Joule AI from day one, in three In2IT EBS Converge packages.",
+    "A structured SAP S/4HANA Cloud adoption approach with defined scope, delivery governance and three In2IT EBS Converge packages.",
 });
 
 /**
@@ -29,16 +29,16 @@ export const metadata = pageMetadata("/sap-enterprise-solutions/grow-fast/", {
 /** Where the value shows up — the four the existing page names. */
 const value = [
   {
-    title: "Guaranteed speed to value",
-    body: "You go live in weeks instead of quarters. Most first-wave go-lives land in sixteen weeks or less.",
+    title: "A structured path to value",
+    body: "A defined first-wave scope provides a clearer basis for planning, governance and delivery.",
   },
   {
     title: "Reduced risk",
     body: "The scope and the methodology are already battle-tested rather than reinvented for your project.",
   },
   {
-    title: "Transparent, fixed costs",
-    body: "Fixed from day one, with no service-fee surprises once the contract is signed.",
+    title: "Transparent commercial model",
+    body: "Scope, assumptions and commercial terms are documented for agreement before delivery begins.",
   },
   {
     title: "Minimal disruption",
@@ -80,7 +80,7 @@ export default function GrowFastPage() {
           <Reveal>
             <Image
               src="/services/sap-grow-fast-banner.jpg"
-              alt="SAP GROW Fast, Converged — go live on SAP S/4HANA Cloud in weeks, not months, with fixed scope, fixed price and Joule AI built in from day one; sixteen weeks to go-live, three packages: Pulse, Momentum and Flow."
+              alt="SAP GROW Fast, Converged — a structured Cloud ERP approach with three packages: Pulse, Momentum and Flow."
               width={1123}
               height={376}
               sizes="(min-width: 1024px) 72rem, 100vw"
@@ -101,11 +101,10 @@ export default function GrowFastPage() {
           <Stagger className="grid gap-5 md:grid-cols-2">
             <StaggerItem className="h-full">
               <Card bezel className="h-full">
-                <Eyebrow>Fit-to-standard, fixed-price</Eyebrow>
+                <Eyebrow>Fit-to-standard delivery</Eyebrow>
                 <p className="mt-5 text-[0.95rem] leading-relaxed text-foreground-muted">
                   Instead of designing your ERP from a blank page, you start from a proven, fit-to-standard scope and
-                  configuration, delivered by a certified partner on a fixed price and a fixed timeline. Most first-wave
-                  go-lives land in sixteen weeks or less.
+                  configuration. Scope, timeline and commercial terms are confirmed for each engagement.
                 </p>
               </Card>
             </StaggerItem>
@@ -162,11 +161,8 @@ export default function GrowFastPage() {
               A discipline, not a <Accent>badge</Accent>.
             </h2>
             <p className="mt-7 max-w-[70ch] text-base leading-relaxed text-brand-muted">
-              Being SAP-qualified as a partner-packaged solution provider is not a badge we point to — it is a
-              discipline we deliver against. Our GROW Fast practice runs on a clear delivery methodology, RACI-defined
-              roles and the quality gates SAP itself recommends, so &ldquo;fast&rdquo; never comes at the expense of
-              &ldquo;right&rdquo;. That is what Converged Intelligence means to us: bringing SAP&rsquo;s platform, AI
-              and our own delivery discipline together into one dependable outcome, not three separate risks.
+              Our GROW Fast practice uses a clear delivery methodology, RACI-defined roles and documented quality gates.
+              Converged Intelligence brings SAP&rsquo;s platform, AI and delivery governance into one programme.
             </p>
           </Reveal>
         </Container>
@@ -200,10 +196,10 @@ export default function GrowFastPage() {
         eyebrow="Ready when you are"
         heading={
           <>
-            Fixed scope. Fixed price. Weeks, not <Accent>quarters</Accent>.
+            Define the scope. Govern the <Accent>delivery</Accent>.
           </>
         }
-        body="If your business has been putting off ERP modernisation because “not now” felt safer than an open-ended project, SAP GROW Fast changes that math. Talk to us about which GROW Fast package fits your business."
+        body="Talk to us about the GROW Fast package, scope and delivery approach that fit your business."
       />
     </>
   );

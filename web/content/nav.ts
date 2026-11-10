@@ -55,7 +55,7 @@ export const platformPractices: PracticeSummary[] = [
   {
     slug: "sap",
     name: "SAP Enterprise Solutions",
-    tagline: "SAP Gold Partner. 300+ consultants. 1,000+ combined years of SAP experience.",
+    tagline: "SAP Gold Partner across S/4HANA, SuccessFactors, Ariba, Concur, analytics and BTP.",
     href: "/sap-enterprise-solutions/",
   },
   {
@@ -184,7 +184,7 @@ export const primaryNav: NavItem[] = [
       { label: "Who We Are?", href: "/about/who-we-are/" },
       { label: "Our Leadership", href: "/about/our-leadership/" },
       { label: "Accreditation", href: "/accreditation-awards/" },
-      { label: "Customer Stories", href: "/about/customer-stories/" },
+      { label: "Case Studies", href: "/case-studies/" },
       { label: "Blogs & Articles", href: "/insights/" },
     ],
   },

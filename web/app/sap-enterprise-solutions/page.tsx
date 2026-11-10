@@ -16,7 +16,7 @@ import { SapToolchain } from "@/components/sections/sap-toolchain";
 export const metadata = pageMetadata("/sap-enterprise-solutions/", {
   title: "SAP Enterprise Solutions",
   description:
-    "SAP run by a Gold Partner — 300+ consultants and 1,000+ combined years of experience across S/4HANA, SuccessFactors, Ariba, Concur, AI and BTP.",
+    "SAP enterprise consulting across S/4HANA, SuccessFactors, Ariba, Concur, analytics and BTP from an SAP Gold Partner.",
 });
 
 /** Six IA clusters — drives both the sticky anchor nav and the section ids. */
@@ -38,7 +38,7 @@ export default function SapEnterpriseSolutionsPage() {
         eyebrow="SAP Enterprise Solutions"
         headline="SAP, run by a"
         accentWord="Gold Partner."
-        subhead="300+ consultants. 1,000+ combined years of SAP experience. A proud SAP Gold Partner."
+        subhead="S/4HANA, SuccessFactors, Ariba, Concur, analytics and BTP from an SAP Gold Partner."
         media={<HeroObject name="pages/sap-enterprise-solutions" />}
         frame={false}
       />
@@ -49,7 +49,7 @@ export default function SapEnterpriseSolutionsPage() {
           <ul className="flex flex-wrap items-center gap-x-2.5 gap-y-2 py-4">
             {/* The gold gradient badge went on 2026-09-17 at the owner's request; the credential
                 itself stays, set as a plain pill like the ones beside it. */}
-            {["SAP Gold Partner", "RISE with SAP", "PCE Partner", "Co-Innovation Partner"].map((c) => (
+            {["SAP Gold Partner"].map((c) => (
               <li key={c} className="glass-pill text-foreground">
                 {c}
               </li>
@@ -103,7 +103,7 @@ export default function SapEnterpriseSolutionsPage() {
             <Reveal>
               <SectionHeading
                 eyebrow="Overview"
-                lead="300+ consultants and 1,000+ combined years of SAP experience, across 50+ clients in manufacturing, infrastructure, professional services, metals and mining, and utilities."
+                lead="Implementation, migration, application management and platform engineering across the SAP portfolio."
               >
                 A proud SAP <Accent>Gold</Accent> Partner.
               </SectionHeading>
@@ -113,15 +113,15 @@ export default function SapEnterpriseSolutionsPage() {
               features={[
                 {
                   title: "Partnership depth",
-                  body: "SAP Gold Partner; RISE with SAP (BTaaS); PCE & Co-Innovation Partner; active in SAP user groups.",
+                  body: "SAP Gold Partner delivering advisory, implementation, migration and application-management services.",
                 },
                 {
                   title: "Industry experience",
-                  body: "50+ SAP clients across manufacturing, infrastructure, mining, utilities, professional services and the public sector.",
+                  body: "Experience across manufacturing, infrastructure, mining, utilities, professional services and the public sector.",
                 },
                 {
                   title: "Specialised skills",
-                  body: "300+ consultants, 40% technical / 60% functional; migration and transformation experts across all major platforms.",
+                  body: "Technical and functional delivery skills spanning migration, transformation and ongoing operations.",
                 },
                 {
                   title: "Solutions & IP",
@@ -227,14 +227,14 @@ export default function SapEnterpriseSolutionsPage() {
               },
               {
                 title: "S/4HANA Private Cloud (PCE)",
-                body: "Dedicated tenancy and full customisation for deep integration or regulatory isolation. We are an SAP PCE Partner.",
+                body: "Dedicated tenancy and full customisation can support deep integration or regulatory-isolation requirements.",
               },
             ]}
           />
           <Reveal delay={0.1} className="mt-8">
             <p className="text-sm font-medium text-foreground-muted">
               30% faster go-live vs benchmark <span className="text-gold">·</span> 25+ S/4HANA programmes delivered{" "}
-              <span className="text-gold">·</span> 100% go-live success rate.
+              <span className="text-gold">·</span> Structured cutover governance.
             </p>
           </Reveal>
 
@@ -297,7 +297,7 @@ export default function SapEnterpriseSolutionsPage() {
           <Reveal className="mb-10 mt-20 max-w-3xl">
             <SectionHeading
               eyebrow="Delivery method"
-              lead="Five Activate phases, compressed by accelerators, pre-built configurations and a single delivery team from Discover through Run. In2IT EBS is recognised by SAP as a certified provider of implementation services."
+              lead="Five Activate phases supported by accelerators, pre-built configurations and one delivery team from Discover through Run."
             >
               SAP Activate, <Accent>accelerated</Accent>.
             </SectionHeading>
@@ -351,9 +351,8 @@ export default function SapEnterpriseSolutionsPage() {
                 Full-suite SAP SuccessFactors, delivered at <Accent>scale</Accent>.
               </h3>
               <Lead className="mt-5">
-                125+ projects delivered globally across Core HR, Talent, Payroll and Workzone, by 87+ certified HXM
-                consultants (70% Associate, 30% Professional) — plus 10+ live proofs of concept for Joule for HR and
-                Talent Intelligence.
+                Delivery across Core HR, Talent, Payroll and Workzone, with integration and adoption support across the
+                programme lifecycle.
               </Lead>
             </Reveal>
           </div>
@@ -389,10 +388,8 @@ export default function SapEnterpriseSolutionsPage() {
           />
           <Reveal delay={0.1} className="mt-8">
             <p className="text-sm font-medium text-foreground-muted">
-              Largest certified SAP HXM consultant pool in region <span className="text-gold">·</span> proprietary iTAM
-              accelerator <span className="text-gold">·</span> EBSx rapid-deployment kit{" "}
-              <span className="text-gold">·</span> Joule-for-HR playbook <span className="text-gold">·</span> 100%
-              success rate on HR transformation projects.
+              iTAM accelerator <span className="text-gold">·</span> EBSx rapid-deployment kit{" "}
+              <span className="text-gold">·</span> Joule-for-HR playbook.
             </p>
           </Reveal>
 

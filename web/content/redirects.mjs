@@ -114,11 +114,13 @@ export const redirects = [
   p("/out-leadership", "/about/our-leadership/"),
 
   // --- Customer stories / case studies ---
-  p("/customer-stories", "/about/customer-stories/"),
-  p("/welspun", "/about/customer-stories/welspun/"),
-  p("/ibg-goes-live-with-sap-successfactors", "/about/customer-stories/"),
-  p("/wework-rise-with-sap-s4hana", "/about/customer-stories/"),
-  p("/sharechat-rise-with-sap-s4hana", "/about/customer-stories/"),
+  p("/customer-stories", "/case-studies/"),
+  p("/about/customer-stories", "/case-studies/"),
+  p("/about/customer-stories/:path*", "/case-studies/"),
+  p("/welspun", "/case-studies/"),
+  p("/ibg-goes-live-with-sap-successfactors", "/case-studies/"),
+  p("/wework-rise-with-sap-s4hana", "/case-studies/"),
+  p("/sharechat-rise-with-sap-s4hana", "/case-studies/"),
 
   // --- Lead funnel / news ---
   p("/expert-advice", "/contact/"),

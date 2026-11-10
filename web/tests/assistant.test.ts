@@ -268,7 +268,7 @@ test("testimonial, client and case-study questions link those sections", () => {
     "Have you done this before?",
     "customer reviews?",
   ])
-    assert.deepEqual(links(q), ["/about/customer-stories/#testimonials", "/case-studies/"], q);
+    assert.deepEqual(links(q), ["/case-studies/"], q);
   // A service question that mentions clients is not a testimonials question.
   assert.equal(links("Can you help clients in FMCG with SAP?").includes("/case-studies/"), false);
 });

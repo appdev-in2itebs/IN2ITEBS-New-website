@@ -10,7 +10,7 @@ for (const theme of ["light"])
     const failures: unknown[] = [];
     for (const path of paths) {
       await page.goto(path);
-      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://in2itebs.com${path}`);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://www.in2itebs.com${path}`);
       const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
       if (result.violations.length)
         failures.push({

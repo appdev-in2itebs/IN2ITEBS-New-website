@@ -81,7 +81,7 @@ export default async function OurLeadershipPage() {
           { label: "The wider leadership team", href: "/about/#leadership" },
           { label: "Who We Are?", href: "/about/who-we-are/" },
           { label: "Accreditation", href: "/accreditation-awards/" },
-          { label: "Customer Stories", href: "/about/customer-stories/" },
+          { label: "Case Studies", href: "/case-studies/" },
         ]}
       />
       <V2Closing body="Tell us where you want to go. We will bring the platforms, the people and the proof, and map your first move in a single conversation." />

@@ -267,7 +267,7 @@ export const servicePages: ServicePage[] = [
       {
         title: "Highly Collaborative approach to generating best Business performance",
         icon: "handshake",
-        body: "As an expert SAP Consulting Company, our methodology is focused on a highly collaborative approach. We constantly use best practices to control essential technologies that generate higher business performance with effective use of big data services. This tactic has been verified time and again to maximize the client's revisit on their investment. Our 100% success rate with customers is a straight consequence of our belief that winning projects begin with senior consultants who acquire profound, industry-specific information. This consequences in lower consultant-to-client ratios in our developments, which in turn guides to better information transfer, advanced client independence, and consumer satisfaction. Our senior-level consultants have a perfect combination of technical proficiency, business management, management, and project insight that enables them to successfully lead a team through the whole workflow development lifecycle. We have practiced running whole projects and incorporating organizations on small and large-scale clients.",
+        body: "Our SAP consulting approach is collaborative and uses experienced, industry-aware teams across the delivery lifecycle. Engagement scope, governance and knowledge transfer are agreed for each project.",
       },
     ],
   },
@@ -334,7 +334,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/sap-grow-fast/",
     metaTitle: "SAP GROW Fast",
     metaDescription:
-      "SAP GROW Fast is SAP's accelerated path onto Cloud ERP: a pre-defined, SAP-validated scope delivered by a certified partner on a fixed price and a fixed timeline.",
+      "SAP GROW Fast is a structured path to Cloud ERP using a pre-defined scope and fit-to-standard delivery approach.",
     image: { src: "/services/live/sap-grow-fast.jpg", alt: "SAP GROW Fast" },
     intro: [
       "Most companies that put off moving to a modern ERP aren't dragging their feet because they don't see the value. They're dragging their feet because \"ERP implementation\" has become shorthand for eighteen months of workshops, a budget that keeps drifting, and a go-live date that keeps slipping. For a growing business, that timeline isn't just inconvenient — it's a competitive disadvantage.",
@@ -344,11 +344,11 @@ export const servicePages: ServicePage[] = [
       {
         title: "What SAP GROW Fast Actually Is",
         icon: "lightbulb",
-        body: "SAP GROW Fast is SAP's accelerated path onto Cloud ERP — a pre-defined, SAP-validated scope covering the processes every business runs on: Finance, Order-to-Cash, and Procure-to-Pay. Instead of designing your ERP from a blank page, you start from a proven, fit-to-standard scope and configuration, delivered by a certified partner on a fixed price and a fixed timeline. Most first-wave go-lives land in sixteen weeks or less.",
+        body: "SAP GROW Fast uses a pre-defined, fit-to-standard scope covering Finance, Order-to-Cash and Procure-to-Pay. Scope, timeline and commercial terms are confirmed for each engagement.",
         bullets: [
           "What makes this a genuinely modern ERP rather than just a faster old one is Joule, SAP's AI copilot, active from day one. From your very first go-live, your team isn't learning a new system cold — they have an assistant that understands natural language, helps them navigate, and flags issues before they become problems.",
           'And "fast" doesn\'t mean "limited." SAP GROW Fast follows a land-and-expand model: your first wave gets you live with the essentials in one entity and one country, and every wave after that — additional countries, deeper integrations, industry-specific capability — happens on your timeline, not a vendor\'s.',
-          "The value shows up in four places at once: guaranteed speed to value, because you're going live in weeks instead of quarters; reduced risk, because the scope and methodology are already battle-tested rather than reinvented for your project; transparent, fixed costs from day one, with no service-fee surprises once the contract is signed; and minimal disruption, because your business keeps running while the implementation happens around it, not instead of it.",
+          "The packaged approach uses a defined scope, delivery method and commercial model intended to reduce avoidable project risk and disruption.",
         ],
       },
       {
@@ -369,7 +369,7 @@ export const servicePages: ServicePage[] = [
       {
         title: "Ready When You Are",
         icon: "rocket",
-        body: "If your business has been putting off ERP modernization because \"not now\" felt safer than an open-ended project, SAP GROW Fast — and an In2IT EBS team that's built specifically around delivering it — changes that math. Fixed scope. Fixed price. A go-live measured in weeks. And AI that's already working for your team from day one.",
+        body: "SAP GROW Fast provides a structured basis for ERP modernisation, with agreed scope, governance and a phased adoption plan.",
       },
     ],
     closing: ["Talk to In2IT EBS about which GROW Fast package fits your business."],

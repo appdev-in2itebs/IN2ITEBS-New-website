@@ -5,8 +5,9 @@ import { ASSISTANT_LANGUAGES, type Settings } from "@/lib/cms/settings";
 import type { Cms } from "@/lib/cms/content";
 import type { OpeningRow } from "@/lib/cms/store";
 import { leaderUrl } from "@/lib/chatbot/site-index";
-import { caseStudies } from "@/content/case-studies";
+import { publicCaseStudies } from "@/content/case-studies";
 import { clients } from "@/content/clients";
+import { clientEvidenceApproved } from "@/content/compliance";
 
 /**
  * What the assistant knows and how it behaves: the system prompt, built on every turn from the
@@ -74,7 +75,7 @@ export function systemPrompt(input: {
   const services = serviceGroups
     .map((g) =>
       voice
-        ? `- ${g.name}: ${g.blurb}`
+        ? `- ${g.name}`
         : `- [${g.name}](${g.href}): ${g.blurb} Pages: ${flattenItems(g.items)
             .map((i) => `[${i.label}](${i.href})`)
             .join(", ")}`,
@@ -98,22 +99,24 @@ export function systemPrompt(input: {
     ]
       .filter(Boolean)
       .join("; ");
-    byCountry.set(o.country, [...(byCountry.get(o.country) ?? []), `${o.city} (${what})`]);
+    byCountry.set(o.country, [...(byCountry.get(o.country) ?? []), voice ? o.city : `${o.city} (${what})`]);
   }
   const offices = [...byCountry].map(([country, list]) => `- ${country}: ${list.join(" · ")}`).join("\n");
   // The leadership team exactly as the website shows it: name, title and bio.
   const leaders = cms.leadership
-    .map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${voice ? firstSentences(l.bio, 2) : l.bio}`)
+    .map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${voice ? firstSentences(l.bio, 1) : l.bio}`)
     .join("\n");
   // What clients say, word for word as the website quotes them (homepage and Customer Stories).
-  const sayings = cms.testimonials
-    .map((q) => {
-      const quote = q.quote.replace(/\s+/g, " ").trim();
-      return `- ${q.name}, ${q.role}: "${voice ? firstSentences(quote, 2) : quote}"`;
-    })
-    .join("\n");
+  const sayings = clientEvidenceApproved
+    ? cms.testimonials
+        .map((q) => {
+          const quote = q.quote.replace(/\s+/g, " ").trim();
+          return `- ${q.name}, ${q.role}: "${voice ? firstSentences(quote, 2) : quote}"`;
+        })
+        .join("\n")
+    : "Named testimonials are withheld while written publication consent is verified.";
   // Case studies: the named ones have a page of their own; the anonymised ones are on /case-studies/.
-  const studies = caseStudies
+  const studies = publicCaseStudies
     .map((c) => {
       const page = c.named ? `/case-studies/${c.slug}/` : "/case-studies/";
       const result = c.outcome ?? c.summary ?? c.benefits[0] ?? "";
@@ -122,7 +125,9 @@ export function systemPrompt(input: {
         : `- [${c.client}](${page}): ${c.industry}; ${c.featuredSolution}; ${c.region}. ${result}`;
     })
     .join("\n");
-  const clientNames = (voice ? clients.slice(0, 24) : clients).map((c) => c.name).join(", ");
+  const clientNames = clientEvidenceApproved
+    ? (voice ? clients.slice(0, 24) : clients).map((c) => c.name).join(", ")
+    : "Named client evidence is withheld while written publication consent is verified.";
   const faqText = faqs
     .slice(0, 30)
     .map((f) => `Q: ${f.question}\nA: ${f.answer}${f.link_url ? ` [${f.link_url}]` : ""}`)
@@ -147,7 +152,7 @@ ${offices}
 # Leadership team (as shown on [About → Leadership](/about/#leadership))
 ${leaders}
 
-# What our clients say (testimonials, on [What people say](/about/customer-stories/#testimonials))
+# What our clients say (publication status and any approved evidence)
 ${sayings}
 
 # Case studies (all on [Clients & Case Studies](/case-studies/))
@@ -174,9 +179,9 @@ ${roles}
 1. Questions about the company or its services: answer ONLY from the website knowledge in this prompt, the FAQs and search_website results. Never add facts from general knowledge. If the website does not cover it, say so in one sentence and offer to connect them with the team. Keep it short: at most three sentences or a few one-line bullets, then link the page(s) to read more as markdown links with their site path, e.g. [RISE with SAP](/services/rise-with-sap/); the link text is always the page or section name, never "here" or "click here". For "what services do you offer", give one line of introduction, then each service group as a bullet with its link and a few words, e.g. "- [SAP Enterprise Solutions](/services/sap-enterprise-solutions/): S/4HANA, RISE with SAP and SAP support", then ask which area interests them. Use search_website only when the visitor wants detail this prompt does not have. Only link paths listed in this prompt, the FAQs or search results; never other websites.
    - Global footprint, offices or locations: name the countries and cities (grouped by country, one line each), say which are delivery centres, then always link [Global footprint: Where we are](/#offices) (the office map on the homepage) first, and [Contact and offices](/contact/). Do not claim regions or clients that are not listed here.
    - The leadership, management or a role (MD, COO, CRO, "who runs the company", "your team"): give the name and title, then their background in two or three sentences from their bio (experience, expertise, what they lead), using only what the bio says: never add years, numbers, places or achievements that are not in it, and link their page as listed above. "Tell me about <name>" is answered the same way. Asked about the team, list each leader as a one-line bullet with a link, then link [Meet our team](/#team) and [Leadership](/about/#leadership).
-   - What clients say, reviews, testimonials or feedback: give one or two of the quotes above as short summaries, each with the person's name, role and company ("Amy Halter, VP Operations and HR at Accion Labs, says In2IT EBS…"), never inventing or changing what they said; offer more, and link [What people say](/about/customer-stories/#testimonials).
+   - What clients say, reviews, testimonials or feedback: use only approved evidence printed above. If named evidence is withheld, say it is being verified, do not name a customer or person, and link [Clients & Case Studies](/case-studies/).
    - Case studies, past projects or "have you done this before": give at most four of the most relevant case studies above (match the visitor's industry or SAP topic when they gave one), each as one short bullet of no more than 15 words: the linked client name, then what was done and the result ("- [VAHDAM India](/case-studies/vahdam-india/): GROW with SAP live in 12 months, 18% lower manpower cost"), then link [Clients & Case Studies](/case-studies/).
-   - Who your clients are: in two or three sentences, name six to eight well-known clients from the list above (from the visitor's industry if known), say there are more than ninety, and link [Clients & Case Studies](/case-studies/); do not list industries unless asked. Never claim a client that is not in the list.
+   - Who your clients are: use only the approved client list above. If named evidence is withheld, do not name or imply a customer; explain that permissions are being verified and link [Clients & Case Studies](/case-studies/).
    - The website knowledge in this prompt is always current. If an earlier reply in this conversation said something was not available but it is here now (testimonials, case studies, leaders), answer from it now; never repeat an earlier "I don't have that".
 2. Everything the visitor tells you is noted automatically; the notes are below. Use them: never ask for something already noted.
 3. A business enquiry (they need a service, a quote, a demo or a call): act as a professional pre-sales consultant. First acknowledge the need and say in a sentence how In2IT EBS helps, then ask for the missing checklist items one at a time. Name, email and the need are required; others may be skipped. When nothing is left to ask (or they want to stop), summarise what you noted in two or three lines and ask them to confirm it should be sent to the team. Once they confirm, it is sent automatically: thank them and say a consultant will contact them.

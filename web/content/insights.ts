@@ -79,66 +79,6 @@ export const insights: Insight[] = [
       "SAP S/4HANA Cloud is a next-generation enterprise resource planning (ERP) software solution that enables businesses to gain real-time insights and analytics…",
     image: "/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business.png",
   },
-  {
-    slug: "coronavirus-lockdown-leads-to-more-gaming-and-e-sports",
-    title: "Coronavirus lockdown leads to more gaming and e-Sports",
-    date: "",
-    dateLabel: "21 Jun",
-    category: "Industry",
-    excerpt:
-      "The esports and gaming part may end up being an unexpected champ as ~45 M or more Chinese are in lockdown to forestall the spread of the coronavirus. The…",
-    image: "/insights/coronavirus-lockdown-leads-to-more-gaming-and-e-sports.jpg",
-  },
-  {
-    slug: "future-where-technology-creates-good-jobs",
-    title: "Mrs Bectors Food-SAP SuccessFactors Go-Live partnering with In2IT EBS",
-    date: "",
-    dateLabel: "08 Dec",
-    category: "Customer story",
-    excerpt:
-      "9th May 2022 is a day to remember and celebrate as a MBFSL team as together are taking a LEAP (Leveraging Effectiveness thru Automating Processes) by moving…",
-    image: "/insights/future-where-technology-creates-good-jobs.jpg",
-  },
-  {
-    slug: "what-you-do-today-improve-your-tomorrows",
-    title: "Top Benefits Of Implementing A CRM For Your Business",
-    date: "2022-04-18",
-    dateLabel: "08 Dec",
-    category: "CRM",
-    excerpt:
-      "You’ve probably heard about CRMs but do you know what the benefits are for implementing one at your business?",
-    image: "/insights/what-you-do-today-improve-your-tomorrows.jpg",
-  },
-  {
-    slug: "attract-and-retain-quality-high-paying-customers",
-    title: "How ERP Software Is Able To Identify Business Inefficiencies",
-    date: "2022-04-05",
-    dateLabel: "08 Dec",
-    category: "ERP",
-    excerpt:
-      "Enterprise Resource Planning (or ERP) software has revolutionised the ways in which companies work in the modern world. Efficiency and speed are now…",
-    image: "/insights/attract-and-retain-quality-high-paying-customers.jpg",
-  },
-  {
-    slug: "solutions-for-all-small-and-large-business",
-    title: "How To Choose The Best CRM For Your Sales Automation",
-    date: "2022-04-07",
-    dateLabel: "08 Dec",
-    category: "CRM",
-    excerpt:
-      "Finding ways to automate sales is one of the top priorities of many companies. After all, it’s a solution that can make the business more profitable through…",
-    image: "/insights/solutions-for-all-small-and-large-business.jpg",
-  },
-  {
-    slug: "live-stream-from-awwwards-showcasing-trends",
-    title: "A Closer Look At Hubspot’s 2022 Hybrid Work Report￼￼",
-    date: "2022-03-29",
-    dateLabel: "08 Dec",
-    category: "Industry",
-    excerpt:
-      "Hubspot’s 2022 Hybrid Work Report focused on the ways in which the world worked during 2021 as well as what is likely to lie ahead in the future. So, what…",
-    image: "/insights/live-stream-from-awwwards-showcasing-trends.jpg",
-  },
 ];
 
 /** Guard: every entry that resolves to an article page here must have a body to render. */

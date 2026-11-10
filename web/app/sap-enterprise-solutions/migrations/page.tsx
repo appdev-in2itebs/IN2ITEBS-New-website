@@ -137,9 +137,9 @@ export default function MigrationsPage() {
           </Reveal>
           <Stagger className="grid gap-5 md:grid-cols-3">
             {[
-              { value: "99.5%", label: "Average data migration accuracy" },
-              { value: "3+", label: "Mock-load cycles per programme" },
-              { value: "100%", label: "Successful cutover rate" },
+              { value: "Reconciled", label: "Data validated against agreed controls" },
+              { value: "Rehearsed", label: "Mock-load and cutover cycles planned by programme" },
+              { value: "Governed", label: "Cutover decisions use documented acceptance gates" },
             ].map((s) => (
               <StaggerItem key={s.label} className="h-full">
                 <Card tone="navy" bezel={false} className="h-full">

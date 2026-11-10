@@ -5,7 +5,7 @@ import { partnerPages } from "@/content/partner-pages";
 import { industries } from "@/content/industries";
 import { legacyIndustries } from "@/content/legacy-industries";
 
-import { caseStudies } from "@/content/case-studies";
+import { publicCaseStudies } from "@/content/case-studies";
 import { contentUpdated } from "@/content/site";
 import { SITE_URL } from "@/lib/utils";
 import { getCms } from "@/lib/cms/content";
@@ -48,8 +48,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/careers/current-openings/",
     "/about/who-we-are/",
     "/about/our-leadership/",
-    "/about/customer-stories/",
-    "/about/customer-stories/welspun/",
     "/careers/events-celebrations/",
     "/contact/",
     "/legal/privacy-notice/",
@@ -64,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...industries.map((i) => `/industries/${i.slug}/`),
     ...legacyIndustries.map((i) => `/industries/${i.slug}/`),
     ...articles.map((p) => `/insights/${p.slug}/`),
-    ...caseStudies.filter((c) => c.named).map((c) => `/case-studies/${c.slug}/`),
+    ...publicCaseStudies.filter((c) => c.named).map((c) => `/case-studies/${c.slug}/`),
   ];
 
   // Pages published from the admin's page builder.

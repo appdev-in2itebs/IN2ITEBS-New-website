@@ -19,10 +19,9 @@ import type { Accreditation, Award } from "./types";
  * `scraped/about/accreditation-awards.md` is from an older revision.
  */
 
-export const awardsTitle = "Accreditation";
+export const awardsTitle = "Awards & memberships";
 
-export const awardsIntro =
-  "We have big ambitions, and a growing sense of urgency to work with others and address world challenges no one can tackle alone.";
+export const awardsIntro = "Recognition and memberships published from the records currently available to In2IT EBS.";
 
 export const awards: Award[] = [
   {
@@ -63,42 +62,15 @@ export const awards: Award[] = [
 ];
 
 export const qualityStatement =
-  "In2IT EBS is one of the few successful icons in the Indian software industry that is dedicated towards the continuous improvement of all its processes, so that consistent quality standard are always met. Recognized for our proven competency in implementing & deploying high-class business solutions, we have revolutionized our presence across the globe. At In2IT EBS, a strong “Total Quality Management” culture prevails, which enables us to offer solutions that exceed expectations at every level.";
+  "Certification versions and validity dates are under formal review. Only memberships that can be stated without an unverified standard version are shown below.";
 
 export const accreditations: Accreditation[] = [
-  {
-    slug: "iso-20000-1",
-    name: "ISO/ IEC 20000-1:2005 (Service Management)",
-    logo: "/awards/iso-20000-1.png",
-    body: [
-      "ISO/ IEC 20000-1:2005 certification underlines the quality of In2IT EBS’ service management systems. This internationally recognized standard for Service Management has a strong focus on providing customers with a consistent service. In order to provide high level services, In2IT EBS adopted an integrated process approach so as to deliver services effectively and cost efficiently in order to meet the often-complex needs of its customers.",
-      "We are thankful to all our clients who have supported and made us successful in achieving these certifications. We will continue to deliver the best in technology by upgrading our skills on an ongoing basis.",
-    ],
-  },
-  {
-    slug: "iso-9001",
-    name: "ISO 9001:2008 (Quality Management)",
-    logo: "/awards/iso-9001.jpg",
-    body: [
-      "Our Bhubaneswar, India based Delivery center and support functions are certified to this internationally recognised standard.",
-      "This provides evidence of our commitment to the end-to-end delivery of customer service: from your very first contact with In2IT right through to the completion of service requests – and everything in between!",
-    ],
-  },
-  {
-    slug: "iso-27001",
-    name: "ISO/ IEC 27000:2005 (Information Security)",
-    logo: "/awards/iso-27001.png",
-    body: [
-      "We have reinforced our stringent data security management with the successful completion of the globally recognised ISO 27001 Information Security certification. It provides confidence that our data is held securely and that safety and confidentiality is at the forefront of our business.",
-      "This standard provides a framework for managing a business’s security responsibilities and provides external assurance for customers as to the scope and scale of our secure environment via our Business Security Management System.",
-    ],
-  },
   {
     slug: "stpi",
     name: "STPI Accreditation:",
     logo: "/awards/stpi.jpg",
     body: [
-      "In2IT EBS is registered with Software Technology Parks of India (STPI) as a 100% export-oriented unit (EOU). As a member of STPI, we are committed to exporting quality software worldwide. STPI membership helps us interface with the Indian government and leverage our natural advantages thereby allowing us to offer quality solutions to our clients at very competitive prices.",
+      "In2IT EBS is registered with Software Technology Parks of India (STPI) as an export-oriented unit (EOU).",
       "As a member of STPI, we have a public commitment towards software quality standards, process capability and improvements in productivity.",
     ],
   },
@@ -107,7 +79,7 @@ export const accreditations: Accreditation[] = [
     name: "Member of NASSCOM:",
     logo: "/awards/nasscom.jpg",
     body: [
-      "NASSCOM is India’s National Association of Software and Service Companies, the premier trade body and the chamber of commerce of the IT software and services industry in India. Since December 2013 we have taken NASSCOM membership.",
+      "In2IT EBS records NASSCOM membership. The membership status will remain subject to the organisation’s formal verification process.",
     ],
   },
 ];

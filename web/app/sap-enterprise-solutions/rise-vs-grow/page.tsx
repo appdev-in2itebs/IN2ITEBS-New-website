@@ -38,7 +38,6 @@ const riseValues = [
   "9–18 months typical",
   "Higher TCO, fewer constraints",
   "SAP-managed cloud, dedicated tenancy",
-  "PCE Partner",
 ];
 
 const growValues = [

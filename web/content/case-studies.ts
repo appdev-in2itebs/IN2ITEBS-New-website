@@ -1,6 +1,8 @@
 /** Case studies — Content Blueprint §10.2 + Deck 2 slides 51-62.
  *  Named studies are publishable; anonymised stay anonymised (no client name/logo). */
 
+import { clientEvidenceApproved } from "./compliance";
+
 export type SapPath = "GROW" | "RISE" | "ECC" | "AMS";
 
 export interface CaseStudy {
@@ -321,3 +323,6 @@ export const caseStudies: CaseStudy[] = [
 export function getCaseStudy(slug: string) {
   return caseStudies.find((c) => c.slug === slug);
 }
+
+/** Public proof fails closed until written consent is recorded. */
+export const publicCaseStudies = clientEvidenceApproved ? caseStudies : caseStudies.filter((study) => !study.named);

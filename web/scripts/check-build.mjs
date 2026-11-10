@@ -14,8 +14,11 @@ const robots = readFileSync(robotsPath, "utf8");
 const manifest = JSON.parse(readFileSync(".next/routes-manifest.json", "utf8"));
 const headerValues = (manifest.headers ?? []).flatMap((h) => h.headers.map((x) => `${x.key}: ${x.value}`));
 const hasNoindex = headerValues.some((v) => /^x-robots-tag: .*noindex/i.test(v));
+// Matches next.config.mjs: GitHub CI preview artefacts stay blocked; the deployed Azure build is
+// public even while its legacy shared environment still says SITE_ENV=preview.
+const indexingEnabled = env === "production" || process.env.CI !== "true";
 const failures = [];
-if (env === "production") {
+if (indexingEnabled) {
   if (!/Allow: \//.test(robots) || /Disallow: \/\s*$/m.test(robots))
     failures.push("production build has a robots.txt that blocks crawling");
   if (hasNoindex) failures.push("production build still sends X-Robots-Tag noindex");
@@ -38,4 +41,4 @@ if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);
 }
-console.log(`check-build: ok (SITE_ENV=${env}, noindex=${hasNoindex})`);
+console.log(`check-build: ok (SITE_ENV=${env}, indexing=${indexingEnabled}, noindex=${hasNoindex})`);

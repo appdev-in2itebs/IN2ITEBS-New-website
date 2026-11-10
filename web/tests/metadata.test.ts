@@ -4,10 +4,10 @@ import { pageMetadata } from "../lib/metadata";
 
 test("page metadata brands the social title and uses trailing-slash image URLs", () => {
   const m = pageMetadata("/about/", { title: "Who We Are", description: "x".repeat(80) });
-  assert.equal(m.alternates?.canonical, "https://in2itebs.com/about/");
+  assert.equal(m.alternates?.canonical, "https://www.in2itebs.com/about/");
   const og = m.openGraph as { title: string; url: string; images: { url: string }[] };
   assert.equal(og.title, "Who We Are · In2IT EBS");
-  assert.equal(og.url, "https://in2itebs.com/about/");
+  assert.equal(og.url, "https://www.in2itebs.com/about/");
   assert.equal(og.images[0].url, "/opengraph-image/");
   assert.equal((m.twitter as { site: string }).site, "@in2itebs_");
 });
@@ -54,7 +54,7 @@ import sitemap from "../app/sitemap";
 import { contentUpdated } from "../content/site";
 test("every sitemap entry has a valid lastModified and the homepage is included", async () => {
   const entries = await sitemap();
-  assert.ok(entries.some((e) => e.url === "https://in2itebs.com/"));
+  assert.ok(entries.some((e) => e.url === "https://www.in2itebs.com/"));
   for (const entry of entries) {
     assert.ok(entry.lastModified instanceof Date && !Number.isNaN(entry.lastModified.getTime()), entry.url);
     assert.ok(!entry.url.endsWith("/thank-you/"));
@@ -87,7 +87,7 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
     legal.map((i) => i.name),
     ["Home", "Privacy Policy"],
   );
-  assert.equal(legal[1].item, "https://in2itebs.com/legal/privacy-policy/");
+  assert.equal(legal[1].item, "https://www.in2itebs.com/legal/privacy-policy/");
   const concur = breadcrumbItems("/sap-enterprise-solutions/concur/", undefined, isKnownPage);
   assert.deepEqual(
     concur.map((i) => i.name),
@@ -100,7 +100,7 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
   );
   assert.deepEqual(
     study.map((i) => i.name),
-    ["Home", "Clients & Case Studies", "Wipro Infrastructure Engineering"],
+    ["Home", "Case Studies", "Wipro Infrastructure Engineering"],
   );
 });
 test("nav labels do not depend on collection order", () => {
