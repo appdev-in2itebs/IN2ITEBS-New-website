@@ -23,7 +23,7 @@ export const partnerPages: PartnerPage[] = [
     title: "About SAP",
     sourceUrl: "https://in2itebs.com/sap/",
     metaDescription:
-      "SAP is the world leader in enterprise applications in terms of software and software-related service revenue, with a customer base of 3,45,000+ spread across 180+ countries.",
+      "Explore the SAP ecosystem and the implementation, migration and support services In2IT EBS provides.",
     logo: "/partners/sap.jpg",
     intro: [
       "SAP is the world leader in enterprise applications in terms of software and software-related service revenue. Based on market capitalization, SAP is the world's third largest independent software manufacturer. With a customer base of 3,45,000+ spread across 180+ countries and close to 84,000+ employees operating out of 130+ countries, SAP is the undisputed leader in the ERP solution space. A strong eco system of 15,000+ partners and 110 million cloud user base backed up by 100+ Innovation centres, SAP generates revenues of about Euro 22 billion and is currently the market leader in the Enterprise Application Services segment.",
@@ -34,8 +34,7 @@ export const partnerPages: PartnerPage[] = [
     name: "SAP Qualtrics",
     logo: "/partners/sap-qualtrics.jpg",
     sourceUrl: "https://in2itebs.com/sap-qualtrics/",
-    metaDescription:
-      "With Experience Management solutions from SAP, you can reduce unwanted attrition, retain and develop top performers, drive employee engagement and increase productivity.",
+    metaDescription: "Explore employee experience management use cases associated with Qualtrics technology.",
     intro: [
       "With Experience Management solutions from SAP, you can reduce unwanted attrition, retain, and develop top performers, drive employee engagement, and increase the productivity of your workforce. The SAP® Qualtrics® Employee Engagement solution helps you understand the key drivers of employee engagement and enables managers and leaders throughout the organization to improve the employee experience.",
     ],
@@ -66,8 +65,7 @@ export const partnerPages: PartnerPage[] = [
     slug: "oracle",
     name: "Oracle",
     sourceUrl: "https://in2itebs.com/oracle-2/",
-    metaDescription:
-      "Oracle enterprise applications and industry solutions, middleware and database: a complete choice of cloud deployment options and a secure path to the latest technology.",
+    metaDescription: "Explore Oracle applications, databases and integration use cases for enterprise operations.",
     logo: "/partners/oracle.jpg",
     intro: [
       "Customers worldwide rely on Oracle's enterprise and industry applications. Oracle Applications provide a complete choice of cloud deployment options, as well as a secure path for customers to benefit from the latest technology advances.",
@@ -93,8 +91,7 @@ export const partnerPages: PartnerPage[] = [
     title: "OpenText",
     logo: "/partners/open-text.jpg",
     sourceUrl: "https://in2itebs.com/open-text-2/",
-    metaDescription:
-      "OpenText can help you tackle the most complex digital transformation programs with confidence, with the world's most complete and integrated Information Management platform.",
+    metaDescription: "Explore OpenText content and information management use cases for enterprise workflows.",
     intro: [
       "OpenText can help you tackle the most complex digital transformation programs with confidence. With the world's most complete and integrated Information Management platform, Opentext empower its customers to organize, integrate and protect data and content as it flows through business processes inside and outside their organization.",
     ],
@@ -116,7 +113,7 @@ export const partnerPages: PartnerPage[] = [
     logo: "/partners/newgen.jpg",
     sourceUrl: "https://in2itebs.com/newgen-2/",
     metaDescription:
-      "Newgen is the leading provider of a unified digital transformation platform with native process automation, content services and communication management capabilities.",
+      "Explore Newgen workflow, content and communication management use cases for enterprise operations.",
     intro: [
       "Newgen is the leading provider of a unified digital transformation platform with native process automation, content services, and communication management capabilities. Globally, successful enterprises rely on Newgen's industry-recognized low code application platform to develop and deploy complex, content-driven, and customer-engaging business applications on the cloud. From onboarding to service requests, lending to underwriting, and for many more use cases across industries. Newgen unlocks simple with speed and agility.",
     ],
@@ -138,8 +135,7 @@ export const partnerPages: PartnerPage[] = [
     title: "Amazon Web Services",
     logo: "/partners/aws.png",
     sourceUrl: "https://in2itebs.com/aws-2/",
-    metaDescription:
-      "Amazon Web Services (AWS) is the world's most comprehensive and broadly adopted cloud platform, offering over 200 fully-featured services from data centers globally.",
+    metaDescription: "Explore AWS cloud architecture, migration and operations use cases for enterprise IT.",
     intro: [
       "Amazon Web Services (AWS) is the world's most comprehensive and broadly adopted cloud platform, offering over 200 fully-featured services from data centers globally. Millions of customers including the fastest-growing start-ups, largest enterprises, and leading government agencies—are using AWS to lower costs, become more agile, and innovate faster.",
     ],

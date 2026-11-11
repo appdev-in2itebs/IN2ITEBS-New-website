@@ -43,8 +43,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     slug: "automobiles",
     name: "Automobiles",
     sourceUrl: "https://in2itebs.com/automobiles/",
-    metaDescription:
-      "Carmakers, suppliers and dealerships are under intense pressure to transform their businesses and prepare for the future of mobility. SAP solutions for the automotive industry from In2IT EBS.",
+    metaDescription: "Connect planning, production, supply chain and customer processes across automotive operations.",
     intro: [
       "The race for automotive digital transformation – Carmakers, suppliers, and dealerships are under intense pressure to transform their businesses and prepare for the future of mobility. The automotive industry is racing toward a new world that's driven by sustainability and changing consumer behaviour, encompassing electric vehicles, connected cars, mobility fleet sharing, onboard sensors, new business models, and always-on connectedness.",
     ],
@@ -167,7 +166,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     name: "FMCG",
     sourceUrl: "https://in2itebs.com/fmcg-2/",
     metaDescription:
-      "Exceed the diverse expectations of consumers and enable your company to grow in an uncertain world sustainably and profitably: SAP for consumer packaged goods from In2IT EBS.",
+      "Support packaged goods businesses with connected planning, production, distribution and analytics.",
     image: "istockphoto-1314035333-612x612-1.jpg",
     intro: [
       "Exceed the diverse expectations of consumers and enable your company to grow in an uncertain world sustainably and profitably. Transforming consumer packaged goods (CPG) for the digital era isn't just about moving to direct-to-consumer models. It's about using new technology – like the Internet of Things (IoT) and AI – to revolutionize internal processes and maximize speed and scalability.",
@@ -228,8 +227,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     slug: "manufacturing",
     name: "Manufacturing",
     sourceUrl: "https://in2itebs.com/manufacturing/",
-    metaDescription:
-      "We help makers of durable and non-durable products harness technology to adapt their operations for new markets and refine their production and engineering management systems.",
+    metaDescription: "Connect manufacturing planning, production, quality and maintenance data to improve operations.",
     image: "industrial-worker-working-production-line-factory-scaled.jpg",
     intro: [
       "We help makers of durable and non-durable products harness technology to adapt their operations for new markets, roll out new collaboration platforms, and refine their production and engineering management systems.",
@@ -242,8 +240,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     slug: "textiles",
     name: "Textiles",
     sourceUrl: "https://in2itebs.com/textiles-2/",
-    metaDescription:
-      "In2IT EBS provides SAP solutions for textile firms: end-to-end planning, production and configuration, quality, inventory, CRM, finance and purchase management.",
+    metaDescription: "Connect material planning, production, quality, inventory and finance in textile operations.",
     image: "pexels-pixabay-236748-1024x615.jpg",
     intro: [
       "Textile and apparel businesses can connect material planning, production, quality, inventory, sales, finance and purchasing in one operating model.",
@@ -324,10 +321,10 @@ export const legacyIndustries: LegacyIndustry[] = [
   {
     slug: "professional-services",
     name: "Professional Services",
-    title: "Professional Service",
+    title: "Professional Services",
     sourceUrl: "https://in2itebs.com/professional-services-2/",
     metaDescription:
-      "Run projects more profitably with professional services solutions: project and managed services, total talent management, business development and sales, and core finance.",
+      "Manage projects, resources, billing and finance with connected systems for professional services firms.",
     image: "istockphoto-841180016-170667a.jpg",
     intro: [
       "Run Projects More Profitably with Professional Services Solutions Firms are rethinking business models to drive growth and engage the best talent. In2IT EBS provides SAP solution that enables firms to drive new growth, deliver digital services, engage the best talent, and become intelligent enterprises through our deep industry process expertise, next-gen best practices, and integration across the industry value chain.",
@@ -494,7 +491,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     name: "Heavy Engineering",
     sourceUrl: "https://in2itebs.com/heavy-engineering-2/",
     metaDescription:
-      "Deliver individualized, sustainable and smart machinery and components, at scale and as a service, with heavy engineering and industrial manufacturing solutions.",
+      "Support complex engineering and industrial manufacturing with connected planning and delivery systems.",
     image: "close-up-hand-holding-smartphone-scaled.jpg",
     intro: [
       "Deliver individualized, sustainable, and smart machinery and components – at scale and as a service – with heavy engineering and industrial manufacturing solutions. Heavy Engineering and Industrial manufacturers are facing the biggest challenge to date: profitable sustainability. Not only do you need to reduce emissions in your own operations and supply chains – but you also need to provide products and services that help your customers do the same.",
@@ -573,7 +570,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     name: "Retail & Ecommerce",
     sourceUrl: "https://in2itebs.com/retail-ecommerce-2/",
     metaDescription:
-      "Combining top-notch business expertise with state-of-the-art technology, we create practical solutions to complex challenges in supply chain management, merchandising, eCommerce and store management.",
+      "Connect merchandising, supply chain, commerce and store operations with practical digital systems.",
     image: "pexels-nataliya-vaitkevich-6214478-600x540.jpg",
     intro: [
       "Combining top-notch business expertise with state-of-the-art technology, we create practical solutions to complex challenges in supply chain management, merchandising, eCommerce and store management.",
@@ -587,7 +584,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     name: "Energy and Utilities",
     sourceUrl: "https://in2itebs.com/energy-and-utilities/",
     metaDescription:
-      "Leading energy and utility companies plan to capture new business opportunities by driving consumer outcomes, increasing productivity and empowering an innovation culture, with RISE with SAP from In2IT EBS.",
+      "Support energy and utilities operations with connected planning, assets, field work and customer processes.",
     intro: [
       "In times of economic crises, winning companies are those that are quick to innovate business processes, advance new business models, and create differentiating outcomes for their customers. Intelligent enterprises that cope best with uncertainty will come out on top in the next normal. The RISE with SAP offering is a stepping stone on the journey to the Intelligent Enterprise. In2IT EBS offering SAP S/4HANA, the Intelligent ERP in the cloud, delivers unprecedented automation around best-practice and next-practice business process standards that give you the flexibility to optimize and transform your business",
       "Energy and utility organisations focus on seven operational and technology priorities:",
@@ -629,12 +626,11 @@ export const legacyIndustries: LegacyIndustry[] = [
     slug: "chemical-fertilizers",
     name: "Chemical & Fertilizers",
     sourceUrl: "https://in2itebs.com/chemical-fertilizers-2/",
-    metaDescription:
-      "Create safe, sustainable chemicals by enabling digital transformation: digital manufacturing, supply chain, product and process innovation, real-time price and margin management, and health and safety.",
+    metaDescription: "Connect chemical production, supply chain, compliance and asset data with enterprise systems.",
     intro: [
-      "Create safe, sustainable chemicals by enabling digital transformation. Keep up with the constant stream of mergers and divestitures, changing regulations, and innovations by transforming processes and delivering sustainable growth and performance with digital manufacturing, supply chain, product and process innovation, real-time price and margin management, and health and safety management.",
-      "In times of economic crises, winning companies are those that are quick to innovate business processes, advance new business models, and create differentiating outcomes for their customers. Intelligent enterprises that cope best with uncertainty will come out on top in the next normal. In2IT EBS offering The RISE with SAP offering is a steppingstone on the journey to the Intelligent Enterprise. SAP S/4HANA, the Intelligent ERP in the cloud, delivers unprecedented automation around best-practice and next-practice business process standards that give you the flexibility to optimize and transform your business.",
-      "Leading chemical companies to plan to capture new business opportunities by responding with new products, services, and even business-outcome-based models that better meet customer needs. Leaders focus on these four strategic priorities",
+      "Chemical and fertiliser businesses coordinate production, quality, safety, procurement and distribution while responding to changing demand and regulation.",
+      "In2IT EBS supports these operations with enterprise planning, integration and application services that connect plant data with business workflows.",
+      "Four priorities shape this work:",
     ],
     sectionsHeading: "What are the strategic priorities in your industry?",
     sections: [
@@ -672,7 +668,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     name: "Banking, Financial Services & Insurance",
     sourceUrl: "https://in2itebs.com/banking/",
     metaDescription:
-      "Banking, Financial Services and Insurance (BFSI) is one of the strategic verticals of In2IT EBS: application development, maintenance and support, and product practices around BFSI.",
+      "Support financial services operations with application engineering, integration, risk and reporting.",
     image: "business-office-sence-scaled.jpg",
     intro: [
       "In2IT EBS focuses on Application Development, Maintenance and Support, Product practices around BFSI and is involved in implementation support, customizations, Product Consulting, Interfaces development and Testing.",
@@ -694,8 +690,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     slug: "government",
     name: "Government & Public Enterprises",
     sourceUrl: "https://in2itebs.com/government/",
-    metaDescription:
-      "In2IT EBS's Government solutions unit partners with governments, public sector entities and semi-government agencies to offer IT-based governance solutions that work for all stakeholders.",
+    metaDescription: "Build and support public-sector systems for services, workflows, data and operational reporting.",
     image: "public-sector-tablet-device-wooden-table-text-83121136.jpg",
     intro: [
       'In2IT EBS\'s Government solutions unit partners with governments, public sector entities and semi-government agencies to offer IT-based governance solutions that work for all stakeholders. Our digital governance solutions promote efficiency, transparency and policy effectiveness, enabling "smart governance" in areas that matter most to citizens and consumers.',
@@ -735,7 +730,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     title: "Healthcare & Life Science",
     sourceUrl: "https://in2itebs.com/healthcare-life-science-2/",
     metaDescription:
-      "In2IT EBS Healthcare Practice offers innovative and end-to-end integrated solutions for healthcare providers, pharmaceutical and medical devices companies and payer organizations.",
+      "Connect healthcare workflows, applications and data across providers, life sciences and medical devices.",
     image: "istockphoto-637785818-170667a.jpg",
     intro: [
       "In2IT EBS Healthcare Practice offers innovative and end-to-end integrated solutions for healthcare providers. Our solutions enhance the efficiency of physicians, hospitals, ancillary facilities, clinics, governmental health bodies, and public health and research organizations.",
@@ -781,7 +776,7 @@ export const legacyIndustries: LegacyIndustry[] = [
     name: "Engineering & Constructions (ECNO)",
     sourceUrl: "https://in2itebs.com/engineering-constructions-ecno-2/",
     metaDescription:
-      "RISE with SAP for engineering and construction: pre-construction, construction supply chain, project delivery and asset management solutions from In2IT EBS.",
+      "Support engineering and construction projects with connected planning, procurement, delivery and asset data.",
     image: "pexels-engin-akyurt-4170184-1024x683.jpg",
     intro: [
       "In times of economic crises, winning companies are those that are quick to innovate business processes, advance new business models, and create differentiating outcomes for their customers. Intelligent enterprises that cope best with uncertainty will come out on top in the next normal. The RISE with SAP offering is a stepping stone on the journey to the Intelligent Enterprise. In2IT EBS offering SAP S/4HANA, the Intelligent ERP in the cloud, delivers unprecedented automation around best-practice and next-practice business process standards that give you the flexibility to optimize and transform your business",

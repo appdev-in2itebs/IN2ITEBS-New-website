@@ -12,7 +12,7 @@ import { CtaSection } from "@/components/sections/cta-section";
 export const metadata = pageMetadata("/sap-enterprise-solutions/concur/", {
   title: "SAP Concur",
   description:
-    "Travel, expense and invoice management on SAP Concur — automated capture, policy enforcement and AP automation, integrated into your finance and HR landscape.",
+    "Connect travel, expense and invoice workflows with SAP Concur, including policy controls and finance integration.",
 });
 
 /** The three Concur pillars — Blueprint §8.5. */

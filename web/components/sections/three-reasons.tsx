@@ -11,7 +11,7 @@ const reasons = [
   {
     n: "02",
     title: "Delivery economics",
-    body: "350+ employees across 10+ delivery centres, with follow-the-sun coverage and 1,000+ combined years of SAP experience.",
+    body: "500+ professionals across four delivery centres in Bengaluru, Hyderabad, Delhi NCR and Bhubaneswar.",
     tags: ["Follow-the-sun", "Offshore-led AMS"],
   },
   {

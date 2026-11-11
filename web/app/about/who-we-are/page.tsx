@@ -4,7 +4,7 @@ import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Overview, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/about/who-we-are/", {
-  title: "Who We Are?",
+  title: "Who we are",
   description:
     "In2IT EBS provides enterprise technology consulting, cloud, managed services and application engineering in India and internationally.",
 });
@@ -12,11 +12,11 @@ export const metadata = pageMetadata("/about/who-we-are/", {
 export default function WhoWeArePage() {
   return (
     <>
-      <BreadcrumbJsonLd path="/about/who-we-are/" name="Who We Are?" />
+      <BreadcrumbJsonLd path="/about/who-we-are/" name="Who we are" />
       <V2Hero
         route="/about/who-we-are/"
-        path={[{ label: "About", href: "/about/" }, { label: "Who We Are?" }]}
-        title="Who We Are?"
+        path={[{ label: "About", href: "/about/" }, { label: "Who we are" }]}
+        title="Who we are"
         lead="In2IT EBS provides enterprise technology consulting, cloud, managed services and application engineering in India and internationally."
         media={<HeroObject name="about/who-we-are" />}
       />
@@ -28,7 +28,7 @@ export default function WhoWeArePage() {
         ]}
       />
       <V2Overview
-        eyebrow="Who We Are?"
+        eyebrow="Who we are"
         heading="Invested in partners and consultants."
         paragraphs={[
           "In2IT EBS has taken the right plunge and invested in partners and consultants to provide tailor-made services whether be it cloud computing services or BPM. We work alongside our customers to help them streamline their processes, ensure optimal usage of deployed solutions, and deliver a high-performance customer-centric service.",

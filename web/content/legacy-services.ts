@@ -280,7 +280,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/sap-rise-with-sap/",
     metaTitle: "Rise with SAP | SAP S/4HANA Implementation",
     metaDescription:
-      "SAP S/4HANA is a real-time enterprise resource management suite for digital business, built on SAP HANA, with SAP Fiori, deployable on-premise, cloud and hybrid.",
+      "Plan SAP S/4HANA Cloud adoption with In2IT EBS, from assessment and migration to implementation and support.",
     image: { src: "/services/live/rise-with-sap.png", alt: "SAP S/4HANA, the digital core" },
     introHeading: "SAP S/4HANA",
     intro: [
@@ -398,9 +398,9 @@ export const servicePages: ServicePage[] = [
     icon: "prism",
     heroObject: "pages/ecc-prism",
     sourceUrl: "https://in2itebs.com/ecc-prism/",
-    metaTitle: "ECC Prism™ – SAP ECC Landscape Intelligence & Optimization Platform",
+    metaTitle: "ECC Prism SAP Landscape Review",
     metaDescription:
-      "A comprehensive SAP ECC landscape audit and optimization platform that extends ECC life, reduces cost, mitigates risk and prepares for a future transition to S/4HANA.",
+      "Review ECC usage, configuration, custom code and licence exposure to plan improvements and a future S/4HANA transition.",
     intro: [
       "ECC Prism™ is a comprehensive SAP ECC landscape audit and optimization platform designed to help enterprises—especially large PSUs and ECC-heavy organizations—extend ECC life, reduce cost, mitigate risk, and prepare for a future transition to S/4HANA, without forcing premature migration decisions.",
       "ECC Prism™ goes beyond traditional technical audits. It combines system intelligence, usage analytics, configuration analysis, and financial impact assessment to deliver actionable, quantified recommendations across licenses, architecture, custom code, integrations, security, and operations.",
@@ -502,7 +502,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/sap-sac/",
     metaTitle: "SAP Analytics Cloud (SAC)",
     metaDescription:
-      "SAP Analytics Cloud combines business intelligence, enterprise planning and augmented analytics in a single cloud offering built on SAP Business Technology Platform.",
+      "Use SAP Analytics Cloud for business intelligence, planning and analytics, with implementation support from In2IT EBS.",
     image: { src: "/services/live/sap-analytics-cloud.png", alt: "SAP Analytics Cloud" },
     intro: [
       "SAP Analytics Cloud is a cloud-based solution that combines business intelligence, enterprise planning, and augmented analytics in a single solution. Built on SAP Business Technology Platform, it helps you eliminate point solutions and break down data silos with a secure, cloud-based approach. Rather than relying on standalone spreadsheets, or separate, disconnected reporting and planning tools, users have everything they need, embedded where they work, to make fast, confident decisions together.",
@@ -658,7 +658,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/cyber-security-services-2/",
     metaTitle: "Cloud Infrastructure Services",
     metaDescription:
-      "Our Cloud services facilitate organizations to achieve business efficiency and operational excellence on system administration, security, compliance, privacy, performance, sizing, management and monitoring.",
+      "Plan and operate cloud infrastructure with support for migration, monitoring, security and governance.",
     image: { src: "/services/live/cloud-system-tablet.jpg", alt: "Cloud system tablet background smart technology" },
     intro: [
       "Cloud is the bedrock of a future-ready company. Cloud Technology is a growing trend in the technological sphere. It is here that In2IT EBS role come into play. Our Cloud services facilitates organizations to achieve business efficiency and operational excellence on system administration, security, compliance, privacy, performance, sizing, management, and monitoring.",
@@ -719,7 +719,7 @@ export const servicePages: ServicePage[] = [
     image: { src: "/services/live/cloud-strategy.jpg", alt: "Cloud Strategy" },
     metaTitle: "Cloud Strategy",
     metaDescription:
-      "In2IT EBS enables your organizational journey to the cloud, helping you develop a clear strategy and prepare your team to meet your business-critical objectives.",
+      "Build a cloud strategy around business priorities, architecture, governance and the steps needed for migration.",
     intro: [
       "A cloud strategy is a succinct statement of the cloud's function in the enterprise. It's a living document that serves as a link between a high-level business strategy and a cloud adoption/migration strategy. A cloud strategy is distinct from a cloud migration or adoption strategy.",
       "In2IT EBS enables your organizational journey to the cloud by avoiding challenges/traps/risks and taking advantage of opportunities specific to your company. As a result, In2IT EBS helps your organization develop a clear strategy and prepare your team to meet your business-critical objectives.",
@@ -748,8 +748,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/cloud-migration-2/",
     image: { src: "/services/icons/cloud-migration.png", alt: "Cloud Migration" },
     metaTitle: "Cloud Migration",
-    metaDescription:
-      "We devise a strategy for full end-to-end cloud migration without creating system gaps, then plan, strategize and execute so you can utilize cloud services sooner.",
+    metaDescription: "Plan cloud migration with application assessment, sequencing, testing and transition support.",
     introHeading: "Cloud migration becomes easier with us",
     intro: [
       "When you are migrating to the cloud, a lot of glitches and issues make you want to stop. However, you know cloud can help you scale and drive growth. Hence, you try to fill in the gaps that arise during the cloud migration.",
@@ -934,8 +933,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/microsoft/",
     image: { src: "/services/icons/microsoft.png", alt: "Microsoft" },
     metaTitle: "Microsoft",
-    metaDescription:
-      "As a Microsoft Gold Partner, In2IT EBS has proven capabilities in digital transformation of customers' mission-critical environments: Office 365, Dynamics 365, SharePoint and Azure.",
+    metaDescription: "Explore Microsoft 365, Dynamics 365, SharePoint and Azure services from In2IT EBS.",
     intro: [
       "As a Microsoft Gold Partner, In2IT EBS has proven capabilities in Digital Transformation of customer's mission-critical environments.",
       "In2IT EBS's Microsoft offering includes Office 365 Migration Services, Enterprise Resource Planning (ERP), Customer Relationship Management (CRM), SharePoint Services (Intranet Portal, Document Management, and Enterprise Content Management (ECM) solution), Microsoft Azure Cloud offerings, and many more.",
@@ -1005,8 +1003,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/microsoft-dynamics-365/",
     image: { src: "/services/live/dynamics-365.jpg", alt: "Microsoft Dynamics 365" },
     metaTitle: "Microsoft Dynamics 365",
-    metaDescription:
-      "Microsoft Dynamics 365 offers software products for end-to-end business management, on-premises and in the cloud, across Sales, Marketing, Service, Finance, Commerce and Supply Chain.",
+    metaDescription: "Connect sales, service, finance and supply chain workflows with Microsoft Dynamics 365.",
     intro: [
       "Microsoft Dynamics 365 offers a variety of software products for end-to-end business management available both on-premises and in the cloud. Choose one, some, or all. Dynamics 365 applications are made to work together—and with your existing systems—for a comprehensive solution that connects your entire business. So, you connect with every customer.",
     ],
@@ -1079,8 +1076,7 @@ export const servicePages: ServicePage[] = [
     icon: "shield",
     sourceUrl: "https://in2itebs.com/cyber-security-services/",
     metaTitle: "Cyber Security & Enterprise Risk",
-    metaDescription:
-      "We help you strengthen the security layer across your organization, from each office system to all the connected devices, with next-gen security architecture.",
+    metaDescription: "Assess cyber risk and strengthen security architecture, controls and operational resilience.",
     introHeading: "We help you create a secure network and organization.",
     intro: [
       "With all of our online devices at risk, cybersecurity is one of the most crucial tasks for every organization. If you have even a single customer, you need to ensure cybersecurity to offer safe, reliable services to your users. Further, in this era of online availability and anytime access, data privacy is the topmost concern of every organization.",
@@ -1161,7 +1157,7 @@ export const servicePages: ServicePage[] = [
     image: { src: "/services/live/cloud-and-infra-security.jpg", alt: "Cloud and Infra Security" },
     metaTitle: "Cloud and Infra Security",
     metaDescription:
-      "In2IT EBS facilitates its customers with technologies, policies, controls and services that protect cloud data, applications and infrastructure from threats.",
+      "Protect cloud data, applications and infrastructure with practical security architecture and controls.",
     intro: [
       "Cloud & Infrastructure security is the practice of securing resources deployed in a cloud environment and supporting systems. Cloud adoption continues to permeate throughout organizations as they embrace agile software development. While they are seeing great dividends in cost-effectiveness and flexibility, building security throughout the software development lifecycle is proving to be difficult, citing increased misconfigurations from user error. At the moment, there is a severe learning curve around DevSecOps and organizations are struggling to find the right expertise to plug this knowledge gap.",
     ],
@@ -1235,8 +1231,7 @@ export const servicePages: ServicePage[] = [
     icon: "sparkles",
     sourceUrl: "https://in2itebs.com/digital-services/",
     metaTitle: "Digital Services",
-    metaDescription:
-      "Our Digital Services are crafted to empower your business, streamline operations and enhance customer engagement through a comprehensive suite of offerings.",
+    metaDescription: "Build and improve digital products, workflows and customer experiences with In2IT EBS.",
     intro: [
       "In today's rapidly evolving digital landscape, staying ahead means leveraging cutting-edge technology and innovative solutions. Our Digital Services are crafted to empower your business, streamline operations, and enhance customer engagement through a comprehensive suite of offerings.",
     ],
@@ -1298,8 +1293,7 @@ export const servicePages: ServicePage[] = [
     icon: "rocket",
     sourceUrl: "https://in2itebs.com/digital-transformation-services/",
     metaTitle: "Digital Transformation Services",
-    metaDescription:
-      "Transform your business for the digital age: strategy, process automation, customer experience, data-driven decisions, cloud integration, change management and more.",
+    metaDescription: "Connect process change, applications, data and cloud work in a practical transformation roadmap.",
     intro: [
       "Transform your business for the digital age with our comprehensive Digital Transformation services. We help you leverage the latest technologies to enhance your processes, improve customer experiences, and drive innovation. Our tailored solutions are designed to meet your unique needs and ensure a seamless transition to a more agile, efficient, and competitive organization.",
     ],
@@ -1369,9 +1363,8 @@ export const servicePages: ServicePage[] = [
     group: "digital-services",
     icon: "code",
     sourceUrl: "https://in2itebs.com/application-development-maintenance-services-adms-2/",
-    metaTitle: "Application Development & Maintenance Services (ADMS)",
-    metaDescription:
-      "From requirements gathering to design, testing, implementation and integration, In2IT EBS supports your organization in every step of application development.",
+    metaTitle: "Application Development and Maintenance",
+    metaDescription: "Develop, modernise and support applications through the full delivery lifecycle with In2IT EBS.",
     image: { src: "/services/live/adms.jpg", alt: "Application development" },
     intro: [
       "The process of developing computer software or a set of programs to accomplish the many functions that a business requires is known as application development. Applications help organizations automate operations and boost productivity by doing everything from calculating monthly budgets to arranging sales reports. Be it Requirements Gathering, Designing, Testing, Implementation, and Integration – In2IT EBS supports your organization in every step of Application Development.",
@@ -1418,7 +1411,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/application-maintenance-support/",
     metaTitle: "Application Maintenance & Support",
     metaDescription:
-      "Our application support and maintenance services ensure that all types of applications are highly available, reliable and relevant to your business's constantly changing requirements.",
+      "Maintain and improve business applications with support, release management and planned enhancements.",
     image: {
       src: "/services/live/application-maintenance-support.jpg",
       alt: "Application maintenance and support services",
@@ -1450,13 +1443,13 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/development-maintenance/",
     metaTitle: "Development & Maintenance",
     metaDescription:
-      "In2IT EBS's Application Development and Maintenance (ADM) Services include Application Development, Application Maintenance and Enhancements, Custom Solution Implementation, Legacy Modernization, Enterprise Application Integration and Data Transformation.",
+      "Build, maintain and modernise applications, from custom development and integration to ongoing support.",
     image: {
       src: "/services/live/adm-offerings.jpg",
       alt: "Application Development and Maintenance Services offerings",
     },
     introHeading:
-      "Digitalization at its best. Designing applications and platforms with state-of-art infrastructure and foundation.",
+      "We design applications and platforms on modern infrastructure using a practical engineering approach.",
     intro: [
       "In2IT EBS's Application Development and Maintenance (ADM) Services include Application Development, Application Maintenance and Enhancements, Custom Solution Implementation, Legacy Modernization, Enterprise Application Integration and Data Transformation. Our proprietary next generation ADM platform leverages extreme automation and DevOps-based agile software delivery practices.",
       "The digital world has compelled organizations to change, and application development must change accordingly.",
@@ -1643,8 +1636,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/ai-machine-learning-2/",
     image: { src: "/services/icons/aiml-1.png", alt: "AI & Machine Learning" },
     metaTitle: "AI & Machine Learning",
-    metaDescription:
-      "Make your business applications and processes more intelligent with the power of AI and Machine Learning: process automation, predictive analytics and personalized experience.",
+    metaDescription: "Explore AI and machine learning for automation, predictive insight and enterprise workflows.",
     introHeading: "Make better future decisions",
     intro: [
       "Make your business applications and processes more intelligent with the power of AI and Machine Learning Business Technology Platform. AI and Machine Learning provide strategic services & applications that automate and optimize corporate processes – and enrich customer experience across the intelligent suite.",
@@ -1687,8 +1679,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/big-data-2/",
     image: { src: "/services/live/big-data.jpg", alt: "Big Data" },
     metaTitle: "Big Data",
-    metaDescription:
-      "Big data consulting, infrastructure, support and insights: turn drawbacks to opportunities and process actionable insights for strategic business decisions.",
+    metaDescription: "Turn large data sets into governed platforms, pipelines and actionable business insight.",
     introHeading: "Make enhanced decisions to improve performance",
     intro: [
       "Today, organizations collect millions and millions of data in an attempt to improve business processes, customer engagement, and business decisions. However, traditional storage methods are stagnant and it is impossible to analyze this data with old approaches.",
@@ -1726,8 +1717,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://in2itebs.com/blockchain/",
     image: { src: "/services/icons/blockchain.png", alt: "Blockchain" },
     metaTitle: "Blockchain",
-    metaDescription:
-      "Blockchain is the key to your transformation: a distributed ledger that lets businesses secure and encrypt transactions and make data transactions tamper-proof.",
+    metaDescription: "Assess blockchain use cases, integration and governance for enterprise transactions and data.",
     introHeading: "Empowering businesses with advanced blockchain services.",
     intro: [
       "Blockchain is the key to your transformation. This distributed ledger allows businesses to secure and encrypt transactions, which help you make your data transactions tamper-proof. The network formed by blockchain is chained together to exhibit security, reliability, and digital effectiveness.",

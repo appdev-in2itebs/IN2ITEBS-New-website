@@ -79,7 +79,7 @@ export default function CustomerStoriesPage() {
         heading="More about us."
         items={[
           { label: "Clients & Case Studies", href: "/case-studies/" },
-          { label: "Who We Are?", href: "/about/who-we-are/" },
+          { label: "Who we are", href: "/about/who-we-are/" },
           { label: "Our Leadership", href: "/about/our-leadership/" },
           { label: "Accreditation", href: "/accreditation-awards/" },
         ]}

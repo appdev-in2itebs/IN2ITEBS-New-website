@@ -75,8 +75,7 @@ export const insights: Insight[] = [
     date: "",
     dateLabel: "17 Jul",
     category: "SAP",
-    excerpt:
-      "SAP S/4HANA Cloud is a next-generation enterprise resource planning (ERP) software solution that enables businesses to gain real-time insights and analytics…",
+    excerpt: "Explore how RISE with SAP supports S/4HANA Cloud migration, process change and enterprise planning.",
     image: "/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business.png",
   },
 ];

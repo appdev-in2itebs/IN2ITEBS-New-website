@@ -12,7 +12,7 @@ import { CtaSection } from "@/components/sections/cta-section";
 export const metadata = pageMetadata("/sap-enterprise-solutions/joule/", {
   title: "SAP Joule",
   description:
-    "SAP Joule and Joule Studio delivered by an early-adopter partner — production agents, custom skills and responsible-AI guardrails across your SAP landscape.",
+    "Explore SAP Joule and Joule Studio use cases, including assistants, workflow support and responsible AI controls.",
 });
 
 /** The four ways teams use Joule — Blueprint §8.7. */

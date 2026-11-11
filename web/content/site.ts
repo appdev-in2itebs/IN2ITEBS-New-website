@@ -1,8 +1,9 @@
 import type { Region, Stat } from "./types";
 
-/** Headline figures — Deck 2 (Corporate Capability, May 2026) via the Features Plan; SOT-02 of the first deck says 350+ employees. Owner to confirm one source (audit M7). */
+/** Headline figures from Amendment Brief v5, including the user-confirmed 500+ professionals. */
 export const stats: Stat[] = [
   { value: "10+", label: "Years of experience" },
+  { value: "500+", label: "Professionals" },
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered" },
   { value: "14+", label: "Industry verticals" },
@@ -14,7 +15,7 @@ export const stats: Stat[] = [
 export const footerCertifications = ["ISO 9001", "ISO/IEC 27001", "SAP Gold Partner"];
 
 /** Bump when site copy changes; feeds sitemap lastModified for pages without their own date. */
-export const contentUpdated = "2026-11-10";
+export const contentUpdated = "2026-11-11";
 
 export const regions: Region[] = [
   { code: "IN", name: "India", email: "info@in2itebs.com" },
