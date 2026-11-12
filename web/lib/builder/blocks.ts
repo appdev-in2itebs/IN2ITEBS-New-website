@@ -428,6 +428,7 @@ export const HOME_SECTIONS = {
   hero: "Hero (video)",
   clients: "Client logos",
   services: "Services",
+  tools: "Interactive tools",
   metrics: "Ecosystem numbers",
   partners: "Partners",
   team: "Leadership",

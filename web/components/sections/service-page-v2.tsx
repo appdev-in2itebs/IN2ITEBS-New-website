@@ -6,6 +6,7 @@ import { RiseGrowChooser } from "@/components/interactive/rise-grow-chooser";
 import { SapToolchain } from "@/components/sections/sap-toolchain";
 import { EstateReviewDiagnostic } from "@/components/interactive/estate-review-diagnostic";
 import { EccMaintenanceChecker } from "@/components/interactive/ecc-maintenance-checker";
+import { ToolsBand } from "@/components/sections/tools-band";
 import {
   V2Hero,
   V2StickyNav,
@@ -137,6 +138,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
           </Container>
         </section>
       ) : null}
+      {page.toolsBand ? <ToolsBand currentPath={`/services/${page.slug}/`} /> : null}
       {siblings.length ? (
         <V2Rail
           eyebrow={`More in ${group?.name}`}

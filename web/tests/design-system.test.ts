@@ -44,13 +44,20 @@ test("gold and glass tokens exist in the root block and the on-video scope", () 
     assert.ok(light.includes(token), `light theme lacks ${token}`);
     assert.ok(dark.includes(token), `dark theme lacks ${token}`);
   }
-  // The accent was gold/amber until the owner dropped it on 2026-09-17; it is a deep teal now, and
-  // lighter over video so it stays legible on dark footage. The token names still say "gold" so the
-  // swap stays a single edit. These pins are what stop a colour change happening by accident.
-  assert.match(light, /--color-gold:\s*48% 0\.12 196/);
-  assert.match(light, /--color-gold-display:\s*54% 0\.13 196/);
+  // The accent has moved twice: gold/amber until 2026-09-17, a deep teal until 2026-11-12, and
+  // now the brand palette. These pins are what stop it moving again by accident.
+  //
+  // Two values, because one accent cannot serve both surfaces. On light it is Steel Blue #3F75A3
+  // (4.90:1 on white; Muted Sand would be 1.69:1). On navy it is Muted Sand #CDC8A5 (9.73:1; Steel
+  // Blue would be 3.36:1 and fail). Brand book v2.0 sets this rule.
+  assert.match(light, /--color-gold:\s*54\.57% 0\.092 246\.3/);
+  assert.match(light, /--color-gold-on-brand:\s*82\.77% 0\.047 100\.6/);
+  // Hue 196 is the retired teal. It must not reappear under any token name.
+  assert.doesNotMatch(light, /--color-gold[\w-]*:\s*[\d.]+% [\d.]+ 196/);
+  assert.doesNotMatch(dark, /--color-gold[\w-]*:\s*[\d.]+% [\d.]+ 196/);
   assert.match(dark, /--color-bg-canvas:\s*12\.87% 0\.008 268\.5/);
-  assert.match(dark, /--color-gold:\s*82% 0\.13 196/);
+  // Over video both surfaces are dark, so both take Muted Sand.
+  assert.match(dark, /--color-gold:\s*82\.77% 0\.047 100\.6/);
 });
 
 test("the on-brand scope remaps gold to the champagne tone", () => {
@@ -138,14 +145,17 @@ test("every glass, gradient and motion utility the components use is defined", (
     assert.ok(new RegExp(`\\.${hook}(?![\\w-])`).test(source), `.${hook} is not defined in globals.css`);
 });
 
-test("headings inside main carry the gradient and can opt out", () => {
+test("headings are solid colour, so an accent phrase can take its own", () => {
   const source = css();
-  assert.match(source, /main h1,\s*main h2\s*\{[^}]*background-image:\s*var\(--gradient-heading\)/);
-  assert.match(
-    source,
-    /main \.theme-on-brand h1,\s*main \.theme-on-brand h2\s*\{[^}]*var\(--gradient-heading-on-brand\)/,
-  );
-  assert.match(source, /\.heading-plain\s*\{[^}]*background-image:\s*none/);
+  // Until 2026-11-12 every h1 and h2 in main was painted with a gradient and clipped to the text,
+  // which set the computed colour to rgba(0,0,0,0). The accent phrase could not then take a colour
+  // of its own — the inherited transparent fill won — and the heading degraded in forced-colours
+  // mode and printed unpredictably. The gradient survives as an opt-IN class.
+  assert.doesNotMatch(source, /main h1,\s*main h2\s*\{[^}]*background-image:\s*var\(--gradient-heading\)/);
+  assert.match(source, /\.text-gradient-heading\s*\{[^}]*background-image:\s*var\(--gradient-heading\)/);
+  // The accent is the brand's one typographic device: Newsreader italic, in the accent colour.
+  assert.match(source, /\.accent\s*\{[^}]*italic/);
+  assert.match(source, /\.accent\s*\{[^}]*oklch\(var\(--color-gold\)\)/);
 });
 
 test("reveals hide content only after hydration and never while paused or reduced", () => {

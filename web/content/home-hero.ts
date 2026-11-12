@@ -20,8 +20,8 @@ export const homeHeroSlides: HeroSlide[] = [
     label: "Enterprise transformation, under control",
     heading: ["Change with confidence.", "Run without compromise."],
     body: "In2IT EBS connects enterprise platforms, digital engineering and managed operations through one accountable transformation partner.",
-    cta: { href: "/contact/", label: "Start a conversation" },
-    secondary: { href: "/services/", label: "Explore our services" },
+    cta: { href: "/contact/", label: "Talk to us" },
+    secondary: { href: "/services/", label: "See our services" },
   },
   {
     id: "sap",
@@ -29,7 +29,7 @@ export const homeHeroSlides: HeroSlide[] = [
     label: "SAP enterprise solutions",
     heading: ["Transform your enterprise with SAP."],
     body: "From S/4HANA and cloud migration to SuccessFactors, analytics and managed services. Connect the platform to the way your business operates.",
-    cta: { href: "/services/sap/", label: "Explore SAP solutions" },
+    cta: { href: "/services/sap/", label: "See our SAP practice" },
     secondary: { href: "/contact/", label: "Talk to us" },
   },
   {
@@ -38,7 +38,7 @@ export const homeHeroSlides: HeroSlide[] = [
     label: "Application development & maintenance",
     heading: ["Applications built around your business."],
     body: "Design, build, integrate and maintain business applications, with engineering and ongoing support connected from the start.",
-    cta: { href: "/services/application-engineering/", label: "Explore application services" },
+    cta: { href: "/services/application-engineering/", label: "See application services" },
     secondary: { href: "/contact/", label: "Talk to us" },
   },
   {
@@ -47,7 +47,7 @@ export const homeHeroSlides: HeroSlide[] = [
     label: "People, finance & customer platforms",
     heading: ["Connect people, processes and performance."],
     body: "Explore SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices for the systems your teams rely on every day.",
-    cta: { href: "/services/enterprise-platforms/", label: "Explore our platform practices" },
+    cta: { href: "/services/enterprise-platforms/", label: "See our platform practices" },
     secondary: { href: "/contact/", label: "Talk to us" },
   },
   {
@@ -56,7 +56,7 @@ export const homeHeroSlides: HeroSlide[] = [
     label: "Cloud, data & AI",
     heading: ["Turn enterprise data into everyday decisions."],
     body: "Bring data, analytics, integration and AI into the flow of work, with architecture and delivery grounded in your business priorities.",
-    cta: { href: "/services/digital-data-ai/", label: "Explore data & AI services" },
+    cta: { href: "/services/digital-data-ai/", label: "See data and AI services" },
     secondary: { href: "/contact/", label: "Talk to us" },
   },
 ];

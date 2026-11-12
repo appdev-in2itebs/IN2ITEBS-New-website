@@ -6,6 +6,7 @@ import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ServiceIconTile } from "@/components/sections/service-icon";
 import { HeroObject } from "@/components/sections/hero-media";
 import { V2Hero, V2StickyNav, V2Section, V2Closing } from "@/components/sections/v2";
+import { ToolsBand } from "@/components/sections/tools-band";
 import { serviceGroups } from "@/content/legacy-services";
 import type { NavItem } from "@/content/types";
 
@@ -79,6 +80,7 @@ export default function ServicesIndexPage() {
           ))}
         </Stagger>
       </V2Section>
+      <ToolsBand tone="canvas" />
       <V2Closing body="Tell us where you want to go. We will bring the platforms, the people and the proof, and map your first move in a single conversation." />
     </>
   );

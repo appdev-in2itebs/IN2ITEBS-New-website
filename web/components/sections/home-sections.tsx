@@ -7,6 +7,7 @@ import { clients } from "@/content/clients";
 import { EcosystemMetrics } from "@/components/sections/ecosystem-metrics";
 import { HomePartners } from "@/components/sections/home-partners";
 import { HomeServices } from "@/components/sections/home-services";
+import { ToolsBand } from "@/components/sections/tools-band";
 import { HomeTeam } from "@/components/sections/home-team";
 import { YoutubeRibbon } from "@/components/sections/youtube-ribbon";
 import { HomeNews } from "@/components/sections/home-news";
@@ -49,6 +50,10 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
     ),
     // The existing site puts the service grid straight under the client ribbon; so do we.
     services: <HomeServices />,
+    // Added 12 November 2026. The two diagnostics had no path to them from anywhere a visitor
+    // starts; see content/tools.ts. They sit directly under the service grid because that is
+    // where somebody is already deciding whether we do the thing they need.
+    tools: <ToolsBand />,
     metrics: <EcosystemMetrics />,
     partners: <HomePartners />,
     // The leadership sits directly under the ecosystem it is accountable for.

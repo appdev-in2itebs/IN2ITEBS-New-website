@@ -104,8 +104,31 @@ export default function WhereWeStandPage() {
           {areas.map((area) => (
             <div key={area}>
               <h3 className="font-display text-h3 text-foreground">{area}</h3>
-              <div className="mt-5 overflow-x-auto">
-                <table className="w-full min-w-[42rem] border-collapse text-left">
+              {/*
+                A 42rem table inside a 390px screen is a horizontal scroller, and a horizontal
+                scroller inside a vertically scrolling page is where a status a buyer is meant to
+                read — "Ahead of us" — goes unseen. So the same rows render twice: stacked blocks
+                below md, the table from md up. The duplication is deliberate and the two halves
+                read from one array, so they cannot drift apart.
+              */}
+              <ul className="mt-5 space-y-4 md:hidden">
+                {capabilities
+                  .filter((c) => c.area === area)
+                  .map((c) => (
+                    <li key={c.capability} className="rounded-card border border-border-subtle bg-surface p-5">
+                      <span
+                        className={`inline-flex whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${STATUS_CLASS[c.status]}`}
+                      >
+                        {STATUS_LABELS[c.status].label}
+                      </span>
+                      <p className="mt-3 font-semibold text-foreground">{c.capability}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-foreground-muted">{c.note}</p>
+                    </li>
+                  ))}
+              </ul>
+
+              <div className="mt-5 hidden md:block">
+                <table className="w-full border-collapse text-left">
                   <thead>
                     <tr className="border-b border-border-strong">
                       <th scope="col" className="py-3 pr-6 text-sm font-semibold text-foreground">
@@ -124,15 +147,17 @@ export default function WhereWeStandPage() {
                       .filter((c) => c.area === area)
                       .map((c) => (
                         <tr key={c.capability} className="border-b border-border-subtle align-top">
-                          <td className="py-4 pr-6 text-foreground">{c.capability}</td>
-                          <td className="py-4 pr-6">
+                          <td className="w-[22%] py-4 pr-6 text-foreground">{c.capability}</td>
+                          <td className="w-[14%] py-4 pr-6">
                             <span
                               className={`inline-flex whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${STATUS_CLASS[c.status]}`}
                             >
                               {STATUS_LABELS[c.status].label}
                             </span>
                           </td>
-                          <td className="py-4 text-foreground-muted">{c.note}</td>
+                          <td className="py-4 text-foreground-muted">
+                            <span className="block max-w-measure">{c.note}</span>
+                          </td>
                         </tr>
                       ))}
                   </tbody>
@@ -141,7 +166,7 @@ export default function WhereWeStandPage() {
             </div>
           ))}
         </div>
-        <p className="mt-10 text-sm text-foreground-muted">
+        <p className="mt-10 max-w-measure text-sm text-foreground-muted">
           Every line was last checked against delivery evidence on{" "}
           {new Date(capabilityReviewed).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
           . A line changes when the evidence changes, not when the wording does.

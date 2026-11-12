@@ -18,10 +18,18 @@ const DRIFT = 28;
 /** How many times the archive is rendered. See the wrap rule in `home-team.tsx` for why it is not 2. */
 const COPIES = 3;
 
-/** "08 DEC" — the badge format the old site used, pinned to UTC so server and client agree. */
+/**
+ * "08 DEC 2026" — the old site's badge, with the year restored.
+ *
+ * The year is not decoration. A card reading "25 FEB" is read as recent by everybody, which is
+ * exactly wrong when the piece is two years old, and an insight strip that quietly overstates its
+ * own freshness is the cheapest credibility loss on the site. Pinned to UTC so server and client
+ * agree and the markup does not flicker on hydration.
+ */
 const badgeFormatter = new Intl.DateTimeFormat("en-GB", {
   day: "2-digit",
   month: "short",
+  year: "numeric",
   timeZone: "UTC",
 });
 

@@ -103,6 +103,14 @@ export interface ServicePage {
    * so that content/ stays data and components/ stays markup. Add a case in ServicePageV2.
    */
   interactive?: "rise-grow-chooser" | "sap-toolchain" | "estate-review-diagnostic" | "ecc-maintenance-checker";
+  /**
+   * Show the "two things you can work out yourself" band on this page.
+   *
+   * Set it on pillar pages, where a reader is still deciding whether we do their thing at all.
+   * The band filters out a tool that lives on the page being rendered, so setting this on a page
+   * that already carries a diagnostic is harmless rather than duplicative.
+   */
+  toolsBand?: boolean;
   heroObject?: HeroImageKey;
   icon: ServiceIconKey;
   metaTitle?: string;
@@ -178,6 +186,7 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ PILLAR HUBS
   {
     slug: "enterprise-platforms",
+    toolsBand: true,
     name: "Enterprise Platforms",
     title: "The platforms your business runs on",
     group: "enterprise-platforms",
@@ -266,6 +275,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "digital-data-ai",
+    toolsBand: true,
     diagram: {
       src: "/diagrams/d1-where-it-sits.svg",
       alt: "Where application engineering, data and AI sit in relation to the SAP core: the channels and users above, the core below, and the layer in between that the two meet in.",
@@ -320,6 +330,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "sap",
     interactive: "sap-toolchain",
+    toolsBand: true,
     diagram: {
       src: "/diagrams/m1-sap-estate.svg",
       alt: "The SAP estate we run: an S/4HANA core surrounded by the people, customer, data and integration layers, with the eleven practices that staff each one.",

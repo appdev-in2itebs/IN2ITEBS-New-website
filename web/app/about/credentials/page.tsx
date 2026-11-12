@@ -10,8 +10,7 @@ import {
   legalEntities,
   headquarters,
 } from "@/content/site";
-import { awards, accreditations, qualityStatement } from "@/content/awards";
-import { AwardsGrid } from "@/components/sections/awards";
+import { awards, qualityStatement } from "@/content/awards";
 import { DiagramBand } from "@/components/sections/diagram-band";
 
 export const metadata = pageMetadata("/about/credentials/", {
@@ -144,8 +143,14 @@ export default function CredentialsPage() {
               ))}
             </ul>
             <p className="mt-5 text-sm text-foreground-muted">
-              The certificate for each is below. We publish the photograph rather than the name, because a name is a
-              claim and a certificate is evidence.
+              <Link
+                href="/about/credentials/awards/"
+                className="font-semibold text-action underline-offset-4 hover:underline"
+              >
+                The certificate for each
+              </Link>{" "}
+              is on its own page. We publish the photograph rather than the name, because a name is a claim and a
+              certificate is evidence.
             </p>
             <p className="mt-5 text-sm text-foreground-muted">
               A partner award says the vendor has looked at our work and formed a view. That is worth something. It is
@@ -154,10 +159,6 @@ export default function CredentialsPage() {
           </div>
         </div>
       </V2Section>
-
-      <section className="bg-surface py-14 md:py-20">
-        <AwardsGrid />
-      </section>
 
       <V2Section
         id="assessed"
@@ -189,22 +190,20 @@ export default function CredentialsPage() {
             </p>
           </div>
         </div>
-        <p className="mt-6 text-sm text-foreground-muted">
+        <p className="mt-6 max-w-measure text-sm text-foreground-muted">
           Current credential strip: {footerCertifications.join(" · ")}.
         </p>
         <p className="mt-3 max-w-measure text-sm text-foreground-muted">{qualityStatement}</p>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {accreditations.map((item) => (
-            <div key={item.slug} className="rounded-card border border-border-subtle bg-surface p-7">
-              <h3 className="font-display text-h3 text-foreground">{item.name.replace(/:$/, "")}</h3>
-              {item.body.map((paragraph) => (
-                <p key={paragraph} className="mt-3 text-foreground-muted">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          ))}
-        </div>
+        <p className="mt-6 max-w-measure text-sm text-foreground-muted">
+          The certificates and the accreditation marks behind all of this are on{" "}
+          <Link
+            href="/about/credentials/awards/"
+            className="font-semibold text-action underline-offset-4 hover:underline"
+          >
+            awards and certificates
+          </Link>
+          .
+        </p>
       </V2Section>
 
       <V2Section

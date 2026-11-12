@@ -254,7 +254,7 @@ export function EccMaintenanceChecker() {
         </div>
 
         {door.gates?.length ? (
-          <div className="mt-8 rounded-card border border-border-subtle bg-surface-subtle p-6">
+          <div className="mt-8 max-w-measure rounded-card border border-border-subtle bg-surface-subtle p-6">
             <p className="label-caps text-foreground-muted">The gates, in SAP&rsquo;s terms</p>
             <ul className="mt-4 space-y-2">
               {door.gates.map((g) => (
@@ -273,7 +273,7 @@ export function EccMaintenanceChecker() {
         ) : null}
 
         <div className="mt-10 flex flex-wrap gap-4">
-          <Button href="/contact/">Talk this through with someone</Button>
+          <Button href="/contact/">Talk to us</Button>
           <Button href="/services/ecc-prism/" variant="ghost">
             What an assessment covers
           </Button>
@@ -319,8 +319,8 @@ export function EccMaintenanceChecker() {
       <div className="mt-10 space-y-10">
         {QUESTIONS.map((q) => (
           <fieldset key={q.id}>
-            <legend className="font-display text-h3 text-foreground">{q.legend}</legend>
-            {q.help ? <p className="mt-2 text-sm text-foreground-muted">{q.help}</p> : null}
+            <legend className="max-w-measure font-display text-h3 text-foreground">{q.legend}</legend>
+            {q.help ? <p className="mt-2 max-w-measure text-sm text-foreground-muted">{q.help}</p> : null}
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {q.options.map((o) => {
                 const selected = answers[q.id] === o.id;

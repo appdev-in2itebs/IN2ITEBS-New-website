@@ -339,8 +339,8 @@ export function EstateReviewDiagnostic() {
       <div className="mt-10 space-y-10">
         {QUESTIONS.map((q) => (
           <fieldset key={q.id}>
-            <legend className="font-display text-h3 text-foreground">{q.legend}</legend>
-            {q.help ? <p className="mt-2 text-sm text-foreground-muted">{q.help}</p> : null}
+            <legend className="max-w-measure font-display text-h3 text-foreground">{q.legend}</legend>
+            {q.help ? <p className="mt-2 max-w-measure text-sm text-foreground-muted">{q.help}</p> : null}
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {q.options.map((o) => {
                 const selected = answers[q.id] === o.id;

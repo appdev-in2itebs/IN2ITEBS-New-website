@@ -28,6 +28,23 @@ const plex = localFont({
   display: "swap",
 });
 
+/**
+ * Newsreader — the brand's display face, and until now the largest unimplemented part of the
+ * brand system. globals.css aliased --font-display to --font-plex, so every heading on the site
+ * rendered in the body face and the italic accent rule was unexecutable.
+ *
+ * Variable weight and a real italic, because the accent phrase in a title needs both.
+ * `display: "swap"` so a slow font never blocks the headline.
+ */
+const newsreader = localFont({
+  src: [
+    { path: "./fonts/newsreader-latin-wght-normal.woff2", style: "normal", weight: "200 800" },
+    { path: "./fonts/newsreader-latin-wght-italic.woff2", style: "italic", weight: "200 800" },
+  ],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -41,7 +58,7 @@ export const metadata: Metadata = {
 /** One theme since 2026-09-15 (dark mode and its cookie script were removed at the owner's request). */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={plex.variable}>
+    <html lang="en" className={`${plex.variable} ${newsreader.variable}`}>
       <GoogleTagManager />
       <body className="grain">
         <GoogleTagManagerNoScript />
