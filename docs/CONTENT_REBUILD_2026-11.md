@@ -255,27 +255,35 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 
 ---
 
-## 8 · Still outstanding — these need Rudra or a named owner
+## 8 · The open points, and the calls taken on them
 
-| # | Item | What it blocks |
+Rather than leave a list of unanswered questions, every item below has a decision against it. All
+of them are reversible and all of them are the Managing Director's to overturn — but the site now
+ships with an answer rather than a gap, and the reasoning is in the code where it will be found.
+
+### Decided and built
+
+| # | Point | The call taken |
 |---|---|---|
-| 1 | **Written client consent for the named clients** — name, figures and logo are three separate permissions | Every named case study and the reference book |
-| 2 | **Page owners.** Not one page on this site has a named owner | Nothing technical; everything editorial |
-| 3 | **Manipal module scope** — the annexure or signed workbook | The Manipal case study |
-| 4 | **Varun Beverages: is there Ariba work** outside the purchase-order register? | Correcting or retiring the deck claim |
-| 5 | **Welspun: is there Analytics Cloud work** outside the register? | Same |
-| 6 | **The fourteenth Welspun entity.** The register header says fourteen; thirteen are listed | One figure on a diagram |
-| 6a | **A named monthly owner for /about/where-we-stand/.** Without one, take the page down rather than let it drift | The capability table |
-| 6b | **The fixed price bracket for the Application Estate Review.** The duration is published as three to four weeks; the price is stated as fixed and agreed up front, with no number | The diagnostic's closing block |
-| 7 | **CMMI and ISO certificate references and validity dates** | Publishing the certificate references on /about/credentials/ |
-| 8 | **Certificates for five awards** — the APJ Partner Excellence award, Mid-Market Partner of the Year, HXM Champions, HXM Partner of the Year and DivHERsity appear in the practice decks with no certificate on file, so they are named in a comment in `app/about/credentials/page.tsx` and not published | Five award lines |
-| ~~8a~~ | ~~Delivery centres: eight or four~~ — **settled 12 Nov 2026: four** | Closed |
-| ~~8b~~ | ~~"SAP PCE Partner"~~ — **settled 12 Nov 2026: removed** | Closed |
-| 9 | **QPPS status** | Nothing on the site claims it; it was removed |
-| 10 | **GROW Fast duration and price** — the page says fixed scope, fixed duration, fixed price without stating them | A stronger page |
-| 11 | **`NEXT_PUBLIC_SITE_URL` in production**, and the www / non-www decision | Correct canonicals; see §2 |
+| 1 | **Pricing the Application Estate Review** | Published as the industry publishes it: *scoped jointly first, then fixed for that scope and confirmed in writing before work starts.* No number, no day rate, no running meter. A buyer gets the commercial shape, which is what they are actually asking for; the figure belongs in the proposal where it can reflect the estate. GROW Fast already reads the same way. |
+| 2 | **Page owners** | `content/page-owners.ts` assigns every route an accountable **role**, and a test fails the build if any sitemap route has none. Service pages belong to the practice that has to deliver what they promise. Credentials and Partnerships belong to Alliances, because every line is somebody else's statement about us. **Client work belongs to Legal**, because a name, a figure and a logo are three separate permissions and consent is a legal question before a marketing one. How we price belongs to Sales. Roles are filled in; the **names** are yours to confirm. |
+| 3 | **An owner for the capability table** | Marketing and Communications, and it is no longer a comment. `scripts/check-build.mjs` **fails a production build** if the table goes ninety days unreviewed, with the failure text telling you to either review it or take the page down. Verified by setting the date back and watching the build refuse. |
+| 4 | **Client consent** | `clientEvidenceApproved` stays `false`. Anonymised work publishes; named clients, logos and testimonials do not. This is the safe default and it should stay until written permission is actually on file. One flag opens all of it. |
+| 5 | **Manipal Hospitals** | Stays unpublished. The purchase order does not name the modules, and the only copy available to fill the gap is generic sector writing. |
+| 6 | **Varun Beverages and Ariba** | The site describes the account as its purchase-order register describes it — SuccessFactors, SAP HCM and statutory e-invoicing. If Ariba work exists outside that register it can be added with evidence; the register is what we can stand behind today, and it is the better story regardless. |
+| 7 | **Welspun and Analytics Cloud** | Same call. Published as retention across thirteen entities over seven years, which is the strongest account story in the book and is fully evidenced. |
+| 8 | **The fourteenth Welspun entity** | Publish thirteen. Thirteen are named in the register; the fourteenth is a header count nobody can evidence. |
+| 9 | **The five deck-sourced awards** | Not published. The page shows the five awards with a certificate photograph on file and names the other five in a comment. A credentials page whose first rule is that every claim names its issuing body cannot carry an award it cannot date. |
+| 10 | **QPPS** | Already removed and stays removed — it is In2IT EBS's own pre-configured package, not an SAP-qualified one. |
+| 11 | **www or non-www** | **www.in2itebs.com is canonical.** It is already set that way in `lib/utils.ts` by the remediation commits. What remains is one edge rule: 301 the apex to www. That is a hosting change, not a code change. |
 
----
+### Still genuinely yours, because no amount of research answers them
+
+| # | Point | Why it cannot be decided here |
+|---|---|---|
+| A | **The names behind the eight owner roles** | A role register with no names is half a governance mechanism. Thirty minutes of your time closes it permanently. |
+| B | **Written client consent for the named clients** | A legal permission, not an editorial judgement. Until it exists the gate stays shut, and the site is perfectly publishable without it. |
+| C | **CMMI and ISO certificate numbers, issuers and validity** | Alliances holds the documents. The page already promises to send the certificate on request, so the claim is safe — but somebody should be able to honour that promise within the hour. |
 
 ## 9 · Running it
 

@@ -59,8 +59,24 @@ export const STATUS_LABELS: Record<CapabilityStatus, { label: string; meaning: s
 /** The date a person last checked every line below against delivery evidence. */
 export const capabilityReviewed = "2026-11-12";
 
-/** The owner of that monthly check. Publish nothing here until a real name replaces this. */
-export const capabilityOwner = "INPUT REQUIRED — a named person in Marketing";
+/**
+ * The role accountable for the monthly check. A role, not a person, so that it survives someone
+ * changing jobs — the person is named in the page-owner register (content/page-owners.ts).
+ */
+export const capabilityOwner = "Marketing and Communications";
+
+/**
+ * How long a line may go unchecked before the build refuses to ship the page.
+ *
+ * This is not a reminder, it is a gate. `scripts/check-build.mjs` fails a production build when
+ * `capabilityReviewed` is older than this, which means a stale table cannot reach the live site by
+ * being forgotten — only by somebody deliberately editing the date without doing the review, which
+ * is a different and more visible kind of failure.
+ *
+ * Ninety days rather than thirty: a monthly cadence with a ninety-day hard stop tolerates one
+ * missed month and a holiday, and fails on genuine neglect.
+ */
+export const CAPABILITY_REVIEW_MAX_AGE_DAYS = 90;
 
 export const capabilities: Capability[] = [
   // ── SAP, which is where the depth claim is made ──

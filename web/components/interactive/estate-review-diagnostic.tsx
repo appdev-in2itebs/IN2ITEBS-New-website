@@ -279,9 +279,17 @@ export function EstateReviewDiagnostic() {
 
         <div className="mt-10 rounded-card border border-border-subtle bg-surface-subtle p-6">
           <p className="text-foreground">
-            <span className="font-semibold">Three to four weeks, fixed price, no onward commitment.</span> The price is
-            fixed against the estate size you selected and agreed before we start. You own the output whether or not you
-            do anything else with us — including the part that says do nothing.
+            <span className="font-semibold">Three to four weeks, fixed price, no onward commitment.</span>
+          </p>
+          <p className="mt-3 text-foreground-muted">
+            We scope it with you first — a short working session where we agree together which applications are in,
+            which are out, and what the output has to answer. The price is then fixed for that scope and confirmed in
+            writing before any work starts. No day rates, no running meter, and no change request unless you change the
+            scope.
+          </p>
+          <p className="mt-3 text-foreground-muted">
+            You own the output whether or not you do anything else with us — including the version that says do nothing
+            yet, or that somebody else is the better fit for what comes next.
           </p>
         </div>
 

@@ -148,3 +148,18 @@ test("the sitemap lists no URL that redirects", async () => {
     [],
   );
 });
+
+/**
+ * Every page has exactly one accountable role.
+ *
+ * The November 2026 audit found someone else's vision statement on the About page, withdrawn ISO
+ * standards on the certification page and two main navigation items returning 404. None of that
+ * was a bad decision; it was nobody being answerable for noticing. This test is the friction that
+ * stops a page shipping without an owner — about thirty seconds, once.
+ */
+test("every page in the sitemap has an accountable owner", async () => {
+  const { default: sitemap } = await import("../app/sitemap");
+  const { ownerOf } = await import("../content/page-owners");
+  const unowned = (await sitemap()).map((e) => new URL(e.url).pathname).filter((p) => !ownerOf(p));
+  assert.deepEqual(unowned, []);
+});

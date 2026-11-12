@@ -47,6 +47,29 @@ if (prerenderedPages.length < PRERENDER_FLOOR)
   failures.push(
     `only ${prerenderedPages.length} pages are prerendered; expected at least ${PRERENDER_FLOOR} (is cookies()/headers() used in a layout?)`,
   );
+/**
+ * The capability table at /about/where-we-stand/ is the one page on this site whose value is
+ * entirely in being current. A stale status table is worse than none: it turns an instrument of
+ * honesty into evidence that we do not check our own claims. So staleness fails the build rather
+ * than sitting in a backlog.
+ *
+ * To clear this failure, review the lines against delivery evidence and move `capabilityReviewed`
+ * in content/capability-status.ts. Moving the date without doing the review is the one failure
+ * mode this cannot catch, and it is a choice somebody has to make deliberately.
+ */
+const capabilitySource = readFileSync("content/capability-status.ts", "utf8");
+const reviewed = capabilitySource.match(/capabilityReviewed = "(\d{4}-\d{2}-\d{2})"/)?.[1];
+const maxAge = Number(capabilitySource.match(/CAPABILITY_REVIEW_MAX_AGE_DAYS = (\d+)/)?.[1] ?? 90);
+if (!reviewed) {
+  failures.push("content/capability-status.ts has no capabilityReviewed date");
+} else {
+  const ageDays = Math.floor((Date.now() - Date.parse(reviewed)) / 86_400_000);
+  if (ageDays > maxAge)
+    failures.push(
+      `the capability table was last reviewed ${ageDays} days ago (limit ${maxAge}). Review the lines against delivery evidence and update capabilityReviewed, or take /about/where-we-stand/ down.`,
+    );
+}
+
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);
