@@ -77,12 +77,10 @@ test("desktop: the hero is a five-slide carousel on ambient video with no contro
     page.getByRole("button", { name: /page animation|service carousel|Next service|Previous service/ }),
   ).toHaveCount(0);
   await noDiscoverCue(page);
-  // The former service carousel section is gone. The hero is the only carousel above the closing
-  // run; the testimonial slider down by the footer is the one other carousel the homepage carries.
+  // The former service carousel and the unapproved testimonial carousel are both absent.
   await expect(page.locator("#featured-services")).toHaveCount(0);
-  await expect(page.locator('[aria-roledescription="carousel"]')).toHaveCount(2);
+  await expect(page.locator('[aria-roledescription="carousel"]')).toHaveCount(1);
   await expect(page.locator('[aria-roledescription="carousel"]').first()).toHaveAttribute("data-brand-hero", "true");
-  await expect(page.locator('[aria-roledescription="carousel"]').nth(1)).toHaveAttribute("data-testimonials", "true");
 });
 
 test("the hero advances on its own every 4.5 seconds and keeps the h1 in the document", async ({ page }) => {

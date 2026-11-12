@@ -6,17 +6,16 @@ import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroObject } from "@/components/sections/hero-media";
-import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { DiagramBand } from "@/components/sections/diagram-band";
-import { getFeaturedClients } from "@/lib/content";
-import { caseStudies } from "@/content/case-studies";
+import { publicCaseStudies } from "@/content/case-studies";
+import { clientEvidenceApproved } from "@/content/compliance";
 
 export const metadata = pageMetadata("/case-studies/", {
   title: "Clients & Case Studies",
   description:
-    "150+ global enterprises delivered to one standard. Browse SAP case studies across industries and delivery paths, from RISE migrations to AMS engagements.",
+    "Anonymised SAP case studies across industries and delivery paths, published while named-client permissions are verified.",
 });
 
 export default function CaseStudiesPage() {
@@ -26,35 +25,22 @@ export default function CaseStudiesPage() {
       <PageHero
         route="/case-studies/"
         eyebrow="Clients & Case Studies"
-        headline="150+ global enterprises,"
-        accentWord="one delivery standard."
-        subhead="From national utilities to digital-first FMCG brands, our clients span industries and continents — each delivered against the same standard of precision, proof and on-time delivery."
+        headline="Enterprise delivery,"
+        accentWord="shown by sector."
+        subhead="Anonymised engagements are published while named-client permissions and supporting evidence are verified."
         media={<HeroObject name="pages/case-studies" />}
         frame={false}
       />
 
-      {/* CLIENT LOGO WALL */}
-      <Section tone="white">
-        <Container>
-          <Reveal className="mb-12 max-w-2xl">
-            <SectionHeading
-              eyebrow="In good company"
-              lead="A representative spread of the enterprises that trust In2IT EBS across SAP implementation, migration and managed services."
-            >
-              Trusted across <Accent>sectors</Accent>.
-            </SectionHeading>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <LogoMarquee clients={getFeaturedClients(24)} />
-          </Reveal>
-        </Container>
-      </Section>
-
-      <DiagramBand
-        src="/diagrams/q1-reference-book.svg"
-        alt="The client reference book by sector: the named clients In2IT EBS can evidence in power and utilities, metals and mining, government, manufacturing, consumer goods, pharma and healthcare, technology, banking, and real estate."
-        tone="subtle"
-      />
+      {/* The reference-book diagram names clients by sector, so it is behind the same consent
+          gate as the logo wall and the testimonials. A diagram is a publication like any other. */}
+      {clientEvidenceApproved ? (
+        <DiagramBand
+          src="/diagrams/q1-reference-book.svg"
+          alt="The client reference book by sector: the named clients In2IT EBS can evidence in power and utilities, metals and mining, government, manufacturing, consumer goods, pharma and healthcare, technology, banking, and real estate."
+          tone="subtle"
+        />
+      ) : null}
 
       {/* CASE STUDY GRID */}
       <Section tone="light">
@@ -67,7 +53,7 @@ export default function CaseStudiesPage() {
               Proof, by <Accent>project</Accent>.
             </SectionHeading>
           </Reveal>
-          <CaseStudyGrid studies={caseStudies} />
+          <CaseStudyGrid studies={publicCaseStudies} />
         </Container>
       </Section>
 
@@ -99,8 +85,8 @@ export default function CaseStudiesPage() {
             See it work in <Accent>your</Accent> sector.
           </>
         }
-        body="Tell us your industry and SAP path. We'll arrange a reference call with a comparable client and walk you through how the work was delivered."
-        ctaLabel="Request a reference call"
+        body="Tell us your industry and SAP path. We will outline the relevant delivery approach and the evidence available for review."
+        ctaLabel="Discuss your requirements"
       />
     </>
   );

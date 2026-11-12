@@ -1,88 +1,13 @@
 import { test, expect } from "@playwright/test";
-import { testimonials } from "../../content/testimonials";
 import { insights } from "../../content/insights";
 
-// The closing run of the homepage mirrors the existing site: the client quotes ("What people say"),
-// the YouTube ribbon, then the article strip ("News & articles") directly above the footer.
-const slider = "section[data-testimonials]";
 const news = "section[data-home-news]";
 
-test("the testimonial row steps on one quote at a time and the portraits jump to a speaker", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
+test("unapproved testimonials and client videos stay off the homepage", async ({ page }) => {
   await page.goto("/");
-  await page.locator(slider).scrollIntoViewIfNeeded();
-  await expect(page.locator(slider).getByRole("heading", { level: 2 })).toHaveText("What people say.");
-
-  // The real roster appears once; the second copy exists only so the row can turn over.
-  const real = page.locator(`${slider} [data-testimonial]`);
-  await expect(real).toHaveCount(testimonials.length);
-  for (const [index, item] of testimonials.entries()) {
-    const card = real.nth(index);
-    await expect(card).toContainText(item.quote.slice(0, 60));
-    await expect(card).toContainText(item.name);
-    await expect(card).toContainText(item.role);
-  }
-
-  const track = page.locator(`${slider} [data-testimonial-track]`);
-  expect(await track.evaluate((el) => getComputedStyle(el).overflowX)).toBe("auto");
-  expect(await track.evaluate((el) => getComputedStyle(el).scrollSnapType)).toContain("x");
-
-  // Two cards are in view on a desktop, so one step moves the row by exactly one card.
-  const step = await track.evaluate((el) => {
-    const card = el.firstElementChild as HTMLElement;
-    return card.offsetWidth + parseFloat(getComputedStyle(el).columnGap || "0");
-  });
-  const viewport = await track.evaluate((el) => el.clientWidth);
-  expect(step).toBeLessThan(viewport * 0.75);
-
-  // The portraits jump straight to a speaker, and the live one is marked.
-  await page.getByRole("button", { name: `Show the testimonial from ${testimonials[2].name}` }).click();
-  await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(step * 1.5);
-  await expect(page.getByRole("button", { name: `Show the testimonial from ${testimonials[2].name}` })).toHaveAttribute(
-    "aria-current",
-    "true",
-  );
+  await expect(page.locator("section[data-testimonials]")).toHaveCount(0);
+  await expect(page.locator("section[data-youtube-ribbon]")).toHaveCount(0);
 });
-
-test("the testimonial row advances on its own, pointer or no pointer", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-  await page.locator(slider).scrollIntoViewIfNeeded();
-  const track = page.locator(`${slider} [data-testimonial-track]`);
-  const started = await track.evaluate((el) => el.scrollLeft);
-  // INTERVAL is 7s; one step lands within that plus the smooth scroll.
-  await expect.poll(() => track.evaluate((el) => el.scrollLeft), { timeout: 12000 }).toBeGreaterThan(started + 50);
-
-  // Hovering must not stop it (2026-09-17). A reader's pointer sits over the quotes they are
-  // reading, so gating the step on hover meant the row only ever moved once they had left.
-  await page.locator("#testimonials-title").hover();
-  const under = await track.evaluate((el) => el.scrollLeft);
-  await expect
-    .poll(() => track.evaluate((el, from) => Math.abs(el.scrollLeft - from), under), { timeout: 12000 })
-    .toBeGreaterThan(50);
-
-  // The page-wide pause control is what stops it on purpose.
-  await page.evaluate(() => document.documentElement.setAttribute("data-motion-paused", "true"));
-  await page.waitForTimeout(800);
-  const parked = await track.evaluate((el) => el.scrollLeft);
-  await page.waitForTimeout(9000);
-  expect(Math.abs((await track.evaluate((el) => el.scrollLeft)) - parked)).toBeLessThan(4);
-});
-
-test("one quote fills the row on a phone", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-  await page.locator(slider).scrollIntoViewIfNeeded();
-  const track = page.locator(`${slider} [data-testimonial-track]`);
-  const card = await track.evaluate((el) => (el.firstElementChild as HTMLElement).offsetWidth);
-  const viewport = await track.evaluate((el) => el.clientWidth);
-  // A single card carries the row on a narrow screen rather than two half-width ones.
-  expect(card).toBeGreaterThan(viewport * 0.75);
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(
-    true,
-  );
-});
-
 test("the article strip travels right to left on its own and can be moved by hand", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");

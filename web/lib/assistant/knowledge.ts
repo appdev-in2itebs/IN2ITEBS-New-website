@@ -5,8 +5,9 @@ import { ASSISTANT_LANGUAGES, type Settings } from "@/lib/cms/settings";
 import type { Cms } from "@/lib/cms/content";
 import type { OpeningRow } from "@/lib/cms/store";
 import { leaderUrl } from "@/lib/chatbot/site-index";
-import { caseStudies } from "@/content/case-studies";
+import { publicCaseStudies } from "@/content/case-studies";
 import { clients } from "@/content/clients";
+import { clientEvidenceApproved } from "@/content/compliance";
 
 /**
  * What the assistant knows and how it behaves: the system prompt, built on every turn from the
@@ -74,7 +75,7 @@ export function systemPrompt(input: {
   const services = serviceGroups
     .map((g) =>
       voice
-        ? `- ${g.name}: ${g.blurb}`
+        ? `- ${g.name}`
         : `- [${g.name}](${g.href}): ${g.blurb} Pages: ${flattenItems(g.items)
             .map((i) => `[${i.label}](${i.href})`)
             .join(", ")}`,
@@ -86,30 +87,43 @@ export function systemPrompt(input: {
   // Offices grouped by country, with the official (company) address and contact of each.
   const byCountry = new Map<string, string[]>();
   for (const o of cms.offices) {
-    const kind = o.kind.includes("delivery-centre")
-      ? "delivery centre"
-      : o.kind.includes("global-entity")
-        ? "global entity"
-        : "office";
-    // A spoken answer never reads out a street address, a registered entity name or an email, so
-    // voice gets the city and what it is, and nothing else.
-    const what = voice ? kind : [kind, o.legalEntity, o.address, o.email, o.phone].filter(Boolean).join("; ");
-    byCountry.set(o.country, [...(byCountry.get(o.country) ?? []), `${o.city} (${what})`]);
+    const what = [
+      o.kind.includes("delivery-centre")
+        ? "delivery centre"
+        : o.kind.includes("global-entity")
+          ? "global entity"
+          : "office",
+      o.legalEntity,
+      o.address,
+      o.email,
+      o.phone,
+    ]
+      .filter(Boolean)
+      .join("; ");
+    // A spoken answer never reads out a street address, a registered entity name or an email, but
+    // it does have to be able to say which cities are delivery centres, so the kind survives.
+    const spoken = o.kind.includes("delivery-centre") ? "delivery centre" : null;
+    byCountry.set(o.country, [
+      ...(byCountry.get(o.country) ?? []),
+      voice ? (spoken ? `${o.city} (${spoken})` : o.city) : `${o.city} (${what})`,
+    ]);
   }
   const offices = [...byCountry].map(([country, list]) => `- ${country}: ${list.join(" · ")}`).join("\n");
   // The leadership team exactly as the website shows it: name, title and bio.
   const leaders = cms.leadership
-    .map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${voice ? firstSentences(l.bio, 2) : l.bio}`)
+    .map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${voice ? firstSentences(l.bio, 1) : l.bio}`)
     .join("\n");
   // What clients say, word for word as the website quotes them (homepage and Customer Stories).
-  const sayings = cms.testimonials
-    .map((q) => {
-      const quote = q.quote.replace(/\s+/g, " ").trim();
-      return `- ${q.name}, ${q.role}: "${voice ? firstSentences(quote, 2) : quote}"`;
-    })
-    .join("\n");
+  const sayings = clientEvidenceApproved
+    ? cms.testimonials
+        .map((q) => {
+          const quote = q.quote.replace(/\s+/g, " ").trim();
+          return `- ${q.name}, ${q.role}: "${voice ? firstSentences(quote, 2) : quote}"`;
+        })
+        .join("\n")
+    : "Named testimonials are withheld while written publication consent is verified.";
   // Case studies: the named ones have a page of their own; the anonymised ones are on /case-studies/.
-  const studies = caseStudies
+  const studies = publicCaseStudies
     .map((c) => {
       const page = c.named ? `/case-studies/${c.slug}/` : "/case-studies/";
       const result = c.outcome ?? c.summary ?? c.benefits[0] ?? "";
@@ -118,7 +132,9 @@ export function systemPrompt(input: {
         : `- [${c.client}](${page}): ${c.industry}; ${c.featuredSolution}; ${c.region}. ${result}`;
     })
     .join("\n");
-  const clientNames = (voice ? clients.slice(0, 24) : clients).map((c) => c.name).join(", ");
+  const clientNames = clientEvidenceApproved
+    ? (voice ? clients.slice(0, 24) : clients).map((c) => c.name).join(", ")
+    : "Named client evidence is withheld while written publication consent is verified.";
   const faqText = faqs
     .slice(0, 30)
     .map((f) => `Q: ${f.question}\nA: ${f.answer}${f.link_url ? ` [${f.link_url}]` : ""}`)
@@ -134,21 +150,21 @@ export function systemPrompt(input: {
 
   // Point 1 of "How to help" tells the model how to format links, bullets and page lists. A spoken
   // reply has none of those, and the Voice conversation block below forbids them outright, so voice
-  // gets the same substance with the formatting instructions taken out.
+  // gets the same substance — consent gate included — with the formatting instructions taken out.
   const howToHelp = voice
     ? `1. Questions about the company or its services: answer ONLY from the website knowledge in this prompt, the FAQs and search_website results. Never add facts from general knowledge. If the website does not cover it, say so in one sentence and offer to connect them with the team. Use search_website only when the visitor wants detail this prompt does not have.
    - Offices or locations: name the countries and the cities, and say which are delivery centres. Do not claim regions or clients that are not listed here.
    - A leader or the team: give the name and title, then one or two sentences of background from their bio above, using only what the bio says: never add years, numbers, places or achievements that are not in it.
-   - Testimonials: summarise one quote with the person's name, role and company, never inventing or changing what they said.
-   - Case studies or "have you done this before": give one or two from the list above that match what they asked about, each in a sentence: the client, what was done, the result.
-   - Who your clients are: name four or five well-known clients from the list above, and say there are more than ninety. Never claim a client that is not in the list.
-   - The website knowledge in this prompt is always current. If an earlier reply said something was not available but it is here now, answer from it now; never repeat an earlier "I don't have that".`
+   - What clients say, reviews or testimonials: use only approved evidence printed above. If named evidence is withheld, say it is being verified and do not name a customer or a person.
+   - Case studies or \"have you done this before\": give one or two from the list above that match what they asked about, each in a sentence: what was done and the result. Name a client only if that client is named in the list above.
+   - Who your clients are: if client names are withheld above, say the client list is being verified and offer to have someone follow up. Never name a client that is not printed above.
+   - The website knowledge in this prompt is always current. If an earlier reply said something was not available but it is here now, answer from it now; never repeat an earlier \"I don't have that\".`
     : `1. Questions about the company or its services: answer ONLY from the website knowledge in this prompt, the FAQs and search_website results. Never add facts from general knowledge. If the website does not cover it, say so in one sentence and offer to connect them with the team. Keep it short: at most three sentences or a few one-line bullets, then link the page(s) to read more as markdown links with their site path, e.g. [RISE and S/4HANA](/services/rise-s4hana/); the link text is always the page or section name, never "here" or "click here". For "what services do you offer", give one line of introduction, then each service group as a bullet with its link and a few words, e.g. "- [Enterprise Platforms](/services/enterprise-platforms/): SAP, SuccessFactors, Salesforce and Workday, implemented and run", then ask which area interests them. Use search_website only when the visitor wants detail this prompt does not have. Only link paths listed in this prompt, the FAQs or search results; never other websites.
    - Global footprint, offices or locations: name the countries and cities (grouped by country, one line each), say which are delivery centres, then always link [Global footprint: Where we are](/#offices) (the office map on the homepage) first, and [Contact and offices](/contact/). Do not claim regions or clients that are not listed here.
    - The leadership, management or a role (MD, COO, CRO, "who runs the company", "your team"): give the name and title, then their background in two or three sentences from their bio (experience, expertise, what they lead), using only what the bio says: never add years, numbers, places or achievements that are not in it, and link their page as listed above. "Tell me about <name>" is answered the same way. Asked about the team, list each leader as a one-line bullet with a link, then link [Meet our team](/#team) and [Leadership](/about/#leadership).
-   - What clients say, reviews, testimonials or feedback: give one or two of the quotes above as short summaries, each with the person's name, role and company ("Amy Halter, VP Operations and HR at Accion Labs, says In2IT EBS…"), never inventing or changing what they said; offer more, and link [What people say](/#testimonials).
+   - What clients say, reviews, testimonials or feedback: use only approved evidence printed above. If named evidence is withheld, say it is being verified, do not name a customer or person, and link [Clients & Case Studies](/case-studies/).
    - Case studies, past projects or "have you done this before": give at most four of the most relevant case studies above (match the visitor's industry or SAP topic when they gave one), each as one short bullet of no more than 15 words: the linked client name, then what was done and the result ("- [VAHDAM India](/case-studies/vahdam-india/): GROW with SAP live in 12 months, 18% lower manpower cost"), then link [Clients & Case Studies](/case-studies/).
-   - Who your clients are: in two or three sentences, name six to eight well-known clients from the list above (from the visitor's industry if known), say there are more than ninety, and link [Clients & Case Studies](/case-studies/); do not list industries unless asked. Never claim a client that is not in the list.
+   - Who your clients are: use only the approved client list above. If named evidence is withheld, do not name or imply a customer; explain that permissions are being verified and link [Clients & Case Studies](/case-studies/).
    - The website knowledge in this prompt is always current. If an earlier reply in this conversation said something was not available but it is here now (testimonials, case studies, leaders), answer from it now; never repeat an earlier "I don't have that".`;
 
   return `${a.persona}
@@ -162,7 +178,7 @@ ${offices}
 # Leadership team (as shown on [About → Leadership](/about/#leadership))
 ${leaders}
 
-# What our clients say (testimonials, on the homepage at [What people say](/#testimonials))
+# What our clients say (publication status and any approved evidence)
 ${sayings}
 
 # Case studies (all on [Clients & Case Studies](/case-studies/))

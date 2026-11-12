@@ -14,8 +14,11 @@ const robots = readFileSync(robotsPath, "utf8");
 const manifest = JSON.parse(readFileSync(".next/routes-manifest.json", "utf8"));
 const headerValues = (manifest.headers ?? []).flatMap((h) => h.headers.map((x) => `${x.key}: ${x.value}`));
 const hasNoindex = headerValues.some((v) => /^x-robots-tag: .*noindex/i.test(v));
+// Matches next.config.mjs: GitHub CI preview artefacts stay blocked; the deployed Azure build is
+// public even while its legacy shared environment still says SITE_ENV=preview.
+const indexingEnabled = env === "production" || process.env.CI !== "true";
 const failures = [];
-if (env === "production") {
+if (indexingEnabled) {
   if (!/Allow: \//.test(robots) || /Disallow: \/\s*$/m.test(robots))
     failures.push("production build has a robots.txt that blocks crawling");
   if (hasNoindex) failures.push("production build still sends X-Robots-Tag noindex");
@@ -30,12 +33,22 @@ const prerender = JSON.parse(readFileSync(".next/prerender-manifest.json", "utf8
 const prerenderedPages = Object.keys(prerender.routes).filter(
   (r) => !/\.(xml|txt)$/.test(r) && r !== "/opengraph-image",
 );
-if (prerenderedPages.length < 60)
+/**
+ * The floor exists to catch a layout accidentally going dynamic (a cookies() or headers() call in
+ * a layout silently turns every page server-rendered), not to police the size of the site.
+ *
+ * Lowered from 60 to 45 on 12 November 2026. The restructure retired fifteen routes and collapsed
+ * fourteen industry pages into nine, and the named case studies are prerendered only once client
+ * consent is recorded (content/compliance.ts), so a correct build of this site is now 54 pages.
+ * Raise it again when the consent gate opens; do not raise it to hide a drop.
+ */
+const PRERENDER_FLOOR = 45;
+if (prerenderedPages.length < PRERENDER_FLOOR)
   failures.push(
-    `only ${prerenderedPages.length} pages are prerendered; expected at least 60 (is cookies()/headers() used in a layout?)`,
+    `only ${prerenderedPages.length} pages are prerendered; expected at least ${PRERENDER_FLOOR} (is cookies()/headers() used in a layout?)`,
   );
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);
 }
-console.log(`check-build: ok (SITE_ENV=${env}, noindex=${hasNoindex})`);
+console.log(`check-build: ok (SITE_ENV=${env}, indexing=${indexingEnabled}, noindex=${hasNoindex})`);

@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export const metadata = pageMetadata("/careers/current-openings/", {
   title: "Current Openings",
   description:
-    "Build a career with endless opportunities. Current openings at In2IT EBS Pvt Ltd across Bangalore, Bhubaneshwar, Chennai, Hyderabad and Mumbai.",
+    "Explore current job openings at In2IT EBS across Bengaluru, Bhubaneswar, Chennai, Hyderabad and Mumbai.",
 });
 
 /**
@@ -32,50 +32,50 @@ const fallbackOpenings: Job[] = [
   {
     title: "Manager - Finance",
     type: "Full Time",
-    location: "Bhubaneshwar - Bangalore",
+    location: "Bhubaneswar - Bengaluru",
     href: "https://in2itebs.com/manager-finance/",
   },
   {
     title: "SuccessFactors Compensation Consultant",
     type: "Full Time",
-    location: "Bangalore - Bhubaneshwar - Chennai, + 4 more",
+    location: "Bengaluru - Bhubaneswar - Chennai, + 4 more",
     href: "https://in2itebs.com/careers/",
   },
   {
     title: "Assistant General Manager – IT Application Delivery",
     type: "Full Time",
-    location: "Bhubaneshwar",
+    location: "Bhubaneswar",
     href: "https://in2itebs.com/careers/",
   },
   {
     title: "Management Trainee",
     type: "Full Time",
-    location: "Bangalore",
+    location: "Bengaluru",
     href: "https://in2itebs.com/management-trainee/",
   },
   {
     title: "NetSuite Technical Consultant",
     type: "Full Time",
-    location: "Bangalore",
+    location: "Bengaluru",
     href: "https://in2itebs.com/netsuite-technical-consultant-3/",
   },
   {
     title: "Senior Consultant - SAP SD WM",
     type: "Full Time",
-    location: "Bhubaneshwar - Mumbai - Bangalore",
+    location: "Bhubaneswar - Mumbai - Bengaluru",
     href: "https://in2itebs.com/senior-consultant-sap-sd-wm/",
   },
-  { title: "Java Developer", type: "Full Time", location: "Bangalore", href: "https://in2itebs.com/java-developer/" },
+  { title: "Java Developer", type: "Full Time", location: "Bengaluru", href: "https://in2itebs.com/java-developer/" },
   {
     title: "Associate Consultant - SuccessFactors RCM",
     type: "Full Time",
-    location: "Bangalore - Bhubaneshwar - Chennai, + 3 more",
+    location: "Bengaluru - Bhubaneswar - Chennai, + 3 more",
     href: "https://in2itebs.com/careers/",
   },
   {
     title: "Assistant General Manager – Business By Design",
     type: "Full Time",
-    location: "Bangalore",
+    location: "Bengaluru",
     href: "https://in2itebs.com/assistant-general-manager-business-by-design/",
   },
 ];

@@ -99,17 +99,6 @@ export const offices: Office[] = [
     phone: "+27 11 873 0234",
     coords: [-26.2178, 28.17],
   },
-  {
-    slug: "usa",
-    name: "USA",
-    legalEntity: "In2IT Enterprise Business Services Inc",
-    kind: ["global-entity"],
-    address: "5900 Balcones Drive, Suite 100, Austin, TX 78731",
-    city: "Austin",
-    country: "USA",
-    email: "info@in2itebs.com",
-    coords: [30.2672, -97.7431],
-  },
 ];
 
 /** 10+ delivery centres named in the deck footprint (SOT-03). */

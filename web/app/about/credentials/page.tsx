@@ -2,6 +2,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 import { stats, footerCertifications, deliveryCentres, legalEntities, headquarters } from "@/content/site";
+import { awards, accreditations, qualityStatement } from "@/content/awards";
 import { DiagramBand } from "@/components/sections/diagram-band";
 
 export const metadata = pageMetadata("/about/credentials/", {
@@ -26,13 +27,18 @@ export const metadata = pageMetadata("/about/credentials/", {
  * publish a certification line without its reference and validity.
  */
 
-const awards = [
-  { name: "SAP Asia Pacific Japan Award for Partner Excellence", detail: "Capacity Building, 2023" },
-  { name: "SAP Mid-Market Partner of the Year", detail: "2021 and 2023" },
-  { name: "SAP HXM Champions", detail: "Mid-Market, 2022" },
-  { name: "SAP HXM Partner of the Year", detail: "Year to be confirmed before publish" },
-  { name: "DivHERsity Award", detail: "Top 20 Companies (SMEs)" },
-];
+/**
+ * The awards shown here are the ones with a certificate photograph on file, read from
+ * content/awards.ts so that this page and the awards data can never drift apart.
+ *
+ * Five further awards appear in the practice decks and have NO certificate on file: the SAP Asia
+ * Pacific Japan Award for Partner Excellence (Capacity Building, 2023), SAP Mid-Market Partner of
+ * the Year (2021 and 2023), SAP HXM Champions (Mid-Market, 2022), SAP HXM Partner of the Year
+ * (year unknown) and the DivHERsity Award (Top 20 Companies, SMEs). They are deliberately not
+ * published. A page whose first rule is "every claim names the body that granted it" cannot carry
+ * an award it cannot date. Alliances produces the certificates, they move into content/awards.ts,
+ * and they appear here automatically.
+ */
 
 const posture = [
   {
@@ -123,9 +129,8 @@ export default function CredentialsPage() {
             <h3 className="font-display text-h3 text-foreground">Recognised by SAP</h3>
             <ul className="mt-4 space-y-3">
               {awards.map((award) => (
-                <li key={award.name}>
-                  <span className="text-foreground">{award.name}</span>
-                  <span className="block text-sm text-foreground-muted">{award.detail}</span>
+                <li key={award.slug} className="text-foreground">
+                  {award.name}
                 </li>
               ))}
             </ul>
@@ -162,6 +167,19 @@ export default function CredentialsPage() {
         <p className="mt-6 text-sm text-foreground-muted">
           Current credential strip: {footerCertifications.join(" · ")}.
         </p>
+        <p className="mt-3 max-w-measure text-sm text-foreground-muted">{qualityStatement}</p>
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
+          {accreditations.map((item) => (
+            <div key={item.slug} className="rounded-card border border-border-subtle bg-surface p-7">
+              <h3 className="font-display text-h3 text-foreground">{item.name.replace(/:$/, "")}</h3>
+              {item.body.map((paragraph) => (
+                <p key={paragraph} className="mt-3 text-foreground-muted">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ))}
+        </div>
       </V2Section>
 
       <V2Section

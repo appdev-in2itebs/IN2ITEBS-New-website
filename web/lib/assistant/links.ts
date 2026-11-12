@@ -40,10 +40,7 @@ export const SECTIONS: { ask: RegExp; links: Page[] }[] = [
     // "In our clients' words — What people say." (Customer Stories, #testimonials) and the
     // Clients & Case Studies page.
     ask: /\b(testimonials?|reviews?|feedback|(clients?|customers?|clines?)['’]? words|what (do |does |are |is )?(your |the |a |our )?(clients?|customers?|people) (says?|saying|said|thinks?)|(clients?|customers?) (says?|said|thinks?)|customer stories|success stor(y|ies)|case stud(y|ies)|references?|(your|existing|current|major|top|big|some) (clients|customers)|client list|clientele|who (are|were) your (clients|customers)|worked with|past projects?|projects you (have )?done|done (this|it) before|portfolio)\b|ग्राहक|केस स्टडी/i,
-    links: [
-      { title: "What people say", url: "/about/customer-stories/#testimonials" },
-      { title: "Clients & Case Studies", url: "/case-studies/" },
-    ],
+    links: [{ title: "Clients & Case Studies", url: "/case-studies/" }],
   },
   {
     // "Offices", "your office", "an office in Dubai"; not a workplace ("an application for our office").

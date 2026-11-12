@@ -79,7 +79,7 @@ export default async function OurLeadershipPage() {
         heading="More about us."
         items={[
           { label: "The wider leadership team", href: "/about/#leadership" },
-          { label: "Who We Are?", href: "/about/who-we-are/" },
+          { label: "Who we are", href: "/about/who-we-are/" },
           { label: "Credentials", href: "/about/credentials/" },
           { label: "Client work", href: "/case-studies/" },
         ]}

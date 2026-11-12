@@ -1,15 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { services } from "../../content/services";
 
-// "Services we offer" is the existing site's service set, carried over one-for-one and placed where
-// it sits there: directly under the client ribbon at the top of the homepage, on a ribbon that
-// travels left to right on its own.
+// "Services we offer" follows the hero after the unapproved client ribbon was withheld.
 const grid = "section#services";
 
-test("the service ribbon follows the client ribbon and lists every service in the existing order", async ({ page }) => {
+test("the service ribbon follows the hero and lists every service in the existing order", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  await expect(page.locator(`main > section[aria-label="Selected clients"] + ${grid}`)).toHaveCount(1);
+  await expect(page.locator(`main > section[data-brand-hero] + ${grid}`)).toHaveCount(1);
 
   const title = page.locator("#home-services-title");
   await expect(title).toHaveText("Services we offer.");

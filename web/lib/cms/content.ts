@@ -9,6 +9,7 @@ import { leadership } from "@/content/leadership";
 import { offices } from "@/content/offices";
 import { testimonials } from "@/content/testimonials";
 import { homeHeroSlides, type HeroSlide } from "@/content/home-hero";
+import { blockedInsightSlugs, blockedOfficeSlugs, clientEvidenceApproved } from "@/content/compliance";
 import type { Insight, Leader, Office, Testimonial } from "@/content/types";
 
 /**
@@ -61,10 +62,12 @@ const shipped = (): Cms => ({
   services: servicePages,
   industries: legacyIndustries,
   partners: partnerPages,
-  articles: insights.map((i) => ({ ...i, body: insightBodies[i.slug] })),
+  articles: insights
+    .filter((i) => !blockedInsightSlugs.has(i.slug))
+    .map((i) => ({ ...i, body: insightBodies[i.slug] })),
   leadership,
-  offices,
-  testimonials,
+  offices: offices.filter((office) => !blockedOfficeSlugs.has(office.slug)),
+  testimonials: clientEvidenceApproved ? testimonials : [],
   homeHero: homeHeroSlides,
   heroes: {},
   edited: new Set(),
@@ -101,18 +104,19 @@ export function applyEdits(rows: Row[], heroes: Record<string, HeroEdit> = {}): 
     return Array.isArray(data) ? (data as T[]) : fallback;
   };
 
-  return {
+  const result: Cms = {
     services: base.services.map((p) => overlay(p, services.get(p.slug)?.data)),
     industries: base.industries.map((p) => overlay(p, industries.get(p.slug)?.data)),
     partners: base.partners.map((p) => overlay(p, partners.get(p.slug)?.data)),
-    articles: [...added, ...kept],
+    articles: [...added, ...kept].filter((article) => !blockedInsightSlugs.has(article.slug)),
     leadership: list("leadership", base.leadership),
-    offices: list("offices", base.offices),
-    testimonials: list("testimonials", base.testimonials),
+    offices: list<Office>("offices", base.offices).filter((office) => !blockedOfficeSlugs.has(office.slug)),
+    testimonials: clientEvidenceApproved ? list("testimonials", base.testimonials) : [],
     homeHero: list("home-hero", base.homeHero),
     heroes,
     edited,
   };
+  return result;
 }
 
 export const getCms = cache(async (): Promise<Cms> => {

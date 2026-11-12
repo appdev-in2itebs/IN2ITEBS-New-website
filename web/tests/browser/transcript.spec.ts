@@ -108,7 +108,7 @@ test("desktop navigation uses unified hover and focus disclosures", async ({ pag
   await about.hover();
   const aboutMenu = page.locator("#desktop-nav-3");
   await expect(aboutMenu).toBeVisible();
-  await expect(aboutMenu.getByRole("link", { name: "Who We Are?" })).toBeVisible();
+  await expect(aboutMenu.getByRole("link", { name: "Who we are" })).toBeVisible();
   await expect(aboutMenu.getByRole("link", { name: "Our Leadership" })).toBeVisible();
   await expect(aboutMenu.getByRole("link", { name: "Blogs & Articles" })).toBeVisible();
   // Partners and Career are their own triggers, never repeated inside About.

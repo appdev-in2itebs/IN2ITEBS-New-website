@@ -11,8 +11,7 @@ import type { NavItem } from "@/content/types";
 
 export const metadata = pageMetadata("/services/", {
   title: "Services",
-  description:
-    "SAP enterprise solutions, analytics, cloud HCM, cloud infrastructure, cyber security, digital services and data & AI: every In2IT EBS service, page by page.",
+  description: "Explore In2IT EBS services across SAP, cloud, applications, digital engineering, data and AI.",
 });
 
 /** The Services index: the existing site's Services mega-menu laid out as a page, in the approved design. */

@@ -8,7 +8,9 @@ export function allowedOrigins(request: Request): Set<string> {
   const origins = new Set<string>([new URL(request.url).origin]);
   const site = new URL(SITE_URL);
   origins.add(site.origin);
-  origins.add(`${site.protocol}//www.${site.host.replace(/^www\./, "")}`);
+  const baseHost = site.host.replace(/^www\./, "");
+  origins.add(`${site.protocol}//${baseHost}`);
+  origins.add(`${site.protocol}//www.${baseHost}`);
   if (process.env.TRUST_PROXY_HEADERS === "1") {
     const proto = request.headers.get("x-forwarded-proto")?.split(",")[0].trim();
     const host = (request.headers.get("x-forwarded-host") ?? request.headers.get("host"))?.split(",")[0].trim();

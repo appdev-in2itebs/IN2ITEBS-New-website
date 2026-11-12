@@ -140,7 +140,7 @@ export function Footer() {
 
         <div className="flex flex-col justify-between gap-5 pt-7 text-xs text-on-brand/[0.52] md:flex-row md:items-center">
           <p>
-            © {site.copyrightYear} {site.legalName}. All rights reserved.
+            © {site.copyrightYear} {site.legalName}. CIN: {site.cin}. All rights reserved.
           </p>
         </div>
       </div>

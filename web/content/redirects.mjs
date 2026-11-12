@@ -165,6 +165,7 @@ export const redirects = [
   p("/welspun", "/case-studies/welspun-group/"),
   p("/about/customer-stories", "/case-studies/"),
   p("/about/customer-stories/welspun", "/case-studies/welspun-group/"),
+  p("/about/customer-stories/:path*", "/case-studies/"),
 
   // --- Leadership profile pages: one destination, not nine dead ends ---
   p("/abhijit-shukla", "/about/our-leadership/"),
@@ -245,6 +246,79 @@ export const redirects = [
   p("/predictive-analysis", "/services/applied-ai/"),
   p("/customer-stories", "/case-studies/"),
   p("/events-celebrations-3", "/careers/events-celebrations/"),
+
+  // ════════════════════════════════════════════════════════════════════════
+  //  THE DEPLOYED APP'S OWN URLS, 12 November 2026
+  //
+  //  The block above catches the legacy WordPress URLs. These are different: they are URLs the
+  //  REBUILT app has already been serving, which the flat-URL restructure retires. They are in
+  //  the deployed sitemap, so they have been offered to Google, and they must not 404.
+  //
+  //  Two slugs survive the restructure unchanged and are deliberately absent from this list:
+  //  /services/ecc-prism/ and /industries/manufacturing/.
+  // ════════════════════════════════════════════════════════════════════════
+
+  // --- Fourteen industry pages become nine ---
+  p("/industries/automobiles", "/industries/manufacturing/"),
+  p("/industries/banking", "/industries/banking-financial-services/"),
+  p("/industries/chemical-fertilizers", "/industries/manufacturing/"),
+  p("/industries/energy-and-utilities", "/industries/power-utilities/"),
+  p("/industries/engineering-constructions-ecno", "/industries/real-estate-infrastructure/"),
+  p("/industries/fmcg", "/industries/consumer-goods-distribution/"),
+  p("/industries/government", "/industries/government-public-sector/"),
+  p("/industries/healthcare-life-science", "/industries/pharma-healthcare-life-sciences/"),
+  p("/industries/heavy-engineering", "/industries/metals-mining-steel/"),
+  p("/industries/professional-services", "/industries/technology-digital-natives/"),
+  p("/industries/retail-ecommerce", "/industries/consumer-goods-distribution/"),
+  // The live telecom page describes metals and mining, so it goes where its content belongs.
+  p("/industries/telecom", "/industries/technology-digital-natives/"),
+  p("/industries/textiles", "/industries/consumer-goods-distribution/"),
+
+  // --- The parallel /services/ tree collapses onto the three pillars ---
+  p("/services/sap-enterprise-solutions", "/services/sap/"),
+  p("/services/sap-concur", "/services/sap/"),
+  p("/services/sap-successfactors", "/services/successfactors/"),
+  p("/services/cloud-hcm-solution", "/services/successfactors/"),
+  p("/services/sap-grow-fast", "/services/grow-fast/"),
+  p("/services/rise-with-sap", "/services/rise-s4hana/"),
+  p("/services/cloud-migration", "/services/rise-s4hana/"),
+  p("/services/other-enterprise-solutions", "/services/enterprise-platforms/"),
+  p("/services/microsoft", "/services/enterprise-platforms/"),
+  p("/services/microsoft-dynamics-365", "/services/enterprise-platforms/"),
+  p("/services/ms-office-365", "/services/enterprise-platforms/"),
+  p("/services/oracle", "/services/enterprise-platforms/"),
+
+  // Application work, however it was labelled
+  p("/services/application-development-maintenance-services-adms", "/services/application-engineering/"),
+  p("/services/development-maintenance", "/services/application-engineering/"),
+  p("/services/agile-devops", "/services/application-engineering/"),
+  p("/services/digital-services", "/services/digital-data-ai/"),
+  p("/services/blockchain", "/services/digital-data-ai/"),
+
+  // Data and AI
+  p("/services/data-analytics-ai", "/services/data-engineering-analytics/"),
+  p("/services/analytics", "/services/data-engineering-analytics/"),
+  p("/services/big-data", "/services/data-engineering-analytics/"),
+  p("/services/predictive-analysis", "/services/data-engineering-analytics/"),
+  p("/services/sap-sac", "/services/data-engineering-analytics/"),
+  p("/services/database-data-management", "/services/enterprise-data-management/"),
+  p("/services/ai-machine-learning", "/services/applied-ai/"),
+  p("/services/robotic-process-automation", "/services/applied-ai/"),
+
+  // Run, and the infrastructure-shaped pages. The published boundary is that infrastructure
+  // appears as managed operations, never as hosting or hardware resale, so they land on
+  // Managed Services rather than getting pages of their own back.
+  p("/services/application-maintenance-support", "/services/managed-services/"),
+  p("/services/cloud-infrastructure-services", "/services/managed-services/"),
+  p("/services/cloud-hosting-services", "/services/managed-services/"),
+  p("/services/cloud-and-infra-security", "/services/managed-services/"),
+  p("/services/identity-and-access-management", "/services/managed-services/"),
+  p("/services/cyber-security-enterprise-risk", "/services/managed-services/"),
+
+  // Advisory
+  p("/services/cloud-strategy", "/services/advisory/"),
+  p("/services/digital-transformation-services", "/services/advisory/"),
+  p("/services/security-and-risk-advisory", "/services/advisory/"),
 ];
 
 /** WordPress theme-demo URLs that never held In2IT content: served as HTTP 410 via a rewrite to /api/gone/. */

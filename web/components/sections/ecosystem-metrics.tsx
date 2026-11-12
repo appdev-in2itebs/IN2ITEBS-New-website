@@ -9,7 +9,7 @@ import { stats } from "@/content/site";
 
 const statIcons: Record<string, LucideIcon> = {
   "Years of experience": Award,
-  Employees: Users,
+  Professionals: Users,
   "Global customers": Globe,
   "Countries delivered": MapPin,
   "Industry verticals": Factory,
