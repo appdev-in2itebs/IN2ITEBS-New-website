@@ -1,4 +1,5 @@
 import { pageMetadata } from "@/lib/metadata";
+import { AllianceStrip } from "@/components/sections/alliance-strip";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 
@@ -19,7 +20,7 @@ export const metadata = pageMetadata("/about/partnerships/", {
 const platforms = [
   {
     partner: "SAP",
-    tier: "Gold Partner · RISE Partnership (BTaaS) · PCE Partnership · Co-Innovation Partner",
+    tier: "Gold Partner · RISE Partnership (BTaaS) · Co-Innovation Partner",
     delivers:
       "RISE with SAP · S/4HANA Cloud Public Edition · Business Technology Platform · SuccessFactors · Ariba · Analytics Cloud · Signavio · Concur",
   },
@@ -154,6 +155,12 @@ export default function PartnershipsPage() {
             Where a tender requires a designation we do not hold, we will say so and propose the partner who does,
             rather than bidding and hoping.
           </p>
+        </div>
+        <div className="mt-10 border-t border-border-subtle pt-10">
+          <p className="label-caps text-foreground-muted">The marks of the platforms we are designated on</p>
+          <div className="mt-6">
+            <AllianceStrip />
+          </div>
         </div>
       </V2Section>
 

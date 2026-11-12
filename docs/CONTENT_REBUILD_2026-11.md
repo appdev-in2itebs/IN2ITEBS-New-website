@@ -103,17 +103,23 @@ Held in one place, `web/content/site.ts`, and used everywhere:
 | Global customers | 150+ |
 | SAP clients | 50+ |
 | Countries delivered in | 30+ |
-| Delivery centres | 8 — Bengaluru, Delhi, Bhubaneswar, Hyderabad, Singapore, Dubai, Nairobi, Johannesburg |
+| Delivery centres | 4 — Bengaluru, Hyderabad, Delhi NCR, Bhubaneswar. All in India |
+| Offices without a delivery centre | Singapore, Dubai, Nairobi, Johannesburg |
 | Legal entities | 5 — India, South Africa, Singapore, UAE, Kenya |
 | Headquarters and registered office | Bengaluru, India |
 
 **Removed because they could not be evidenced:** "RISE with SAP" in the credentials strip (it is a
-product, not a status), a bare "CMMI" with no level, and an unverified ISO 9001. The strip is now
-CMMI Level 3 · ISO 27001 · SAP Gold Partner · SAP PCE Partner.
+product, not a status), a bare "CMMI" with no level, an unverified ISO 9001, and "SAP PCE Partner"
+— withdrawn on the Managing Director's instruction, 12 November 2026, because the designation
+could not be produced in SAP's own wording with a date. The strip is now
+**CMMI Level 3 · ISO 27001 · SAP Gold Partner**, and /about/credentials/ says on the page that we
+do not claim a PCE partnership.
 
-A delivery centre is somewhere you can visit. An entity without a staffed office is listed as an
-entity, not as a delivery centre. Mumbai, Chennai and the US entity came off the list for that
-reason.
+A delivery centre is somewhere staffed that you can visit. **Four, not eight** — settled on
+12 November 2026 to match the submitted Ghana MoF IFMIS proposal, so the website and a bid in a
+client's hands carry the same number. Singapore, Dubai, Nairobi and Johannesburg are offices and
+legal entities; they are listed as entities and must never be counted as delivery centres. Mumbai,
+Chennai and the US entity came off the list entirely.
 
 `/about/credentials/` names a gap on purpose: **In2IT EBS is not a RISE with SAP Validated
 Partner.** Some Indian public-sector tenders use that designation as a pre-qualification. A
@@ -154,7 +160,31 @@ credential. The NALCO case study in the repository is the Plant Maintenance awar
 
 ---
 
-## 5 · Diagrams
+## 5 · What was carried over from the running app
+
+The instruction was to keep the better parts of the Next.js app as it runs today, and the design
+system, motion, video heroes, chatbot, voice assistant and admin CMS are all untouched. The
+restructure deleted fifteen route folders, which left some good work orphaned. Four pieces were
+rescued rather than retired:
+
+- **The RISE vs GROW chooser** (`components/interactive/rise-grow-chooser.tsx`, 455 lines) now sits
+  on `/services/rise-s4hana/`. It is the only thing on this site that answers a buyer's question
+  before they talk to us, and it was about to be deleted along with the page it happened to live
+  on.
+- **The SAP delivery toolchain** (Signavio, LeanIX, Cloud ALM, Tricentis, Activate, WalkMe) now
+  sits on `/services/sap/`.
+- **The award certificate photographs** now sit on `/about/credentials/`. The page lists the award
+  names and then shows the certificates, because a name is a claim and a certificate is evidence.
+- **The partner logo strip** now sits on `/about/partnerships/`.
+
+Both of the first two attach through a `interactive` key on a `ServicePage`, so content stays data
+and markup stays in components. Adding another means one key and one case in `ServicePageV2`.
+
+Retired on purpose: `three-reasons`, `pillar-cards`, `three-tiers-hero`, `platform-practice-links`,
+`extended-practice-page` and `comparison-table`. All six were layout blocks tied to the old
+information architecture, and the V2 section components do the same work.
+
+## 6 · Diagrams
 
 Thirty-two hand-drawn SVGs in the brand palette are in `web/public/diagrams/`. They render through
 `components/sections/diagram-band.tsx`, a full-width band with a white frame.
@@ -180,7 +210,7 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 
 ---
 
-## 6 · Still outstanding — these need Rudra or a named owner
+## 7 · Still outstanding — these need Rudra or a named owner
 
 | # | Item | What it blocks |
 |---|---|---|
@@ -192,15 +222,15 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 | 6 | **The fourteenth Welspun entity.** The register header says fourteen; thirteen are listed | One figure on a diagram |
 | 7 | **CMMI and ISO certificate references and validity dates** | Publishing the certificate references on /about/credentials/ |
 | 8 | **Certificates for five awards** — the APJ Partner Excellence award, Mid-Market Partner of the Year, HXM Champions, HXM Partner of the Year and DivHERsity appear in the practice decks with no certificate on file, so they are named in a comment in `app/about/credentials/page.tsx` and not published | Five award lines |
-| 8a | **Delivery centres: eight or four.** The MD confirmed eight; the submitted Ghana MoF IFMIS proposal states four. The website and a bid in a client's hands cannot disagree | The headline figure, and any tender that cites it |
-| 8b | **"SAP PCE Partner"** — reinstated on the MD's confirmation after commit 5a570d5 removed it as an unstable string. Needs SAP's own wording | The footer credential strip |
+| ~~8a~~ | ~~Delivery centres: eight or four~~ — **settled 12 Nov 2026: four** | Closed |
+| ~~8b~~ | ~~"SAP PCE Partner"~~ — **settled 12 Nov 2026: removed** | Closed |
 | 9 | **QPPS status** | Nothing on the site claims it; it was removed |
 | 10 | **GROW Fast duration and price** — the page says fixed scope, fixed duration, fixed price without stating them | A stronger page |
 | 11 | **`NEXT_PUBLIC_SITE_URL` in production**, and the www / non-www decision | Correct canonicals; see §2 |
 
 ---
 
-## 7 · Running it
+## 8 · Running it
 
 ```bash
 cd web

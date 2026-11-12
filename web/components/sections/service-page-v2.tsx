@@ -2,6 +2,8 @@ import { heroPicture } from "@/components/sections/hero-override";
 import { ServiceHeroMark, serviceIcon } from "@/components/sections/service-icon";
 import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
 import { DiagramBand } from "@/components/sections/diagram-band";
+import { RiseGrowChooser } from "@/components/interactive/rise-grow-chooser";
+import { SapToolchain } from "@/components/sections/sap-toolchain";
 import {
   V2Hero,
   V2StickyNav,
@@ -105,6 +107,20 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
               </p>
             ))}
           </Container>
+        </section>
+      ) : null}
+      {/* The interactive blocks carried over from the existing site. The RISE/GROW chooser is the
+          only thing on this site that answers a buyer's question before they talk to us, which is
+          why it survived the restructure rather than being retired with the page it sat on. */}
+      {page.interactive === "rise-grow-chooser" ? (
+        <section className="bg-surface-subtle py-16 md:py-24">
+          <Container>
+            <RiseGrowChooser />
+          </Container>
+        </section>
+      ) : page.interactive === "sap-toolchain" ? (
+        <section className="bg-surface-subtle py-16 md:py-24">
+          <SapToolchain />
         </section>
       ) : null}
       {siblings.length ? (

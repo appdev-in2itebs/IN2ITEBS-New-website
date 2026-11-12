@@ -1,8 +1,16 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
-import { stats, footerCertifications, deliveryCentres, legalEntities, headquarters } from "@/content/site";
+import {
+  stats,
+  footerCertifications,
+  deliveryCentres,
+  internationalOffices,
+  legalEntities,
+  headquarters,
+} from "@/content/site";
 import { awards, accreditations, qualityStatement } from "@/content/awards";
+import { AwardsGrid } from "@/components/sections/awards";
 import { DiagramBand } from "@/components/sections/diagram-band";
 
 export const metadata = pageMetadata("/about/credentials/", {
@@ -91,8 +99,9 @@ export default function CredentialsPage() {
         heading="Registered, staffed and delivering"
         paragraphs={[
           `${headquarters.legalName} is headquartered and registered in ${headquarters.city}, ${headquarters.country}.`,
-          `Eight staffed delivery centres — ${deliveryCentres.join(", ")} — and five legal entities, in ${legalEntities.map((e) => e.country).join(", ")}.`,
-          "A delivery centre is somewhere you can visit. An entity without a staffed office is listed as an entity, not as a delivery centre.",
+          `Four staffed delivery centres — ${deliveryCentres.join(", ")}, all in India — and five legal entities, in ${legalEntities.map((e) => e.country).join(", ")}.`,
+          `We also hold offices in ${internationalOffices.join(", ")}. They are offices, not delivery centres, and this page will not count them as one.`,
+          "A delivery centre is somewhere staffed that you can visit. That distinction is the reason this page says four and not eight, and it is the same number our submitted bids carry.",
         ]}
       >
         <dl className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
@@ -107,17 +116,16 @@ export default function CredentialsPage() {
 
       <DiagramBand
         src="/diagrams/p2-where-we-are.svg"
-        alt="Where In2IT EBS is registered, staffed and delivering: the Bengaluru headquarters, the eight staffed delivery centres and the five legal entities, with the countries each covers."
+        alt="Where In2IT EBS is registered, staffed and delivering: the Bengaluru headquarters, the four staffed delivery centres in India, the overseas offices and the five legal entities, with the countries each covers."
         tone="subtle"
       />
-      <V2Section id="sap" eyebrow="Our SAP relationship" heading="Four designations, not one" tone="subtle">
+      <V2Section id="sap" eyebrow="Our SAP relationship" heading="Three designations, not one" tone="subtle">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-card border border-border-subtle bg-surface p-7">
             <h3 className="font-display text-h3 text-foreground">What we hold</h3>
             <ul className="mt-4 space-y-2 text-foreground-muted">
               <li>SAP Gold Partner</li>
               <li>RISE with SAP Partnership (BTaaS)</li>
-              <li>SAP PCE Partnership</li>
               <li>SAP Co-Innovation Partner</li>
             </ul>
             <p className="mt-5 text-sm text-foreground-muted">
@@ -135,12 +143,20 @@ export default function CredentialsPage() {
               ))}
             </ul>
             <p className="mt-5 text-sm text-foreground-muted">
+              The certificate for each is below. We publish the photograph rather than the name, because a name is a
+              claim and a certificate is evidence.
+            </p>
+            <p className="mt-5 text-sm text-foreground-muted">
               A partner award says the vendor has looked at our work and formed a view. That is worth something. It is
               not the same as a client reference, and the client work is on its own page.
             </p>
           </div>
         </div>
       </V2Section>
+
+      <section className="bg-surface py-14 md:py-20">
+        <AwardsGrid />
+      </section>
 
       <V2Section
         id="assessed"
@@ -200,6 +216,11 @@ export default function CredentialsPage() {
 
       <V2Section id="not-claimed" eyebrow="What is not here" heading="What we do not claim" tone="canvas">
         <div className="max-w-measure space-y-5 text-foreground-muted">
+          <p>
+            <span className="text-foreground">We do not claim an SAP PCE partnership.</span> It appeared in the footer
+            credential strip and on this page until 12 November 2026, when it was withdrawn: the designation could not
+            be produced in SAP&rsquo;s own wording with a date. It returns if and when Alliances can.
+          </p>
           <p>
             <span className="text-foreground">We are not a RISE with SAP Validated Partner.</span> Some Indian
             public-sector tenders now use that designation as a pre-qualification, and where they do, we are not

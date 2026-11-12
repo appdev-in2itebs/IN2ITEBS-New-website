@@ -12,15 +12,11 @@ import type { Region, Stat } from "./types";
  *
  * Reviewed every six months. Next review: May 2027.
  *
- * ── ONE FIGURE IS IN DISPUTE AND NEEDS A DECISION ────────────────────────────────────────────
- * DELIVERY CENTRES. The Managing Director confirmed eight (below). The Ghana MoF IFMIS technical
- * proposal — submitted, auditable, and in a client's hands — states four: Bengaluru, Hyderabad,
- * Delhi NCR and Bhubaneswar. The difference is almost certainly staffed delivery centres (four,
- * all in India) versus offices and entities (eight, including the overseas ones). Both numbers
- * cannot be published. A website saying eight while a submitted bid says four is the kind of
- * contradiction that loses a tender on a technicality, so this is resolved before go-live, not
- * after. The eight below are the MD's figure and stand until he says otherwise.
- * ─────────────────────────────────────────────────────────────────────────────────────────────
+ * DELIVERY CENTRES: FOUR. Settled by the Managing Director on 12 November 2026, matching the
+ * submitted Ghana MoF IFMIS proposal. A delivery centre is a staffed centre you can visit, and all
+ * four are in India. Singapore, Dubai, Nairobi and Johannesburg are offices and legal entities —
+ * they are listed as entities, below, and must never be counted as delivery centres. The website
+ * and a bid in a client's hands now say the same number.
  */
 export const stats: Stat[] = [
   { value: "500+", label: "People" },
@@ -29,7 +25,7 @@ export const stats: Stat[] = [
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered in" },
   { value: "10+", label: "Years of experience" },
-  { value: "8", label: "Delivery centres" },
+  { value: "4", label: "Delivery centres in India" },
   { value: "50+", label: "SAP clients" },
 ];
 
@@ -62,12 +58,11 @@ export const headlineStats: Stat[] = stats.slice(0, 4);
  *  - "ISO 9001" REMOVED — held until the certificate number, issuing body, validity dates and
  *    scope are confirmed. The accreditation page cites withdrawn editions (9001:2008,
  *    20000-1:2005), and content/awards.ts now says versions and validity are under review.
- *  - "SAP PCE Partner" KEPT — and this is the one place this file reverses commit 5a570d5, which
- *    removed it as an unstable string. It is reinstated because the Managing Director confirmed
- *    it directly in November 2026. If Alliances cannot produce it in SAP's own wording, it comes
- *    out again and the MD is told why.
+ *  - "SAP PCE Partner" REMOVED — commit 5a570d5 took it out as an undefined, unstable string, and
+ *    the Managing Director confirmed that removal on 12 November 2026. It returns only if
+ *    Alliances produces it in SAP's own wording, with a date.
  */
-export const footerCertifications = ["CMMI Level 3", "ISO 27001", "SAP Gold Partner", "SAP PCE Partner"];
+export const footerCertifications = ["CMMI Level 3", "ISO 27001", "SAP Gold Partner"];
 
 /** Bump when site copy changes; feeds sitemap lastModified for pages without their own date. */
 export const contentUpdated = "2026-11-12";
@@ -79,17 +74,11 @@ export const headquarters = {
   legalName: "In2IT Enterprise Business Services Private Limited",
 };
 
-/** The eight delivery centres. See the dispute noted at the top of this file before publishing. */
-export const deliveryCentres = [
-  "Bengaluru",
-  "Delhi",
-  "Bhubaneswar",
-  "Hyderabad",
-  "Singapore",
-  "Dubai",
-  "Nairobi",
-  "Johannesburg",
-];
+/** The four delivery centres. Staffed, visitable, all in India. Offices are not delivery centres. */
+export const deliveryCentres = ["Bengaluru", "Hyderabad", "Delhi NCR", "Bhubaneswar"];
+
+/** Where the firm has an office or a registered entity but not a staffed delivery centre. */
+export const internationalOffices = ["Singapore", "Dubai", "Nairobi", "Johannesburg"];
 
 /** The five legal entities. */
 export const legalEntities = [

@@ -98,6 +98,11 @@ export interface ServicePage {
    * components/sections/diagram-band.tsx.
    */
   diagram?: { src: string; alt: string; caption?: string };
+  /**
+   * An interactive block rendered after the sections. Kept as a key rather than a component import
+   * so that content/ stays data and components/ stays markup. Add a case in ServicePageV2.
+   */
+  interactive?: "rise-grow-chooser" | "sap-toolchain";
   heroObject?: HeroImageKey;
   icon: ServiceIconKey;
   metaTitle?: string;
@@ -314,6 +319,7 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ ENTERPRISE PLATFORMS
   {
     slug: "sap",
+    interactive: "sap-toolchain",
     diagram: {
       src: "/diagrams/m1-sap-estate.svg",
       alt: "The SAP estate we run: an S/4HANA core surrounded by the people, customer, data and integration layers, with the eleven practices that staff each one.",
@@ -495,6 +501,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "rise-s4hana",
+    interactive: "rise-grow-chooser",
     diagram: {
       src: "/diagrams/m2-achieve.svg",
       alt: "SAP's ACHIEVE delivery method as we run it: seven stages from assess to run, each ending in a sign-off the client controls before the next begins.",

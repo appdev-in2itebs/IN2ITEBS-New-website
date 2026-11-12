@@ -1,12 +1,12 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
-import { deliveryCentres, legalEntities, headquarters } from "@/content/site";
+import { deliveryCentres, internationalOffices, legalEntities, headquarters } from "@/content/site";
 
 export const metadata = pageMetadata("/about/markets/", {
   title: "Where we operate",
   description:
-    "Headquartered in Bengaluru, with eight delivery centres and five legal entities — and the data residency position for every market we deliver in.",
+    "Headquartered in Bengaluru, with four delivery centres and five legal entities — and the data residency position for every market we deliver in.",
 });
 
 /**
@@ -79,10 +79,11 @@ export default function MarketsPage() {
       />
       <V2Overview
         eyebrow="At a glance"
-        heading="Five entities, eight delivery centres, thirty-plus countries"
+        heading="Five entities, four delivery centres, thirty-plus countries"
         paragraphs={[
           `${headquarters.legalName} is headquartered and registered in ${headquarters.city}, ${headquarters.country}.`,
-          `Delivery centres: ${deliveryCentres.join(", ")}.`,
+          `Delivery centres, all in India: ${deliveryCentres.join(", ")}.`,
+          `Offices without a delivery centre: ${internationalOffices.join(", ")}.`,
           `Legal entities in ${legalEntities.map((e) => e.country).join(", ")}. Clients across India and South Asia, Africa, the Middle East, Southeast Asia and ANZ, Europe and North America.`,
         ]}
       />

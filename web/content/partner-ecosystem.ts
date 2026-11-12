@@ -14,7 +14,7 @@ export const partnerCategories: PartnerCategory[] = [
     title: "Application Platforms",
     intro: "The enterprise platforms we transform and run end-to-end.",
     partners: [
-      { name: "SAP", note: "Gold · RISE · PCE", logo: "/logos/partners/sap.svg" },
+      { name: "SAP", note: "Gold Partner", logo: "/logos/partners/sap.svg" },
       { name: "Salesforce", logo: "/logos/partners/salesforce.svg" },
       { name: "Workday", logo: "/logos/partners/workday.svg" },
       { name: "SAP Concur", logo: "/logos/sap/sap-concur.png" },
