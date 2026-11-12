@@ -45,10 +45,10 @@ export type OwnerRole =
 /**
  * Where a question about a page goes. Mailboxes, not people.
  *
- * Only two of these exist today — info@ and hr@ are already in use on the site. The rest are
- * aliases to create, and each one is five minutes of work in the mail admin that then never needs
- * touching again. Until an alias exists, mail to it will bounce, so create them before relying on
- * this register operationally.
+ * Four of these already exist — info@, hr@, hiring@ and accounts@. The rest are aliases the
+ * internal IT team is creating, and each is a few minutes of work in the mail admin that then
+ * never needs touching again. Until an alias exists, mail to it bounces, so check
+ * `existingMailboxes` before pointing anything public at one.
  */
 export const mailboxes: Record<OwnerRole, string> = {
   "Marketing and Communications": "marketing@in2itebs.com",
@@ -61,8 +61,27 @@ export const mailboxes: Record<OwnerRole, string> = {
   "Legal and Compliance": "legal@in2itebs.com",
 };
 
-/** Already live. The others in `mailboxes` are aliases still to be created. */
-export const existingMailboxes = new Set(["info@in2itebs.com", "hr@in2itebs.com"]);
+/**
+ * Mailboxes that exist today, and what each is for on the public site.
+ *
+ * `hiring@` is the candidate intake address and is what the careers pages use — not `hr@`, which
+ * is the internal HR role mailbox and should not collect CVs. `accounts@` is billing and supplier
+ * queries, which belong on the contact page rather than in a sales funnel.
+ */
+export const existingMailboxes = new Set([
+  "info@in2itebs.com",
+  "hr@in2itebs.com",
+  "hiring@in2itebs.com",
+  "accounts@in2itebs.com",
+]);
+
+/** Public contact points, by what the visitor is actually trying to do. */
+export const publicMailboxes = {
+  general: "info@in2itebs.com",
+  newBusiness: "sales@in2itebs.com",
+  careers: "hiring@in2itebs.com",
+  accounts: "accounts@in2itebs.com",
+} as const;
 
 /**
  * Ownership by route prefix, most specific first. A route takes the first prefix it matches, so

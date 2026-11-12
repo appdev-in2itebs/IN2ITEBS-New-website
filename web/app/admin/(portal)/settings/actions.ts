@@ -10,7 +10,8 @@ function valueFrom(key: SettingKey, form: FormData) {
   const s = (name: string) => String(form.get(name) ?? "").trim();
   if (key === "announcement")
     return { enabled: form.get("enabled") === "on", text: s("text"), linkUrl: s("linkUrl"), linkLabel: s("linkLabel") };
-  if (key === "contact") return { email: s("email"), hrEmail: s("hrEmail"), phone: s("phone") };
+  if (key === "contact")
+    return { email: s("email"), hrEmail: s("hrEmail"), accountsEmail: s("accountsEmail"), phone: s("phone") };
   return {
     enabled: form.get("enabled") === "on",
     name: s("name"),

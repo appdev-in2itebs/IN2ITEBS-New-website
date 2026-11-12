@@ -8,7 +8,7 @@
  *
  *   IDENTITY    — a client's name and logo, shown as a fact of the relationship.
  *   TESTIMONIAL — a named person's words, face and job title.
- *   CASE STUDY  — what we did for a named client, with scope, duration and figures.
+ *   CASE STUDY  — what we did for a client, named or by sector, with scope, duration and figures.
  *
  * They carry different risk and are granted by different people. A logo is a trademark question
  * and usually a marketing decision. A testimonial is an individual's likeness and words, and that
@@ -47,14 +47,25 @@ export const clientIdentityApproved = true;
 export const clientTestimonialsApproved = false;
 
 /**
- * Named case studies — the client, the engagement, the scope and the figures.
+ * Naming clients in case studies.
  *
- * OFF. The highest bar of the three, because the content is commercial detail about the client's
- * own business rather than the bare fact that they are a client. Nine named studies and the four
- * written from purchase orders sit behind this.
+ * OFF, and this is a POSITION rather than a holding pattern. The Managing Director's preference,
+ * confirmed 12 November 2026, is that client work publishes by sector and region — "A state-owned
+ * mining undertaking, eastern India" — and the competitors do the same. So the default is not
+ * "hidden until consent arrives"; the default is anonymous, and naming a client is the exception
+ * that has to be argued for.
  *
- * Turn it on per client rather than globally, when their communications or legal team has agreed
- * the text. Until then every one of them still publishes anonymised, by sector and region.
+ * Every study publishes either way. See `publicCaseStudies` in content/case-studies.ts: each named
+ * study carries an `anonymous` block and goes out through it, with a neutral slug, while this is
+ * false. Nothing is withheld by leaving it that way.
+ *
+ * Turning it on would need two things, in this order: the client's written agreement to be named
+ * AND a decision to depart from the house style for that client. Written consent alone is not a
+ * reason to name somebody if anonymous is how we publish.
+ *
+ * A reminder worth keeping, because it is the trap: anonymising is not renaming. The overrides
+ * exist because the scenarios identified the clients outright, and tests/metadata.test.ts fails
+ * the build if a name or an identifying token survives into the published copy.
  */
 export const namedCaseStudiesApproved = false;
 

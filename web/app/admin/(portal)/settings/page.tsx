@@ -90,8 +90,17 @@ export default async function SettingsPage({
             <Field label="Enquiries email">
               <input name="email" type="email" required defaultValue={contact.email} className={input} />
             </Field>
-            <Field label="HR email">
+            <Field label="Careers email (where applications and CVs go)">
               <input name="hrEmail" type="email" required defaultValue={contact.hrEmail} className={input} />
+            </Field>
+            <Field label="Accounts email (billing and suppliers)">
+              <input
+                name="accountsEmail"
+                type="email"
+                required
+                defaultValue={contact.accountsEmail}
+                className={input}
+              />
             </Field>
             <Field label="Phone">
               <input name="phone" maxLength={40} defaultValue={contact.phone} className={input} />

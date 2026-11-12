@@ -14,7 +14,14 @@ export const announcementSchema = z.object({
 
 export const contactSchema = z.object({
   email: z.string().trim().email().max(254).default("info@in2itebs.com"),
-  hrEmail: z.string().trim().email().max(254).default("hr@in2itebs.com"),
+  /**
+   * Candidate-facing, not the internal HR mailbox. hiring@ is the intake address built for CVs
+   * and applications; hr@ is the role mailbox and should not be collecting attachments from
+   * strangers. Editable in /admin/settings, so a change needs no deploy.
+   */
+  hrEmail: z.string().trim().email().max(254).default("hiring@in2itebs.com"),
+  /** Billing, invoices and supplier queries. Shown on the contact page, kept out of the sales path. */
+  accountsEmail: z.string().trim().email().max(254).default("accounts@in2itebs.com"),
   phone: z.string().trim().max(40).default(""),
 });
 
