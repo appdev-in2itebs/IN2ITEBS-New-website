@@ -1,7 +1,13 @@
 # The November 2026 rebuild — what changed, and what the team still has to do
 
-This is the handover note for the website team. It covers one branch of work: the content and
-structure rebuild carried out on 12 November 2026 against the repository as it was handed over.
+This is the handover note for the website team. It covers the content and structure rebuild
+carried out on 12 November 2026, merged with the Phase 0 audit remediation already on `main`
+(commits 5a570d5, 3a47c80, 4180bda).
+
+**Both pieces of work were fixing the same site from different ends.** The remediation closed the
+false-claim and consent exposure; the rebuild closed the structure. Nothing from either side was
+dropped silently, and where the two disagreed the disagreement is recorded in the code rather than
+resolved quietly. Section 8 lists what needs a decision.
 
 Nothing in the platform was rewritten. The application is a well-built Next.js 15 App Router site
 with an admin CMS, a chatbot and voice; it did not need recoding. What it needed was the content
@@ -9,7 +15,7 @@ replaced and the structure corrected, and that is what this is.
 
 **Verified in a clean container before handover:** clean install, `npm run format:check`,
 `npm run lint`, `npm run typecheck`, 112 unit tests, a production build with
-`SITE_ENV=production`, the repository's own `scripts/check-build.mjs`, and a crawl of all 69
+`SITE_ENV=production`, the repository's own `scripts/check-build.mjs`, and a crawl of all 51
 sitemap URLs against the built server — every one returns 200.
 
 ---
@@ -40,9 +46,15 @@ already earns traffic.
 `salesforce`, `workday`, `oracle`, `microsoft`, `what-we-do`, `delivery-excellence`,
 `why-in2it-ebs`, `partners`, `accreditation-awards`, `about/customer-stories`.
 
-Each one is in `web/content/redirects.mjs` with a 301 to its successor. The map holds **167
+Each one is in `web/content/redirects.mjs` with a 301 to its successor. The map holds **217
 redirects, no duplicates, no chains, and none pointing at a page that does not exist** — the test
 suite enforces all four.
+
+**49 of those are new and easy to miss.** The older entries catch legacy WordPress URLs. These
+catch URLs the *rebuilt* app has already been serving — `/services/sap-enterprise-solutions/`,
+`/industries/telecom/`, `/services/cyber-security-enterprise-risk/` and the rest. They are in the
+deployed sitemap, so they have already been offered to Google. Two slugs survive the restructure
+unchanged and are deliberately absent: `/services/ecc-prism/` and `/industries/manufacturing/`.
 
 ### Pages added
 
@@ -56,12 +68,10 @@ suite enforces all four.
 legacy site and printed twice. It is gone, and nothing replaces it until approved copy exists. The
 reason is in a comment in `app/about/who-we-are/page.tsx` so that nobody restores it.
 
-**The canonical URL defect is not in this code.** Canonicals are built in `lib/metadata.ts` from
-`SITE_URL`, which reads `NEXT_PUBLIC_SITE_URL`. The sslip.io canonicals on the live site come from
-that variable being wrong in the production environment. Set it to the live origin —
-`https://www.in2itebs.com` or `https://in2itebs.com`, whichever is chosen as canonical — and the
-problem disappears without a code change. **www and non-www are currently indexed separately. Pick
-one and 301 the other at the edge.**
+**The canonical URL defect is fixed, by the remediation commits rather than by this branch.**
+`lib/utils.ts` now sets `www.in2itebs.com` as the public `SITE_URL` and adds `INDEXING_ENABLED`,
+and `check-build.mjs` verifies it. **What remains is at the edge, not in the code: www and non-www
+are still indexed as separate sites. Pick one and 301 the other.**
 
 **Google Tag Manager (GTM-PWV2BPZH) is wired in**, in `components/layout/google-tag-manager.tsx`
 and `app/layout.tsx`. The container id reads from `NEXT_PUBLIC_GTM_ID` where it is set, so a
@@ -127,9 +137,12 @@ Three rules were applied, and they are repeated in a comment at the top of the b
    HCM and statutory e-invoicing — not as "Ariba across 14 countries". Welspun is described as
    retention across thirteen entities, not as an Analytics Cloud account. Both deck claims are
    unevidenced and are open questions with the client teams.
-3. **Consent gate.** All four clients are named. Written consent covering the name, the figures and
-   the logo is three separate permissions, and it is outstanding for all four. Set `named: false`
-   and remove `client` for any one not cleared before go-live.
+3. **Consent gate — now enforced in code, not by convention.** `content/compliance.ts` holds
+   `clientEvidenceApproved = false`, and while it is false the logo wall, the testimonials, every
+   named case study, the client list in the assistant's prompt and the reference-book diagram all
+   render nothing. The four new case studies are behind it like everything else, and the sitemap
+   and the prerender list follow it. **Flipping that one flag publishes all of it, so flip it only
+   when written consent covering the name, the figures and the logo is actually on file.**
 
 **Manipal Hospitals is deliberately not published.** Its purchase order does not name the
 SuccessFactors modules on its face, and the only copy available to fill the gap is generic sector
@@ -149,6 +162,10 @@ Thirty-two hand-drawn SVGs in the brand palette are in `web/public/diagrams/`. T
 Wired in: eleven service pages (`diagram` on a `ServicePage`), the Welspun case study (`diagram` on
 a `CaseStudy`), `/about/credentials/` and `/case-studies/`. The rest are planning diagrams from the
 content documents and are not referenced by a page.
+
+The reference-book diagram on `/case-studies/` names clients by sector, so it sits behind
+`clientEvidenceApproved` with the logo wall and the testimonials. **A diagram is a publication like
+any other** — worth remembering before adding the next one.
 
 Two things to know before adding more:
 
@@ -174,7 +191,9 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 | 5 | **Welspun: is there Analytics Cloud work** outside the register? | Same |
 | 6 | **The fourteenth Welspun entity.** The register header says fourteen; thirteen are listed | One figure on a diagram |
 | 7 | **CMMI and ISO certificate references and validity dates** | Publishing the certificate references on /about/credentials/ |
-| 8 | **Award years** — the SAP HXM Partner of the Year year is marked "to be confirmed before publish" | That one line |
+| 8 | **Certificates for five awards** — the APJ Partner Excellence award, Mid-Market Partner of the Year, HXM Champions, HXM Partner of the Year and DivHERsity appear in the practice decks with no certificate on file, so they are named in a comment in `app/about/credentials/page.tsx` and not published | Five award lines |
+| 8a | **Delivery centres: eight or four.** The MD confirmed eight; the submitted Ghana MoF IFMIS proposal states four. The website and a bid in a client's hands cannot disagree | The headline figure, and any tender that cites it |
+| 8b | **"SAP PCE Partner"** — reinstated on the MD's confirmation after commit 5a570d5 removed it as an unstable string. Needs SAP's own wording | The footer credential strip |
 | 9 | **QPPS status** | Nothing on the site claims it; it was removed |
 | 10 | **GROW Fast duration and price** — the page says fixed scope, fixed duration, fixed price without stating them | A stronger page |
 | 11 | **`NEXT_PUBLIC_SITE_URL` in production**, and the www / non-www decision | Correct canonicals; see §2 |
