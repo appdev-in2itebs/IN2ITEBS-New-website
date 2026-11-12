@@ -134,3 +134,58 @@ test("nav labels do not depend on collection order", () => {
     ["Home", "Legal", "Disclaimer"],
   );
 });
+
+/**
+ * Anonymised case studies must actually be anonymous.
+ *
+ * Swapping the client name is not anonymisation. "The 930 km Mombasa–Kisumu mainline" is one
+ * railway; "PepsiCo's second-largest bottling franchisee outside the United States" is one
+ * company. A reader who can reverse it in a single search has been told the client anyway, and
+ * we have signalled that we thought we were hiding them — the worst of both.
+ *
+ * So this walks every field of every published study and fails on a client name or on any token
+ * that identifies one. Add to TELLS whenever a new study is written.
+ */
+test("anonymised case studies leak no client name or identifying detail", async () => {
+  const { caseStudies, publicCaseStudies } = await import("../content/case-studies");
+  const { namedCaseStudiesApproved } = await import("../content/compliance");
+  if (namedCaseStudiesApproved) return; // Named publication is approved; nothing to anonymise.
+
+  const TELLS = [
+    // Proper nouns that identify a single organisation
+    "Telangana",
+    "Andhra Pradesh",
+    "Mombasa",
+    "Kisumu",
+    "PepsiCo",
+    "Navratna",
+    "bauxite",
+    "National Aluminium",
+    "Central Public Procurement Portal",
+    "Odisha",
+    "Delhi",
+    "Gold Category",
+    // Every named client, whole. Distinctive parts of a name are listed by hand rather than split
+    // out mechanically, because "Engineering" and "India" are words an anonymised study is
+    // entitled to use and a test that cries wolf gets deleted.
+    ...caseStudies.filter((c) => c.named).map((c) => c.client),
+    "Wipro",
+    "WayCool",
+    "VAHDAM",
+    "Triveni",
+    "Welspun",
+    "Varun",
+    "NALCO",
+    "TGNPDCL",
+    "APTRANSCO",
+  ];
+
+  const offenders: string[] = [];
+  for (const study of publicCaseStudies) {
+    const haystack = JSON.stringify(study);
+    for (const tell of TELLS)
+      if (new RegExp(`\\b${tell.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(haystack))
+        offenders.push(`${study.slug}: "${tell}"`);
+  }
+  assert.deepEqual([...new Set(offenders)], []);
+});

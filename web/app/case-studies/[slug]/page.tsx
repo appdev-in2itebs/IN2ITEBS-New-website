@@ -1,6 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Container, Section } from "@/components/ui/container";
 import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
@@ -10,11 +10,10 @@ import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
-import { caseStudies, getCaseStudy } from "@/content/case-studies";
-import { namedCaseStudiesApproved } from "@/content/compliance";
+import { publicCaseStudies, getCaseStudy, canonicalCaseStudySlug } from "@/content/case-studies";
 
 export async function generateStaticParams() {
-  return namedCaseStudiesApproved ? caseStudies.filter((c) => c.named).map((c) => ({ slug: c.slug })) : [];
+  return publicCaseStudies.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -30,7 +29,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const study = getCaseStudy(slug);
-  if (!namedCaseStudiesApproved || !study || !study.named) notFound();
+  const moved = canonicalCaseStudySlug(slug);
+  if (moved) permanentRedirect(`/case-studies/${moved}/`);
+  if (!study) notFound();
 
   // First word of the featured solution becomes the headline accent.
   const accentWord = study.featuredSolution.split(" ")[0];

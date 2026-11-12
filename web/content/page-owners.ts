@@ -53,7 +53,7 @@ export type OwnerRole =
 export const mailboxes: Record<OwnerRole, string> = {
   "Marketing and Communications": "marketing@in2itebs.com",
   Alliances: "alliances@in2itebs.com",
-  "Practice — Enterprise Platforms": "sap@in2itebs.com",
+  "Practice — Enterprise Platforms": "apps@in2itebs.com",
   "Practice — Digital, Data and AI": "engineering@in2itebs.com",
   "Practice — Advisory": "advisory@in2itebs.com",
   "Sales and Bid Management": "sales@in2itebs.com",

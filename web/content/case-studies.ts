@@ -19,6 +19,29 @@ export interface CaseStudy {
   summary?: string; // ≤155 characters, used as the page meta description (named studies only)
   /** A full-width diagram shown after the challenge. `src` is a file in /public/diagrams/. */
   diagram?: { src: string; alt: string };
+  /**
+   * What this study looks like before the client has agreed to be named.
+   *
+   * Swapping the `client` field alone does NOT anonymise anything: "the 930 km Mombasa–Kisumu
+   * mainline" is one railway, and "PepsiCo's second-largest bottling franchisee outside the United
+   * States" is one company. Pseudo-anonymisation a reader can reverse in a single search is worse
+   * than naming, because it discloses the client anyway while signalling that we believed we were
+   * hiding them.
+   *
+   * So every field carrying an identifying detail is overridden here, not just the name. A test in
+   * tests/metadata.test.ts fails the build if a client name or an identifying token leaks into the
+   * anonymised output.
+   */
+  anonymous?: {
+    /** The URL this study uses while anonymous. A slug like "tgnpdcl" names the client. */
+    slug: string;
+    client: string;
+    scenario?: string;
+    summary?: string;
+    region?: string;
+    differentiator?: string;
+    featuredSolution?: string;
+  };
   benefits: string[];
   solution: string[];
   differentiator: string;
@@ -75,6 +98,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "tgnpdcl",
+    anonymous: {
+      slug: "state-power-distribution-south-india",
+      client: "A state power distribution utility, southern India",
+      scenario:
+        "A state-owned electricity distribution utility migrated its existing SAP ERP estate from ECC (SOH) to RISE with S/4HANA, with phased delivery, document management, analytics and integration uplift.",
+      summary:
+        "A state electricity distribution utility moved its SAP ERP estate from ECC to RISE with S/4HANA in phases, reaching an integrated SAP landscape.",
+      region: "Southern India",
+    },
     client: "TGNPDCL",
     named: true,
     industry: "Energy & Utilities",
@@ -104,6 +136,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "wipro-infrastructure-engineering",
+    anonymous: {
+      slug: "industrial-engineering-manufacturer-india",
+      client: "An industrial engineering manufacturer, India",
+      scenario:
+        "An industrial engineering business spanning hydraulics, industrial automation, aerospace, water treatment and additive manufacturing. Brownfield migration to S/4HANA 2022 on RISE with SAP (Azure), end to end in five months.",
+      summary:
+        "An industrial engineering manufacturer moved to S/4HANA 2022 on RISE with SAP (Azure) in a five-month brownfield migration across four continents.",
+      region: "Manufacturing sites across four continents",
+    },
     client: "Wipro Infrastructure Engineering",
     named: true,
     industry: "Metals, Mining & Heavy Engineering",
@@ -133,6 +174,17 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "waycool-foods",
+    anonymous: {
+      slug: "agri-commerce-distribution-india",
+      differentiator:
+        "An eight-week end-to-end lift and shift to Azure — mapping a complex agri-commerce process set onto a digital platform.",
+      client: "An agri-commerce and food distribution business, India",
+      scenario:
+        "A large Indian agri-commerce business scaling a complex supply chain from soil to sale. Migration to RISE with SAP on Azure completed end to end in eight weeks.",
+      summary:
+        "A large Indian agri-commerce business moved to RISE with SAP S/4HANA on Azure in an eight-week end-to-end lift and shift.",
+      region: "India",
+    },
     client: "WayCool Foods",
     named: true,
     industry: "FMCG / Food & Beverages",
@@ -162,6 +214,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "vahdam-india",
+    anonymous: {
+      slug: "direct-to-consumer-wellness-brand-india",
+      client: "A direct-to-consumer wellness brand, India",
+      scenario:
+        "A homegrown wellness brand selling Indian teas and superfoods directly to consumers in more than a hundred countries, pioneering digital-first FMCG. SAP S/4HANA Cloud Public Edition completed in twelve months.",
+      summary:
+        "A digital-first Indian tea and superfoods brand went live on SAP S/4HANA Cloud Public Edition in twelve months.",
+      region: "Direct-to-consumer, worldwide",
+    },
     client: "VAHDAM India",
     named: true,
     industry: "FMCG / Food & Beverages",
@@ -212,6 +273,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "triveni-turbines",
+    anonymous: {
+      slug: "industrial-turbine-manufacturer-india",
+      client: "An industrial turbine manufacturer, India",
+      scenario:
+        "An original equipment manufacturer of industrial steam turbines serving power generation across sugar, steel, distillery, biomass, pulp and paper, palm oil, independent power and chemicals. Brownfield migration to RISE with SAP on Azure in five months.",
+      summary:
+        "An industrial steam turbine manufacturer completed a brownfield migration to RISE with SAP on Azure in five months.",
+      region: "Exporting worldwide",
+    },
     client: "Triveni Turbines",
     named: true,
     industry: "Metals, Mining & Heavy Engineering",
@@ -241,6 +311,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "kenya-railways",
+    anonymous: {
+      slug: "state-railway-operator-east-africa",
+      client: "A state-owned national railway operator, East Africa",
+      scenario:
+        "A state corporation under a national ministry of transport, operating a mainline of roughly nine hundred kilometres within a network of several thousand. A ten-month fresh implementation moved the business from legacy systems to SAP ECC.",
+      summary:
+        "A state-owned East African railway operator moved from legacy systems to SAP in a ten-month fresh implementation.",
+      region: "East Africa",
+    },
     client: "Kenya Railways",
     named: true,
     industry: "Government & Public Enterprises (PSUs)",
@@ -270,6 +349,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "aptransco",
+    anonymous: {
+      slug: "state-power-transmission-south-india",
+      client: "A state power transmission utility, southern India",
+      scenario:
+        "A state electricity transmission corporation engaged In2IT EBS for a three-year onsite application-management engagement to stabilise a critical ERP backbone.",
+      summary:
+        "A three-year onsite application-management engagement stabilising the ERP backbone of a state electricity transmission corporation.",
+      region: "Southern India",
+    },
     client: "APTRANSCO",
     named: true,
     industry: "Government & Public Enterprises (PSUs)",
@@ -293,6 +381,13 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "delhi-transco",
+    anonymous: {
+      slug: "state-power-transmission-north-india",
+      client: "A state power transmission utility, northern India",
+      summary:
+        "Annual maintenance support across a state transmission utility's SAP ERP estate — resolving downtime, automating legacy processes and keeping operations running.",
+      region: "Northern India",
+    },
     client: "Delhi Transco Limited",
     named: true,
     industry: "Government & Public Enterprises (PSUs)",
@@ -347,6 +442,15 @@ export const caseStudies: CaseStudy[] = [
    */
   {
     slug: "welspun-group",
+    anonymous: {
+      slug: "diversified-manufacturing-group-india",
+      client: "A diversified manufacturing group, India and the UK",
+      scenario:
+        "What began in May 2018 as two ABAP consultants on a data-entry automation project for a textiles business became, over seven years, eighty-nine purchase orders across thirteen companies within one diversified manufacturing group — each one a separate procurement process that could have gone elsewhere.",
+      summary:
+        "Seven years, thirteen companies within one manufacturing group and eighty-nine purchase orders — SuccessFactors, SAP support and specialist engineering.",
+      region: "India and the United Kingdom",
+    },
     client: "Welspun Group",
     named: true,
     diagram: {
@@ -380,6 +484,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "odisha-mining-corporation",
+    anonymous: {
+      slug: "state-mining-undertaking-east-india",
+      client: "A state-owned mining undertaking, eastern India",
+      scenario:
+        "A state-owned mining undertaking bought a facial recognition attendance system, then a full infrastructure managed service, then an integration layer between SAP and its management information systems. Each was won separately, against open tender.",
+      summary:
+        "Three contracts in four years with a state mining undertaking — AI attendance, infrastructure managed services and SAP to MIS integration.",
+      region: "Eastern India",
+    },
     client: "Odisha Mining Corporation",
     named: true,
     industry: "Government & Public Enterprises (PSUs)",
@@ -408,6 +521,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "varun-beverages",
+    anonymous: {
+      slug: "beverage-bottling-group-south-asia-africa",
+      client: "A multinational beverage bottling group, South Asia and Africa",
+      scenario:
+        "A large beverage bottling group runs operations across the Indian subcontinent and Africa. One people system had to run across all of it — and then the pieces each country's revenue authority demanded had to be built on top.",
+      summary:
+        "One SuccessFactors and SAP HCM platform across six legal entities in seven countries, with e-invoicing integrations for three revenue authorities.",
+      region: "South Asia and Africa",
+    },
     client: "Varun Beverages",
     named: true,
     industry: "Food, Beverages & Consumer Goods",
@@ -436,6 +558,15 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "nalco",
+    anonymous: {
+      slug: "state-metals-producer-india",
+      client: "A state-owned integrated metals producer, India",
+      scenario:
+        "A state-owned integrated metals producer implemented SAP Plant Maintenance with Work Clearance Management, won on open tender through a national public procurement portal, and kept us on to run it.",
+      summary:
+        "SAP Plant Maintenance with Work Clearance Management for a state-owned metals producer, won on open tender and run under AMS to March 2023.",
+      region: "Eastern India",
+    },
     client: "NALCO",
     named: true,
     industry: "Metals, Mining & Heavy Engineering",
@@ -464,9 +595,43 @@ export const caseStudies: CaseStudy[] = [
   },
 ];
 
+/** A study as the site currently publishes it — anonymised or named, by its public slug. */
 export function getCaseStudy(slug: string) {
-  return caseStudies.find((c) => c.slug === slug);
+  return publicCaseStudies.find((c) => c.slug === slug);
+}
+
+/**
+ * The slug a request should end up on, or null if it is already right.
+ *
+ * While a client is anonymous their real slug still has to resolve — it is in the redirect map and
+ * on other people's links — but it must not stay in the address bar, because "/case-studies/
+ * tgnpdcl/" names the client as plainly as the page would. So the named slug 301s to the
+ * anonymous one, and when consent arrives the pair swaps over.
+ */
+export function canonicalCaseStudySlug(slug: string): string | null {
+  if (publicCaseStudies.some((c) => c.slug === slug)) return null;
+  const study = caseStudies.find((c) => c.slug === slug || c.anonymous?.slug === slug);
+  if (!study) return null;
+  const target = namedCaseStudiesApproved ? study.slug : study.anonymous?.slug;
+  return target && target !== slug ? target : null;
 }
 
 /** Public proof fails closed until written consent is recorded. */
-export const publicCaseStudies = namedCaseStudiesApproved ? caseStudies : caseStudies.filter((study) => !study.named);
+/**
+ * What the site actually publishes.
+ *
+ * Before a client has agreed to be named, their study still publishes — as the sector and region,
+ * with every identifying detail replaced from `anonymous`. Hiding the work entirely was the Phase
+ * 0 emergency position; it cost us twelve case studies in order to protect twelve names.
+ *
+ * A named study with no `anonymous` block is withheld rather than published half-scrubbed.
+ */
+export const publicCaseStudies: CaseStudy[] = namedCaseStudiesApproved
+  ? caseStudies
+  : caseStudies.flatMap((study) => {
+      if (!study.named) return [study];
+      if (!study.anonymous) return [];
+      // The diagram is dropped, not rewritten: r1-welspun-account.svg carries the client's name
+      // inside the artwork, where no override can reach it.
+      return [{ ...study, ...study.anonymous, named: false, logo: null, diagram: undefined }];
+    });
