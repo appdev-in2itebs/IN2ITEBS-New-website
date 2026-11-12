@@ -1,6 +1,14 @@
 /* ============================================================================
    In2IT EBS — design tokens v2.0                              12 November 2026
    ----------------------------------------------------------------------------
+   IDENTITY AND THE ENVERICS TRANSITION
+   The group renames to Enverics, with In2IT EBS continuing as a practice name.
+   Everything in this file except the --brand-* block below is name-independent:
+   the palette is identical in both brand books, and the type, space, state,
+   chart and accessibility rules do not change with the name.
+
+   So the rename is this block plus new logo artwork. Not a new system, and not
+   a re-learning exercise for anyone who builds with these tokens.
    The single source of truth for colour, type, space and state.
 
    Import this file. Do not restate these values by hand anywhere else: v1.0 was
@@ -14,6 +22,13 @@
    ========================================================================= */
 
 :root {
+  /* --- Identity. The only part a rename touches. --------------------------- */
+  --brand-name: "In2IT EBS";
+  --brand-descriptor: "Converged Intelligence";
+  /* Successor: Enverics. The wordmark is artwork in both cases and is never
+     set live — the two wordmarks are different drawings and neither is
+     Newsreader. */
+
   /* --- Core palette -------------------------------------------------------
      Unchanged from v1.0 in intent. Two corrections, three additions, each
      noted. */
@@ -108,6 +123,21 @@
   --size-body:    17px;  --lh-body:    1.6;
   --size-small:   15px;  --lh-small:   1.5;
   --size-eyebrow: 13px;  --lh-eyebrow: 1.2;   --tr-eyebrow: 0.14em;
+
+  /* Headline case. PARTIAL CHANGE from v1.0: caps are kept where they are a
+     graphic statement of a few words — covers, section dividers, the display
+     step — and main headlines move to sentence case, because at headline
+     length caps cost reading speed and cannot carry the italic accent.
+     The eyebrow stays Newsreader uppercase, exactly as v1.0 specified. */
+  --case-display: uppercase;
+  --case-h1:      none;
+  --case-h2:      none;
+  --case-eyebrow: uppercase;
+
+  /* One accent phrase per title, Newsreader Italic. ADDED — used everywhere
+     in our material and specified nowhere in v1.0. */
+  --accent-on-light: var(--steel);
+  --accent-on-dark:  var(--sand);
 
   --measure:      66ch;   /* Max 72ch. Beyond ~75 the eye loses the return. */
 

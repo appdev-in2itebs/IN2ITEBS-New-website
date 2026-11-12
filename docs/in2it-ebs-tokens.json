@@ -1,57 +1,180 @@
 {
   "$schema": "https://design-tokens.github.io/community-group/format/",
-  "$description": "In2IT EBS design tokens, v2.0. The single source of truth for colour, type, space and state. Every other artefact — website, deck template, Word template, diagrams — references these rather than restating them. v1.0 was restated by hand in each artefact, which is how three different palettes came to be in use at once.",
+  "$description": "In2IT EBS design tokens, v2.0. The single source of truth for colour, type, space and state. Every other artefact references these rather than restating them.",
   "$version": "2.0.0",
   "$updated": "2026-11-12",
+  "brand": {
+    "$comment": "IDENTITY LIVES HERE AND NOWHERE ELSE. The group renames to Enverics, with In2IT EBS continuing as a practice name. Everything below this block is name-independent: the palette is identical in both brand books, and the type, space, state, chart and accessibility rules do not change with the name. A rename is therefore an edit to this block plus new logo artwork — not a new system.",
+    "name": "In2IT EBS",
+    "legal-name": "In2IT Enterprise Business Services Private Limited",
+    "cin": "U72900KA2016PTC147788",
+    "descriptor": "Converged Intelligence",
+    "successor-name": "Enverics",
+    "practice-name-after-rename": "In2IT EBS",
+    "wordmark-face": {
+      "value": "supplied as artwork",
+      "note": "Never set live. The In2IT EBS wordmark and the Enverics wordmark are different drawings; neither is Newsreader."
+    }
+  },
   "colour": {
     "$comment": "The six core colours are unchanged from v1.0 in intent. Two corrections and two additions, each recorded below.",
-    "navy":        { "value": "#121E3B", "name": "Deep Navy",      "note": "Dominant. 60-70% of visual weight." },
-    "steel":       { "value": "#3F75A3", "name": "Steel Blue",     "note": "CORRECTED. v1.0 printed HEX #121e3b against RGB 63,117,163 on the colour-codes page. The RGB was right; the HEX was Deep Navy repeated. Anyone who copied the HEX got navy." },
-    "sky":         { "value": "#A3CBE6", "name": "Light Sky Blue", "note": "Background and on-navy text only. Never text on white." },
-    "sand":        { "value": "#CDC8A5", "name": "Muted Sand",     "note": "The one warm note. Its home is ON NAVY (9.73:1), not on white (1.69:1). v1.0 had this backwards." },
-    "grey-soft":   { "value": "#E1E1E1", "name": "Soft Grey",      "note": "Surface only. 1.31:1 on white — it cannot carry text at any size." },
-    "white":       { "value": "#FFFFFF", "name": "White" },
-
-    "grey-text":   { "value": "#5A6478", "name": "Slate Grey",     "note": "ADDED. v1.0 had no colour for secondary text: Soft Grey is 1.31:1 on white. 5.95:1 on white, so it is the secondary text colour." },
-    "steel-light": { "value": "#94B8D0", "name": "Mist Blue",      "note": "ADDED. A mid-blue between Steel and Sky for card fills and chart series. Carries Navy text at 7.87:1 and nothing else." },
-    "off-white":   { "value": "#F7F8FA", "name": "Paper",          "note": "ADDED. Soft Grey #E1E1E1 is too heavy for a page background. 15.50:1 with Navy." }
+    "navy": {
+      "value": "#121E3B",
+      "name": "Deep Navy",
+      "note": "Dominant. 60-70% of visual weight."
+    },
+    "steel": {
+      "value": "#3F75A3",
+      "name": "Steel Blue",
+      "note": "CORRECTED. v1.0 printed HEX #121e3b against RGB 63,117,163 on the colour-codes page. The RGB was right; the HEX was Deep Navy repeated. Anyone who copied the HEX got navy."
+    },
+    "sky": {
+      "value": "#A3CBE6",
+      "name": "Light Sky Blue",
+      "note": "Background and on-navy text only. Never text on white."
+    },
+    "sand": {
+      "value": "#CDC8A5",
+      "name": "Muted Sand",
+      "note": "The one warm note. Its home is ON NAVY (9.73:1), not on white (1.69:1). v1.0 had this backwards."
+    },
+    "grey-soft": {
+      "value": "#E1E1E1",
+      "name": "Soft Grey",
+      "note": "Surface only. 1.31:1 on white — it cannot carry text at any size."
+    },
+    "white": {
+      "value": "#FFFFFF",
+      "name": "White"
+    },
+    "grey-text": {
+      "value": "#5A6478",
+      "name": "Slate Grey",
+      "note": "ADDED. v1.0 had no colour for secondary text: Soft Grey is 1.31:1 on white. 5.95:1 on white, so it is the secondary text colour."
+    },
+    "steel-light": {
+      "value": "#94B8D0",
+      "name": "Mist Blue",
+      "note": "ADDED. A mid-blue between Steel and Sky for card fills and chart series. Carries Navy text at 7.87:1 and nothing else."
+    },
+    "off-white": {
+      "value": "#F7F8FA",
+      "name": "Paper",
+      "note": "ADDED. Soft Grey #E1E1E1 is too heavy for a page background. 15.50:1 with Navy."
+    }
   },
   "colour-on-dark": {
     "$comment": "Navy is the dominant surface, so it needs its own full set. v1.0 specified none, which is why an undocumented teal was invented to fill the gap.",
-    "text":      { "value": "#FFFFFF", "ratio-on-navy": 16.48 },
-    "text-muted":{ "value": "#A3CBE6", "ratio-on-navy": 9.60 },
-    "accent":    { "value": "#CDC8A5", "ratio-on-navy": 9.73, "note": "Sand is the accent on navy. Steel Blue is NOT: 3.36:1 fails AA for body text." },
-    "rule":      { "value": "#CDC8A5", "opacity": 0.4 }
+    "text": {
+      "value": "#FFFFFF",
+      "ratio-on-navy": 16.48
+    },
+    "text-muted": {
+      "value": "#A3CBE6",
+      "ratio-on-navy": 9.6
+    },
+    "accent": {
+      "value": "#CDC8A5",
+      "ratio-on-navy": 9.73,
+      "note": "Sand is the accent on navy. Steel Blue is NOT: 3.36:1 fails AA for body text."
+    },
+    "rule": {
+      "value": "#CDC8A5",
+      "opacity": 0.4
+    }
   },
   "state": {
     "$comment": "ADDED in v2.0. v1.0 defined none. A system with no state colours guarantees that someone invents them.",
-    "focus":          { "value": "#3F75A3", "offset": "#FFFFFF", "note": "2px ring plus a 2px offset ring in the surface colour, so it reads on white and on navy alike." },
-    "focus-on-dark":  { "value": "#A3CBE6", "offset": "#121E3B" },
-    "link":           { "value": "#3F75A3", "note": "Underlined. Colour alone never carries meaning." },
-    "link-hover":     { "value": "#2C5478" },
-    "link-visited":   { "value": "#4A5A7A" },
-    "link-on-dark":   { "value": "#A3CBE6" },
-    "error":          { "value": "#B3261E", "on-dark": "#F2B8B5", "ratio-on-white": 6.54, "ratio-on-navy": 9.65 },
-    "success":        { "value": "#1B5E3F", "on-dark": "#A6D9BE", "ratio-on-white": 7.72, "ratio-on-navy": 10.43 },
-    "warning":        { "value": "#7A4F01", "on-dark": "#E8C37A", "ratio-on-white": 7.13, "ratio-on-navy": 9.82 },
-    "disabled-text":  { "value": "#8A91A0", "note": "Exempt from contrast minimums by WCAG, but kept legible on purpose." }
+    "focus": {
+      "value": "#3F75A3",
+      "offset": "#FFFFFF",
+      "note": "2px ring plus a 2px offset ring in the surface colour, so it reads on white and on navy alike."
+    },
+    "focus-on-dark": {
+      "value": "#A3CBE6",
+      "offset": "#121E3B"
+    },
+    "link": {
+      "value": "#3F75A3",
+      "note": "Underlined. Colour alone never carries meaning."
+    },
+    "link-hover": {
+      "value": "#2C5478"
+    },
+    "link-visited": {
+      "value": "#4A5A7A"
+    },
+    "link-on-dark": {
+      "value": "#A3CBE6"
+    },
+    "error": {
+      "value": "#B3261E",
+      "on-dark": "#F2B8B5",
+      "ratio-on-white": 6.54,
+      "ratio-on-navy": 9.65
+    },
+    "success": {
+      "value": "#1B5E3F",
+      "on-dark": "#A6D9BE",
+      "ratio-on-white": 7.72,
+      "ratio-on-navy": 10.43
+    },
+    "warning": {
+      "value": "#7A4F01",
+      "on-dark": "#E8C37A",
+      "ratio-on-white": 7.13,
+      "ratio-on-navy": 9.82
+    },
+    "disabled-text": {
+      "value": "#8A91A0",
+      "note": "Exempt from contrast minimums by WCAG, but kept legible on purpose."
+    }
   },
   "chart": {
     "$comment": "REWRITTEN in v2.0. The v1.0 rule — 'use shades within the existing blue family' — does not work and the arithmetic is in the book. Five blues give a best adjacent separation of 2.05:1 and collapse in greyscale, which is how charts print into tender packs.",
     "series-max-by-colour": 2,
     "series": [
-      { "value": "#121E3B", "label-colour": "#FFFFFF" },
-      { "value": "#94B8D0", "label-colour": "#121E3B" }
+      {
+        "value": "#121E3B",
+        "label-colour": "#FFFFFF"
+      },
+      {
+        "value": "#94B8D0",
+        "label-colour": "#121E3B"
+      }
     ],
-    "emphasis": { "value": "#CDC8A5", "note": "The one series that matters, against the rest in Mist Blue. Only on navy or in a navy-framed chart." },
-    "sequential": ["#F7F8FA", "#A3CBE6", "#94B8D0", "#3F75A3", "#121E3B"],
+    "emphasis": {
+      "value": "#CDC8A5",
+      "note": "The one series that matters, against the rest in Mist Blue. Only on navy or in a navy-framed chart."
+    },
+    "sequential": [
+      "#F7F8FA",
+      "#A3CBE6",
+      "#94B8D0",
+      "#3F75A3",
+      "#121E3B"
+    ],
     "rule": "Above two categories, carry identity by direct labelling, small multiples or position — never by a third and fourth blue."
   },
   "type": {
     "$comment": "v1.0 named two families and six styles but no sizes, no line-heights, no measure and no scale ratio. That is a font list, not a type system.",
     "family": {
-      "display": { "value": "Newsreader", "fallback": ["Georgia", "Cambria", "serif"] },
-      "text":    { "value": "IBM Plex Sans", "fallback": ["Calibri", "system-ui", "sans-serif"] }
+      "display": {
+        "value": "Newsreader",
+        "fallback": [
+          "Georgia",
+          "Cambria",
+          "serif"
+        ]
+      },
+      "text": {
+        "value": "IBM Plex Sans",
+        "fallback": [
+          "Calibri",
+          "system-ui",
+          "sans-serif"
+        ]
+      }
     },
     "office-fallback": {
       "$comment": "CORRECTED. v1.0 specified Calibri for body and nothing for headings, so the serif — the distinctive element — simply vanished in Word and email. Georgia ships with Office on Windows and Mac.",
@@ -60,28 +183,120 @@
     },
     "scale": {
       "$comment": "1.25 major third. Six steps and no more.",
-      "display": { "size": "64px", "line-height": 1.05, "tracking": "-0.02em", "family": "display", "weight": 700 },
-      "h1":      { "size": "48px", "line-height": 1.1,  "tracking": "-0.02em", "family": "display", "weight": 700 },
-      "h2":      { "size": "32px", "line-height": 1.2,  "tracking": "-0.01em", "family": "display", "weight": 600 },
-      "h3":      { "size": "24px", "line-height": 1.3,  "family": "text", "weight": 600 },
-      "body-lg": { "size": "20px", "line-height": 1.55, "family": "text", "weight": 400 },
-      "body":    { "size": "17px", "line-height": 1.6,  "family": "text", "weight": 400 },
-      "small":   { "size": "15px", "line-height": 1.5,  "family": "text", "weight": 400 },
-      "eyebrow": { "size": "13px", "line-height": 1.2,  "tracking": "0.14em", "family": "text", "weight": 600, "transform": "uppercase" }
+      "display": {
+        "size": "64px",
+        "line-height": 1.05,
+        "tracking": "-0.02em",
+        "family": "display",
+        "weight": 700
+      },
+      "h1": {
+        "size": "48px",
+        "line-height": 1.1,
+        "tracking": "-0.02em",
+        "family": "display",
+        "weight": 700
+      },
+      "h2": {
+        "size": "32px",
+        "line-height": 1.2,
+        "tracking": "-0.01em",
+        "family": "display",
+        "weight": 600
+      },
+      "h3": {
+        "size": "24px",
+        "line-height": 1.3,
+        "family": "text",
+        "weight": 600
+      },
+      "body-lg": {
+        "size": "20px",
+        "line-height": 1.55,
+        "family": "text",
+        "weight": 400
+      },
+      "body": {
+        "size": "17px",
+        "line-height": 1.6,
+        "family": "text",
+        "weight": 400
+      },
+      "small": {
+        "size": "15px",
+        "line-height": 1.5,
+        "family": "text",
+        "weight": 400
+      },
+      "eyebrow": {
+        "size": "13px",
+        "line-height": 1.2,
+        "tracking": "0.14em",
+        "family": "display",
+        "weight": 600,
+        "transform": "uppercase"
+      }
     },
-    "measure": { "value": "66ch", "max": "72ch", "note": "ADDED. Lines beyond roughly 75 characters lose the return." },
-    "minimum-body-size": "16px"
+    "measure": {
+      "value": "66ch",
+      "max": "72ch",
+      "note": "ADDED. Lines beyond roughly 75 characters lose the return."
+    },
+    "minimum-body-size": "16px",
+    "headline-case": {
+      "display": "uppercase",
+      "h1": "sentence",
+      "h2": "sentence",
+      "$comment": "PARTIAL CHANGE from v1.0, not a reversal. v1.0 set both jumbo and main headlines in All Caps. Caps are kept where they are a graphic statement of a few words — covers, section dividers, the display step. Main headlines move to sentence case, because at headline length caps cost reading speed and cannot carry the italic accent."
+    },
+    "eyebrow-face": {
+      "value": "display",
+      "$comment": "UNCHANGED from v1.0. Newsreader Medium, uppercase, tracked. An earlier draft of v2.0 proposed moving this to IBM Plex; that was preference rather than defect, and it is withdrawn."
+    },
+    "accent": {
+      "rule": "One accent phrase per title, Newsreader Italic.",
+      "colour-on-light": "#3F75A3",
+      "colour-on-dark": "#CDC8A5",
+      "$comment": "ADDED. Used throughout our material and specified nowhere in v1.0. It is the most distinctive thing the brand does, and it existed only as convention."
+    }
   },
   "space": {
     "$comment": "ADDED. A 4px base, so spacing is a decision from a list rather than a number someone chose.",
     "base": "4px",
-    "scale": ["4px", "8px", "12px", "16px", "24px", "32px", "48px", "64px", "96px", "128px"]
+    "scale": [
+      "4px",
+      "8px",
+      "12px",
+      "16px",
+      "24px",
+      "32px",
+      "48px",
+      "64px",
+      "96px",
+      "128px"
+    ]
   },
-  "radius": { "sharp": "0", "default": "4px", "card": "8px", "$comment": "v1.0 was silent. Large radii read as consumer SaaS; this is an enterprise system." },
+  "radius": {
+    "sharp": "0",
+    "default": "4px",
+    "card": "8px",
+    "$comment": "v1.0 was silent. Large radii read as consumer SaaS; this is an enterprise system."
+  },
   "logo": {
-    "clear-space": { "value": "25% of logomark height on all sides", "note": "v1.0 artwork had it baked at roughly 5%." },
-    "minimum-width": { "digital": "140px", "print": "35mm", "note": "ADDED. Below this the CONVERGED INTELLIGENCE line stops being legible before the mark does." },
-    "variants": ["navy-on-light", "sky-on-dark", "white-on-image"]
+    "clear-space": {
+      "value": "25% of logomark height on all sides",
+      "note": "v1.0 artwork had it baked at roughly 5%."
+    },
+    "minimum-width": {
+      "digital": "140px",
+      "print": "35mm",
+      "note": "ADDED. Below this the CONVERGED INTELLIGENCE line stops being legible before the mark does."
+    },
+    "variants": [
+      "navy-on-light",
+      "sky-on-dark",
+      "white-on-image"
+    ]
   },
   "accessibility": {
     "standard": "WCAG 2.2 AA",
