@@ -10,10 +10,6 @@ const headings = [
   { section: "section[data-home-news]", text: "News & articles." },
 ];
 
-// "What people say." is the one that types itself out instead (owner, 2026-09-18), so it has no
-// per-word boxes at all and is checked on its own below.
-const typed = { section: "section[data-testimonials]", text: "What people say." };
-
 test("the homepage display headings arrive word by word, in more than one way", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
@@ -53,44 +49,6 @@ test("the homepage display headings arrive word by word, in more than one way", 
   expect(variants.length).toBeGreaterThan(1);
 });
 
-test("the testimonial heading lifts in and then types itself out under a caret", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
-  const words = page.locator(`${typed.section} h2 .words-type`);
-  await expect(words).toHaveCount(1);
-  // Nothing is split: one text node, so selection and find-in-page still see a single string.
-  await expect(words).toHaveText(typed.text);
-  expect(await words.locator(".word").count()).toBe(0);
-  expect(await words.locator(".type-text").evaluate((el) => el.childNodes.length === 1 && el.textContent)).toBe(
-    typed.text,
-  );
-
-  const text = words.locator(".type-text");
-  const caret = words.locator(".type-caret");
-  // Before the section arrives the line is clipped away to nothing and the caret sits at the left.
-  await expect.poll(() => text.evaluate((el) => getComputedStyle(el).clipPath)).toMatch(/inset\(.*100%/);
-
-  await page.locator(typed.section).scrollIntoViewIfNeeded();
-
-  // The caret tracks the typing edge, so watching it is watching the typing: it starts at the left
-  // of the line and walks to the end. Polling the clip alone would not do — the clip stops reading
-  // "100%" after the very first character, which says the typing started, not that it finished.
-  const distanceToEnd = async () => {
-    const line = (await words.locator(".type-line").boundingBox())!;
-    const tip = (await caret.boundingBox())!;
-    return Math.abs(tip.x - (line.x + line.width));
-  };
-  expect(await distanceToEnd(), "the caret should start at the left of the line").toBeGreaterThan(100);
-  await expect.poll(distanceToEnd, { timeout: 8000 }).toBeLessThan(6);
-
-  // With the caret home, every character is painted and the lift has settled.
-  expect(await text.evaluate((el) => getComputedStyle(el).clipPath)).not.toMatch(/[1-9]\d*%/);
-  expect(await text.evaluate((el) => getComputedStyle(el).transform)).toMatch(/none|matrix\(1, 0, 0, 1, 0, 0\)/);
-
-  // And it does not blink for ever — a heading that never stops repainting is a distraction.
-  await expect.poll(() => caret.evaluate((el) => getComputedStyle(el).opacity), { timeout: 12000 }).toBe("0");
-});
-
 test("the words are held back until their section arrives, then settle in place", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
@@ -118,9 +76,9 @@ test("reduced motion leaves every word exactly where it is", async ({ browser })
   const context = await browser.newContext({ reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.goto("/");
-  // The typed line is simply there, with no caret at all.
-  await expect(page.locator(".type-caret")).toBeHidden();
-  expect(await page.locator(".type-text").evaluate((el) => getComputedStyle(el).clipPath)).toBe("none");
+  // The withheld testimonial section contributes no animated text or caret.
+  await expect(page.locator("section[data-testimonials] .words-type")).toHaveCount(0);
+  await expect(page.locator(".type-caret")).toHaveCount(0);
   const settled = await page.locator(".word-rise").evaluateAll((spans) =>
     spans.every((s) => {
       const style = getComputedStyle(s);

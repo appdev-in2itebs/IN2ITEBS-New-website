@@ -25,8 +25,8 @@ test("there is no theme switch anywhere in the header or the mobile menu", async
 test("filter changes announce results and reset", async ({ page }) => {
   await page.goto("/case-studies/");
   const initial = await page.getByRole("status").textContent();
-  await page.getByRole("button", { name: "GROW", exact: true }).click();
-  await expect(page.getByRole("button", { name: "GROW", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "RISE", exact: true }).click();
+  await expect(page.getByRole("button", { name: "RISE", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("status")).not.toHaveText(initial!);
   await page.getByRole("button", { name: "Clear filters" }).click();
   await expect(page.getByRole("status")).toHaveText(initial!);
@@ -51,21 +51,20 @@ test("comparison remains scrollable at 320px", async ({ page }) => {
   await expect.poll(() => table.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
 });
-test("reduced motion never hides the hero and exposes all client marks", async ({ page }) => {
+test("reduced motion never hides the hero or exposes withheld client marks", async ({ page }) => {
   // The visible pause controls went on 2026-09-15 pm; `prefers-reduced-motion` is the pause now.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await expect(page.getByRole("button", { name: /page animation|client ribbon|client entries/ })).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 2 }).first()).toHaveCSS("opacity", "1");
-  await expect(page.locator(".client-ribbon-copy")).toBeHidden();
-  await expect(page.locator(".client-ribbon-list")).toHaveCSS("flex-wrap", "wrap");
+  await expect(page.locator(".client-ribbon-copy")).toHaveCount(0);
+  await expect(page.locator(".client-ribbon-list")).toHaveCount(0);
 });
 test("unconfirmed direct visits never claim lead delivery", async ({ page }) => {
   await page.goto("/thank-you/");
   await expect(page.locator("main")).toContainText("There is no recent enquiry confirmation");
 });
-test("heading scale and client hover treatment are intact", async ({ page }) => {
-  // Reduced motion holds the ribbon still for the hover; there is no pause button to press any more.
+test("heading scale is intact while client marks are withheld", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   // The services directory that used to carry the display-scale h2 went on 2026-09-17, so the
@@ -74,12 +73,7 @@ test("heading scale and client hover treatment are intact", async ({ page }) => 
     await page.locator("section[data-brand-hero] h1").evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
   ).toBeGreaterThan(32);
   await expect(page.getByRole("button", { name: /client ribbon|client entries/ })).toHaveCount(0);
-  const logo = page.locator(".client-ribbon-list img").first();
-  await logo.hover();
-  // The logos are painted in full colour at all times (the grayscale-until-hover treatment went
-  // with the palette rework), so "no grayscale" is the assertion, not a literal filter string.
-  const filter = await logo.evaluate((el) => getComputedStyle(el).filter);
-  expect(filter === "none" || /grayscale\(0\)/.test(filter), `logo filter is ${filter}`).toBe(true);
+  await expect(page.locator(".client-ribbon-list img")).toHaveCount(0);
 });
 test("the scroll-down button hides while the footer is in view", async ({ page }) => {
   await page.goto("/about/");
