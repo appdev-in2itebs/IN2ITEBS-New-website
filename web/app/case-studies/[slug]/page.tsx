@@ -8,6 +8,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
+import { DiagramBand } from "@/components/sections/diagram-band";
 import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { caseStudies, getCaseStudy } from "@/content/case-studies";
 
@@ -87,6 +88,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           </Reveal>
         </Container>
       </Section>
+
+      {study.diagram ? <DiagramBand src={study.diagram.src} alt={study.diagram.alt} tone="subtle" /> : null}
 
       {/* WHAT WE DELIVERED */}
       <Section tone="light">

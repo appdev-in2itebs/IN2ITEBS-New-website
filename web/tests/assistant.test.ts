@@ -54,7 +54,7 @@ test("a reasoning model's thinking never reaches the visitor", () => {
 
 test("site search finds the right page", () => {
   const hits = searchSite(siteIndex(), [], "RISE with SAP");
-  assert.ok(hits.some((h) => h.url === "/services/rise-with-sap/"));
+  assert.ok(hits.some((h) => h.url === "/services/rise-s4hana/"));
 });
 
 test("assistant settings have safe defaults and reject nonsense", () => {
@@ -99,19 +99,19 @@ test("the CV upload button appears only at the CV step of a job application", ()
 
 test("answers link the website's own pages", () => {
   const index = siteIndex();
-  const linked = addLinks("We offer SAP Enterprise Solutions and Digital Services. Our RISE with SAP team can help.", {
+  const linked = addLinks("We offer Enterprise Platforms and Managed Services. Our RISE and S/4HANA team can help.", {
     index,
     faqs: [],
   });
-  assert.match(linked, /\[SAP Enterprise Solutions\]\(\/[^)]+\)/);
-  assert.match(linked, /\[Digital Services\]\(\/[^)]+\)/);
-  assert.match(linked, /\[RISE with SAP\]\(\/services\/rise-with-sap\/\)/);
+  assert.match(linked, /\[Enterprise Platforms\]\(\/[^)]+\)/);
+  assert.match(linked, /\[Managed Services\]\(\/[^)]+\)/);
+  assert.match(linked, /\[RISE and S\/4HANA\]\(\/services\/rise-s4hana\/\)/);
   // Not twice, and never inside an existing link.
-  const once = addLinks("See [RISE with SAP](/services/rise-with-sap/). RISE with SAP is our offer.", {
+  const once = addLinks("See [RISE and S/4HANA](/services/rise-s4hana/). RISE and S/4HANA is our offer.", {
     index,
     faqs: [],
   });
-  assert.equal(once.match(/\(\/services\/rise-with-sap\/\)/g)?.length, 1);
+  assert.equal(once.match(/\(\/services\/rise-s4hana\/\)/g)?.length, 1);
   // A bare path becomes a proper link.
   assert.match(addLinks("The contact page lists every office. [/contact/]", { index, faqs: [] }), /\]\(\/contact\/\)/);
   // A question answered without links gets one; a non-question does not.
@@ -131,10 +131,13 @@ test("answers link the website's own pages", () => {
   assert.equal(tidy.includes("(/services/digital-services/) (/services/digital-services/)"), false);
   assert.match(tidy, /\[Analytics\]\(\/services\/sap-sac\/\)/);
   // A short name is never linked inside a longer one; names of several words match in any case.
-  const nested = addLinks("Our Data Analytics & AI portfolio and our digital services.", { index, faqs: [] });
-  assert.match(nested, /\[Data Analytics & AI\]\(\/services\/data-analytics-ai\/\)/);
-  assert.doesNotMatch(nested, /Data \[Analytics\]/);
-  assert.match(nested, /\[digital services\]\(\/services\/digital-services\/\)/);
+  const nested = addLinks("Our Data Engineering and Analytics portfolio and our managed services.", {
+    index,
+    faqs: [],
+  });
+  assert.match(nested, /\[Data Engineering and Analytics\]\(\/services\/data-engineering-analytics\/\)/);
+  assert.doesNotMatch(nested, /Data \[Engineering/);
+  assert.match(nested, /\[managed services\]\(\/services\/managed-services\/\)/);
 });
 
 test("the leadership and the global footprint are found and linked", () => {

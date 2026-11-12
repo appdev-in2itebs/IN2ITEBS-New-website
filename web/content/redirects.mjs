@@ -6,134 +6,92 @@ const p = (source, destination) => ({ source, destination, permanent: true });
 
 export const redirects = [
   // --- Retired v1 hubs -> new pillar IA ---
-  p("/application-development-managed-services", "/digital-data-ai/application-engineering/"),
+  p("/application-development-managed-services", "/services/application-engineering/"),
 
   // --- SAP cluster -> SAP deep-dive sub-pages ---
-  p("/sap-rise-with-sap", "/services/rise-with-sap/"),
-  p("/sap-success-factors", "/services/sap-successfactors/"),
+  p("/sap-rise-with-sap", "/services/rise-s4hana/"),
   // /sap-concur/ is the *partner* page on the existing site; /sap-concur-2/ is the service page.
-  p("/sap-concur", "/partners/sap-concur/"),
-  p("/sap-concur-2", "/services/sap-concur/"),
-  p("/sap-sac", "/services/sap-sac/"),
-  p("/sap-qualtrics", "/partners/sap-qualtrics/"),
-  p("/simplifytalent", "/sap-enterprise-solutions/successfactors/"),
-  p("/simplifyhiring", "/sap-enterprise-solutions/successfactors/"),
+  p("/sap-concur", "/about/partnerships/"),
+  p("/sap-concur-2", "/services/sap/"),
+  p("/sap-sac", "/services/data-engineering-analytics/"),
+  p("/sap-qualtrics", "/about/partnerships/"),
+  p("/simplifytalent", "/services/successfactors/"),
+  p("/simplifyhiring", "/services/successfactors/"),
   // ECC Prism retained at /ecc-prism/
 
   // --- ADMS / app engineering ---
-  p(
-    "/application-development-maintenance-services-adms",
-    "/services/application-development-maintenance-services-adms/",
-  ),
-  p(
-    "/application-development-maintenance-services-adms-2",
-    "/services/application-development-maintenance-services-adms/",
-  ),
-  p("/development-maintenance", "/services/development-maintenance/"),
-  p("/application-maintenance-support", "/services/application-maintenance-support/"),
-  p("/agile-devops", "/services/agile-devops/"),
-  p("/agile-devops-2", "/services/agile-devops/"),
+  p("/application-development-maintenance-services-adms", "/services/application-engineering/"),
+  p("/application-development-maintenance-services-adms-2", "/services/application-engineering/"),
+  p("/development-maintenance", "/services/application-engineering/"),
+  p("/application-maintenance-support", "/services/managed-services/"),
+  p("/agile-devops", "/services/application-engineering/"),
+  p("/agile-devops-2", "/services/application-engineering/"),
 
   // --- Digital services -> Digital, Data & AI ---
-  p("/digital-services", "/services/digital-services/"),
-  p("/digital-transformation-services", "/services/digital-transformation-services/"),
-  p("/other-enterprise-solutions", "/services/other-enterprise-solutions/"),
+  p("/digital-services", "/services/digital-data-ai/"),
+  p("/digital-transformation-services", "/services/advisory/"),
+  p("/other-enterprise-solutions", "/services/enterprise-platforms/"),
 
   // --- Cloud / infra / security (no dedicated page) -> nearest tech home ---
-  p("/cloud-strategy", "/services/cloud-strategy/"),
-  p("/cloud-strategy-2", "/services/cloud-strategy/"),
-  p("/cloud-migration", "/services/cloud-migration/"),
-  p("/cloud-migration-2", "/services/cloud-migration/"),
-  p("/cloud-hosting-services", "/services/cloud-hosting-services/"),
-  p("/cloud-and-infra-security", "/services/cloud-and-infra-security/"),
-  p("/cyber-security-services", "/services/cyber-security-enterprise-risk/"),
+  p("/cloud-strategy", "/services/advisory/"),
+  p("/cloud-migration", "/services/rise-s4hana/"),
+  p("/cloud-migration-2", "/services/rise-s4hana/"),
+  p("/cloud-hosting-services", "/services/managed-services/"),
+  p("/cloud-and-infra-security", "/services/advisory/"),
   // The existing site's "Cloud Infrastructure Services" heading links to this slug (a Cloud Services page).
-  p("/cyber-security-services-2", "/services/cloud-infrastructure-services/"),
-  p("/security-and-risk-advisory", "/services/security-and-risk-advisory/"),
-  p("/security-and-risk-advisory-2", "/services/security-and-risk-advisory/"),
-  p("/identity-and-access-management", "/services/identity-and-access-management/"),
-  p("/identity-and-access-management-2", "/services/identity-and-access-management/"),
+  p("/security-and-risk-advisory", "/services/advisory/"),
+  p("/identity-and-access-management", "/services/advisory/"),
 
   // --- Future platforms (Oracle / Microsoft) -> Platform Services ---
   // -2 slugs are the existing site's *partner* pages; -3 and the bare slug are its service pages.
-  p("/oracle-2", "/partners/oracle/"),
-  p("/oracle-3", "/services/oracle/"),
-  p("/microsoft-2", "/partners/microsoft/"),
-  p("/ms-office-365", "/services/ms-office-365/"),
-  p("/microsoft-dynamics-365", "/services/microsoft-dynamics-365/"),
+  p("/microsoft-2", "/about/partnerships/"),
+  p("/ms-office-365", "/services/enterprise-platforms/"),
+  p("/microsoft-dynamics-365", "/services/enterprise-platforms/"),
 
   // --- Data / AI / automation -> Digital, Data & AI ---
-  p("/data-analytics-ai", "/services/data-analytics-ai/"),
-  p("/data-analytics-ai-2", "/services/data-analytics-ai/"),
-  p("/database-data-management", "/services/database-data-management/"),
-  p("/database-data-management-2", "/services/database-data-management/"),
-  p("/predictive-analysis", "/services/predictive-analysis/"),
-  p("/ai-machine-learning", "/services/ai-machine-learning/"),
-  p("/ai-machine-learning-2", "/services/ai-machine-learning/"),
-  p("/big-data", "/services/big-data/"),
-  p("/big-data-2", "/services/big-data/"),
-  p("/blockchain", "/services/blockchain/"),
-  p("/robotic-process-automation", "/services/robotic-process-automation/"),
-  p("/robotic-process-automation-2", "/services/robotic-process-automation/"),
+  p("/data-analytics-ai", "/services/data-engineering-analytics/"),
+  p("/data-analytics-ai-2", "/services/data-engineering-analytics/"),
+  p("/database-data-management", "/services/enterprise-data-management/"),
+  p("/database-data-management-2", "/services/enterprise-data-management/"),
+  p("/ai-machine-learning", "/services/applied-ai/"),
+  p("/ai-machine-learning-2", "/services/applied-ai/"),
+  p("/big-data", "/services/data-engineering-analytics/"),
+  p("/big-data-2", "/services/data-engineering-analytics/"),
+  p("/blockchain", "/services/digital-data-ai/"),
+  p("/robotic-process-automation", "/services/applied-ai/"),
 
   // --- Industries ---
-  p("/fmcg", "/industries/fmcg/"),
-  p("/fmcg-2", "/industries/fmcg/"),
-  p("/manufacturing", "/industries/manufacturing/"),
-  p("/heavy-engineering", "/industries/heavy-engineering/"),
-  p("/heavy-engineering-2", "/industries/heavy-engineering/"),
-  p("/textiles", "/industries/textiles/"),
-  p("/textiles-2", "/industries/textiles/"),
-  p("/retail-ecommerce", "/industries/retail-ecommerce/"),
-  p("/retail-ecommerce-2", "/industries/retail-ecommerce/"),
-  p("/professional-services", "/industries/professional-services/"),
-  p("/professional-services-2", "/industries/professional-services/"),
-  p("/chemical-fertilizers", "/industries/chemical-fertilizers/"),
-  p("/chemical-fertilizers-2", "/industries/chemical-fertilizers/"),
-  p("/energy-and-utilities", "/industries/energy-and-utilities/"),
-  p("/banking", "/industries/banking/"),
-  p("/government", "/industries/government/"),
-  p("/healthcare-life-science", "/industries/healthcare-life-science/"),
-  p("/healthcare-life-science-2", "/industries/healthcare-life-science/"),
-  p("/telecom", "/industries/telecom/"),
-  p("/engineering-constructions-ecno", "/industries/engineering-constructions-ecno/"),
-  p("/engineering-constructions-ecno-2", "/industries/engineering-constructions-ecno/"),
-  p("/automobiles", "/industries/automobiles/"),
+  p("/fmcg", "/industries/consumer-goods-distribution/"),
+  p("/fmcg-2", "/industries/consumer-goods-distribution/"),
+  p("/heavy-engineering", "/industries/manufacturing/"),
+  p("/textiles", "/industries/manufacturing/"),
+  p("/retail-ecommerce", "/industries/consumer-goods-distribution/"),
+  p("/retail-ecommerce-2", "/industries/consumer-goods-distribution/"),
+  p("/professional-services", "/industries/technology-digital-natives/"),
+  p("/chemical-fertilizers", "/industries/manufacturing/"),
+  p("/chemical-fertilizers-2", "/industries/manufacturing/"),
+  p("/energy-and-utilities", "/industries/power-utilities/"),
+  p("/healthcare-life-science", "/industries/pharma-healthcare-life-sciences/"),
+  p("/engineering-constructions-ecno", "/industries/manufacturing/"),
 
   // --- Partners ---
-  p("/sap", "/partners/sap/"),
-  p("/open-text-2", "/partners/open-text/"),
-  p("/ibm", "/partners/ibm/"),
-  p("/newgen-2", "/partners/newgen/"),
-  p("/hp-2", "/partners/hp/"),
-  p("/aws-2", "/partners/aws/"),
+  p("/hp-2", "/about/partnerships/"),
+  p("/aws-2", "/about/partnerships/"),
 
   // --- About / people ---
   p("/who-we-are", "/about/who-we-are/"),
   p("/our-leadership", "/about/our-leadership/"),
-  p("/out-leadership", "/about/our-leadership/"),
 
   // --- Customer stories / case studies ---
-  p("/customer-stories", "/about/customer-stories/"),
-  p("/welspun", "/about/customer-stories/welspun/"),
-  p("/ibg-goes-live-with-sap-successfactors", "/about/customer-stories/"),
-  p("/wework-rise-with-sap-s4hana", "/about/customer-stories/"),
-  p("/sharechat-rise-with-sap-s4hana", "/about/customer-stories/"),
+  p("/ibg-goes-live-with-sap-successfactors", "/case-studies/"),
+  p("/wework-rise-with-sap-s4hana", "/case-studies/"),
+  p("/sharechat-rise-with-sap-s4hana", "/case-studies/"),
 
   // --- Lead funnel / news ---
   p("/expert-advice", "/contact/"),
-  p("/news", "/insights/"),
 
   // --- Region / city pages -> home ---
-  p("/home-kenya", "/"),
-  p("/home-southafrica", "/"),
-  p("/in2it-india", "/"),
-  p("/in2it-singapore", "/"),
-  p("/in2it-dubai", "/"),
   p("/in2it-melbourne", "/"),
-  p("/in2it-manila", "/"),
-  p("/in2it-malaysia", "/"),
-  p("/in2it-bangkok", "/"),
 
   // --- Legal ---
   p("/privacy-notice", "/legal/privacy-notice/"),
@@ -159,34 +117,134 @@ export const redirects = [
     "/insights/igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas/",
   ),
   p("/grow-with-sap", "/insights/grow-with-sap/"),
-  p("/sap-grow-fast", "/services/sap-grow-fast/"),
-  p("/grow-with-sap-leadership-forum-event", "/sap-enterprise-solutions/rise-vs-grow/"),
+  p("/sap-grow-fast", "/services/grow-fast/"),
+  p("/grow-with-sap-leadership-forum-event", "/services/rise-s4hana/"),
   // --- SuccessFactors local landing pages and campaigns ---
   p("/in2it-ebs-simplify-hiring", "/insights/in2it-ebs-simplify-hiring/"),
   p("/in2it-ebs-simplify-talent-2", "/insights/in2it-ebs-simplify-talent-2/"),
-  p("/sap-successfactors-partner-in-india", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-success-factors-in-bangalore", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-successfactors-partner-in-mumbai", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-successfactors-partner-in-chennai", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-successfactors-partner-in-delhi", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-successfactors-partner-in-kolkata", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-success-factors-in-hyderabad", "/sap-enterprise-solutions/successfactors/"),
-  p("/sap-success-factors-in-bhubaneswar", "/sap-enterprise-solutions/successfactors/"),
-  p("/unlock-the-power-of-hr-technology-transformation", "/sap-enterprise-solutions/successfactors/"),
-  p("/unlock-the-power-of-hr-technology-transformation-register-now", "/sap-enterprise-solutions/successfactors/"),
-  p("/unlock-the-power-of-hr-technology-transformation-register-now1", "/sap-enterprise-solutions/successfactors/"),
+  p("/sap-successfactors-partner-in-delhi", "/services/successfactors/"),
+  p("/unlock-the-power-of-hr-technology-transformation", "/services/successfactors/"),
+  p("/unlock-the-power-of-hr-technology-transformation-register-now", "/services/successfactors/"),
+  p("/unlock-the-power-of-hr-technology-transformation-register-now1", "/services/successfactors/"),
   // --- Careers, FAQ, leadership profiles, news archive ---
-  p("/join-our-team", "/careers/"),
-  p("/apply-now", "/careers/"),
   p("/our-culture", "/careers/our-culture/"),
-  p("/sap-and-success-factor-consultant", "/careers/current-openings/"),
-  p("/events-celebrations-3", "/careers/events-celebrations/"),
   p("/faq", "/contact/"),
-  p("/dharmendra-sharma", "/about/"),
-  p("/anil-kumar-soleti", "/about/"),
-  p("/rajat-kapoor", "/about/"),
   p("/news/page/2", "/insights/"),
   p("/global-webinar", "/insights/"),
+  // ════════════════════════════════════════════════════════════════════════
+  // RESTRUCTURE, NOVEMBER 2026 — flat service URLs, three pillars, nine industries.
+  //
+  // Ordered by the clicks each source earned in Search Console over the twelve months to
+  // 11 November 2026, so the pages that carry real traffic are the ones reviewed first.
+  // Every destination is the FINAL target: no chains.
+  // ════════════════════════════════════════════════════════════════════════
+
+  // --- Corporate pages with measured traffic ---
+  p("/out-leadership", "/about/our-leadership/"), // 109 clicks — a typo slug that ranks; keep it alive
+  p("/india", "/about/markets/"), // 114 clicks
+  p("/in2it-india", "/about/markets/"),
+  p("/home-southafrica", "/about/markets/"),
+  p("/home-kenya", "/about/markets/"),
+  p("/south-africa", "/about/markets/"),
+  p("/kenya", "/about/markets/"),
+  p("/in2it-dubai", "/about/markets/"),
+  p("/in2it-singapore", "/about/markets/"),
+  p("/in2it-malaysia", "/about/markets/"),
+  p("/in2it-bangkok", "/about/markets/"),
+  p("/in2it-manila", "/about/markets/"),
+  p("/accreditation-awards", "/about/credentials/"),
+  // The /partners/ hub and its ten partner pages became one page. The wildcard catches every
+  // partner slug, including any the old site had that this repo never ported.
+  p("/partners", "/about/partnerships/"),
+  p("/partners/:slug*", "/about/partnerships/"),
+  p("/jobs", "/careers/current-openings/"),
+  p("/sap-and-success-factor-consultant", "/careers/current-openings/"), // a job posting slug, not a service page
+  p("/join-our-team", "/careers/current-openings/"),
+  p("/apply-now", "/careers/current-openings/"),
+  p("/news", "/insights/"),
+  p("/welspun", "/case-studies/welspun-group/"),
+  p("/about/customer-stories", "/case-studies/"),
+  p("/about/customer-stories/welspun", "/case-studies/welspun-group/"),
+
+  // --- Leadership profile pages: one destination, not nine dead ends ---
+  p("/abhijit-shukla", "/about/our-leadership/"),
+  p("/rajat-kapoor", "/about/our-leadership/"),
+  p("/anil-kumar-soleti", "/about/our-leadership/"),
+  p("/dharmendra-sharma", "/about/our-leadership/"),
+
+  // --- The parallel /sap-enterprise-solutions/ tree collapses into /services/sap/ ---
+  p("/sap-enterprise-solutions", "/services/sap/"),
+  p("/sap-enterprise-solutions/rise-with-sap", "/services/rise-s4hana/"),
+  p("/sap-enterprise-solutions/migrations", "/services/rise-s4hana/"),
+  p("/sap-enterprise-solutions/grow-fast", "/services/grow-fast/"),
+  p("/sap-enterprise-solutions/successfactors", "/services/successfactors/"),
+  p("/sap-enterprise-solutions/rise-vs-grow", "/services/rise-s4hana/"),
+  p("/sap-enterprise-solutions/health-check-360", "/services/application-estate-review/"),
+  p("/sap-enterprise-solutions/syniti", "/services/enterprise-data-management/"),
+  p("/sap-enterprise-solutions/analytics-cloud", "/services/data-engineering-analytics/"),
+  p("/sap-enterprise-solutions/joule", "/services/applied-ai/"),
+  p("/sap-enterprise-solutions/clean-core", "/services/sap/"),
+  p("/sap-enterprise-solutions/abap-factory", "/services/sap/"),
+  p("/sap-enterprise-solutions/concur", "/services/sap/"),
+  p("/sap-enterprise-solutions/ariba", "/services/sap/"),
+
+  // --- Legacy SAP landing pages, including the city-targeted SuccessFactors set ---
+  p("/sap", "/services/sap/"),
+  p("/sap-success-factors", "/services/successfactors/"),
+  p("/sap-success-factors-in-bangalore", "/services/successfactors/"),
+  p("/sap-success-factors-in-hyderabad", "/services/successfactors/"),
+  p("/sap-success-factors-in-bhubaneswar", "/services/successfactors/"),
+  p("/sap-successfactors-partner-in-india", "/services/successfactors/"),
+  p("/sap-successfactors-partner-in-chennai", "/services/successfactors/"),
+  p("/sap-successfactors-partner-in-mumbai", "/services/successfactors/"),
+  p("/sap-successfactors-partner-in-kolkata", "/services/successfactors/"),
+
+  // --- Hand-built pillar routes replaced by /services/<slug>/ ---
+  p("/platform-services", "/services/enterprise-platforms/"),
+  p("/platform-services/other-enterprise-solutions", "/services/enterprise-platforms/"),
+  p("/advisory", "/services/advisory/"),
+  p("/digital-data-ai", "/services/digital-data-ai/"),
+  p("/digital-data-ai/application-engineering", "/services/application-engineering/"),
+  p("/digital-data-ai/ai-automation", "/services/applied-ai/"),
+  p("/ecc-prism", "/services/ecc-prism/"),
+  p("/salesforce", "/services/salesforce/"),
+  p("/workday", "/services/workday/"),
+  p("/what-we-do", "/services/"),
+  p("/delivery-excellence", "/services/"),
+  p("/why-in2it-ebs", "/about/who-we-are/"),
+
+  // --- Platforms we hold no designation from. The pillar hub says so in plain words. ---
+  p("/oracle", "/services/enterprise-platforms/"),
+  p("/oracle-2", "/services/enterprise-platforms/"),
+  p("/oracle-3", "/services/enterprise-platforms/"),
+  p("/oracle-netsuite-2", "/services/enterprise-platforms/"),
+  p("/microsoft", "/services/enterprise-platforms/"),
+  p("/ibm", "/about/partnerships/"),
+  p("/newgen-2", "/about/partnerships/"),
+  p("/open-text-2", "/about/partnerships/"),
+
+  // --- Legacy industry slugs -> the nine that have proof behind them ---
+  p("/automobiles", "/industries/manufacturing/"),
+  p("/textiles-2", "/industries/manufacturing/"),
+  p("/heavy-engineering-2", "/industries/manufacturing/"),
+  p("/engineering-constructions-ecno-2", "/industries/manufacturing/"),
+  p("/manufacturing", "/industries/manufacturing/"),
+  p("/healthcare-life-science-2", "/industries/pharma-healthcare-life-sciences/"),
+  p("/banking", "/industries/banking-financial-services/"),
+  p("/government", "/industries/government-public-sector/"),
+  p("/telecom", "/industries/technology-digital-natives/"),
+  p("/professional-services-2", "/industries/technology-digital-natives/"),
+
+  // --- Retired standalone service pages -> the page that now covers the work ---
+  p("/cyber-security-services", "/services/advisory/"),
+  p("/cyber-security-services-2", "/services/advisory/"),
+  p("/security-and-risk-advisory-2", "/services/advisory/"),
+  p("/identity-and-access-management-2", "/services/advisory/"),
+  p("/cloud-strategy-2", "/services/advisory/"),
+  p("/robotic-process-automation-2", "/services/applied-ai/"),
+  p("/predictive-analysis", "/services/applied-ai/"),
+  p("/customer-stories", "/case-studies/"),
+  p("/events-celebrations-3", "/careers/events-celebrations/"),
 ];
 
 /** WordPress theme-demo URLs that never held In2IT content: served as HTTP 410 via a rewrite to /api/gone/. */

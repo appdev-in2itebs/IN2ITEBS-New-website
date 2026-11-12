@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
-import { sapChildren } from "@/content/nav";
 import { servicePages } from "@/content/legacy-services";
-import { partnerPages } from "@/content/partner-pages";
 import { industries } from "@/content/industries";
 import { legacyIndustries } from "@/content/legacy-industries";
 
@@ -12,45 +10,37 @@ import { getCms } from "@/lib/cms/content";
 import { livePagePaths } from "@/lib/builder/store";
 import { getOpenOpenings } from "@/lib/cms/store";
 
-/** Canonical route inventory — three-pillar IA. All paths use trailing slashes. */
+/**
+ * Canonical route inventory. All paths use trailing slashes.
+ *
+ * Rule: a sitemap lists pages that return 200, never ones that redirect. Every path retired in the
+ * November 2026 restructure was removed from this list on the same day its route folder was
+ * deleted, and lives on only in content/redirects.mjs. If you delete a route, delete it here too.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Articles as published in /admin/content, including ones added there.
   const articles = (await getCms()).articles.filter((a) => !a.href);
   const staticPaths = [
     "/",
-    // What We Do — pillars
+    // What we do
     "/services/",
-    "/what-we-do/",
-    "/platform-services/",
-    "/platform-services/other-enterprise-solutions/",
-    "/advisory/",
-    "/digital-data-ai/",
-    "/digital-data-ai/application-engineering/",
-    "/digital-data-ai/ai-automation/",
-    "/delivery-excellence/",
-    // Platform practices
-    "/sap-enterprise-solutions/",
-    "/salesforce/",
-    "/workday/",
-    "/oracle/",
-    "/microsoft/",
-    "/ecc-prism/",
-    // Proof & company
+    // Proof
     "/industries/",
     "/case-studies/",
-    "/partners/",
-    "/why-in2it-ebs/",
-    "/about/",
-    "/accreditation-awards/",
     "/insights/",
+    // Company
+    "/about/",
+    "/about/who-we-are/",
+    "/about/our-leadership/",
+    "/about/credentials/",
+    "/about/partnerships/",
+    "/about/markets/",
+    // Careers
     "/careers/",
     "/careers/our-culture/",
     "/careers/current-openings/",
-    "/about/who-we-are/",
-    "/about/our-leadership/",
-    "/about/customer-stories/",
-    "/about/customer-stories/welspun/",
     "/careers/events-celebrations/",
+    // Contact and legal
     "/contact/",
     "/legal/privacy-notice/",
     "/legal/privacy-policy/",
@@ -58,9 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const dynamicPaths = [
-    ...sapChildren.map((c) => c.href), // SAP deep-dive sub-pages
-    ...servicePages.map((p) => `/services/${p.slug}/`), // the existing site's Services menu, page for page
-    ...partnerPages.map((p) => `/partners/${p.slug}/`),
+    ...servicePages.map((p) => `/services/${p.slug}/`), // every service page, pillar hubs included
     ...industries.map((i) => `/industries/${i.slug}/`),
     ...legacyIndustries.map((i) => `/industries/${i.slug}/`),
     ...articles.map((p) => `/insights/${p.slug}/`),

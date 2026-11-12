@@ -75,14 +75,35 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
       detail: detailOf(industry.intro, industry.sections),
       keywords: [...tokens(industry.slug.replace(/-/g, " ")), "industry", "sector"],
     });
+  /**
+   * Partnerships are one page now, not ten. Each partner is still indexed by name so a question
+   * about a specific vendor finds us, but every one resolves to /about/partnerships/ — the page
+   * that states the tier, what we deliver under it and where we have delivered it.
+   */
   for (const partner of partners)
     entries.push({
       title: `${partner.name} partnership`,
       summary: clip(partner.intro[0] || ""),
-      url: `/partners/${partner.slug}/`,
+      url: "/about/partnerships/",
       detail: detailOf(partner.intro, partner.sections ?? []),
       keywords: [...tokens(partner.name), "partner", "partnership"],
     });
+  entries.push({
+    title: "Credentials",
+    summary:
+      "SAP Gold Partner, CMMI Level 3 appraised and ISO 27001 certified, with the awards, appraisals and the gaps we do not claim.",
+    url: "/about/credentials/",
+    keywords: tokens("credentials certification accreditation iso cmmi award gold partner audit security"),
+  });
+  entries.push({
+    title: "Where we operate",
+    summary:
+      "Headquartered in Bengaluru, with eight delivery centres and five legal entities, and the data residency position for each market.",
+    url: "/about/markets/",
+    keywords: tokens(
+      "markets geography countries offices entity delivery centre data residency india kenya south africa singapore dubai",
+    ),
+  });
   entries.push({
     title: "Contact and offices",
     summary: `Offices in ${[...new Set(offices.map((o) => `${o.city} (${o.country})`))].join(", ")}.`,

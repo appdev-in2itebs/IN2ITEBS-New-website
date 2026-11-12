@@ -1,225 +1,162 @@
 import type { NavItem, PracticeSummary } from "./types";
 import { servicesMenu } from "./legacy-services";
 
-/** Three-pillar architecture (Content Blueprint, Deck 2). */
+/**
+ * NAVIGATION — the approved architecture, November 2026.
+ *
+ * Seven top-level items plus a persistent "Talk to us". Every item resolves to a real hub page.
+ * None points at a dropdown only, and none points at "#".
+ *
+ * Three rules this file enforces:
+ *  1. Service URLs are FLAT — /services/<slug>/. The pillar is a grouping in the menu and on the
+ *     hub page, never a path segment, so renaming or regrouping a pillar later moves no URL.
+ *  2. No count appears in a label. "Industries", never "Our nine industries".
+ *  3. A page is listed here only when it exists and has proof behind it. Build the slot, not the
+ *     page: a capability without evidence belongs in the credentials register, not the menu.
+ */
 
-// SAP flagship sub-pages (the deep-dive set).
-export const sapChildren: NavItem[] = [
-  { label: "SAP Overview", href: "/sap-enterprise-solutions/" },
-  { label: "RISE with SAP", href: "/sap-enterprise-solutions/rise-with-sap/" },
-  { label: "SAP GROW Fast", href: "/sap-enterprise-solutions/grow-fast/" },
-  { label: "RISE vs GROW", href: "/sap-enterprise-solutions/rise-vs-grow/" },
-  { label: "Migrations", href: "/sap-enterprise-solutions/migrations/" },
-  { label: "SuccessFactors / HXM", href: "/sap-enterprise-solutions/successfactors/" },
-  { label: "Health Check 360", href: "/sap-enterprise-solutions/health-check-360/" },
-  { label: "Concur", href: "/sap-enterprise-solutions/concur/" },
-  { label: "Ariba", href: "/sap-enterprise-solutions/ariba/" },
-  { label: "Joule", href: "/sap-enterprise-solutions/joule/" },
-  { label: "Clean Core / BTP", href: "/sap-enterprise-solutions/clean-core/" },
-  { label: "Syniti Data Management", href: "/sap-enterprise-solutions/syniti/" },
-  { label: "SAP Analytics Cloud", href: "/sap-enterprise-solutions/analytics-cloud/" },
-  { label: "ABAP Factory", href: "/sap-enterprise-solutions/abap-factory/" },
-];
-
-/** Pillars used on hub pages + the mega-menu. */
+/** The three service pillars. Categories, not vendors — each absorbs new platforms without renaming. */
 export const pillars: PracticeSummary[] = [
   {
-    slug: "platform-services",
-    name: "Platform Services",
-    tagline: "SAP, SuccessFactors, Salesforce, Workday, Oracle and Microsoft: full lifecycle, one accountable partner.",
-    href: "/platform-services/",
+    slug: "enterprise-platforms",
+    name: "Enterprise Platforms",
+    tagline:
+      "SAP, Salesforce and Workday — implementing, migrating, extending and running the packaged platforms that carry your core business processes.",
+    href: "/services/enterprise-platforms/",
   },
   {
-    slug: "advisory-services",
-    name: "Advisory Services",
-    tagline: "Consulting-led transformation — strategy, enterprise architecture, AI strategy and program governance.",
-    href: "/advisory/",
+    slug: "advisory",
+    name: "Advisory",
+    tagline: "Transformation strategy, enterprise architecture, governance, risk and data protection.",
+    href: "/services/advisory/",
   },
   {
     slug: "digital-data-ai",
     name: "Digital, Data & AI",
-    tagline:
-      "Engineering-led transformation — application engineering, AI & automation, data & analytics, integration & cloud.",
-    href: "/digital-data-ai/",
-  },
-  {
-    slug: "delivery-excellence",
-    name: "Delivery Excellence",
-    tagline: "FastForward methodology, development factory and global AMS bench behind every engagement.",
-    href: "/delivery-excellence/",
+    tagline: "Engineering around and beyond the packaged core — applications, data, AI and the integration spine.",
+    href: "/services/digital-data-ai/",
   },
 ];
 
-// Practice cards used on the Platform Services hub.
-export const platformPractices: PracticeSummary[] = [
-  {
-    slug: "sap",
-    name: "SAP Enterprise Solutions",
-    tagline: "SAP Gold Partner. 300+ consultants. 1,000+ combined years of SAP experience.",
-    href: "/sap-enterprise-solutions/",
-  },
-  {
-    slug: "salesforce",
-    name: "Salesforce",
-    tagline: "Customer experience across Sales, Service, Marketing, Commerce and Industry Clouds.",
-    href: "/salesforce/",
-  },
-  {
-    slug: "workday",
-    name: "Workday",
-    tagline: "HR and finance transformation on a single cloud platform.",
-    href: "/workday/",
-  },
-  {
-    slug: "successfactors",
-    name: "SAP SuccessFactors",
-    tagline: "HR transformation across core HR, talent and workforce experience.",
-    href: "/sap-enterprise-solutions/successfactors/",
-  },
-  {
-    slug: "oracle",
-    name: "Oracle",
-    tagline: "Enterprise applications, Oracle Cloud ERP, JD Edwards and database services.",
-    href: "/oracle/",
-  },
-  {
-    slug: "microsoft",
-    name: "Microsoft",
-    tagline: "Dynamics 365, Microsoft 365, SharePoint and Azure services.",
-    href: "/microsoft/",
-  },
-];
-
-/** The "What We Do" mega-menu — pillar-grouped with nested sub-items. */
-export const whatWeDoMenu: NavItem[] = [
-  {
-    label: "Platform Services",
-    href: "/platform-services/",
-    children: [
-      { label: "SAP Enterprise Solutions", href: "/sap-enterprise-solutions/", children: sapChildren },
-      { label: "Salesforce", href: "/salesforce/" },
-      { label: "Workday", href: "/workday/" },
-      { label: "SAP SuccessFactors", href: "/sap-enterprise-solutions/successfactors/" },
-      { label: "Oracle", href: "/oracle/" },
-      { label: "Microsoft", href: "/microsoft/" },
-    ],
-  },
-  {
-    label: "Advisory Services",
-    href: "/advisory/",
-    children: [
-      { label: "Transformation Advisory", href: "/advisory/#transformation-advisory" },
-      { label: "Strategy & Governance", href: "/advisory/#strategy-governance" },
-      { label: "Enterprise Architecture", href: "/advisory/#enterprise-architecture" },
-      { label: "Change & Assurance", href: "/advisory/#change-assurance" },
-    ],
-  },
-  {
-    label: "Digital, Data & AI",
-    href: "/digital-data-ai/",
-    children: [
-      { label: "Application Engineering", href: "/digital-data-ai/application-engineering/" },
-      { label: "AI & Automation", href: "/digital-data-ai/ai-automation/" },
-      { label: "Data & Analytics", href: "/digital-data-ai/#data-analytics" },
-      { label: "Integration & Cloud", href: "/digital-data-ai/#integration-cloud" },
-    ],
-  },
-  {
-    label: "Delivery Excellence",
-    href: "/delivery-excellence/",
-    children: [
-      { label: "FastForward Methodology", href: "/delivery-excellence/#fastforward" },
-      { label: "AMS Transition", href: "/delivery-excellence/#transition" },
-      { label: "Development Factory", href: "/delivery-excellence/#factory" },
-    ],
-  },
-];
-
-/** The Industries dropdown, item for item as the existing site's menu lists it, each to that page. */
-export const industriesMenu: NavItem[] = [
-  { label: "Automobiles", href: "/industries/automobiles/" },
-  { label: "FMCG", href: "/industries/fmcg/" },
-  { label: "Manufacturing", href: "/industries/manufacturing/" },
-  { label: "Textiles", href: "/industries/textiles/" },
-  { label: "Professional Services", href: "/industries/professional-services/" },
-  { label: "Heavy Engineering", href: "/industries/heavy-engineering/" },
-  { label: "Retail & Ecommerce", href: "/industries/retail-ecommerce/" },
-  { label: "Energy and Utilities", href: "/industries/energy-and-utilities/" },
-  { label: "Chemical & Fertilizers", href: "/industries/chemical-fertilizers/" },
-  { label: "Banking, Financial Services & Insurance", href: "/industries/banking/" },
-  { label: "Government & Public Enterprises", href: "/industries/government/" },
-  { label: "Pharma, Healthcare & Life Science", href: "/industries/healthcare-life-science/" },
-  { label: "Media & Telecommunications", href: "/industries/telecom/" },
-  { label: "Engineering & Constructions (ECNO)", href: "/industries/engineering-constructions-ecno/" },
-];
-
-/** The Partners dropdown, in the existing site's order; each goes to that partner's own page. */
-export const partnersMenu: NavItem[] = [
-  { label: "SAP", href: "/partners/sap/" },
-  { label: "SAP Qualtrics", href: "/partners/sap-qualtrics/" },
-  { label: "SAP Concur", href: "/partners/sap-concur/" },
-  { label: "Microsoft", href: "/partners/microsoft/" },
-  { label: "Oracle", href: "/partners/oracle/" },
-  { label: "Open Text", href: "/partners/open-text/" },
-  { label: "IBM", href: "/partners/ibm/" },
-  { label: "Newgen", href: "/partners/newgen/" },
-  { label: "HP", href: "/partners/hp/" },
-  { label: "AWS", href: "/partners/aws/" },
+/** Enterprise Platforms — nine pages. Managed Services is its own page, not a paragraph on four others. */
+export const enterprisePlatformsChildren: NavItem[] = [
+  { label: "SAP", href: "/services/sap/" },
+  { label: "GROW Fast", href: "/services/grow-fast/" },
+  { label: "ECC Prism", href: "/services/ecc-prism/" },
+  { label: "RISE and S/4HANA", href: "/services/rise-s4hana/" },
+  { label: "SuccessFactors", href: "/services/successfactors/" },
+  { label: "Smart Meter to Cash", href: "/services/smart-meter-to-cash/" },
+  { label: "Managed Services", href: "/services/managed-services/" },
+  { label: "Salesforce", href: "/services/salesforce/" },
+  { label: "Workday", href: "/services/workday/" },
 ];
 
 /**
- * The primary navigation, rebuilt on 2026-09-19 to the existing in2itebs.com menu: Home, Services
- * (its eight-group mega-menu), Industries, Partners, About, Contact and Career, with the same
- * items under each. The landing page itself is untouched; only the header follows the old site.
+ * Advisory — the hub only, for now.
+ *
+ * Four child pages are specified in the architecture. Two of the four are genuinely sellable and
+ * two are aspirational; which is which has not been settled. Publishing four pages before that is
+ * decided would put unevidenced claims on the site, which is the defect this rebuild exists to
+ * remove. The hub ships; the children ship when the content is settled.
  */
+export const advisoryChildren: NavItem[] = [];
+
+/** Digital, Data & AI — five pages plus the hub. */
+export const digitalDataAiChildren: NavItem[] = [
+  { label: "Application Engineering", href: "/services/application-engineering/" },
+  { label: "The Application Estate Review", href: "/services/application-estate-review/" },
+  { label: "Data Engineering and Analytics", href: "/services/data-engineering-analytics/" },
+  { label: "Enterprise Data Management", href: "/services/enterprise-data-management/" },
+  { label: "Applied AI", href: "/services/applied-ai/" },
+];
+
+/** The Services mega-menu, grouped by pillar. */
+export const whatWeDoMenu: NavItem[] = [
+  { label: "Enterprise Platforms", href: "/services/enterprise-platforms/", children: enterprisePlatformsChildren },
+  { label: "Advisory", href: "/services/advisory/" },
+  { label: "Digital, Data & AI", href: "/services/digital-data-ai/", children: digitalDataAiChildren },
+];
+
+/**
+ * Industries — nine pages, down from fourteen.
+ *
+ * Every one of these has at least one named client engagement behind it, evidenced by a purchase
+ * order or a signed contract. The five that were retired had navigation entries and nothing else.
+ */
+export const industriesMenu: NavItem[] = [
+  { label: "Metals, mining and steel", href: "/industries/metals-mining-steel/" },
+  { label: "Power and utilities", href: "/industries/power-utilities/" },
+  { label: "Government and public sector", href: "/industries/government-public-sector/" },
+  { label: "Manufacturing", href: "/industries/manufacturing/" },
+  { label: "Consumer goods and distribution", href: "/industries/consumer-goods-distribution/" },
+  { label: "Pharma, healthcare and life sciences", href: "/industries/pharma-healthcare-life-sciences/" },
+  { label: "Technology and digital natives", href: "/industries/technology-digital-natives/" },
+  { label: "Banking and financial services", href: "/industries/banking-financial-services/" },
+  { label: "Real estate and infrastructure", href: "/industries/real-estate-infrastructure/" },
+];
+
+/**
+ * Partners — one page, not ten.
+ *
+ * The old site gave each partner a page it could not fill. The Partnerships page states what tier
+ * we hold, what we deliver under it and, where there is one, where we have delivered it. Partners
+ * we hold no current designation from are named as absent rather than implied by a logo.
+ */
+export const partnersMenu: NavItem[] = [];
+
+/** Primary navigation — seven items. "Talk to us" is rendered separately as the persistent CTA. */
 export const primaryNav: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services/", children: servicesMenu },
+  { label: "Services", href: "/services/", children: whatWeDoMenu },
   { label: "Industries", href: "/industries/", children: industriesMenu },
-  { label: "Partners", href: "/partners/", children: partnersMenu },
+  { label: "Client work", href: "/case-studies/" },
+  { label: "Insights", href: "/insights/" },
   {
     label: "About",
     href: "/about/",
     children: [
-      { label: "Who We Are?", href: "/about/who-we-are/" },
-      { label: "Our Leadership", href: "/about/our-leadership/" },
-      { label: "Accreditation", href: "/accreditation-awards/" },
-      { label: "Customer Stories", href: "/about/customer-stories/" },
-      { label: "Blogs & Articles", href: "/insights/" },
+      { label: "Who we are", href: "/about/who-we-are/" },
+      { label: "Leadership", href: "/about/our-leadership/" },
+      { label: "Credentials", href: "/about/credentials/" },
+      { label: "Partnerships", href: "/about/partnerships/" },
+      { label: "Where we operate", href: "/about/markets/" },
+    ],
+  },
+  {
+    label: "Careers",
+    href: "/careers/",
+    children: [
+      { label: "Our culture", href: "/careers/our-culture/" },
+      { label: "Events and celebrations", href: "/careers/events-celebrations/" },
+      { label: "Current openings", href: "/careers/current-openings/" },
     ],
   },
   { label: "Contact", href: "/contact/" },
-  {
-    label: "Career",
-    href: "/careers/",
-    children: [
-      { label: "Our Culture", href: "/careers/our-culture/" },
-      { label: "Events & Celebrations", href: "/careers/events-celebrations/" },
-      { label: "Current Openings", href: "/careers/current-openings/" },
-    ],
-  },
 ];
 
-// Back-compat: some existing components import `practices`.
+/** Back-compat: some components import `platformPractices` / `practices`. */
+export const platformPractices: PracticeSummary[] = pillars;
 export const practices = platformPractices;
+
+/** Back-compat for components that still import the SAP deep-dive list. */
+export const sapChildren: NavItem[] = enterprisePlatformsChildren;
 
 export const footerNav = {
   company: [
-    { label: "Who We Are", href: "/about/" },
-    { label: "Why In2IT EBS", href: "/why-in2it-ebs/" },
-    { label: "Our Awards", href: "/accreditation-awards/" },
+    { label: "Who we are", href: "/about/who-we-are/" },
+    { label: "Credentials", href: "/about/credentials/" },
+    { label: "Partnerships", href: "/about/partnerships/" },
+    { label: "Where we operate", href: "/about/markets/" },
     { label: "Industries", href: "/industries/" },
-    { label: "Clients & Case Studies", href: "/case-studies/" },
-    { label: "Partners & Ecosystem", href: "/partners/" },
+    { label: "Client work", href: "/case-studies/" },
     { label: "Insights", href: "/insights/" },
     { label: "Careers", href: "/careers/" },
   ],
   practices: [
-    { label: "Platform Services", href: "/platform-services/" },
-    { label: "SAP Enterprise Solutions", href: "/sap-enterprise-solutions/" },
-    { label: "Advisory Services", href: "/advisory/" },
-    { label: "Digital, Data & AI", href: "/digital-data-ai/" },
-    { label: "Delivery Excellence", href: "/delivery-excellence/" },
+    { label: "Enterprise Platforms", href: "/services/enterprise-platforms/" },
+    { label: "SAP", href: "/services/sap/" },
+    { label: "Managed Services", href: "/services/managed-services/" },
+    { label: "Advisory", href: "/services/advisory/" },
+    { label: "Digital, Data & AI", href: "/services/digital-data-ai/" },
   ],
   legal: [
     { label: "Privacy Notice", href: "/legal/privacy-notice/" },
@@ -227,3 +164,5 @@ export const footerNav = {
     { label: "Disclaimer", href: "/legal/disclaimer/" },
   ],
 };
+
+export { servicesMenu };

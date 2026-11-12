@@ -15,6 +15,8 @@ export interface CaseStudy {
   region: string;
   scenario: string;
   summary?: string; // ≤155 characters, used as the page meta description (named studies only)
+  /** A full-width diagram shown after the challenge. `src` is a file in /public/diagrams/. */
+  diagram?: { src: string; alt: string };
   benefits: string[];
   solution: string[];
   differentiator: string;
@@ -315,6 +317,148 @@ export const caseStudies: CaseStudy[] = [
     ],
     differentiator:
       "AMS services enabled uninterrupted operations, cost efficiencies and ERP aligned to organisational goals — improving service delivery and stakeholder satisfaction.",
+  },
+
+  /* ------------------------------------------------------------------ written from purchase orders
+   *
+   * The four studies below were written from signed purchase orders and purchase-order registers,
+   * not from another case study and not from a slide. Three rules were applied to them:
+   *
+   * 1. Every figure is one a document states. Where the documents prove duration and breadth rather
+   *    than business outcome, there is no `outcome` — the duration IS the claim. Do not add
+   *    percentages to strengthen these; there is nothing behind them.
+   * 2. Varun Beverages is described as its register describes it (SuccessFactors, SAP HCM and
+   *    statutory e-invoicing), not as "Ariba across 14 countries", and Welspun as retention across
+   *    thirteen entities, not as an Analytics Cloud account. Both deck claims are unevidenced and
+   *    are open questions with the client teams.
+   * 3. CONSENT GATE — these four clients are named. Written consent covering the name, the figures
+   *    and the logo is three separate permissions and is still outstanding for all four. Set
+   *    `named: false` and remove `client` for any one not cleared before this goes live.
+   *
+   * Manipal Hospitals is deliberately NOT here. Its purchase order does not name the SuccessFactors
+   * modules on its face, and the only copy available to fill the gap is generic sector writing. It
+   * publishes when the scope annexure arrives, and not before.
+   *
+   * The NALCO entry below is the Plant Maintenance award. The 2017 "Nalco SAP Migration PO" is a
+   * data centre hardware refresh awarded to In2IT Technologies Pvt. Ltd. — a different legal entity
+   * — and must never be cited as an In2IT EBS SAP credential.
+   */
+  {
+    slug: "welspun-group",
+    client: "Welspun Group",
+    named: true,
+    diagram: {
+      src: "/diagrams/r1-welspun-account.svg",
+      alt: "The Welspun account after seven years: eighty-nine purchase orders across thirteen group companies, the five kinds of work they bought, and the share each kind takes.",
+    },
+    industry: "Metals, Mining & Heavy Engineering",
+    sapPath: "AMS",
+    featuredSolution: "SuccessFactors · SAP support · specialist engineering",
+    employees: "25,000+",
+    region: "India and the United Kingdom",
+    scenario:
+      "What began in May 2018 as two ABAP consultants on a data-entry automation project for the textiles business became, over seven years, eighty-nine purchase orders across thirteen group companies — each one a separate procurement process that could have gone elsewhere.",
+    summary:
+      "Seven years, thirteen Welspun group companies and eighty-nine purchase orders — SuccessFactors, SAP support and specialist engineering across the group.",
+    benefits: [
+      "SuccessFactors across the group — Employee Central, Recruiting, Onboarding and Offboarding, Performance and Goals, Compensation, Career Development and Succession, and Learning",
+      "Workforce Analytics delivered across six companies in a single programme",
+      "Annual support contracts with a committed quarterly allocation per entity, renewed every year since January 2019",
+      "SAP post-go-live operations support for the Advanced Textiles unit at Anjar on a twelve-month contract",
+    ],
+    solution: [
+      "SuccessFactors implementation and managed support",
+      "ABAP and integration specialists embedded in client teams",
+      "SAP PI integration for the UK company",
+      "SAP Cloud for Customer for the pipes business",
+      "Application support for a digital visiting card application",
+    ],
+    differentiator:
+      "Forty-five per cent of the value is specialist people placed inside the client's own teams and thirty-one per cent is managed support. That mix is what an account looks like once a client has stopped buying projects and started buying a partner.",
+  },
+  {
+    slug: "odisha-mining-corporation",
+    client: "Odisha Mining Corporation",
+    named: true,
+    industry: "Government & Public Enterprises (PSUs)",
+    sapPath: "AMS",
+    featuredSolution: "AI attendance · infrastructure managed services · SAP to MIS integration",
+    employees: "3,000+",
+    region: "Odisha, India",
+    scenario:
+      "A Gold Category state public sector undertaking bought a facial recognition attendance system, then a full infrastructure managed service, then an integration layer between SAP and its management information systems. Each was won separately, against open tender.",
+    summary:
+      "Three contracts in four years with a Gold Category state mining undertaking — AI attendance, infrastructure managed services and SAP to MIS integration.",
+    benefits: [
+      "Biometric facial attendance at the head office using AI-powered cameras, with temperature and mask detection — awarded November 2020",
+      "A twelve-month managed service across servers, operating systems and databases, desktops and laptops, applications and network security",
+      "Customisation and integration of SAP with the corporation's management information systems through APIs, across seventy-nine activity units",
+    ],
+    solution: [
+      "AI facial recognition attendance system",
+      "Server, OS and database management",
+      "Desktop, laptop and application management",
+      "Network security management",
+      "SAP to MIS API integration",
+    ],
+    differentiator:
+      "No single transformation programme, no multi-year master agreement and no strategic partnership announcement — three separately tendered contracts won on their own merits from a buyer whose procurement process is designed to make favouritism difficult. The three span computer vision, infrastructure operations and enterprise integration.",
+  },
+  {
+    slug: "varun-beverages",
+    client: "Varun Beverages",
+    named: true,
+    industry: "Food, Beverages & Consumer Goods",
+    sapPath: "ECC",
+    featuredSolution: "SuccessFactors Employee Central · SAP HCM · statutory e-invoicing",
+    employees: "20,000+",
+    region: "India, Zambia, Zimbabwe, Morocco, Sri Lanka, Kenya and DR Congo",
+    scenario:
+      "PepsiCo's second-largest bottling franchisee outside the United States runs operations across the Indian subcontinent and Africa. One people system had to run across all of it — and then the pieces each country's revenue authority demanded had to be built on top.",
+    summary:
+      "One SuccessFactors and SAP HCM platform across six legal entities in seven countries, with e-invoicing integrations for three revenue authorities.",
+    benefits: [
+      "SuccessFactors Employee Central with SAP HCM payroll, organisation management, personnel administration and time management across six legal entities, on a fixed price and a five-month plan",
+      "Zimbabwe and Zambia live January 2021, Sri Lanka March 2021",
+      "Employee Central, Performance Management and Recruitment for the Indian business, with Performance and Goals integrated to the group's analytics platform; Recruiting and Onboarding followed in 2022",
+      "Twenty-eight purchase orders over seven years — eleven implementations, nine specialist engagements, four enhancements and two support contracts",
+    ],
+    solution: [
+      "Zambia — Electronic Signature Device and Virtual Electronic Fiscal Device integration, ZRA e-invoicing with sales and purchase dashboards, and Smart Invoice integration for imports and milk procurement",
+      "Kenya — SAP cloud migration, Azure hosting and ongoing functional and technical support",
+      "DR Congo — e-invoicing for the plant in the Maluku Special Economic Zone",
+      "India — IT declaration portlet integrated with payroll, purchase-requisition and contract approval workflows, and two Fiori workflow applications",
+    ],
+    differentiator:
+      "Most of the value is not the global HR platform. It is the long tail of integrations to revenue authorities in Zambia, Kenya and the Democratic Republic of Congo — the work that has a legal deadline, no glamour, and a direct consequence if it is late.",
+  },
+  {
+    slug: "nalco",
+    client: "NALCO",
+    named: true,
+    industry: "Metals, Mining & Heavy Engineering",
+    sapPath: "ECC",
+    featuredSolution: "SAP Plant Maintenance with Work Clearance Management, and AMS",
+    employees: "6,000+",
+    region: "Odisha, India",
+    scenario:
+      "National Aluminium Company — a Navratna public sector undertaking and India's integrated bauxite-to-aluminium producer — implemented SAP Plant Maintenance with Work Clearance Management, won on open tender through the Central Public Procurement Portal, and kept us on to run it.",
+    summary:
+      "SAP Plant Maintenance with Work Clearance Management for a Navratna aluminium producer, won on open tender and run under AMS to March 2023.",
+    benefits: [
+      "Plant Maintenance implemented across the maintenance estate",
+      "Work Clearance Management — the permit-to-work layer controlling who may touch equipment, when, and under what isolation",
+      "A seven-month defect liability period after go-live and six months of post-stabilisation support written into the original award",
+      "Contract extended and revalued once during its life, from ₹91.1 lakh to ₹1.15 crore",
+    ],
+    solution: [
+      "SAP Plant Maintenance",
+      "Work Clearance Management",
+      "Defect liability and post-stabilisation support",
+      "Application management services to March 2023",
+    ],
+    differentiator:
+      "Plant Maintenance is demonstrated everywhere. Work Clearance Management rarely is — it sits between a maintenance order and a person with a spanner, and it is what stops an isolation being lifted while someone is still inside the equipment. In a smelter that is not a software feature; in a Government of India enterprise under statutory audit it is also a record somebody will ask to see.",
   },
 ];
 

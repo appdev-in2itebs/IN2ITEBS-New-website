@@ -245,7 +245,9 @@ export const insightBodies: Record<
     blocks: [
       { type: "heading", text: "Leadership Forum" },
       { type: "paragraph", text: "Quickly and Confidently Adopt Cloud ERP" },
-      { type: "link", text: "Register Now", href: "/grow-with-sap-leadership-forum-event/" },
+      // The original "Register Now" pointed at an event registration page for an event that has
+      // happened. It now points at the page the article is about.
+      { type: "link", text: "RISE and S/4HANA", href: "/services/rise-s4hana/" },
     ],
   },
   "in2it-ebs-simplify-talent-2": {

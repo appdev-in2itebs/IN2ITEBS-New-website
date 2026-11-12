@@ -1,116 +1,95 @@
 import type { IndustryMeta } from "./types";
 
-/** 13 industry pages. deckSectors drives which client logos appear (industry-client-map.md). */
+/**
+ * Nine industry pages, down from fourteen. Hero metadata only — the page bodies live in
+ * content/legacy-industries.ts and must use the same slugs.
+ *
+ * `deckSectors` drives which client logos appear. Logos publish only where written consent covers
+ * the logo specifically: name, figures and logo are three separate permissions and clients often
+ * grant one and not another.
+ */
 export const industries: IndustryMeta[] = [
   {
-    slug: "automobiles",
-    name: "Automobiles",
-    headline: "The race for automotive",
-    accentWord: "transformation",
+    slug: "metals-mining-steel",
+    name: "Metals, mining and steel",
+    headline: "Where the tonnage and the ledger",
+    accentWord: "have to agree",
     subhead:
-      "Carmakers, suppliers and dealerships transforming for a future of electric, connected and shared mobility.",
-    deckSectors: ["Automotives"],
+      "Grade-based contract pricing, gate and weighbridge control, fleet integration and statutory levies — in production at Navratna public sector undertakings.",
+    deckSectors: ["Metals & Mining", "PSUs"],
   },
   {
-    slug: "fmcg",
-    name: "FMCG / Food & Beverages",
-    headline: "Consumer goods, reinvented for the",
-    accentWord: "digital era",
+    slug: "power-utilities",
+    name: "Power and utilities",
+    headline: "Meters installed is not",
+    accentWord: "revenue collected",
     subhead:
-      "Grow sustainably and profitably — using IoT and AI across product, manufacturing and consumer experience.",
-    deckSectors: ["Food & Beverages"],
+      "Meter-to-cash, contract accounting, asset management and grid capital projects — across distribution, transmission, generation and water.",
+    deckSectors: ["PSUs", "Others"],
   },
   {
-    slug: "healthcare-life-sciences",
-    name: "Healthcare & Life Sciences",
-    headline: "End-to-end solutions for",
-    accentWord: "healthcare",
-    subhead: "Helping pharmaceutical and medical-device companies, providers and payers achieve measurable results.",
-    deckSectors: ["Health & Pharma"],
-  },
-  {
-    slug: "textiles-apparel",
-    name: "Textiles & Apparel",
-    headline: "Run textile and apparel businesses more",
-    accentWord: "profitably",
-    subhead: "Drive new growth, deliver digital services and become an intelligent enterprise.",
-    deckSectors: ["Apparel & Fashion"],
-  },
-  {
-    slug: "metals-mining",
-    name: "Metals, Mining & Heavy Engineering",
-    headline: "Smart, sustainable machinery and materials —",
-    accentWord: "at scale",
-    subhead: "Heavy engineering and industrial manufacturers facing the challenge of profitable sustainability.",
-    deckSectors: ["Metals & Mining"],
-  },
-  {
-    slug: "chemicals-fertilizers",
-    name: "Chemicals & Fertilizers",
-    headline: "Safe, sustainable chemicals through",
-    accentWord: "digital transformation",
-    subhead: "Keep pace with mergers, changing regulation and innovation with digital manufacturing and supply chain.",
-    deckSectors: ["Chemicals"],
-  },
-  {
-    slug: "engineering-construction",
-    name: "Engineering & Construction (ECNO)",
-    headline: "Build the intelligent enterprise across the",
-    accentWord: "construction lifecycle",
-    subhead: "RISE with SAP and S/4HANA bring best-practice automation across engineering and construction.",
-    deckSectors: ["Infra & Housing"],
-  },
-  {
-    slug: "real-estate",
-    name: "Real Estate",
-    headline: "Remove operational barriers across the",
-    accentWord: "real-estate lifecycle",
-    subhead: "Intelligent ERP and asset-management solutions for developers, owners and operators.",
-    deckSectors: ["Real Estate"],
-  },
-  {
-    slug: "bfsi",
-    name: "Banking, Financial Services & Insurance",
-    headline: "Solutions that drive efficiency and",
-    accentWord: "innovation",
-    subhead: "A strategic vertical — application development, maintenance, product practices, interfaces and testing.",
-    deckSectors: ["Services & BFSI"],
-  },
-  {
-    slug: "government-psu",
-    name: "Government & Public Enterprises (PSUs)",
-    headline: "Smart governance that works for",
-    accentWord: "every stakeholder",
-    subhead: "Partnering with governments and public-sector entities on efficient, transparent IT-based governance.",
+    slug: "government-public-sector",
+    name: "Government and public sector",
+    headline: "Built for the buyer who has to",
+    accentWord: "show their working",
+    subhead:
+      "Public sector undertakings, state utilities and state-owned enterprises — delivered under open tender, national audit and statutory reporting.",
     deckSectors: ["PSUs"],
   },
   {
-    slug: "professional-services",
-    name: "IT & Professional Services",
-    headline: "Run projects more",
-    accentWord: "profitably",
-    subhead: "Firms rethinking business models to drive growth and engage the best talent.",
+    slug: "manufacturing",
+    name: "Manufacturing",
+    headline: "Where the shop floor and the ledger",
+    accentWord: "have to agree",
+    subhead:
+      "S/4HANA conversions, RISE migrations, engineering project lifecycles and plant maintenance for industrial manufacturers.",
+    deckSectors: ["Automotives", "Chemicals", "Others"],
+  },
+  {
+    slug: "consumer-goods-distribution",
+    name: "Consumer goods and distribution",
+    headline: "One business, and a different tax authority",
+    accentWord: "in every market",
+    subhead:
+      "Global HR platforms, statutory e-invoicing integrations and cloud migrations across Asia and Africa for food, beverage and retail businesses.",
+    deckSectors: ["Food & Beverages", "Apparel & Fashion"],
+  },
+  {
+    slug: "pharma-healthcare-life-sciences",
+    name: "Pharma, healthcare and life sciences",
+    headline: "The implementation is a project.",
+    accentWord: "The audit trail is forever.",
+    subhead:
+      "SuccessFactors and S/4HANA for pharmaceutical manufacturers, hospital groups, biotech and diagnostics — eight evidenced engagements.",
+    deckSectors: ["Health & Pharma"],
+  },
+  {
+    slug: "technology-digital-natives",
+    name: "Technology and digital natives",
+    headline: "A real ERP, before the spreadsheets",
+    accentWord: "become the risk",
+    subhead:
+      "S/4HANA Cloud and SuccessFactors for internet platforms, education technology, data science and IT services businesses.",
     deckSectors: ["IT & Professional Services"],
   },
   {
-    slug: "energy-utilities",
-    name: "Energy & Utilities",
-    headline: "Operational excellence and new revenue for",
-    accentWord: "energy",
-    subhead: "RISE with SAP and S/4HANA bring best-practice automation to energy and utility businesses.",
-    deckSectors: [],
+    slug: "banking-financial-services",
+    name: "Banking and financial services",
+    headline: "Development finance, with the audit",
+    accentWord: "scrutiny that comes with it",
+    subhead: "A brownfield conversion to S/4HANA on RISE for a state-established development finance institution.",
+    deckSectors: ["Services & BFSI"],
   },
   {
-    slug: "media-telecom",
-    name: "Media & Telecommunications",
-    headline: "Next-generation solutions for media and",
-    accentWord: "telecom",
-    subhead:
-      "Large-scale engagements with flexible consulting, systems integration and rollout across sourcing models.",
-    deckSectors: [],
+    slug: "real-estate-infrastructure",
+    name: "Real estate and infrastructure",
+    headline: "Workspace and property operations",
+    accentWord: "on a cloud core",
+    subhead: "S/4HANA Cloud implementation, managed support and licensing for flexible workspace operations.",
+    deckSectors: ["Real Estate", "Infra & Housing"],
   },
 ];
 
 export function getIndustry(slug: string) {
-  return industries.find((i) => i.slug === slug);
+  return industries.find((industry) => industry.slug === slug);
 }

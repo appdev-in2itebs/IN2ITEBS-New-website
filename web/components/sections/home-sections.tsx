@@ -34,7 +34,7 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
           <LogoMarquee clients={clients} />
           <div className="mt-8 flex flex-wrap items-center justify-end gap-4">
             <Link
-              href="/partners/"
+              href="/about/partnerships/"
               className="inline-flex min-h-11 items-center text-sm font-semibold text-gold underline decoration-gold/40 underline-offset-4"
             >
               Partners &amp; technology ecosystem

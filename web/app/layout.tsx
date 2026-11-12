@@ -13,6 +13,7 @@ import { PageLoader } from "@/components/layout/page-loader";
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { Announcement } from "@/components/layout/announcement";
 import { ChatWidget } from "@/components/chat/chat-widget";
+import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/layout/google-tag-manager";
 
 /**
  * IBM Plex Sans, bundled in the repository (app/fonts, SIL Open Font License) rather than fetched
@@ -34,14 +35,16 @@ export const metadata: Metadata = {
     template: "%s · In2IT EBS",
   },
   description:
-    "10+ years of enterprise transformation, delivered globally. SAP Gold Partner with adjacent strength across Salesforce, Workday, Oracle, Microsoft, cloud and application services.",
+    "An SAP Gold Partner with 380+ SAP consultants across eleven practices, delivering enterprise platforms, advisory and digital engineering in more than thirty countries.",
 };
 
 /** One theme since 2026-09-15 (dark mode and its cookie script were removed at the owner's request). */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={plex.variable}>
+      <GoogleTagManager />
       <body className="grain">
+        <GoogleTagManagerNoScript />
         <SiteChrome>
           <PageLoader />
         </SiteChrome>

@@ -1,6 +1,7 @@
 import { heroPicture } from "@/components/sections/hero-override";
 import { ServiceHeroMark, serviceIcon } from "@/components/sections/service-icon";
 import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
+import { DiagramBand } from "@/components/sections/diagram-band";
 import {
   V2Hero,
   V2StickyNav,
@@ -69,6 +70,9 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
         paragraphs={rest.length ? rest : [lead]}
         link={group && !groupIsThisPage ? { label: `${group.name} overview`, href: group.href } : undefined}
       />
+      {page.diagram ? (
+        <DiagramBand src={page.diagram.src} alt={page.diagram.alt} caption={page.diagram.caption} tone="subtle" />
+      ) : null}
       {page.sections.length ? (
         <V2Section
           id="covers"

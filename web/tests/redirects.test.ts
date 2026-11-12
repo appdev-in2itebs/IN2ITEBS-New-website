@@ -1,9 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { redirects, goneSources } from "../content/redirects.mjs";
 
+/**
+ * Legacy URLs that must keep resolving, with the page they must land on.
+ *
+ * Updated 12 November 2026 for the flat service URLs and the nine-industry list. Where a
+ * destination changed, it changed because the page it used to point at no longer exists — not
+ * because the requirement went away. Entries are never deleted from this list; a URL that once
+ * earned a click keeps its destination.
+ */
 const required: [string, string][] = [
   [
     "/how-rise-with-sap-s-4hana-cloud-can-transform-your-business",
@@ -20,32 +28,32 @@ const required: [string, string][] = [
   // The two SAP paths got their own ported pages on 2026-09-17; the legacy URLs follow the page
   // that is actually about them, not the one comparing them.
   ["/grow-with-sap", "/insights/grow-with-sap/"],
-  ["/sap-grow-fast", "/services/sap-grow-fast/"],
-  ["/sap-rise-with-sap", "/services/rise-with-sap/"],
-  ["/other-enterprise-solutions", "/services/other-enterprise-solutions/"],
-  ["/grow-with-sap-leadership-forum-event", "/sap-enterprise-solutions/rise-vs-grow/"],
+  ["/sap-grow-fast", "/services/grow-fast/"],
+  ["/sap-rise-with-sap", "/services/rise-s4hana/"],
+  ["/other-enterprise-solutions", "/services/enterprise-platforms/"],
+  ["/grow-with-sap-leadership-forum-event", "/services/rise-s4hana/"],
   ["/in2it-ebs-simplify-hiring", "/insights/in2it-ebs-simplify-hiring/"],
   ["/in2it-ebs-simplify-talent-2", "/insights/in2it-ebs-simplify-talent-2/"],
-  ["/sap-successfactors-partner-in-india", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-success-factors-in-bangalore", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-successfactors-partner-in-mumbai", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-successfactors-partner-in-chennai", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-successfactors-partner-in-delhi", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-successfactors-partner-in-kolkata", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-success-factors-in-hyderabad", "/sap-enterprise-solutions/successfactors/"],
-  ["/sap-success-factors-in-bhubaneswar", "/sap-enterprise-solutions/successfactors/"],
-  ["/unlock-the-power-of-hr-technology-transformation", "/sap-enterprise-solutions/successfactors/"],
-  ["/unlock-the-power-of-hr-technology-transformation-register-now", "/sap-enterprise-solutions/successfactors/"],
-  ["/unlock-the-power-of-hr-technology-transformation-register-now1", "/sap-enterprise-solutions/successfactors/"],
-  ["/join-our-team", "/careers/"],
-  ["/apply-now", "/careers/"],
+  ["/sap-successfactors-partner-in-india", "/services/successfactors/"],
+  ["/sap-success-factors-in-bangalore", "/services/successfactors/"],
+  ["/sap-successfactors-partner-in-mumbai", "/services/successfactors/"],
+  ["/sap-successfactors-partner-in-chennai", "/services/successfactors/"],
+  ["/sap-successfactors-partner-in-delhi", "/services/successfactors/"],
+  ["/sap-successfactors-partner-in-kolkata", "/services/successfactors/"],
+  ["/sap-success-factors-in-hyderabad", "/services/successfactors/"],
+  ["/sap-success-factors-in-bhubaneswar", "/services/successfactors/"],
+  ["/unlock-the-power-of-hr-technology-transformation", "/services/successfactors/"],
+  ["/unlock-the-power-of-hr-technology-transformation-register-now", "/services/successfactors/"],
+  ["/unlock-the-power-of-hr-technology-transformation-register-now1", "/services/successfactors/"],
+  ["/join-our-team", "/careers/current-openings/"],
+  ["/apply-now", "/careers/current-openings/"],
   ["/our-culture", "/careers/our-culture/"],
   ["/sap-and-success-factor-consultant", "/careers/current-openings/"],
   ["/events-celebrations-3", "/careers/events-celebrations/"],
   ["/faq", "/contact/"],
-  ["/dharmendra-sharma", "/about/"],
-  ["/anil-kumar-soleti", "/about/"],
-  ["/rajat-kapoor", "/about/"],
+  ["/dharmendra-sharma", "/about/our-leadership/"],
+  ["/anil-kumar-soleti", "/about/our-leadership/"],
+  ["/rajat-kapoor", "/about/our-leadership/"],
   ["/news/page/2", "/insights/"],
   ["/global-webinar", "/insights/"],
 ];
@@ -85,4 +93,58 @@ test("theme-demo URLs are listed as gone, not redirected", () => {
   for (const g of gone) assert.ok(goneSources.includes(g), g);
   const sources = new Set(redirects.map((r) => r.source));
   for (const g of goneSources) assert.ok(!sources.has(g), `${g} is both gone and redirected`);
+});
+
+/**
+ * A redirect is a safety net for links we do not control — not a way of linking inside our own
+ * site. The November 2026 restructure deleted sixteen route folders, and the pages that linked to
+ * them kept working only because the redirect map caught them. That is invisible rot: the link
+ * still resolves, so nobody notices until the redirect is retired.
+ *
+ * These two tests make it visible. If one fails, fix the link, not the test.
+ */
+const INTERNAL_PATH = /["'`]((?:\/(?!\/)[a-z0-9-]+)+\/?)["'`]/g;
+/** Paths that are not pages: API routes, static assets and the file-system route segments. */
+const NOT_A_PAGE =
+  /^\/(api|_next|admin|logos|brand|heroes|images|img|video|videos|diagrams|fonts|icons|photos|hero|rest|auth|storage|speech-to-text|text-to-speech|translate|path|404|opengraph-image)\b/;
+/** Dynamic routes, which have no literal path to compare against. */
+const DYNAMIC = [
+  /^\/insights\/[^/]+\/$/,
+  /^\/case-studies\/[^/]+\/$/,
+  /^\/industries\/[^/]+\/$/,
+  /^\/services\/[^/]+\/$/,
+  /^\/careers\/(current-openings|apply)\/[^/]+\/$/,
+];
+
+const sourceSet = new Set(redirects.map((r) => r.source.replace(/\/?$/, "/")));
+
+test("no page links to a URL that only redirects", () => {
+  const offenders: string[] = [];
+  const walk = (dir: string) => {
+    for (const entry of readdirSync(dir)) {
+      const full = path.join(dir, entry);
+      if (statSync(full).isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!/\.(tsx?|mjs)$/.test(entry) || full.includes("redirects.mjs")) continue;
+      const source = readFileSync(full, "utf8");
+      for (const m of source.matchAll(INTERNAL_PATH)) {
+        const p = m[1].endsWith("/") ? m[1] : `${m[1]}/`;
+        if (NOT_A_PAGE.test(p) || DYNAMIC.some((r) => r.test(p))) continue;
+        if (sourceSet.has(p)) offenders.push(`${path.relative(process.cwd(), full)}: ${p}`);
+      }
+    }
+  };
+  for (const dir of ["app", "components", "content", "lib"]) walk(path.join(process.cwd(), dir));
+  assert.deepEqual([...new Set(offenders)], []);
+});
+
+test("the sitemap lists no URL that redirects", async () => {
+  const { default: sitemap } = await import("../app/sitemap");
+  const listed = (await sitemap()).map((e) => new URL(e.url).pathname);
+  assert.deepEqual(
+    listed.filter((p) => sourceSet.has(p)),
+    [],
+  );
 });

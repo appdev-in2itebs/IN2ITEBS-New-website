@@ -9,6 +9,7 @@ import { HeroObject } from "@/components/sections/hero-media";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
+import { DiagramBand } from "@/components/sections/diagram-band";
 import { getFeaturedClients } from "@/lib/content";
 import { caseStudies } from "@/content/case-studies";
 
@@ -48,6 +49,12 @@ export default function CaseStudiesPage() {
           </Reveal>
         </Container>
       </Section>
+
+      <DiagramBand
+        src="/diagrams/q1-reference-book.svg"
+        alt="The client reference book by sector: the named clients In2IT EBS can evidence in power and utilities, metals and mining, government, manufacturing, consumer goods, pharma and healthcare, technology, banking, and real estate."
+        tone="subtle"
+      />
 
       {/* CASE STUDY GRID */}
       <Section tone="light">

@@ -88,10 +88,12 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
     ["Home", "Privacy Policy"],
   );
   assert.equal(legal[1].item, "https://in2itebs.com/legal/privacy-policy/");
-  const concur = breadcrumbItems("/sap-enterprise-solutions/concur/", undefined, isKnownPage);
+  // Flat service URLs: the pillar groups the page in the menu but is not a path segment, so a
+  // service page has exactly one crumb above it.
+  const sap = breadcrumbItems("/services/sap/", undefined, isKnownPage);
   assert.deepEqual(
-    concur.map((i) => i.name),
-    ["Home", "SAP Enterprise Solutions", "Concur"],
+    sap.map((i) => i.name),
+    ["Home", "Services", "SAP"],
   );
   const study = breadcrumbItems(
     "/case-studies/wipro-infrastructure-engineering/",
@@ -100,27 +102,27 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
   );
   assert.deepEqual(
     study.map((i) => i.name),
-    ["Home", "Clients & Case Studies", "Wipro Infrastructure Engineering"],
+    ["Home", "Client work", "Wipro Infrastructure Engineering"],
   );
 });
 test("nav labels do not depend on collection order", () => {
   // Hash children such as /advisory/#change-assurance must not claim the parent path.
   for (const [p, label] of [
-    ["/advisory/", "Advisory Services"],
-    ["/digital-data-ai/", "Digital, Data & AI"],
-    ["/delivery-excellence/", "Delivery Excellence"],
+    ["/services/advisory/", "Advisory"],
+    ["/services/digital-data-ai/", "Digital, Data & AI"],
+    ["/services/enterprise-platforms/", "Enterprise Platforms"],
   ] as const) {
     assert.deepEqual(
       breadcrumbItems(p).map((i) => i.name),
-      ["Home", label],
+      ["Home", "Services", label],
       p,
     );
   }
   // Deep nav children are still known, so intermediate crumbs survive.
-  assert.ok(isKnownPage("/sap-enterprise-solutions/rise-vs-grow/"));
+  assert.ok(isKnownPage("/services/rise-s4hana/"));
   assert.deepEqual(
-    breadcrumbItems("/sap-enterprise-solutions/rise-vs-grow/").map((i) => i.name),
-    ["Home", "SAP Enterprise Solutions", "RISE vs GROW"],
+    breadcrumbItems("/services/rise-s4hana/").map((i) => i.name),
+    ["Home", "Services", "RISE and S/4HANA"],
   );
   // The default predicate applies the no-404 guard; an explicit passthrough restores the old behaviour.
   assert.deepEqual(

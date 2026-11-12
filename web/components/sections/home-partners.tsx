@@ -74,7 +74,7 @@ export function HomePartners() {
           ))}
           <li className="glass-liquid text-logo-foreground">
             <Link
-              href="/partners/"
+              href="/about/partnerships/"
               className="flex h-full min-h-28 items-center justify-center gap-2 p-5 text-sm font-semibold hover:underline"
             >
               Full ecosystem <ArrowUpRight size={18} aria-hidden />

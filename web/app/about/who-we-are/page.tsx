@@ -16,29 +16,17 @@ export const metadata = pageMetadata("/about/who-we-are/", {
  * Explore, Create, Empower, and Grow Together" statement and the five tiles under it, with that
  * page's own picture-icons (under /public/about), in the approved design.
  */
-const tiles = [
-  {
-    title: "Vision",
-    body: "People working together as a lean, global enterprise to make people's lives better through automotive and mobility leadership.",
-    icon: "/about/mission.png",
-  },
-  {
-    title: "Mission",
-    body: "Utilize the power of Information Technology to bring smart, connected solutions to every business on earth.",
-    icon: "/about/purpose.png",
-  },
-  {
-    title: "Our Purpose",
-    body: "We have big ambitions, and a growing sense of urgency to work with others and address world challenges no one can tackle alone.",
-    icon: "/about/value.png",
-  },
-  {
-    title: "Value",
-    body: "We know it takes people with different ideas, strengths, interests, and cultural backgrounds to make our company succeed.",
-    icon: "/about/support.png",
-  },
-  { title: "Support", body: "24/7", icon: "/about/support.png" },
-];
+/**
+ * The vision and values block was removed on 12 November 2026.
+ *
+ * The previous "Vision" text was Ford Motor Company's published vision statement, carried over
+ * from the legacy site and printed twice on this page. "Mission", "Our Purpose" and "Value" were
+ * generic to the point of saying nothing, and "Support — 24/7" is a service level, not a value.
+ *
+ * Nothing replaces it until approved copy exists. An empty space is better than someone else's
+ * words, and a buyer who recognises them stops believing the rest of the page.
+ */
+const tiles: { title: string; body: string; icon: string }[] = [];
 
 export default function WhoWeArePage() {
   return (
@@ -115,8 +103,8 @@ export default function WhoWeArePage() {
         heading="More about us."
         items={[
           { label: "Our Leadership", href: "/about/our-leadership/" },
-          { label: "Accreditation", href: "/accreditation-awards/" },
-          { label: "Customer Stories", href: "/about/customer-stories/" },
+          { label: "Credentials", href: "/about/credentials/" },
+          { label: "Client work", href: "/case-studies/" },
           { label: "Blogs & Articles", href: "/insights/" },
         ]}
       />
