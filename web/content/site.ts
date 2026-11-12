@@ -55,14 +55,18 @@ export const headlineStats: Stat[] = stats.slice(0, 4);
  *  - "CMMI" with no maturity level REMOVED, "CMMI Level 3" ADDED — a maturity model with no level
  *    is not a credential. Level 3 is stated in the submitted Ghana MoF IFMIS proposal, which is
  *    the strongest evidence we hold for it.
- *  - "ISO 9001" REMOVED — held until the certificate number, issuing body, validity dates and
- *    scope are confirmed. The accreditation page cites withdrawn editions (9001:2008,
- *    20000-1:2005), and content/awards.ts now says versions and validity are under review.
+ *  - "ISO 9001" KEPT — confirmed by the Managing Director on 12 November 2026 alongside CMMI
+ *    Level 3 and ISO/IEC 27001. THE CERTIFICATION IS REAL; WHAT WAS WRONG WAS THE EDITION. The
+ *    legacy accreditation page cited ISO 9001:2008 and ISO/IEC 20000-1:2005, both withdrawn, and
+ *    "ISO/IEC 27000:2005", which is the vocabulary document and not certifiable at all. So the
+ *    standard is named here without a year, and no edition number is published anywhere on this
+ *    site until the certificate itself is in hand. Naming a withdrawn edition is worse than
+ *    naming none: it tells an auditor we have not looked at our own certificate since 2008.
  *  - "SAP PCE Partner" REMOVED — commit 5a570d5 took it out as an undefined, unstable string, and
  *    the Managing Director confirmed that removal on 12 November 2026. It returns only if
  *    Alliances produces it in SAP's own wording, with a date.
  */
-export const footerCertifications = ["CMMI Level 3", "ISO 27001", "SAP Gold Partner"];
+export const footerCertifications = ["CMMI Level 3", "ISO 9001", "ISO/IEC 27001", "SAP Gold Partner"];
 
 /** Bump when site copy changes; feeds sitemap lastModified for pages without their own date. */
 export const contentUpdated = "2026-11-12";

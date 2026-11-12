@@ -91,7 +91,7 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
   entries.push({
     title: "Credentials",
     summary:
-      "SAP Gold Partner, CMMI Level 3 appraised and ISO 27001 certified, with the awards, appraisals and the gaps we do not claim.",
+      "SAP Gold Partner, CMMI Level 3 appraised, ISO 9001 and ISO/IEC 27001 certified, with the awards, appraisals and the gaps we do not claim.",
     url: "/about/credentials/",
     keywords: tokens("credentials certification accreditation iso cmmi award gold partner audit security"),
   });

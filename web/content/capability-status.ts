@@ -66,6 +66,11 @@ export const capabilityReviewed = "2026-11-12";
 export const capabilityOwner = "Marketing and Communications";
 
 /**
+ * The eight accountable roles on this site live in content/page-owners.ts. This file names only
+ * the one that owns this table; the register is the single place a role is defined.
+ */
+
+/**
  * How long a line may go unchecked before the build refuses to ship the page.
  *
  * This is not a reminder, it is a gate. `scripts/check-build.mjs` fails a production build when

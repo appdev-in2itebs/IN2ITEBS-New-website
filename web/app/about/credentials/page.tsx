@@ -17,7 +17,7 @@ import { DiagramBand } from "@/components/sections/diagram-band";
 export const metadata = pageMetadata("/about/credentials/", {
   title: "Credentials",
   description:
-    "SAP Gold Partner, CMMI Level 3 appraised, ISO 27001 certified. The partnerships, appraisals and awards we hold — each with the body that granted it.",
+    "SAP Gold Partner, CMMI Level 3 appraised, ISO 9001 and ISO/IEC 27001 certified — each credential with the body that granted it.",
 });
 
 /**
@@ -72,7 +72,7 @@ const posture = [
   },
   {
     title: "Secure delivery",
-    body: "CMMI Level 3 appraised and ISO 27001 certified processes, secured delivery centres and vetted consultants.",
+    body: "CMMI Level 3 appraised, ISO 9001 and ISO/IEC 27001 certified processes, secured delivery centres and vetted consultants.",
   },
 ];
 
@@ -165,7 +165,7 @@ export default function CredentialsPage() {
         heading="Appraised, not self-declared"
         tone="canvas"
       >
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-card border border-border-subtle bg-surface p-7">
             <h3 className="font-display text-h3 text-foreground">CMMI Level 3</h3>
             <p className="mt-3 text-foreground-muted">
@@ -174,7 +174,15 @@ export default function CredentialsPage() {
             </p>
           </div>
           <div className="rounded-card border border-border-subtle bg-surface p-7">
-            <h3 className="font-display text-h3 text-foreground">ISO 27001</h3>
+            <h3 className="font-display text-h3 text-foreground">ISO 9001</h3>
+            <p className="mt-3 text-foreground-muted">
+              Certified for quality management. We name the standard without an edition year on purpose: the edition and
+              validity dates come from the certificate, and we would rather print nothing than print a year that has
+              since been withdrawn.
+            </p>
+          </div>
+          <div className="rounded-card border border-border-subtle bg-surface p-7">
+            <h3 className="font-display text-h3 text-foreground">ISO/IEC 27001</h3>
             <p className="mt-3 text-foreground-muted">
               Certified for information security management. Both appraisals are re-assessed on a cycle rather than
               granted once, and we will give you the current certificate on request.
