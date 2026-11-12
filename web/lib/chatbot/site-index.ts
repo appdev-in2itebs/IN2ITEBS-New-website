@@ -98,7 +98,7 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
   entries.push({
     title: "Where we operate",
     summary:
-      "Headquartered in Bengaluru, with eight delivery centres and five legal entities, and the data residency position for each market.",
+      "Headquartered in Bengaluru, with four delivery centres in India, overseas offices and five legal entities, and the data residency position for each market.",
     url: "/about/markets/",
     keywords: tokens(
       "markets geography countries offices entity delivery centre data residency india kenya south africa singapore dubai",
