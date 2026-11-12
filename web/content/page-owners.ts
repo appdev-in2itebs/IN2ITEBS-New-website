@@ -17,15 +17,18 @@
  * therefore cannot ship without somebody's name against it. That is deliberate friction, and it
  * costs about thirty seconds.
  *
- * ── ROLES, NOT PEOPLE ────────────────────────────────────────────────────────────────────────
- * Roles survive people changing jobs; names do not. `people` below maps each role to the person
- * holding it today, and is the only part that changes when somebody moves. It is NOT rendered on
- * the site — this register is internal, and publishing a staff directory by page is not the
- * intent.
+ * ── ROLES AND MAILBOXES, NEVER NAMES ─────────────────────────────────────────────────────────
+ * An earlier draft of this file held a person's name against each role. That was wrong, and the
+ * Managing Director was right to reject it: people change jobs, a name register goes stale within
+ * a year, and a stale register is exactly the failure this file exists to prevent.
  *
- * The name against each role is the Managing Director's to confirm. Until he does, the role is
- * still the right answer to "who is answerable for this page", which is the question that was
- * previously unanswerable.
+ * So ownership resolves to a ROLE, and a role resolves to a MAILBOX. A mailbox is durable, it
+ * already routes to whoever holds the role today, it survives a resignation without an edit here,
+ * and it is what the rest of the industry uses. Nobody has to remember to update this file when
+ * somebody is promoted.
+ *
+ * This register is internal and is not rendered anywhere on the site. Public contact on the site
+ * is the role mailbox too — never an individual's address, for the same reason.
  * ─────────────────────────────────────────────────────────────────────────────────────────────
  */
 
@@ -39,17 +42,27 @@ export type OwnerRole =
   | "Human Resources"
   | "Legal and Compliance";
 
-/** Who holds each role today. Confirm with the Managing Director before relying on it. */
-export const people: Record<OwnerRole, string> = {
-  "Marketing and Communications": "TO CONFIRM",
-  Alliances: "TO CONFIRM",
-  "Practice — Enterprise Platforms": "TO CONFIRM",
-  "Practice — Digital, Data and AI": "TO CONFIRM",
-  "Practice — Advisory": "TO CONFIRM",
-  "Sales and Bid Management": "TO CONFIRM",
-  "Human Resources": "TO CONFIRM",
-  "Legal and Compliance": "TO CONFIRM",
+/**
+ * Where a question about a page goes. Mailboxes, not people.
+ *
+ * Only two of these exist today — info@ and hr@ are already in use on the site. The rest are
+ * aliases to create, and each one is five minutes of work in the mail admin that then never needs
+ * touching again. Until an alias exists, mail to it will bounce, so create them before relying on
+ * this register operationally.
+ */
+export const mailboxes: Record<OwnerRole, string> = {
+  "Marketing and Communications": "marketing@in2itebs.com",
+  Alliances: "alliances@in2itebs.com",
+  "Practice — Enterprise Platforms": "sap@in2itebs.com",
+  "Practice — Digital, Data and AI": "engineering@in2itebs.com",
+  "Practice — Advisory": "advisory@in2itebs.com",
+  "Sales and Bid Management": "sales@in2itebs.com",
+  "Human Resources": "hr@in2itebs.com",
+  "Legal and Compliance": "legal@in2itebs.com",
 };
+
+/** Already live. The others in `mailboxes` are aliases still to be created. */
+export const existingMailboxes = new Set(["info@in2itebs.com", "hr@in2itebs.com"]);
 
 /**
  * Ownership by route prefix, most specific first. A route takes the first prefix it matches, so
@@ -121,4 +134,10 @@ export const ownerRules: { prefix: string; owner: OwnerRole; why?: string }[] = 
 /** The role accountable for a route. Returns undefined only if the rules above have a hole. */
 export function ownerOf(path: string): OwnerRole | undefined {
   return ownerRules.find((rule) => path.startsWith(rule.prefix))?.owner;
+}
+
+/** Where to send a question about a page. */
+export function mailboxFor(path: string): string {
+  const owner = ownerOf(path);
+  return owner ? mailboxes[owner] : "info@in2itebs.com";
 }

@@ -10,7 +10,7 @@ import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { publicCaseStudies } from "@/content/case-studies";
-import { clientEvidenceApproved } from "@/content/compliance";
+import { clientIdentityApproved } from "@/content/compliance";
 
 export const metadata = pageMetadata("/case-studies/", {
   title: "Clients & Case Studies",
@@ -34,7 +34,7 @@ export default function CaseStudiesPage() {
 
       {/* The reference-book diagram names clients by sector, so it is behind the same consent
           gate as the logo wall and the testimonials. A diagram is a publication like any other. */}
-      {clientEvidenceApproved ? (
+      {clientIdentityApproved ? (
         <DiagramBand
           src="/diagrams/q1-reference-book.svg"
           alt="The client reference book by sector: the named clients In2IT EBS can evidence in power and utilities, metals and mining, government, manufacturing, consumer goods, pharma and healthcare, technology, banking, and real estate."

@@ -7,7 +7,7 @@ import type { OpeningRow } from "@/lib/cms/store";
 import { leaderUrl } from "@/lib/chatbot/site-index";
 import { publicCaseStudies } from "@/content/case-studies";
 import { clients } from "@/content/clients";
-import { clientEvidenceApproved } from "@/content/compliance";
+import { clientIdentityApproved, clientTestimonialsApproved } from "@/content/compliance";
 
 /**
  * What the assistant knows and how it behaves: the system prompt, built on every turn from the
@@ -114,7 +114,7 @@ export function systemPrompt(input: {
     .map((l, i) => `- [${l.name}](${leaderUrl(l, i)}): ${l.title}. ${voice ? firstSentences(l.bio, 1) : l.bio}`)
     .join("\n");
   // What clients say, word for word as the website quotes them (homepage and Customer Stories).
-  const sayings = clientEvidenceApproved
+  const sayings = clientTestimonialsApproved
     ? cms.testimonials
         .map((q) => {
           const quote = q.quote.replace(/\s+/g, " ").trim();
@@ -132,7 +132,7 @@ export function systemPrompt(input: {
         : `- [${c.client}](${page}): ${c.industry}; ${c.featuredSolution}; ${c.region}. ${result}`;
     })
     .join("\n");
-  const clientNames = clientEvidenceApproved
+  const clientNames = clientIdentityApproved
     ? (voice ? clients.slice(0, 24) : clients).map((c) => c.name).join(", ")
     : "Named client evidence is withheld while written publication consent is verified.";
   const faqText = faqs

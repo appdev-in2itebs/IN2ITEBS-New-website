@@ -9,7 +9,7 @@ import { leadership } from "@/content/leadership";
 import { offices } from "@/content/offices";
 import { testimonials } from "@/content/testimonials";
 import { homeHeroSlides, type HeroSlide } from "@/content/home-hero";
-import { blockedInsightSlugs, blockedOfficeSlugs, clientEvidenceApproved } from "@/content/compliance";
+import { blockedInsightSlugs, blockedOfficeSlugs, clientTestimonialsApproved } from "@/content/compliance";
 import type { Insight, Leader, Office, Testimonial } from "@/content/types";
 
 /**
@@ -67,7 +67,7 @@ const shipped = (): Cms => ({
     .map((i) => ({ ...i, body: insightBodies[i.slug] })),
   leadership,
   offices: offices.filter((office) => !blockedOfficeSlugs.has(office.slug)),
-  testimonials: clientEvidenceApproved ? testimonials : [],
+  testimonials: clientTestimonialsApproved ? testimonials : [],
   homeHero: homeHeroSlides,
   heroes: {},
   edited: new Set(),
@@ -111,7 +111,7 @@ export function applyEdits(rows: Row[], heroes: Record<string, HeroEdit> = {}): 
     articles: [...added, ...kept].filter((article) => !blockedInsightSlugs.has(article.slug)),
     leadership: list("leadership", base.leadership),
     offices: list<Office>("offices", base.offices).filter((office) => !blockedOfficeSlugs.has(office.slug)),
-    testimonials: clientEvidenceApproved ? list("testimonials", base.testimonials) : [],
+    testimonials: clientTestimonialsApproved ? list("testimonials", base.testimonials) : [],
     homeHero: list("home-hero", base.homeHero),
     heroes,
     edited,

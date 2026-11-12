@@ -1,5 +1,5 @@
 import type { Client } from "@/content/types";
-import { clientEvidenceApproved } from "@/content/compliance";
+import { clientIdentityApproved } from "@/content/compliance";
 import { ClientLogo } from "./client-logo";
 
 /**
@@ -8,7 +8,7 @@ import { ClientLogo } from "./client-logo";
  * MotionObserver pauses the loop while the ribbon is offscreen.
  */
 export function LogoMarquee({ clients, duration = clients.length * 2.6 }: { clients: Client[]; duration?: number }) {
-  if (!clientEvidenceApproved) return null;
+  if (!clientIdentityApproved) return null;
   if (!clients.length) return null;
   return (
     <div role="region" aria-label="Client and client-brand logos">
