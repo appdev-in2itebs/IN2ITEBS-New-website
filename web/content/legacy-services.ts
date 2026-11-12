@@ -102,7 +102,7 @@ export interface ServicePage {
    * An interactive block rendered after the sections. Kept as a key rather than a component import
    * so that content/ stays data and components/ stays markup. Add a case in ServicePageV2.
    */
-  interactive?: "rise-grow-chooser" | "sap-toolchain";
+  interactive?: "rise-grow-chooser" | "sap-toolchain" | "estate-review-diagnostic" | "ecc-maintenance-checker";
   heroObject?: HeroImageKey;
   icon: ServiceIconKey;
   metaTitle?: string;
@@ -441,6 +441,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "ecc-prism",
+    interactive: "ecc-maintenance-checker",
     diagram: {
       src: "/diagrams/m5-ecc-prism-stages.svg",
       alt: "ECC Prism in three stages — assess the estate, decide the disposition, then move — each one priced and sellable on its own, with a decision point between each.",
@@ -805,6 +806,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "application-estate-review",
+    interactive: "estate-review-diagnostic",
     diagram: {
       src: "/diagrams/e2-portfolio-map.svg",
       alt: "What an application estate review produces: every application in the estate placed on a map and given a disposition — keep, replace, retire or leave alone.",

@@ -105,6 +105,24 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
     ),
   });
   entries.push({
+    title: "Where we stand",
+    summary:
+      "Every capability with one of four statuses — delivered, with a partner, building, or ahead of us — including the ones we do not do.",
+    url: "/about/where-we-stand/",
+    keywords: tokens(
+      "capability status maturity what can you do do you do gaps honest delivered partner building ahead reference experience",
+    ),
+  });
+  entries.push({
+    title: "How we price",
+    summary:
+      "Two commercial models — fixed scope and managed service — with the risk each side carries, what the client supplies, and what counts as a change request.",
+    url: "/services/how-we-price/",
+    keywords: tokens(
+      "price pricing cost commercial model fixed price managed service rate card change request risk sla credits engagement model how much",
+    ),
+  });
+  entries.push({
     title: "Contact and offices",
     summary: `Offices in ${[...new Set(offices.map((o) => `${o.city} (${o.country})`))].join(", ")}.`,
     url: "/contact/",

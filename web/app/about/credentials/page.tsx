@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
@@ -229,6 +230,30 @@ export default function CredentialsPage() {
           </p>
           <p>
             We hold no designation from Oracle, ServiceNow, Microsoft Dynamics or Adobe, and we do not implement them.
+          </p>
+        </div>
+      </V2Section>
+
+      <V2Section
+        id="stand"
+        eyebrow="The rest of the picture"
+        heading="And where we stand on everything else"
+        tone="subtle"
+      >
+        <div className="max-w-measure space-y-5 text-foreground-muted">
+          <p>
+            Credentials say what a third party has assessed. They do not say what we can actually build, which varies by
+            area and is a separate question with a separate page.
+          </p>
+          <p>
+            <Link
+              href="/about/where-we-stand/"
+              className="font-semibold text-action underline-offset-4 hover:underline"
+            >
+              Where we stand
+            </Link>{" "}
+            lists every capability with one of four statuses — delivered, with a partner, building, or ahead of us —
+            including the ones where the honest status is that we do not do it.
           </p>
         </div>
       </V2Section>

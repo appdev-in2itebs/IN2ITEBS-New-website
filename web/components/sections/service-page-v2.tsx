@@ -4,6 +4,8 @@ import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { RiseGrowChooser } from "@/components/interactive/rise-grow-chooser";
 import { SapToolchain } from "@/components/sections/sap-toolchain";
+import { EstateReviewDiagnostic } from "@/components/interactive/estate-review-diagnostic";
+import { EccMaintenanceChecker } from "@/components/interactive/ecc-maintenance-checker";
 import {
   V2Hero,
   V2StickyNav,
@@ -121,6 +123,18 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
       ) : page.interactive === "sap-toolchain" ? (
         <section className="bg-surface-subtle py-16 md:py-24">
           <SapToolchain />
+        </section>
+      ) : page.interactive === "estate-review-diagnostic" ? (
+        <section id="diagnostic" className="bg-surface-subtle py-16 md:py-24">
+          <Container>
+            <EstateReviewDiagnostic />
+          </Container>
+        </section>
+      ) : page.interactive === "ecc-maintenance-checker" ? (
+        <section id="checker" className="bg-surface-subtle py-16 md:py-24">
+          <Container>
+            <EccMaintenanceChecker />
+          </Container>
         </section>
       ) : null}
       {siblings.length ? (

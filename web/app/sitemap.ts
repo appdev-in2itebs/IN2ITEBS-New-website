@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/",
     // What we do
     "/services/",
+    "/services/how-we-price/",
     // Proof
     "/industries/",
     "/case-studies/",
@@ -35,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about/credentials/",
     "/about/partnerships/",
     "/about/markets/",
+    "/about/where-we-stand/",
     // Careers
     "/careers/",
     "/careers/our-culture/",

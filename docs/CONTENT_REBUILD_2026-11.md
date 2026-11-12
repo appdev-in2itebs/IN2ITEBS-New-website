@@ -184,7 +184,52 @@ Retired on purpose: `three-reasons`, `pillar-cards`, `three-tiers-hero`, `platfo
 `extended-practice-page` and `comparison-table`. All six were layout blocks tied to the old
 information architecture, and the V2 section components do the same work.
 
-## 6 · Diagrams
+## 6 · Four new things, and the research behind each
+
+Built after reading how the comparable firms do it. In each case the design is a reaction to a
+specific weakness in theirs, recorded in a comment at the top of the file so it is not undone by
+somebody who thinks they are tidying up.
+
+**The Application Estate Review diagnostic** — `/services/application-estate-review/`. Eight
+questions, scored, with a tailored scope list at the end. Persistent's Application Portfolio
+Rationalization page is the nearest competitor equivalent and it has no assessment on it at all:
+a problem statement, a framework name, a claim of 20–30% savings, and a "Request a Demo" button.
+So ours: no savings percentage (nobody can know it before looking), no "demo", and the output
+scores *the visitor's own estate visibility* rather than our capability. A buyer can finish it,
+close the tab, and be better off.
+
+**The SAP maintenance checker** — `/services/ecc-prism/`. Five questions, and the database answer
+decides most of it. **The research corrected a date we had wrong: the transition option runs to
+2033, not 2035.** The facts are SAP's own, from "Planning Beyond 2030", SAP News Center,
+7 October 2026: mainstream to 31 Dec 2027, extended to 31 Dec 2030, customer-specific from 2031,
+and a transition option 2031–2033 requiring SAP ERP private edition on HANA before 31 Dec 2030,
+with no Java-dependent capabilities.
+
+Three things are deliberately absent and must not be added without a source printed on the page:
+the uplift percentage for extended maintenance (SAP says "an additional fee" and publishes no
+number), a minimum database size for the transition option (SAP has published none), and any
+migration-progress percentage (ASUG and DSAG disagree by more than twenty points). **Re-verify
+every date before any campaign** — the 2033 option was announced weeks before this was built.
+
+The checker also surfaces the fact that actually matters to an Indian buyer: customer-specific
+maintenance carries **no legal-change updates**. GST changes, statutory payroll and e-invoicing
+do not stop arriving because your maintenance phase changed.
+
+**Where we stand** — `/about/where-we-stand/`. Every capability with one of four statuses, gaps
+printed next to strengths. No competitor publishes anything like it, which is the opportunity and
+the warning. **It needs a named monthly owner in Marketing or it should not go live** — the rules
+are at the top of `content/capability-status.ts`, and the owner field currently reads INPUT
+REQUIRED. A stale status table is worse than none.
+
+**How we price** — `/services/how-we-price/`. Two models, fixed scope and managed service, with
+the risk allocation written in both directions, a defined change-control trigger and what the
+client supplies. The nearest credible example is ScienceSoft's pricing page, and reading it is
+what shaped this one: it lists models without ever saying who carries the risk, offers a "cap"
+without defining it, has a "mixed model — depending on the situation", never says what the client
+supplies, and puts every number behind a form. Outcome-linked and gain-share stay off the page on
+the Managing Director's decision; no rate card, ever.
+
+## 7 · Diagrams
 
 Thirty-two hand-drawn SVGs in the brand palette are in `web/public/diagrams/`. They render through
 `components/sections/diagram-band.tsx`, a full-width band with a white frame.
@@ -210,7 +255,7 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 
 ---
 
-## 7 · Still outstanding — these need Rudra or a named owner
+## 8 · Still outstanding — these need Rudra or a named owner
 
 | # | Item | What it blocks |
 |---|---|---|
@@ -220,6 +265,8 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 | 4 | **Varun Beverages: is there Ariba work** outside the purchase-order register? | Correcting or retiring the deck claim |
 | 5 | **Welspun: is there Analytics Cloud work** outside the register? | Same |
 | 6 | **The fourteenth Welspun entity.** The register header says fourteen; thirteen are listed | One figure on a diagram |
+| 6a | **A named monthly owner for /about/where-we-stand/.** Without one, take the page down rather than let it drift | The capability table |
+| 6b | **The fixed price bracket for the Application Estate Review.** The duration is published as three to four weeks; the price is stated as fixed and agreed up front, with no number | The diagnostic's closing block |
 | 7 | **CMMI and ISO certificate references and validity dates** | Publishing the certificate references on /about/credentials/ |
 | 8 | **Certificates for five awards** — the APJ Partner Excellence award, Mid-Market Partner of the Year, HXM Champions, HXM Partner of the Year and DivHERsity appear in the practice decks with no certificate on file, so they are named in a comment in `app/about/credentials/page.tsx` and not published | Five award lines |
 | ~~8a~~ | ~~Delivery centres: eight or four~~ — **settled 12 Nov 2026: four** | Closed |
@@ -230,7 +277,7 @@ build cache will serve a stale stylesheet that does not contain a utility used f
 
 ---
 
-## 8 · Running it
+## 9 · Running it
 
 ```bash
 cd web
