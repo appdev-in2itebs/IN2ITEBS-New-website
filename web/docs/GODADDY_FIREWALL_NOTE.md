@@ -23,7 +23,9 @@ Block reason:  Your IP address was temporarily blocked by our IDS for this websi
 Time:          2026-11-18 13:13:13
 ```
 
-**There was no outage.** The site served everyone else normally the whole time. The origin —
+**There was no outage.** Verified from an unrelated IP while the office was blocked: the homepage
+returned in full, with the correct title and headline. The site served everyone else normally the
+whole time. The origin —
 nginx/1.24.0 proxying a Next.js process — was healthy in every window it was reached, returning
 complete pages with cache hits. Nothing was wrong with the server, the disk, or the application.
 
@@ -47,10 +49,20 @@ Allowlisting without that answer hides the signal rather than fixing anything �
 on the network is generating traffic the IDS reads as hostile (a scanner, a plugin, a misbehaving
 integration), it will keep doing it against every other site that network touches.
 
-**One thing that will be in the log and is not the cause.** Roughly twenty automated requests were
-made to the homepage from that IP during diagnosis, some with cache-busting query strings. The
-block timestamp precedes them by several hours, so they did not trigger it — but a burst of
-scripted requests is an easy thing to mistake for a cause.
+**Our own testing is a likely contributor, and this note corrected itself on the point.** An
+earlier version said the block timestamp preceded the diagnostic requests by several hours. That
+assumed the firewall displays UTC. It does not: two block pages captured 4m13s apart carried
+timestamps 4m45s apart, tracking local time with a constant ~10h30m offset, which puts the
+display at **UTC-5**. The blocks therefore landed at 18:13 and 18:17 UTC — roughly twenty minutes
+**after** a burst of about twenty scripted requests with cache-busting query strings, not before.
+
+The very first 403 of the day still predates all of that, so testing did not start it. But
+`TMP022` is a _temporary_ block and repeated reloading is what re-arms it, and the site was being
+reloaded steadily from the office for an hour. **The first thing to try is leaving it alone for
+twenty to thirty minutes.**
+
+Ask support "which rule fires on this, and is our own testing tripping it" rather than assuming
+something hostile. On current evidence that is the likeliest answer.
 
 ---
 
