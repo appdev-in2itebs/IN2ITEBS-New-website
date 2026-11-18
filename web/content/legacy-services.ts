@@ -118,6 +118,8 @@ export interface ServicePage {
     diagram?: { src: string; alt: string; caption?: string };
     items: ServiceSection[];
     closing?: string[];
+    /** A diagram after the closing prose — for showing the output rather than the scope. */
+    closingDiagram?: { src: string; alt: string; caption?: string };
   };
   /**
    * An interactive block rendered after the sections. Kept as a key rather than a component import
@@ -602,6 +604,15 @@ export const servicePages: ServicePage[] = [
         "What you get at the end: an executive health report, the technical and functional audit, the licence optimisation findings, an archiving strategy, an analytics recommendation, a risk register with severity and owners, and a two-to-three year roadmap for the estate. For public sector clients, those are assembled into a pack built to be handed to an audit committee rather than summarised for one.",
         "What is deliberately not in it: the migration itself, new licences, new software, and any process re-engineering beyond identifying where it would pay. The assessment is bought, delivered and finished on its own, and what you do next is a separate decision made with better information.",
       ],
+      // A scope list tells a buyer what we will look at. This shows them what lands on their desk
+      // at the end, which is the question they are actually asking. Licence position is the page
+      // chosen because it is the lever that pays for the engagement.
+      closingDiagram: {
+        src: "/diagrams/x1-prism-licence.svg",
+        alt: "A sample page from an ECC Prism report, covering licence position: four findings on the left — inactive named users, users classified above the role they perform, shared user IDs, and indirect access indicators — with the matching recommendations on the right, and an estimated impact band stating audit exposure falling from medium to low after remediation. Figures are illustrative; a real report carries your own, each citing the system it came from.",
+        caption:
+          "One page from a sample report. The figures are illustrative — yours come from your own estate, and each one cites the system it came from.",
+      },
     },
     closing: [
       "Why we built this: because the alternative being offered to most ECC customers is a migration they are not ready to fund, on a timetable set by somebody else's product roadmap rather than by their own business.",

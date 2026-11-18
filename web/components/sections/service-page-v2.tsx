@@ -89,7 +89,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
         >
           <V2Bento items={items} />
           {page.closing?.length ? (
-            <Reveal className="mt-12">
+            <Reveal className="mt-12 space-y-5">
               {page.closing.map((paragraph) => (
                 <p
                   key={paragraph}
@@ -103,7 +103,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
         </V2Section>
       ) : page.closing?.length ? (
         <section className="bg-surface-subtle py-16">
-          <Container>
+          <Container className="space-y-5">
             {page.closing.map((paragraph) => (
               <p
                 key={paragraph}
@@ -151,7 +151,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
               />
             </div>
             {page.extraSections.closing?.length ? (
-              <Reveal className="mt-12">
+              <Reveal className="mt-12 space-y-5">
                 {page.extraSections.closing.map((paragraph) => (
                   <p
                     key={paragraph}
@@ -163,6 +163,14 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
               </Reveal>
             ) : null}
           </V2Section>
+          {page.extraSections.closingDiagram ? (
+            <DiagramBand
+              src={page.extraSections.closingDiagram.src}
+              alt={page.extraSections.closingDiagram.alt}
+              caption={page.extraSections.closingDiagram.caption}
+              tone="canvas"
+            />
+          ) : null}
         </>
       ) : null}
       {/* The interactive blocks carried over from the existing site. The RISE/GROW chooser is the
