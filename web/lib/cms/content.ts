@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
+import { supabaseAdmin, supabaseConfigured, unreachable } from "@/lib/supabase";
 import { servicePages, type ServicePage, type ServiceSection } from "@/content/legacy-services";
 import { legacyIndustries, type LegacyIndustry, type IndustrySection } from "@/content/legacy-industries";
 import { partnerPages, type PartnerPage } from "@/content/partner-pages";
@@ -127,6 +127,14 @@ export const getCms = cache(async (): Promise<Cms> => {
     db.from("cms_entries").select("collection, key, data, deleted").neq("collection", "page"),
     db.from("page_heroes").select("path, title, intro, image_key"),
   ]);
+  // When the database cannot be reached, serve the shipped content rather than a 500 on every page;
+  // the admin's edits reappear as soon as it is back. Query errors still surface, they mean a schema problem.
+  if (unreachable(entries.error?.message) || unreachable(heroes.error?.message)) {
+    console.error(
+      `cms: Supabase unreachable (${entries.error?.message ?? heroes.error?.message}); serving shipped content`,
+    );
+    return shipped();
+  }
   if (entries.error) throw new Error(`cms_entries: ${entries.error.message}`);
   if (heroes.error) throw new Error(`page_heroes: ${heroes.error.message}`);
   const heroMap: Record<string, HeroEdit> = {};

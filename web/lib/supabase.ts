@@ -38,3 +38,11 @@ export function supabaseAdmin(): SupabaseClient {
   });
   return cached;
 }
+
+/**
+ * True when Supabase could not be reached at all (network down, host gone), as opposed to a query
+ * error. Public pages fall back to their shipped content in that case rather than failing with a 500.
+ */
+export function unreachable(message: string | undefined) {
+  return /fetch failed|ECONNREFUSED|ENOTFOUND|ETIMEDOUT|ECONNRESET/i.test(message ?? "");
+}

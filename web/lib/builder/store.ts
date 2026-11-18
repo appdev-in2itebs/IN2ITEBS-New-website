@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
+import { supabaseAdmin, supabaseConfigured, unreachable } from "@/lib/supabase";
 import { redirects } from "@/content/redirects.mjs";
 import { HOME_KEY, isSlug, type Block, type BuiltPage, type PageDoc } from "./blocks";
 
@@ -30,6 +30,10 @@ export const getLivePage = cache(async (slug: string): Promise<PageDoc | null> =
     .eq("deleted", false)
     .limit(1)
     .maybeSingle();
+  if (error && unreachable(error.message)) {
+    console.error(`builder page: Supabase unreachable (${error.message}); page served without builder content`);
+    return null;
+  }
   if (error) throw new Error(`builder page: ${error.message}`);
   if (!data || data.key === HOME_KEY) return null;
   return asBuilt(data.data)?.live ?? null;
@@ -44,6 +48,10 @@ export const getLiveHome = cache(async (): Promise<Block[] | null> => {
     .eq("collection", PAGE_COLLECTION)
     .eq("key", HOME_KEY)
     .maybeSingle();
+  if (error && unreachable(error.message)) {
+    console.error(`home layout: Supabase unreachable (${error.message}); shipped homepage order used`);
+    return null;
+  }
   if (error) throw new Error(`home layout: ${error.message}`);
   return asBuilt(data?.data)?.live?.blocks ?? null;
 });
