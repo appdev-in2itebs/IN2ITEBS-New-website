@@ -2,6 +2,7 @@ import { social, site } from "@/content/site";
 import { getCms } from "@/lib/cms/content";
 import { SITE_URL } from "@/lib/utils";
 import { breadcrumbItems, isKnownPage, safeJsonLd } from "@/lib/json-ld";
+import { capabilityJsonLd } from "@/lib/capability-feed";
 
 function Script({ data }: { data: unknown }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }} />;
@@ -60,6 +61,16 @@ export function BreadcrumbJsonLd({ path, name }: { path: string; name?: string }
     })),
   };
   return <Script data={data} />;
+}
+
+/**
+ * The capability register as structured data, on /about/where-we-stand/.
+ *
+ * Built from the same serialiser as /api/capabilities so the markup and the endpoint cannot drift
+ * apart — see lib/capability-feed.ts.
+ */
+export function CapabilityJsonLd() {
+  return <Script data={capabilityJsonLd()} />;
 }
 
 /** Article schema for an insight. */

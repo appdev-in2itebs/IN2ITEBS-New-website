@@ -26,7 +26,20 @@ export const homeHeroSlides: HeroSlide[] = [
     // checking), and puts a number a reader can verify in the first screen.
     body: "We run SAP for mining, power, manufacturing and the public sector — the estates where an audit, a tender or a regulator is always watching. 500+ people, four delivery centres, one accountable partner.",
     cta: { href: "/contact/", label: "Talk to us" },
-    secondary: { href: "/services/", label: "See our services" },
+    // Changed 18 November 2026. The secondary slot held "See our services", which is the link the
+    // header already provides and which nobody has ever needed a hero button to find. It now
+    // points at the capability register — the page that says what we do NOT do.
+    //
+    // A firm offering to disqualify itself in the first screen is saying something no competitor
+    // on the same long-list is saying, and it is the one claim here that cannot be matched by
+    // writing better copy. It also pre-qualifies: somebody who clicks it and finds their
+    // requirement under "Ahead of us" has saved a meeting, which is a fair trade both ways.
+    //
+    // Deliberately the SECOND button, not the first. The primary call to action is still the
+    // commercial one. A sales site whose main CTA is "here is why not to hire us" is a posture
+    // rather than a position, and the difference is the whole distance between this working and
+    // this being insufferable.
+    secondary: { href: "/about/where-we-stand/", label: "See what we cannot do" },
   },
   {
     id: "sap",

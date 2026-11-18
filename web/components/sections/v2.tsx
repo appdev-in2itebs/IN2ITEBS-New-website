@@ -215,6 +215,47 @@ export function V2Overview({
   );
 }
 
+/**
+ * THE POSITION SLAB.
+ *
+ * ── WHY THIS EXISTS ──────────────────────────────────────────────────────────────────────────
+ * Every service page on this site ended with its best sentence. The `closing[]` paragraphs are
+ * where the writing stops describing the service and states a position — "Depth is a number and a
+ * name. It should not be an adjective anywhere on this site." was the last thing on the SAP page,
+ * below a card grid, where a reader who had already decided would never reach it.
+ *
+ * That is backwards. The sharpest claim is the reason to keep reading, not the reward for having
+ * read. This band takes the first closing paragraph and puts it third on the page, directly after
+ * the overview, on navy, alone.
+ *
+ * ── WHY IT LOOKS LIKE THIS ───────────────────────────────────────────────────────────────────
+ * One column, 60 characters wide, display scale, one Sand hairline above it. No image, no button,
+ * no card, nothing beside it. The constraint is the design: a page that has been alternating
+ * white and off-white sections suddenly goes dark and holds a single thought, and the reader has
+ * nowhere else to look. Add a CTA here and it becomes an advertisement; add an image and it
+ * becomes a banner. It only works while it is the one thing on the screen.
+ *
+ * It renders nothing when a page has no closing paragraph, which is correct — a page with no
+ * position should not be given a slab to put one in.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ */
+export function V2PositionSlab({ children, id }: { children: ReactNode; id?: string }) {
+  if (!children) return null;
+  return (
+    <section id={id} className="theme-on-brand relative isolate overflow-hidden bg-brand py-20 text-on-brand md:py-28">
+      <div aria-hidden className="pointer-events-none absolute inset-0 hero-ambient opacity-60" />
+      <Container className="relative">
+        <Reveal className="max-w-[60ch]">
+          <span aria-hidden className="mb-8 block h-px w-24 bg-gold-on-brand/70" />
+          <p className="font-display text-[clamp(1.6rem,3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.02em] text-on-brand">
+            {children}
+          </p>
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
+
 /** A section frame: eyebrow, bloomed heading, optional note on the right, then whatever it holds. */
 export function V2Section({
   id,

@@ -8,6 +8,7 @@ import { EcosystemMetrics } from "@/components/sections/ecosystem-metrics";
 import { HomePartners } from "@/components/sections/home-partners";
 import { HomeServices } from "@/components/sections/home-services";
 import { IndustryStrip } from "@/components/sections/industry-strip";
+import { HomeManifesto } from "@/components/sections/home-manifesto";
 import { ToolsBand } from "@/components/sections/tools-band";
 import { HomeTeam } from "@/components/sections/home-team";
 import { YoutubeRibbon } from "@/components/sections/youtube-ribbon";
@@ -49,6 +50,10 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
         </Container>
       </section>
     ),
+    // Added 18 November 2026, and it ships third. Everything else on this page describes a
+    // capability; this band makes four claims a competitor structurally cannot make, each linking
+    // to the thing itself rather than to a page about it. See home-manifesto.tsx.
+    manifesto: <HomeManifesto />,
     // Added 18 November 2026. The homepage named no industry anywhere above the fold, while the
     // nine industry pages were the strongest copy on the site with nothing routing to them. One
     // band, one click. See components/sections/industry-strip.tsx.

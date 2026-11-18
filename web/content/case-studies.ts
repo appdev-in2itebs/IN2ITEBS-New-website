@@ -236,7 +236,7 @@ export const caseStudies: CaseStudy[] = [
       "5-month delivery",
     ],
     differentiator:
-      "Precise landscape design, sizing and technical migration tailored to global manufacturing — a seamless transition with minimal disruption across 4 continents.",
+      "Landscape design, sizing and technical migration built around a manufacturer running on four continents. The cutover ran to plan and production did not stop.",
   },
   {
     slug: "waycool-foods",
@@ -304,7 +304,7 @@ export const caseStudies: CaseStudy[] = [
     benefits: [
       "Streamlined supply chain through a unified business platform",
       "Improved capacity planning for manpower and machinery",
-      "Seamless integration with GSP, Amazon and Shopify",
+      "Integrated with GSP, Amazon and Shopify, with orders reconciled in one place",
       "Automated e-invoicing, e-way billing and banking processes",
     ],
     solution: [

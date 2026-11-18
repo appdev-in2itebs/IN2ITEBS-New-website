@@ -7,10 +7,12 @@ import { SapToolchain } from "@/components/sections/sap-toolchain";
 import { EstateReviewDiagnostic } from "@/components/interactive/estate-review-diagnostic";
 import { EccMaintenanceChecker } from "@/components/interactive/ecc-maintenance-checker";
 import { ToolsBand } from "@/components/sections/tools-band";
+import { V2Blueprint } from "@/components/sections/v2-ledger";
 import {
   V2Hero,
   V2StickyNav,
   V2Overview,
+  V2PositionSlab,
   V2Section,
   V2Bento,
   V2Rail,
@@ -41,6 +43,15 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
     ...(siblings.length ? [{ id: "related", label: `More in ${group?.name ?? "Services"}` }] : []),
     { id: "talk", label: "Talk to us" },
   ];
+  /**
+   * The page's position, promoted out of the closing block and up to block three.
+   *
+   * `closing[0]` is, on almost every page, the sentence the writer was actually trying to land —
+   * and it was sitting below a card grid at the bottom of the page. It now renders as a navy slab
+   * immediately after the overview, and the remaining closing paragraphs keep their old place, so
+   * nothing is printed twice and nothing is lost.
+   */
+  const [position, ...closingRest] = page.closing ?? [];
   const items: BentoItem[] = page.sections.map((section) => ({
     title: section.title,
     body: section.body,
@@ -80,6 +91,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
         paragraphs={rest.length ? rest : [lead]}
         link={group && !groupIsThisPage ? { label: `${group.name} overview`, href: group.href } : undefined}
       />
+      <V2PositionSlab>{position}</V2PositionSlab>
       {page.diagram ? (
         <DiagramBand src={page.diagram.src} alt={page.diagram.alt} caption={page.diagram.caption} tone="subtle" />
       ) : null}
@@ -89,10 +101,14 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
           eyebrow={group?.name ?? "Services"}
           heading={page.sectionsHeading ?? `What ${page.name} covers.`}
         >
-          <V2Bento items={items} />
-          {page.closing?.length ? (
+          {page.layout === "blueprint" ? (
+            <V2Blueprint steps={page.sections.map((s) => ({ title: s.title, body: s.body, bullets: s.bullets }))} />
+          ) : (
+            <V2Bento items={items} />
+          )}
+          {closingRest.length ? (
             <Reveal className="mt-12 space-y-5">
-              {page.closing.map((paragraph) => (
+              {closingRest.map((paragraph) => (
                 <p
                   key={paragraph}
                   className="max-w-[70ch] text-lg font-medium leading-relaxed text-foreground md:text-xl"
@@ -103,10 +119,10 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
             </Reveal>
           ) : null}
         </V2Section>
-      ) : page.closing?.length ? (
+      ) : closingRest.length ? (
         <section className="bg-surface-subtle py-16">
           <Container className="space-y-5">
-            {page.closing.map((paragraph) => (
+            {closingRest.map((paragraph) => (
               <p
                 key={paragraph}
                 className="max-w-[70ch] text-lg font-medium leading-relaxed text-foreground md:text-xl"

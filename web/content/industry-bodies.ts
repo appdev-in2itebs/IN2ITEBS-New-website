@@ -102,7 +102,7 @@ export const industryBodies: Record<
       },
       {
         title: "CPG Supply Chain",
-        body: "Maximise supply chain visibility and agility, collaborating in real time to mitigate disruption and deliver seamless order fulfilment.",
+        body: "See further down the chain and react in real time, so disruption is absorbed rather than passed on, and orders survive the handoffs that usually lose them.",
         bullets: [
           "Integrated supply chain planning and execution",
           "Smart warehouse and transportation management",
@@ -116,7 +116,7 @@ export const industryBodies: Record<
         bullets: [
           "360-degree customer view and real-time analytics",
           "Omnichannel commerce and customer service",
-          "Intelligent micro-segmentation and seamless journeys",
+          "Micro-segmentation, and a journey that survives a change of channel",
           "Value-added services and subscription billing management",
         ],
       },
@@ -447,7 +447,7 @@ export const industryBodies: Record<
     features: [
       {
         title: "Integrated, efficient operations",
-        body: "Seamless integration of all operations and enhanced operational efficiency across the business.",
+        body: "Operations integrated end to end, so a change in one function shows up in the next without a reconciliation step in between.",
       },
       {
         title: "Superior decision support",

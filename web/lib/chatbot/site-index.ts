@@ -114,6 +114,15 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
     ),
   });
   entries.push({
+    title: "What we got wrong",
+    summary:
+      "A dated log of claims we published on this site and then corrected or withdrew, including the ones that cost us something. Nothing is ever removed from it.",
+    url: "/about/what-we-got-wrong/",
+    keywords: tokens(
+      "correction corrections errata mistake mistakes wrong error withdrawn retracted changed claim accuracy honest transparency track record",
+    ),
+  });
+  entries.push({
     title: "How we price",
     summary:
       "Two commercial models — fixed scope and managed service — with the risk each side carries, what the client supplies, and what counts as a change request.",

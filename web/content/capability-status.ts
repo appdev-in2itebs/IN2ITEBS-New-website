@@ -83,6 +83,36 @@ export const capabilityOwner = "Marketing and Communications";
  */
 export const CAPABILITY_REVIEW_MAX_AGE_DAYS = 90;
 
+/**
+ * The date this page stops publishing unless somebody checks the table again.
+ *
+ * ── WHY A DATE AND NOT A COUNTDOWN ───────────────────────────────────────────────────────────
+ * The obvious way to show the gate on the page is "checked 12 days ago, 78 remaining". That
+ * number is computed when the page is built, and these pages are statically generated — so a page
+ * built today and not rebuilt for a month goes on telling every visitor it was checked 12 days
+ * ago. That is precisely the quiet staleness this whole mechanism exists to prevent, and a clock
+ * that lies is worse than no clock.
+ *
+ * A date cannot drift. "Checked on 12 November 2026, expires 10 February 2027" is true the moment
+ * it renders and still true a year later, and the reader does the subtraction against their own
+ * calendar rather than against our build time.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ */
+export const capabilityExpires = new Date(
+  Date.parse(`${capabilityReviewed}T00:00:00Z`) + CAPABILITY_REVIEW_MAX_AGE_DAYS * 86_400_000,
+)
+  .toISOString()
+  .slice(0, 10);
+
+/** The house format for a date a reader is meant to check against their own calendar. */
+export const longDate = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
 export const capabilities: Capability[] = [
   // ── SAP, which is where the depth claim is made ──
   {

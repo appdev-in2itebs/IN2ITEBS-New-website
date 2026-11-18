@@ -1,7 +1,18 @@
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, CapabilityJsonLd } from "@/components/seo/json-ld";
+import { FEED_PATH } from "@/lib/capability-feed";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
-import { capabilities, capabilityReviewed, STATUS_LABELS, type CapabilityStatus } from "@/content/capability-status";
+import Link from "next/link";
+import { Container } from "@/components/ui/container";
+import {
+  capabilities,
+  capabilityExpires,
+  capabilityOwner,
+  capabilityReviewed,
+  longDate,
+  STATUS_LABELS,
+  type CapabilityStatus,
+} from "@/content/capability-status";
 
 export const metadata = pageMetadata("/about/where-we-stand/", {
   title: "Where we stand",
@@ -45,6 +56,7 @@ export default function WhereWeStandPage() {
   return (
     <>
       <BreadcrumbJsonLd path="/about/where-we-stand/" name="Where we stand" />
+      <CapabilityJsonLd />
       <V2Hero
         route="/about/where-we-stand/"
         path={[{ label: "About", href: "/about/" }, { label: "Where we stand" }]}
@@ -57,6 +69,7 @@ export default function WhereWeStandPage() {
           { id: "key", label: "What the statuses mean" },
           { id: "table", label: "The table" },
           { id: "use", label: "How to use it" },
+          { id: "upkeep", label: "Upkeep" },
         ]}
       />
 
@@ -198,6 +211,95 @@ export default function WhereWeStandPage() {
           </div>
         </div>
       </V2Section>
+
+      {/*
+        THE STALENESS CLOCK.
+
+        The build already refuses to ship this page when the table goes ninety days unchecked —
+        scripts/check-build.mjs, verified by backdating the constant until the build failed. That
+        machinery was invisible, which meant the strongest thing about this page was the one thing
+        no visitor could see. This band shows it, in the only form that cannot itself go stale:
+        two fixed dates. See the note above `capabilityExpires` in content/capability-status.ts
+        for why this is deliberately not a countdown.
+      */}
+      <section
+        aria-labelledby="upkeep-heading"
+        id="upkeep"
+        className="theme-on-brand relative isolate overflow-hidden bg-brand py-20 text-on-brand md:py-24"
+      >
+        <div aria-hidden className="pointer-events-none absolute inset-0 hero-ambient opacity-60" />
+        <Container className="relative">
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-5">
+              <span className="label-caps text-gold-on-brand">Upkeep</span>
+              <h2
+                id="upkeep-heading"
+                className="heading-plain mt-6 font-display text-[clamp(1.9rem,3.6vw,2.9rem)] font-bold leading-[1.08] tracking-[-0.035em]"
+              >
+                This page has an expiry date.
+              </h2>
+            </div>
+            <div className="lg:col-span-7">
+              <dl className="grid gap-px overflow-hidden rounded-feature bg-on-brand/15 sm:grid-cols-2">
+                <div className="bg-brand p-7">
+                  <dt className="label-caps text-gold-on-brand">Last checked</dt>
+                  <dd className="mt-3 font-display text-h3 font-semibold text-on-brand">
+                    {longDate(capabilityReviewed)}
+                  </dd>
+                </div>
+                <div className="bg-brand p-7">
+                  <dt className="label-caps text-gold-on-brand">Stops publishing</dt>
+                  <dd className="mt-3 font-display text-h3 font-semibold text-on-brand">
+                    {longDate(capabilityExpires)}
+                  </dd>
+                </div>
+              </dl>
+              <div className="mt-8 max-w-[58ch] space-y-4 text-base leading-relaxed text-on-brand/80">
+                <p>
+                  If nobody here re-checks every line against delivery evidence before that second date, this site stops
+                  building. Not a reminder that gets ignored &mdash; a failed build that has to be fixed before anything
+                  else on this site can be published.
+                </p>
+                <p>
+                  {capabilityOwner} owns the check. The only way past the gate without doing the work is to edit the
+                  date on purpose, which is a different and far more visible kind of failure than letting a page quietly
+                  rot.
+                </p>
+                <p>
+                  We print the two dates rather than &ldquo;verified recently&rdquo; because a page can be built once
+                  and served for months afterwards. Fixed dates stay true for as long as they are on the screen; a
+                  countdown would start lying the day after it was rendered, which is the exact failure this page exists
+                  to prevent.{" "}
+                  <Link
+                    href="/about/what-we-got-wrong/"
+                    className="inline-block min-h-6 font-semibold text-gold-on-brand underline underline-offset-4"
+                  >
+                    When we get something wrong, it goes here
+                  </Link>
+                  .
+                </p>
+                {/*
+                  Published for the bid team that parses a long-list before anyone reads it, and
+                  for the assistants that now assemble "which partners deliver X" from structured
+                  data rather than prose. No key, no rate limit, no conversation with Alliances
+                  first — an endpoint you have to ask permission to read is the PDF problem again.
+                */}
+                <p className="border-t border-on-brand/20 pt-4 text-sm text-on-brand/70">
+                  If you would rather parse this than read it, the whole register &mdash; statuses, review dates,
+                  SAP&rsquo;s qualified packages and the corrections log &mdash; is available as JSON at{" "}
+                  <a
+                    href={FEED_PATH}
+                    className="inline-block min-h-6 font-semibold text-gold-on-brand underline underline-offset-4"
+                  >
+                    {FEED_PATH}
+                  </a>
+                  . No key, no rate limit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
 
       <V2Closing
         eyebrow="Found a gap that matters to you?"

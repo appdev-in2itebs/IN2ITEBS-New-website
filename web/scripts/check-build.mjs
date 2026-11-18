@@ -1,5 +1,6 @@
 // Asserts that the artefacts in .next match SITE_ENV. Runs automatically after `next build` (postbuild).
 import { readFileSync, existsSync } from "node:fs";
+import { houseStyleOffenders } from "./house-style.mjs";
 const env = process.env.SITE_ENV;
 if (env !== "production" && env !== "preview") {
   console.error(`check-build: SITE_ENV must be production or preview, got ${JSON.stringify(env)}`);
@@ -89,6 +90,18 @@ if (!statsAt) {
       `the corporate facts in content/site.ts were last checked ${ageDays} days ago (limit ${statsMaxAge}). Check each figure against its source and update statsReviewed.`,
     );
 }
+
+/**
+ * THE ADJECTIVE GATE. The word list, the exemption and the reasoning live in
+ * scripts/house-style.mjs, because the test suite runs the same scan — see
+ * tests/house-style.test.ts. One list, two enforcers: a style rule with two
+ * definitions is a style rule with none.
+ */
+const adjectiveHits = houseStyleOffenders("content");
+if (adjectiveHits.length)
+  failures.push(
+    `unfalsifiable adjectives in site copy — say the number, the name or the mechanism instead:\n    ${adjectiveHits.join("\n    ")}`,
+  );
 
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);

@@ -295,7 +295,7 @@ export const insightBodies: Record<
       },
       {
         type: "heading",
-        text: "A seamless, integrated experience that encourages sharing information & gaining insight into your business",
+        text: "One system of record, so a question about the business only has to be asked once",
       },
       {
         type: "image",
@@ -463,7 +463,7 @@ export const insightBodies: Record<
       },
       {
         type: "heading",
-        text: "A seamless, integrated experience that encourages sharing information & gaining insight into your business",
+        text: "One system of record, so a question about the business only has to be asked once",
       },
       {
         type: "heading",

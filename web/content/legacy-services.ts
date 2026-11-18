@@ -88,7 +88,28 @@ export interface ServicePage {
   intro: string[];
   introHeading?: string;
   sections: ServiceSection[];
-  layout?: "cards" | "steps" | "list";
+  /**
+   * How `sections` is laid out.
+   *
+   * ── "cards" (the default) ──────────────────────────────────────────────────────────────────
+   * The bento grid. Right when the sections are a *set*: things that are true at the same time,
+   * in no particular order, any one of which a reader might be scanning for.
+   *
+   * ── "blueprint" ────────────────────────────────────────────────────────────────────────────
+   * Outline numerals down a rule. Right when the sections are a *sequence*: stages, layers,
+   * severity bands, the steps of a method. Use it whenever the section heading contains an
+   * ordinal, or the items only make sense read in order — "Three stages, each one sellable on
+   * its own", "Connect, bill, collect".
+   *
+   * The distinction is not cosmetic. A grid of equal cards asserts that its contents are equal
+   * and unordered. When they are neither, the layout has thrown away the one thing it could have
+   * told the reader for free, and the reader has to reconstruct the sequence from the prose.
+   *
+   * Eighteen of the twenty-two pages in this file shipped the identical grid in November 2026.
+   * See components/sections/v2-ledger.tsx for why that was a problem beyond looking like
+   * everybody else. Pick by what the content IS, not by which renders better on the day.
+   */
+  layout?: "cards" | "blueprint";
   sectionsHeading?: string;
   closing?: string[];
   image?: { src: string; alt: string };
@@ -484,7 +505,7 @@ export const servicePages: ServicePage[] = [
       "In2IT Converged Pulse for SAP GROW Fast is our packaged implementation of SAP Cloud ERP — Finance, Sales and Procurement, with SuccessFactors Employee Central alongside it — live in twelve weeks. It is one of three packages SAP has qualified and published, and it carries a fixed scope, a fixed duration and a fixed price, all three stated before you sign.",
     ],
     sectionsHeading: "The shape of it",
-    layout: "steps",
+    layout: "blueprint",
     sections: [
       { title: "Prepare", icon: "check-circle", body: "Access, project team, data templates issued." },
       {
@@ -618,7 +639,7 @@ export const servicePages: ServicePage[] = [
       "The second thing almost nobody has checked is what the estate is costing them in the meantime — in licences nobody uses, custom code nobody runs, data nobody has archived and reporting running against the wrong system. Those four are usually enough to pay for the work of finding them.",
     ],
     sectionsHeading: "Three stages, each one sellable on its own",
-    layout: "steps",
+    layout: "blueprint",
     sections: [
       {
         title: "Assess",
@@ -900,7 +921,7 @@ export const servicePages: ServicePage[] = [
       "Every one of those gaps sits between two suppliers. The meter vendor, the communications provider, the meter-data system, the billing team and the collections function each hold up their own service level while the revenue sits in the space between them. Nobody's target is breached and the money does not arrive. That is not a technology problem — it is an accountability problem, and it is solved by one party owning the whole flow.",
     ],
     sectionsHeading: "Connect, bill, collect",
-    layout: "steps",
+    layout: "blueprint",
     sections: [
       {
         title: "Connect",
@@ -940,6 +961,7 @@ export const servicePages: ServicePage[] = [
     intro: [
       "Implementation is a project with an end date. Support is a relationship with none. This page states what we commit to, what we measure, and what happens when we miss — because a support proposal that does not say those three things is asking you to find out later.",
     ],
+    layout: "blueprint",
     sectionsHeading: "Four severity bands, and what each one means",
     sections: [
       {
@@ -1113,6 +1135,7 @@ export const servicePages: ServicePage[] = [
     intro: [
       "Most organisations can name their ERP and their top ten applications. Very few can name the other sixty, say what each costs, or say which of them one person understands.",
     ],
+    layout: "blueprint",
     sectionsHeading: "What the review produces",
     sections: [
       {
@@ -1196,7 +1219,7 @@ export const servicePages: ServicePage[] = [
       "Data gets treated as a task inside somebody else's programme. It is given to whoever is free, scoped by how long the cutover window is, and declared finished on the day the system goes live. Three things then happen: master data drifts because nobody owns it, reporting becomes distrusted because the masters disagree, and years of statutory retention obligation sit on a legacy system kept alive purely so somebody can look things up. None of those is a migration problem. All three are consequences of treating data as a phase.",
     ],
     sectionsHeading: "Three layers, bought separately or together",
-    layout: "steps",
+    layout: "blueprint",
     sections: [
       {
         title: "Advise",
