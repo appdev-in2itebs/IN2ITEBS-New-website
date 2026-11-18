@@ -700,12 +700,67 @@ export const servicePages: ServicePage[] = [
         body: "HR data that does not reconcile to the general ledger produces a month-end argument every month, for years.",
       },
       {
+        title: "The statutory calendar, and 2027",
+        icon: "shield",
+        body: "India's four Labour Codes have applied since 21 November 2025, and the Digital Personal Data Protection Rules put employer obligations on an eighteen-month clock running to May 2027. Both land inside the HR system: the first changes what a wage is and therefore what provident fund and gratuity are calculated on; the second changes what you may keep, for how long, and who you may send it to.",
+      },
+      {
         title: "Year two",
         icon: "refresh",
         body: "The implementation partner has gone, the configuration has drifted, and the first statutory change arrives. This is the year the decision is actually judged, and it is why this page links to managed support rather than ending at go-live.",
         href: svc("managed-services"),
       },
     ],
+    extraSections: {
+      eyebrow: "Health Check 360",
+      heading: "Six dimensions of health, in three weeks",
+      anchorLabel: "Health Check 360",
+      intro:
+        "Most SuccessFactors estates do not need another implementation. They need somebody to establish what is actually configured, what the business actually does, and where those two have come apart — before any more change is bought. Health Check 360 is a fixed three-week diagnostic that does exactly that, and it is sold on its own.",
+      diagram: {
+        src: "/diagrams/y1-health-check-decisions.svg",
+        alt: "The six decisions every Health Check 360 finding resolves into — retain what works and must not be disturbed, fix what is configured wrongly or failing, optimise what works but is needlessly complex, complete capability that was licensed and stopped halfway, adopt functionality built correctly but unused, and retire what no longer earns its place.",
+        caption: "Retain is a finding too. An assessment that returns only problems has not looked properly.",
+      },
+      items: [
+        {
+          title: "Solution health",
+          icon: "settings",
+          body: "Is it configured correctly? Employee Central and position management, Time, Recruiting, Onboarding, Performance and Goals, Learning, Compensation and Succession — plus role-based permissions, workflows, business rules, MDF objects and templates.",
+        },
+        {
+          title: "Process health",
+          icon: "git-branch",
+          body: "Does the system support how HR actually operates, end to end — recruit, onboard, employ, time, pay, develop, exit? We look for the breaks, and for the workarounds people built around them.",
+        },
+        {
+          title: "Data health",
+          icon: "database",
+          body: "Can the business trust what it reads? Employee, position and organisational data, foundation objects, effective dating, duplicates, stale records, and whether any of it reconciles across systems.",
+        },
+        {
+          title: "Integration health",
+          icon: "link",
+          body: "Does information move reliably? SuccessFactors to payroll, to S/4HANA and the general ledger, to provident fund and statutory bodies, to identity and provisioning, to job portals and third parties — and what happens when one of them fails.",
+        },
+        {
+          title: "Adoption health",
+          icon: "eye",
+          body: "Is it being used? Employee and manager self-service, module utilisation, activity happening off-system, and the gap between what you have licensed, what has been enabled, and what anybody actually opens.",
+        },
+        {
+          title: "Governance and sustainability",
+          icon: "key",
+          body: "Can you operate it without us? Documentation, configuration ownership, support dependency, release and change governance, and whether the knowledge is inside the business or inside a supplier.",
+        },
+      ],
+      closing: [
+        "How it runs: week one establishes the baseline — the configuration and integration inventory, module-owner interviews, process walkthroughs and an adoption picture. Week two diagnoses root causes, module by module, with the payroll replication and the integration failure patterns examined in detail. Week three converts findings into decisions: scored for business impact, sequenced into quick wins and critical fixes, and sized for effort against a thirty, sixty and ninety-day plan.",
+        "What you are left with is a decision pack rather than a report: an executive health score, module-level health cards, a process heatmap, a data-quality scorecard, an integration risk map, an adoption baseline, a prioritised gap register and the roadmap. Every material finding is validated by one of our SuccessFactors specialists before it reaches the register.",
+        "Twelve specialist services extend it where the evidence justifies them — Labour Codes payroll assurance, pay-run reconciliation, DPDP readiness for HR data, access and segregation-of-duties review, integration observability, configuration knowledge recovery, ticket forensics, release readiness, licence and entitlement recovery, reporting trust, an adoption pulse, and Joule readiness. Each reuses the discovery already done, so nobody is interviewed twice.",
+        "Remediation is deliberately not priced up front. The week-three blueprint sizes each fix by effort and dependency, and what follows is scoped from that — so you commit only to the work the evidence justifies.",
+      ],
+    },
     closing: [
       "What we implement: Employee Central, Employee Central Payroll, Time Management, self-service for employees and managers; Recruiting and Onboarding, Performance and Goals, Compensation, Succession and Development, Learning; integration to S/4HANA and finance, to third-party payroll and benefits providers, reporting and people analytics, and the authorisation model nobody budgets for and everybody needs.",
       "Our managed services practice supports SuccessFactors estates under the same published severity bands and response targets as every other platform we run — including the ones we did not implement.",
