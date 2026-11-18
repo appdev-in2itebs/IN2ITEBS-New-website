@@ -5,7 +5,7 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { DemoForm } from "@/components/forms/demo-form";
 import { contactsFor } from "@/content/offices";
 import type { Office } from "@/content/types";
@@ -53,7 +53,7 @@ export default async function ContactPage() {
         accentWord="transformation"
         subhead="Start your transformation, or reach the office nearest you."
         cta={false}
-        media={<HeroObject name="pages/contact" />}
+        media={<HeroFigure figureKey="pages/contact" />}
         frame={false}
       />
 

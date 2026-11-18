@@ -26,14 +26,16 @@ test("the service ribbon follows the hero and lists every service in the existin
     expect(service.blurb).not.toMatch(/\.\.$/);
   }
 
-  // The photograph on every card resolves. They are lazy, so the ribbon has to be looked at first.
+  // Every card carries its drawn figure. The photographs went on 18 November 2026 — see
+  // content/hero-images.ts — so there is no file to resolve and nothing to wait for: the figure is
+  // inline SVG in the markup. It is presentational, so it must be hidden from assistive tech, and
+  // the card's accessible name has to come from the link text rather than from a picture.
   await page.locator(grid).scrollIntoViewIfNeeded();
   for (const service of services) {
-    const image = page.locator(`${grid} [data-service="${service.slug}"] img`);
-    await expect(image).toHaveAttribute("alt", service.imageAlt);
-    await expect
-      .poll(() => image.evaluate((el: HTMLImageElement) => el.naturalWidth), { timeout: 10000 })
-      .toBeGreaterThan(0);
+    const card = page.locator(`${grid} [data-service="${service.slug}"]`).first();
+    await expect(card.locator("svg[aria-hidden='true']").first()).toBeAttached();
+    await expect(card.locator("img")).toHaveCount(0);
+    await expect(card).toContainText(service.name);
   }
 
   // The duplicates must never be reachable or announced, or they multiply the list for screen readers.

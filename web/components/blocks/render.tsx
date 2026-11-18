@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight, ChevronDown, Quote } from "lucide-react";
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 import { clients } from "@/content/clients";
 import { site } from "@/content/site";
 import type { Testimonial } from "@/content/types";

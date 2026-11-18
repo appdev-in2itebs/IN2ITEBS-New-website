@@ -1,4 +1,4 @@
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 import { PICTURE_GROUPS, pictureGroup, type PictureOption } from "@/lib/cms/picture-groups";
 import { input } from "./ui";
 

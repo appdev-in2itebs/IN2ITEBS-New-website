@@ -4,7 +4,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Container } from "@/components/ui/container";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/careers/events-celebrations/", {
@@ -121,7 +121,7 @@ export default function EventsCelebrationsPage() {
         path={[{ label: "Career", href: "/careers/" }, { label: "Events & Celebrations" }]}
         title="Events & Celebrations"
         lead="Our offices reflect our brand that we live every day. Our employees are provided with a relaxing and creative workspace to help them get the job done!"
-        media={<HeroObject name="careers/events-celebrations" />}
+        media={<HeroFigure figureKey="careers/events-celebrations" />}
       />
       <V2StickyNav
         anchors={[

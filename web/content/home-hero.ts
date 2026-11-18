@@ -9,14 +9,11 @@ export type HeroSlide = {
   body: string;
   cta: { href: string; label: string };
   secondary: { href: string; label: string };
-  /** Which frame sequence in content/hero-frames.ts plays behind this slide (slide-1 … slide-5). */
-  frames: string;
 };
 
 export const homeHeroSlides: HeroSlide[] = [
   {
     id: "brand",
-    frames: "slide-1",
     label: "SAP for asset-heavy and regulated India",
     heading: ["Change with confidence.", "Run without compromise."],
     // Rewritten 18 November 2026. The previous body described a category — "connects enterprise
@@ -43,7 +40,6 @@ export const homeHeroSlides: HeroSlide[] = [
   },
   {
     id: "sap",
-    frames: "slide-2",
     label: "SAP enterprise solutions",
     heading: ["Transform your enterprise with SAP."],
     body: "From S/4HANA and cloud migration to SuccessFactors, analytics and managed services. Connect the platform to the way your business operates.",
@@ -52,7 +48,6 @@ export const homeHeroSlides: HeroSlide[] = [
   },
   {
     id: "applications",
-    frames: "slide-3",
     label: "Application development & maintenance",
     heading: ["Applications built around your business."],
     body: "Design, build, integrate and maintain business applications, with engineering and ongoing support connected from the start.",
@@ -61,7 +56,6 @@ export const homeHeroSlides: HeroSlide[] = [
   },
   {
     id: "platforms",
-    frames: "slide-4",
     label: "People, finance & customer platforms",
     heading: ["Connect people, processes and performance."],
     body: "Explore SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices for the systems your teams rely on every day.",
@@ -70,7 +64,6 @@ export const homeHeroSlides: HeroSlide[] = [
   },
   {
     id: "data-ai",
-    frames: "slide-5",
     label: "Cloud, data & AI",
     heading: ["Turn enterprise data into everyday decisions."],
     body: "Bring data, analytics, integration and AI into the flow of work, with architecture and delivery grounded in your business priorities.",

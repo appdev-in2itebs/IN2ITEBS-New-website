@@ -5,7 +5,7 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { DiagramBand } from "@/components/sections/diagram-band";
@@ -28,7 +28,7 @@ export default function CaseStudiesPage() {
         headline="Enterprise delivery,"
         accentWord="shown by sector."
         subhead="Anonymised engagements are published while named-client permissions and supporting evidence are verified."
-        media={<HeroObject name="pages/case-studies" />}
+        media={<HeroFigure figureKey="pages/case-studies" />}
         frame={false}
       />
 

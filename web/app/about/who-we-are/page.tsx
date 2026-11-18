@@ -1,6 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/about/who-we-are/", {
@@ -30,7 +30,7 @@ export default function WhoWeArePage() {
         path={[{ label: "About", href: "/about/" }, { label: "Who we are" }]}
         title="Who we are"
         lead="In2IT EBS provides enterprise technology consulting, cloud, managed services and application engineering in India and internationally."
-        media={<HeroObject name="about/who-we-are" />}
+        media={<HeroFigure figureKey="about/who-we-are" />}
       />
       <V2StickyNav
         anchors={[

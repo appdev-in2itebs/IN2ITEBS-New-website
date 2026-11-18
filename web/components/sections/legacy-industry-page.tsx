@@ -1,7 +1,6 @@
 import { heroPicture } from "@/components/sections/hero-override";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { sectorIcon } from "@/components/sections/hero-motif";
-import { HeroImage, HeroMark, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import {
   V2Hero,
   V2StickyNav,
@@ -23,7 +22,6 @@ import type { LegacyIndustry } from "@/content/legacy-industries";
  */
 export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry & { heroImage?: string } }) {
   const title = industry.title ?? industry.name;
-  const heroKey = `industries/${industry.slug}`;
   const [lead, ...rest] = industry.intro;
   const others = industriesMenu.filter((item) => item.href !== `/industries/${industry.slug}/`);
   const anchors = [
@@ -56,17 +54,7 @@ export function LegacyIndustryPage({ industry }: { industry: LegacyIndustry & { 
         path={[{ label: "Industries", href: "/industries/" }, { label: industry.name }]}
         title={title}
         lead={lead}
-        media={heroPicture(
-          industry.heroImage,
-          hasHeroImage(heroKey) ? (
-            <HeroObject name={heroKey} />
-          ) : industry.image ? (
-            <HeroImage src={`/industries/${industry.slug}/${industry.image}`} alt={title} />
-          ) : (
-            <HeroMark icon={sectorIcon(industry.slug)} />
-          ),
-          title,
-        )}
+        media={heroPicture(industry.heroImage, <HeroFigure figureKey={`industries/${industry.slug}`} />, title)}
       />
       <V2StickyNav anchors={anchors} />
       <V2Overview eyebrow={industry.name} heading={`About ${industry.name}`} paragraphs={rest.length ? rest : [lead]} />

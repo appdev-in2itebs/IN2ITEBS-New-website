@@ -10,7 +10,7 @@ import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { MetricsBand } from "@/components/sections/metrics-band";
-import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { publicCaseStudies, getCaseStudy, canonicalCaseStudySlug } from "@/content/case-studies";
 
 export async function generateStaticParams() {
@@ -80,7 +80,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         headline={study.client}
         accentWord={accentWord}
         subhead={study.featuredSolution}
-        media={<HeroMotif icon={practiceIcon("sap-enterprise-solutions")} />}
+        media={<HeroFigure figureKey={`case-studies/${study.slug}`} />}
       />
 
       {/* FACTS STRIP */}

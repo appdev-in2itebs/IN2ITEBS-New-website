@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -153,7 +154,7 @@ export function HomeNews({ insights = shippedInsights }: { insights?: Insight[] 
                     className="glass-card group flex h-full flex-col overflow-hidden rounded-surface"
                   >
                     <span className="relative block aspect-[16/9] w-full overflow-hidden bg-surface-subtle">
-                      {article.image && (
+                      {article.image ? (
                         <Image
                           src={article.image}
                           alt=""
@@ -162,6 +163,8 @@ export function HomeNews({ insights = shippedInsights }: { insights?: Insight[] 
                           loading="lazy"
                           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                         />
+                      ) : (
+                        <HeroFigure figureKey={`insights/${article.slug}`} className="absolute inset-0" />
                       )}
                       <span
                         aria-hidden

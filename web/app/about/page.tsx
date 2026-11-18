@@ -7,7 +7,7 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { StatBand } from "@/components/sections/stat-band";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
@@ -57,7 +57,7 @@ export default async function AboutPage() {
         eyebrow="Who we are"
         headline="Three pillars."
         accentWord="One converged enterprise."
-        media={<HeroObject name="pages/about" />}
+        media={<HeroFigure figureKey="pages/about" />}
         frame={false}
         subhead="We are structured for Platforms, Advisory and Digital Engineering under shared delivery, governance and account ownership — so you get one accountable partner for the whole transformation, not a patchwork of vendors."
       />

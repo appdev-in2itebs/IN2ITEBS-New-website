@@ -221,8 +221,8 @@ export const CONTENT_TYPES = {
         itemLabel: "slide",
         titleKey: "label",
         max: 5,
-        keep: ["id", "frames"],
-        hint: "Five slides, each over its own film. Drag to change the order.",
+        keep: ["id"],
+        hint: "Five slides of copy over the brand ground. Drag to change the order.",
         fields: [
           { key: "label", label: "Small label", kind: "text", max: 80, required: true },
           {

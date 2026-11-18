@@ -23,7 +23,6 @@ export const insights: Insight[] = [
     category: "SuccessFactors",
     excerpt:
       "Programmes are usually sequenced around what hurts most. That is the wrong input, and it is why rollouts stall at module three.",
-    image: "/insights/revolutionizing-hr-with-sap-successfactors-a-strategic-approach-to-modern-hcm-solutions.jpg",
   },
   {
     slug: "igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas",
@@ -33,8 +32,6 @@ export const insights: Insight[] = [
     category: "AI",
     excerpt:
       "Three capabilities worth understanding, our own position stated narrowly, and the one metric that predicts whether a pilot survives.",
-    image:
-      "/insights/igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas.jpg",
   },
   {
     // Was an expired event landing page carrying SAP's own campaign strapline, "Quickly and
@@ -47,7 +44,6 @@ export const insights: Insight[] = [
     category: "SAP",
     excerpt:
       "The constraint is the point of it, and it is the thing most buyers do not price properly. What the model trades, and how to test the fit.",
-    image: "/insights/grow-with-sap.jpg",
   },
   {
     slug: "in2it-ebs-simplify-talent-2",
@@ -57,7 +53,6 @@ export const insights: Insight[] = [
     category: "SuccessFactors",
     excerpt:
       "SimplifyTalent, an SAP Qualified Partner Package which leverages the global best practices of SAP SuccessFactors software solution portfolio aligning with…",
-    image: "/insights/in2it-ebs-simplify-talent-2.jpg",
   },
   {
     slug: "in2it-ebs-simplify-hiring",
@@ -67,7 +62,6 @@ export const insights: Insight[] = [
     category: "SuccessFactors",
     excerpt:
       "Simplify Hiring is an SAP Qualified Partner Package which leverages the global best practices of SAP SuccessFactors solution portfolio, aligning with…",
-    image: "/insights/in2it-ebs-simplify-hiring.png",
   },
   {
     slug: "how-rise-with-sap-s-4hana-cloud-can-transform-your-business",
@@ -77,7 +71,6 @@ export const insights: Insight[] = [
     category: "SAP",
     excerpt:
       "RISE is sold as a destination. It is closer to a contracting model, and the difference decides how much of your migration it covers.",
-    image: "/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business.png",
   },
 ];
 

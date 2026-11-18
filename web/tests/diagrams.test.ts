@@ -90,3 +90,45 @@ test("every diagram referenced in content exists on disk", () => {
   const missing = [...referenced].filter((f) => !svgs.includes(f));
   assert.deepEqual(missing, []);
 });
+
+/**
+ * NO PHOTOGRAPHY.
+ *
+ * The 190-odd stock images came out on 18 November 2026 — unresolvable licensing, and the deeper
+ * point that a stock photograph is the visual form of an unfalsifiable adjective on a site that
+ * fails its own build over the written kind. See content/hero-images.ts.
+ *
+ * This is the gate that keeps it that way. Photography will be proposed again, reasonably, by
+ * somebody who was not here for the licence problem — and the honest answer then is a decision
+ * taken deliberately, not a JPEG that arrives in a pull request and is never mentioned.
+ *
+ * What is allowed: our own event photography (ours), client and partner logos (a consent and
+ * trademark question already decided elsewhere), brand marks, and original SVG diagrams.
+ */
+test("no photographic asset has come back into the repository", () => {
+  const PHOTO = /\.(jpe?g|webp|avif)$/i;
+  const ALLOWED = [
+    "public/events", // our own people at our own events
+    "public/awards", // photographs of our own certificates — the evidence, not a stock image
+    "public/logos", // client and partner marks — a separate, live decision
+    "public/partners", // the same, as JPEG
+    "public/industries", // client logos behind the consent gate
+    "public/brand", // our own marks
+    "public/insights/body", // article artwork being retired page by page; four icons left
+    "public/testimonials", // named individuals, behind the per-person consent gate
+    "public/youtube", // thumbnails of our own channel's videos
+    "public/video", // our own clip and its poster frame
+  ];
+  const offenders: string[] = [];
+  const walk = (dir: string) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      const rel = path.relative(process.cwd(), full);
+      if (ALLOWED.some((a) => rel.startsWith(a))) continue;
+      if (entry.isDirectory()) walk(full);
+      else if (PHOTO.test(entry.name)) offenders.push(rel);
+    }
+  };
+  walk(path.join(process.cwd(), "public"));
+  assert.deepEqual(offenders, []);
+});

@@ -25,9 +25,7 @@ export type ServiceCard = {
   blurb: string;
   /** This site's page for the service — the destination its old URL redirects to. */
   href: string;
-  image: string;
   /** Describes the photograph for anyone who cannot see it; several carry burnt-in wordmarks. */
-  imageAlt: string;
 };
 
 /**
@@ -49,8 +47,6 @@ export const services: ServiceCard[] = [
     blurb:
       "SAP S/4HANA is a real-time enterprise resource management suite for digital business, built on the in-memory SAP HANA platform and deployable on-premise, in the cloud or hybrid.",
     href: "/services/rise-s4hana/",
-    image: "/services/rise-with-sap.jpg",
-    imageAlt: "A desk running S/4HANA dashboards, captioned RISE with SAP — Business Transformation as a Service",
   },
   {
     slug: "sap-successfactors",
@@ -58,8 +54,6 @@ export const services: ServiceCard[] = [
     blurb:
       "The SAP SuccessFactors HXM Suite provides cloud-based solutions for core HR and payroll, talent management and the everyday experience of working in your organisation.",
     href: "/services/successfactors/",
-    image: "/services/sap-successfactors.jpg",
-    imageAlt: "A pen resting on printed bar charts and graphs",
   },
   {
     slug: "sap-sac",
@@ -67,8 +61,6 @@ export const services: ServiceCard[] = [
     blurb:
       "SAP Analytics Cloud combines business intelligence, enterprise planning and augmented analytics in one solution on SAP Business Technology Platform, so reporting and planning stop living apart.",
     href: "/services/data-engineering-analytics/",
-    image: "/services/sap-analytics-cloud.jpg",
-    imageAlt: "A hand reaching into a field of figures and rising bars, captioned SAP Analytics Cloud",
   },
   {
     slug: "grow-with-sap",
@@ -76,8 +68,6 @@ export const services: ServiceCard[] = [
     blurb:
       "S/4HANA Public Cloud on pre-configured industry processes — a fit-to-standard path for the mid-market and for net-new business units, on a quarterly release cadence.",
     href: "/services/converged-pulse/",
-    image: "/services/grow-with-sap.jpg",
-    imageAlt: "Terraced green hillside planting, captioned GROW with SAP",
   },
   {
     slug: "other-enterprise-solutions",
@@ -85,8 +75,6 @@ export const services: ServiceCard[] = [
     blurb:
       "Enterprises keep changing with the market. We help you plan, implement and customise the leading platforms — Oracle, Microsoft and SAP — around what the organisation needs next.",
     href: "/services/enterprise-platforms/",
-    image: "/services/other-enterprise-solutions.jpg",
-    imageAlt: "Four pairs of hands fitting jigsaw pieces together on a table",
   },
   {
     slug: "data-analytics-ai",
@@ -94,8 +82,6 @@ export const services: ServiceCard[] = [
     blurb:
       "Structured, unstructured and semi-structured data is rising in volume faster than anyone can read it. Business analytics and intelligence turn that variety into answers you can act on.",
     href: "/services/data-engineering-analytics/",
-    image: "/services/data-analytics-ai.jpg",
-    imageAlt: "A desktop monitor filled with analytics dashboards in an office",
   },
   {
     slug: "adms",
@@ -103,7 +89,5 @@ export const services: ServiceCard[] = [
     blurb:
       "Building and maintaining the software a business runs on — development, integration, maintenance and support across both modern and legacy application estates.",
     href: "/services/application-engineering/",
-    image: "/services/adms.jpg",
-    imageAlt: "Two people sketching mobile app wireframes on paper at a desk",
   },
 ];

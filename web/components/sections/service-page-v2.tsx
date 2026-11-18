@@ -1,6 +1,6 @@
 import { heroPicture } from "@/components/sections/hero-override";
-import { ServiceHeroMark, serviceIcon } from "@/components/sections/service-icon";
-import { HeroImage, HeroObject, hasHeroImage } from "@/components/sections/hero-media";
+import { serviceIcon } from "@/components/sections/service-icon";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { RiseGrowChooser } from "@/components/interactive/rise-grow-chooser";
 import { SapToolchain } from "@/components/sections/sap-toolchain";
@@ -30,8 +30,6 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
   const group = getServiceGroup(page.group);
   const title = page.title ?? page.name;
   const [lead, ...rest] = page.intro;
-  const ownHero = `services/${page.slug}`;
-  const heroKey = hasHeroImage(ownHero) ? ownHero : page.heroObject;
   const siblings = group ? flattenItems(group.items).filter((item) => item.href !== `/services/${page.slug}/`) : [];
   const groupIsThisPage = group?.href === `/services/${page.slug}/`;
   const anchors = [
@@ -64,6 +62,12 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
 
   return (
     <>
+      {/*
+        The hero is a generated figure, not a photograph. `heroPicture` still runs first, so a
+        picture uploaded deliberately in /admin wins — a person choosing an image for a reason is
+        a different thing from a stock library choosing one for us. See hero-figure.tsx for why
+        there are no photographs left on this site.
+      */}
       <V2Hero
         route={`/services/${page.slug}/`}
         path={[
@@ -73,17 +77,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
         ]}
         title={title}
         lead={lead}
-        media={heroPicture(
-          page.heroImage,
-          heroKey ? (
-            <HeroObject name={heroKey} />
-          ) : page.image ? (
-            <HeroImage src={page.image.src} alt={page.image.alt} />
-          ) : (
-            <ServiceHeroMark icon={page.icon} />
-          ),
-          title,
-        )}
+        media={heroPicture(page.heroImage, <HeroFigure figureKey={`services/${page.slug}`} />, title)}
       />
       <V2StickyNav anchors={anchors} />
       <V2Overview
