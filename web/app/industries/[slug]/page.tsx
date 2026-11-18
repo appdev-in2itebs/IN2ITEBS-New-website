@@ -9,7 +9,6 @@ import { PageHero } from "@/components/sections/page-hero";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { ClientWall } from "@/components/sections/client-wall";
 import { CtaSection } from "@/components/sections/cta-section";
-import Image from "next/image";
 import { industries, getIndustry } from "@/content/industries";
 import { getClientsBySectors } from "@/lib/content";
 import { getIndustryBody } from "@/content/industry-bodies";
@@ -53,24 +52,25 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <BreadcrumbJsonLd path={`/industries/${ind.slug}/`} name={ind.name} />
+      {/*
+        This hero carries no media, deliberately.
+
+        It used to be `/stock/${ind.slug}.jpg`, which matched no file in public/stock/ for any
+        slug the site has — "power-utilities" against "energy-utilities.jpg", and so on for all
+        nine. It never rendered a broken image only because this branch never runs: every current
+        industry has edited content and returns above. Add a tenth without content and every
+        visitor to it would have met a broken hero.
+
+        Restoring it would mean inventing a slug-to-photograph mapping. The fallback renders
+        without a picture instead; the nine live pages get theirs from
+        components/sections/legacy-industry-page.tsx.
+      */}
       <PageHero
         route={`/industries/${ind.slug}/`}
         eyebrow="Industries"
         headline={ind.headline}
         accentWord={ind.accentWord}
         subhead={ind.subhead}
-        media={
-          <div className="relative h-full w-full overflow-hidden rounded-[calc(var(--radius-feature)-0.5rem)]">
-            <Image
-              src={`/stock/${ind.slug}.jpg`}
-              alt={ind.name}
-              fill
-              sizes="(min-width: 1024px) 45vw, 100vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        }
       />
 
       {/* OVERVIEW + CAPABILITIES */}

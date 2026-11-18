@@ -42,7 +42,7 @@ const featuredIndustries = [
   {
     name: "Manufacturing",
     detail: "Automotive, heavy engineering and industrial products",
-    href: "/industries/automobiles/",
+    href: "/industries/manufacturing/",
     image: "/stock/automobiles.jpg",
     Icon: GitBranch,
     className: "md:col-span-7 md:row-span-2",
@@ -50,7 +50,7 @@ const featuredIndustries = [
   {
     name: "Energy & utilities",
     detail: "Critical infrastructure and public enterprises",
-    href: "/industries/energy-utilities/",
+    href: "/industries/power-utilities/",
     image: "/stock/energy-utilities.jpg",
     Icon: Network,
     className: "md:col-span-5",
@@ -58,7 +58,7 @@ const featuredIndustries = [
   {
     name: "Consumer products",
     detail: "Food, beverage and high-velocity supply chains",
-    href: "/industries/fmcg/",
+    href: "/industries/consumer-goods-distribution/",
     image: "/stock/fmcg.jpg",
     Icon: Building2,
     className: "md:col-span-5",

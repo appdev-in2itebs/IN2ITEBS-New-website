@@ -42,6 +42,34 @@ export interface QualifiedPackage {
   sapSummary: string;
   /** What we would add, which SAP does not say. */
   ours: string;
+  /**
+   * What the package actually contains, grouped the way it is sold.
+   *
+   * ── WHY THIS IS HERE AND NOT IN AN IMAGE ─────────────────────────────────────────────────
+   * It used to be an image. The full scope of SimplifyTalent and SimplifyHiring — every module,
+   * template and integration — was a set of flat JPEGs on two /insights/ articles. The most
+   * specific and most checkable content we hold about two SAP-qualified packages was therefore
+   * **invisible to search and unreadable by a screen reader**, and the first question a buyer
+   * asks — "what do I actually get?" — could not be answered by searching for it.
+   *
+   * The artwork was also off-brand green and carried four spelling errors that had been live for
+   * years, because nobody proofreads a picture: "Caimpaigns", "Starteygy", "Souring" and
+   * "Questionaires". Text gets proofread; pictures do not. That is a reason to prefer text with
+   * nothing to do with accessibility.
+   *
+   * ── THE RULE ─────────────────────────────────────────────────────────────────────────────
+   * This is a transcription, not a rewrite. Every line below appears in the source artwork; the
+   * only changes are spelling, capitalisation and the removal of duplicate rows. **Nothing was
+   * added to make a package look larger**, because the scope of a fixed-price package is a
+   * commercial commitment, and inventing a line in one is a different class of error from a typo.
+   *
+   * Left undefined for the three Converged packages: SAP's profile publishes their summary but no
+   * itemised scope, and we do not hold one anybody has signed off. An invented scope is worse
+   * than none.
+   */
+  scope?: { group: string; items: string[] }[];
+  /** Where the itemised scope came from, so the next person can check it against the source. */
+  scopeSource?: string;
 }
 
 export const qualifiedPackages: QualifiedPackage[] = [
@@ -83,6 +111,66 @@ export const qualifiedPackages: QualifiedPackage[] = [
     sapSummary:
       "Leverages the SAP SuccessFactors solution portfolio, enabling organisations across all industries to implement the end-to-end spectrum of core HR.",
     ours: "A packaged core HR build, shaped by what Indian organisations actually have to run — establishment, statutory reporting and the payroll hand-off — rather than by a global template.",
+    scopeSource:
+      "Transcribed from the package artwork on /insights/in2it-ebs-simplify-talent-2/ (Picture3.jpg and Picture4.jpg), 18 November 2026.",
+    scope: [
+      {
+        group: "Employee Central core",
+        items: [
+          "Organisation management",
+          "People profile",
+          "Standard job profile builder",
+          "Badges and talent profile enablement",
+          "Five standard document generations",
+          "SFTP integration with one biometric and one payroll vendor",
+        ],
+      },
+      {
+        group: "Employee life cycle",
+        items: ["New hire and rehire", "HR transactions", "Event reasons", "Separation"],
+      },
+      {
+        group: "Leave management, India",
+        items: ["Leave application", "Team absences", "View time account", "HR admin tasks on time off"],
+      },
+      {
+        group: "Position management",
+        items: ["Create position", "Change or deactivate position", "Mass change of positions"],
+      },
+      {
+        group: "Goal management",
+        items: [
+          "Goal plan and approval",
+          "Status report",
+          "Meeting agenda",
+          "Standard goal library and smart goal wizard",
+        ],
+      },
+      {
+        group: "Performance management",
+        items: [
+          "One route map, one rating scale",
+          "Standard writing assistant and legal scan",
+          "Company directory",
+          "Continuous performance management",
+        ],
+      },
+      {
+        group: "360-degree feedback and calibration",
+        items: ["360 reviews", "Standard dashboard", "Calibration", "Executive reviews", "Stack ranking reviews"],
+      },
+      {
+        group: "Included with India localisation",
+        items: [
+          "Business processes and workflows",
+          "Standard data models",
+          "Standard email notifications",
+          "Role-based permissions",
+          "Theme manager",
+          "One goal plan template, one performance template, one 360-degree template",
+        ],
+      },
+    ],
   },
   {
     name: "SimplifyHiring",
@@ -92,6 +180,69 @@ export const qualifiedPackages: QualifiedPackage[] = [
     sapSummary:
       "Leverages the global best practices of the SAP SuccessFactors solution portfolio, for recruitment and onboarding.",
     ours: "Recruiting and Onboarding taken together, because the hand-off between them is where candidates are lost and where the first impression of the employer is actually made.",
+    scopeSource:
+      "Transcribed from the package artwork on /insights/in2it-ebs-simplify-hiring/ (t1.png), 18 November 2026. Four spellings corrected against the original.",
+    scope: [
+      {
+        group: "Requisition management",
+        items: [
+          "Requisition and approval",
+          "Standard SuccessFactors pre-screening questionnaires",
+          "Competency-based assessment setup",
+          "Sourcing setup",
+          "Recruiting posting setup",
+        ],
+      },
+      {
+        group: "Candidate management",
+        items: [
+          "Multistage application",
+          "Document attachment",
+          "Interview scheduling with Outlook integration",
+          "Candidate search",
+          "Candidate upload, single or bulk",
+          "Email campaigns",
+          "Talent pools with ten-status setup",
+        ],
+      },
+      {
+        group: "Offer management",
+        items: ["Offer approval setup, two-level approval", "One offer letter setup"],
+      },
+      {
+        group: "Onboarding",
+        items: [
+          "One India onboarding template, including Form 11 and Form 2 (EPF nominee details)",
+          "Asset request setup",
+          "ID card request setup",
+          "Buddy programme setup",
+          "Quick links setup",
+          "Standard notifications",
+        ],
+      },
+      {
+        group: "Standard dashboards and reports",
+        items: [
+          "Requisition status",
+          "Candidate pipeline report",
+          "Offer acceptance ratio",
+          "Cost per hire",
+          "Joining report",
+          "Turnaround time of position closure",
+        ],
+      },
+      {
+        group: "Included with",
+        items: [
+          "One requisition template, one candidate template",
+          "One offer approval template, one offer letter template",
+          "Role-based permissions",
+          "Email notifications",
+          "One standard route map: two steps, one rating scale of 1 to 5",
+          "Career site builder, one strategy page",
+        ],
+      },
+    ],
   },
 ];
 

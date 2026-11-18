@@ -30,13 +30,25 @@ export type ServiceCard = {
   imageAlt: string;
 };
 
+/**
+ * NOTE ON `href` VS `slug`, 18 November 2026.
+ *
+ * Every `href` below points at the page's canonical URL. The `slug` beside it is the PRE-RESTRUCTURE
+ * name and is kept because it still addresses the artwork in public/services/ — they are no longer
+ * the same string and must not be re-derived from one another.
+ *
+ * They used to match, which meant all seven cards in the homepage service grid linked at old URLs
+ * and every visitor who clicked one paid a 308 redirect. It resolved, so no crawl of the sitemap
+ * ever saw it: the sitemap lists canonical routes, and a link to a non-canonical one is invisible
+ * to that check by construction. tests/links.test.ts now fails on it.
+ */
 export const services: ServiceCard[] = [
   {
     slug: "rise-with-sap",
     name: "RISE with SAP",
     blurb:
       "SAP S/4HANA is a real-time enterprise resource management suite for digital business, built on the in-memory SAP HANA platform and deployable on-premise, in the cloud or hybrid.",
-    href: "/services/rise-with-sap/",
+    href: "/services/rise-s4hana/",
     image: "/services/rise-with-sap.jpg",
     imageAlt: "A desk running S/4HANA dashboards, captioned RISE with SAP — Business Transformation as a Service",
   },
@@ -45,7 +57,7 @@ export const services: ServiceCard[] = [
     name: "SAP SuccessFactors",
     blurb:
       "The SAP SuccessFactors HXM Suite provides cloud-based solutions for core HR and payroll, talent management and the everyday experience of working in your organisation.",
-    href: "/services/sap-successfactors/",
+    href: "/services/successfactors/",
     image: "/services/sap-successfactors.jpg",
     imageAlt: "A pen resting on printed bar charts and graphs",
   },
@@ -54,7 +66,7 @@ export const services: ServiceCard[] = [
     name: "SAP SAC",
     blurb:
       "SAP Analytics Cloud combines business intelligence, enterprise planning and augmented analytics in one solution on SAP Business Technology Platform, so reporting and planning stop living apart.",
-    href: "/services/sap-sac/",
+    href: "/services/data-engineering-analytics/",
     image: "/services/sap-analytics-cloud.jpg",
     imageAlt: "A hand reaching into a field of figures and rising bars, captioned SAP Analytics Cloud",
   },
@@ -63,7 +75,7 @@ export const services: ServiceCard[] = [
     name: "Grow with SAP",
     blurb:
       "S/4HANA Public Cloud on pre-configured industry processes — a fit-to-standard path for the mid-market and for net-new business units, on a quarterly release cadence.",
-    href: "/services/sap-grow-fast/",
+    href: "/services/converged-pulse/",
     image: "/services/grow-with-sap.jpg",
     imageAlt: "Terraced green hillside planting, captioned GROW with SAP",
   },
@@ -72,7 +84,7 @@ export const services: ServiceCard[] = [
     name: "Other Enterprise Solutions",
     blurb:
       "Enterprises keep changing with the market. We help you plan, implement and customise the leading platforms — Oracle, Microsoft and SAP — around what the organisation needs next.",
-    href: "/services/other-enterprise-solutions/",
+    href: "/services/enterprise-platforms/",
     image: "/services/other-enterprise-solutions.jpg",
     imageAlt: "Four pairs of hands fitting jigsaw pieces together on a table",
   },
@@ -81,7 +93,7 @@ export const services: ServiceCard[] = [
     name: "Data Analytics & AI",
     blurb:
       "Structured, unstructured and semi-structured data is rising in volume faster than anyone can read it. Business analytics and intelligence turn that variety into answers you can act on.",
-    href: "/services/data-analytics-ai/",
+    href: "/services/data-engineering-analytics/",
     image: "/services/data-analytics-ai.jpg",
     imageAlt: "A desktop monitor filled with analytics dashboards in an office",
   },
@@ -90,7 +102,7 @@ export const services: ServiceCard[] = [
     name: "Application Development & Maintenance Services (ADMS)",
     blurb:
       "Building and maintaining the software a business runs on — development, integration, maintenance and support across both modern and legacy application estates.",
-    href: "/services/application-development-maintenance-services-adms/",
+    href: "/services/application-engineering/",
     image: "/services/adms.jpg",
     imageAlt: "Two people sketching mobile app wireframes on paper at a desk",
   },

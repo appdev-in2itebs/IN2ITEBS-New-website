@@ -1,6 +1,7 @@
 import { pageMetadata } from "@/lib/metadata";
 import { ArticleJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import Link from "next/link";
+import { PackageScope } from "@/components/sections/package-scope";
 import { notFound } from "next/navigation";
 import { Container, Section } from "@/components/ui/container";
 import { Eyebrow, Headline } from "@/components/ui/typography";
@@ -89,7 +90,11 @@ export default async function InsightPage({ params }: { params: Promise<{ slug: 
             )}
             <div className="flex flex-col gap-5 text-lg leading-relaxed text-foreground-muted">
               {body.blocks.map((block, index) =>
-                block.type === "image" ? (
+                block.type === "scope" ? (
+                  // Expanded from content/qpps.ts, so the article and the practice page cannot
+                  // disagree about what a fixed-price package contains.
+                  <PackageScope key={index} packageName={block.package} />
+                ) : block.type === "image" ? (
                   // The live article prints these inline, at this point in the copy.
                   <figure key={index} className="my-2 overflow-hidden rounded-feature">
                     {/* eslint-disable-next-line @next/next/no-img-element */}

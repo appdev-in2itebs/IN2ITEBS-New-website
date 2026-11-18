@@ -34,7 +34,18 @@
 export type InsightBlock =
   | { type: "heading" | "paragraph" | "listItem"; text: string; strong?: boolean }
   | { type: "image"; src: string; alt?: string }
-  | { type: "link"; text: string; href: string };
+  | { type: "link"; text: string; href: string }
+  /**
+   * The itemised scope of an SAP-qualified package, expanded at render time from
+   * `content/qpps.ts` by its `short` name.
+   *
+   * It is a reference rather than a copy on purpose. This content used to live in a JPEG on this
+   * page and nowhere else; transcribing it into the article as flat text would have fixed the
+   * accessibility problem and created a worse one, because the same scope also appears on the
+   * practice page, and two hand-maintained copies of a fixed-price package's contents will
+   * disagree within a year. The scope is a commercial commitment, so it gets one source.
+   */
+  | { type: "scope"; package: string };
 
 export const insightBodies: Record<
   string,
@@ -249,11 +260,6 @@ export const insightBodies: Record<
         text: "More transparency in the system",
       },
       {
-        type: "image",
-        src: "/insights/body/Picture2-1024x194.jpg",
-        alt: "",
-      },
-      {
         type: "heading",
         text: "In the Cloud",
       },
@@ -291,25 +297,16 @@ export const insightBodies: Record<
       },
       {
         type: "paragraph",
-        text: "Possible Integrating RPA/NLP Tools with SimplifyTalent for Souring automation for removing mundane jobs",
+        text: "Possible Integrating RPA/NLP Tools with SimplifyTalent for Sourcing automation for removing mundane jobs",
       },
       {
         type: "heading",
         text: "One system of record, so a question about the business only has to be asked once",
       },
-      {
-        type: "image",
-        src: "/insights/body/Picture3.jpg",
-        alt: "",
-      },
+      { type: "scope", package: "SimplifyTalent" },
       {
         type: "heading",
         text: "Performance & Goal Management",
-      },
-      {
-        type: "image",
-        src: "/insights/body/Picture4.jpg",
-        alt: "",
       },
       {
         type: "paragraph",
@@ -321,7 +318,7 @@ export const insightBodies: Record<
       },
       {
         type: "listItem",
-        text: "Over 50+ certified SuccessFactors consultants across different modules",
+        text: "More than 50 SuccessFactors consultants across the module set",
       },
       {
         type: "listItem",
@@ -337,7 +334,7 @@ export const insightBodies: Record<
       },
       {
         type: "listItem",
-        text: "Presence across all major cities in Indi",
+        text: "Presence across all major cities in India",
       },
       {
         type: "paragraph",
@@ -417,17 +414,12 @@ export const insightBodies: Record<
         text: "A Fully Integrated response to Social Recruiting & Onboarding",
       },
       {
-        type: "image",
-        src: "/insights/body/hari1-1024x119.jpg",
-        alt: "",
-      },
-      {
         type: "heading",
         text: "In the Cloud",
       },
       {
         type: "paragraph",
-        text: "With SimplifyTalent cloud solutions, you get a lower, predictable monthly cost and faster time to value. It’s more flexible, scalable, and secure, and it’s faster.",
+        text: "With SimplifyHiring cloud solutions, you get a lower, predictable monthly cost and faster time to value. It’s more flexible, scalable, and secure, and it’s faster.",
       },
       {
         type: "heading",
@@ -435,7 +427,7 @@ export const insightBodies: Record<
       },
       {
         type: "paragraph",
-        text: "SimplifyTalent contains a core set of functionalities common across the entire software suite. Whether you deploy the full HCM Suite or just a part of it.",
+        text: "SimplifyHiring contains a core set of functionalities common across the entire software suite. Whether you deploy the full HCM Suite or just a part of it.",
       },
       {
         type: "heading",
@@ -443,7 +435,7 @@ export const insightBodies: Record<
       },
       {
         type: "paragraph",
-        text: "With smart phones and tablet computers, you can take advantage of the power of SimplifyTalent, anytime, anywhere.",
+        text: "With smart phones and tablet computers, you can take advantage of the power of SimplifyHiring, anytime, anywhere.",
       },
       {
         type: "heading",
@@ -451,7 +443,7 @@ export const insightBodies: Record<
       },
       {
         type: "paragraph",
-        text: "You can take advantage of extending other modules of SuccessFactors to co-exist with SimplifyTalent",
+        text: "You can take advantage of extending other modules of SuccessFactors to co-exist with SimplifyHiring",
       },
       {
         type: "heading",
@@ -459,7 +451,7 @@ export const insightBodies: Record<
       },
       {
         type: "paragraph",
-        text: "Possible Integrating RPA/NLP Tools with SimplifyTalent for Souring automation for removing mundane jobs",
+        text: "Possible Integrating RPA/NLP Tools with SimplifyHiring for Sourcing automation for removing mundane jobs",
       },
       {
         type: "heading",
@@ -469,11 +461,7 @@ export const insightBodies: Record<
         type: "heading",
         text: "SimplifyHiring",
       },
-      {
-        type: "image",
-        src: "/insights/body/t1.png",
-        alt: "",
-      },
+      { type: "scope", package: "SimplifyHiring" },
       {
         type: "heading",
         text: "WHAT DOES IN2IT enterprise business services OFFER?",
@@ -484,7 +472,7 @@ export const insightBodies: Record<
       },
       {
         type: "listItem",
-        text: "Over 30+ certified SuccessFactors consultants across different modules",
+        text: "More than 30 SuccessFactors consultants across the module set",
       },
       {
         type: "listItem",

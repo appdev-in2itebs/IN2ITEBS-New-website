@@ -7,6 +7,7 @@ import { SapToolchain } from "@/components/sections/sap-toolchain";
 import { EstateReviewDiagnostic } from "@/components/interactive/estate-review-diagnostic";
 import { EccMaintenanceChecker } from "@/components/interactive/ecc-maintenance-checker";
 import { ToolsBand } from "@/components/sections/tools-band";
+import { PackageScope } from "@/components/sections/package-scope";
 import { V2Blueprint } from "@/components/sections/v2-ledger";
 import {
   V2Hero,
@@ -249,6 +250,22 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
               </article>
             ))}
           </div>
+          {/*
+            The itemised contents, for the packages where we hold a signed-off scope. This is the
+            content that used to live only inside a JPEG on an /insights/ article — sixty-eight
+            line items that search engines and screen readers could not read. See
+            components/sections/package-scope.tsx.
+          */}
+          {packagesFor(page.qualifiedPackages).some((pkg) => pkg.scope?.length) ? (
+            <div className="mt-16 space-y-16">
+              {packagesFor(page.qualifiedPackages)
+                .filter((pkg) => pkg.scope?.length)
+                .map((pkg) => (
+                  <PackageScope key={pkg.short} packageName={pkg.short} />
+                ))}
+            </div>
+          ) : null}
+
           <Reveal className="mt-10 max-w-measure">
             <p className="text-sm text-foreground-muted">
               The wording above in each card&rsquo;s middle paragraph is SAP&rsquo;s, trimmed for length and not for
