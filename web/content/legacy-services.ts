@@ -99,6 +99,27 @@ export interface ServicePage {
    */
   diagram?: { src: string; alt: string; caption?: string };
   /**
+   * A second section group, with its own heading and its own diagram above it.
+   *
+   * Most service pages say one thing and need one list. A few — ECC Prism is the first — carry a
+   * narrative ("three stages") and a specification ("what the assessment actually looks at"),
+   * and flattening those into one list loses both: the reader cannot see the shape of the
+   * engagement, and cannot check whether their own problem is in scope.
+   *
+   * Use it sparingly. Two groups is a page with two jobs; three would be a page that should have
+   * been split.
+   */
+  extraSections?: {
+    heading: string;
+    /** Short label for the sticky nav chip. The heading is usually too long to sit in one. */
+    anchorLabel?: string;
+    eyebrow?: string;
+    intro?: string;
+    diagram?: { src: string; alt: string; caption?: string };
+    items: ServiceSection[];
+    closing?: string[];
+  };
+  /**
    * An interactive block rendered after the sections. Kept as a key rather than a component import
    * so that content/ stays data and components/ stays markup. Add a case in ServicePageV2.
    */
@@ -478,6 +499,7 @@ export const servicePages: ServicePage[] = [
       "2027, 2030 or 2033 — most ECC customers do not know which maintenance date applies to them. ECC Prism establishes which, and gets you safe to it.",
     intro: [
       "Most ECC customers believe they are facing a single deadline. They are facing three, they are eligible for only one of them, and almost nobody has checked which.",
+      "The second thing almost nobody has checked is what the estate is costing them in the meantime — in licences nobody uses, custom code nobody runs, data nobody has archived and reporting running against the wrong system. Those four are usually enough to pay for the work of finding them.",
     ],
     sectionsHeading: "Three stages, each one sellable on its own",
     layout: "steps",
@@ -516,9 +538,75 @@ export const servicePages: ServicePage[] = [
         ],
       },
     ],
+    extraSections: {
+      eyebrow: "The assessment",
+      heading: "Nine domains, one read-only pass",
+      anchorLabel: "The assessment",
+      intro:
+        "The stages above are the shape of the engagement. This is its specification — what we look at, so you can check whether your own problem is in scope before you ask us about it. Every domain produces findings with evidence attached, because a recommendation a buyer cannot show their own audit committee is not worth making.",
+      // Not a picture of the nine cards below — that would be decoration. This one carries the
+      // commercial argument, which is the part a reader cannot get from the scope list: where the
+      // money comes back from, and why findings from a firm that resells nothing are worth more.
+      diagram: {
+        src: "/diagrams/m7-ecc-prism-economics.svg",
+        alt: "The four levers an ECC assessment finds money in — licences nobody uses, custom code nobody runs, data that should be archived, and reporting running against the transaction system — with the rule that In2IT EBS resells no licences, takes no product commission and names no analytics vendor it is paid to name.",
+      },
+      items: [
+        {
+          title: "Landscape and architecture",
+          icon: "layers",
+          body: "Version, enhancement pack and Unicode status, the DEV, QAS, PRD and DR setup, and whether what you are paying to run matches what the system actually uses.",
+        },
+        {
+          title: "The integration estate",
+          icon: "link",
+          body: "Every SAP and non-SAP interface, with its stability, its error handling and whether anybody still owns it. Also whether a new integration you are considering can be done inside ECC at all.",
+        },
+        {
+          title: "Functional and process",
+          icon: "git-branch",
+          body: "Module by module across FI, CO, MM, SD, PS, PP, PM and HCM. Manual workarounds, shadow systems kept in spreadsheets, customisations carrying a high cost to own, and the control gaps an auditor would find.",
+        },
+        {
+          title: "Custom code",
+          icon: "code",
+          body: "Every Z and Y object inventoried, with the ones nobody has executed in a year separated from the ones holding the business up. Modifications are separated from enhancements, because they carry different risk at conversion.",
+        },
+        {
+          title: "Licence position",
+          icon: "shield",
+          body: "Named users against actual usage, licences classified above what the person does, dormant accounts, and indirect access exposure — found before SAP's own measurement finds it rather than after.",
+        },
+        {
+          title: "Data volume and quality",
+          icon: "database",
+          body: "Database growth and the tables driving it, business-critical data separated from history, and master data that is duplicated, incomplete or wrong in ways that are already affecting your reporting.",
+        },
+        {
+          title: "Archiving feasibility",
+          icon: "folder",
+          body: "Which objects can be archived module by module, what depends on them, and — the question that actually decides it — how an auditor still reaches an archived record three years later.",
+        },
+        {
+          title: "Reporting and analytics",
+          icon: "line-chart",
+          body: "What reporting is doing to ECC performance, how much of it has escaped into spreadsheets, and whether a low-cost BI layer can take the load without a new SAP licence or a new vendor lock-in.",
+        },
+        {
+          title: "Security and controls",
+          icon: "lock",
+          body: "User and role hygiene, firefighter and super-user access, segregation of duties, and the IT general controls a statutory audit will test. For public sector undertakings, the specific gaps a CAG audit tends to raise.",
+        },
+      ],
+      closing: [
+        "What you get at the end: an executive health report, the technical and functional audit, the licence optimisation findings, an archiving strategy, an analytics recommendation, a risk register with severity and owners, and a two-to-three year roadmap for the estate. For public sector clients, those are assembled into a pack built to be handed to an audit committee rather than summarised for one.",
+        "What is deliberately not in it: the migration itself, new licences, new software, and any process re-engineering beyond identifying where it would pay. The assessment is bought, delivered and finished on its own, and what you do next is a separate decision made with better information.",
+      ],
+    },
     closing: [
       "Why we built this: because the alternative being offered to most ECC customers is a migration they are not ready to fund, on a timetable set by somebody else's product roadmap rather than by their own business.",
       "That is not an argument against moving to S/4HANA. We migrate clients to S/4HANA and we think most ECC estates should get there. It is an argument against moving badly, at the wrong moment, because a date was presented as an emergency. A migration taken on an informed timetable is a better migration.",
+      "How we work in your system: read-only, against a copy of your data with display access. No configuration is touched, no transport is moved, production carries on, and every finding arrives with the evidence behind it. It is sold as a fixed-price assessment against milestones, because the four levers above usually recover the cost of finding them inside the first year — and because it defers the capital decision on S/4HANA by two to three years, taken deliberately rather than by drift.",
       "You can buy the assessment on its own, act on it yourself, and never speak to us again. That is a real option and we price it as one.",
     ],
   },

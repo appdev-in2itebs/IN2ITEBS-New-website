@@ -33,6 +33,9 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
   const anchors = [
     { id: "overview", label: "Overview" },
     ...(page.sections.length ? [{ id: "covers", label: page.sectionsHeading ? "Details" : "What it covers" }] : []),
+    ...(page.extraSections
+      ? [{ id: "detail", label: page.extraSections.anchorLabel ?? page.extraSections.heading }]
+      : []),
     ...(siblings.length ? [{ id: "related", label: `More in ${group?.name ?? "Services"}` }] : []),
     { id: "talk", label: "Talk to us" },
   ];
@@ -111,6 +114,56 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
             ))}
           </Container>
         </section>
+      ) : null}
+      {page.extraSections ? (
+        <>
+          {page.extraSections.diagram ? (
+            <DiagramBand
+              src={page.extraSections.diagram.src}
+              alt={page.extraSections.diagram.alt}
+              caption={page.extraSections.diagram.caption}
+              tone="canvas"
+            />
+          ) : null}
+          <V2Section
+            id="detail"
+            eyebrow={page.extraSections.eyebrow ?? "In detail"}
+            heading={page.extraSections.heading}
+            tone="subtle"
+          >
+            {page.extraSections.intro ? (
+              <Reveal>
+                <p className="max-w-measure text-lg leading-relaxed text-foreground-muted">
+                  {page.extraSections.intro}
+                </p>
+              </Reveal>
+            ) : null}
+            <div className={page.extraSections.intro ? "mt-10" : undefined}>
+              <V2Bento
+                items={page.extraSections.items.map((section) => ({
+                  title: section.title,
+                  body: section.body,
+                  bullets: section.bullets,
+                  iconImage: section.iconImage,
+                  icon: section.iconImage ? undefined : serviceIcon(section.icon),
+                  href: section.href,
+                }))}
+              />
+            </div>
+            {page.extraSections.closing?.length ? (
+              <Reveal className="mt-12">
+                {page.extraSections.closing.map((paragraph) => (
+                  <p
+                    key={paragraph}
+                    className="max-w-measure text-lg font-medium leading-relaxed text-foreground md:text-xl"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </Reveal>
+            ) : null}
+          </V2Section>
+        </>
       ) : null}
       {/* The interactive blocks carried over from the existing site. The RISE/GROW chooser is the
           only thing on this site that answers a buyer's question before they talk to us, which is
