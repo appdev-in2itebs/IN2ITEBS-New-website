@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
+import { readOrFallBack } from "@/lib/cms/outage";
 import { servicePages, type ServicePage, type ServiceSection } from "@/content/legacy-services";
 import { legacyIndustries, type LegacyIndustry, type IndustrySection } from "@/content/legacy-industries";
 import { partnerPages, type PartnerPage } from "@/content/partner-pages";
@@ -17,9 +18,9 @@ import type { Insight, Leader, Office, Testimonial } from "@/content/types";
  * saved in /admin (Supabase table cms_entries) laid over it. Pages call getCms() while they render;
  * React's cache() makes that one database round trip per page render, however many components ask.
  *
- * Failure policy. Without Supabase credentials (a laptop, CI) the shipped text is used. With them, a
- * failed query throws: during an on-demand refresh that makes Next keep serving the last good page,
- * instead of caching the shipped text over a live edit; during a deploy it fails the build loudly.
+ * Failure policy. Without Supabase credentials (a laptop, CI) the shipped text is used. With them,
+ * the two failure cases are deliberately different — see the note above `getCms()` at the foot of
+ * this file before changing either.
  */
 
 export type ArticleBody = { author?: string; authorRole?: string; authorDate?: string; blocks: InsightBlock[] };
@@ -119,25 +120,32 @@ export function applyEdits(rows: Row[], heroes: Record<string, HeroEdit> = {}): 
   return result;
 }
 
+/** Failure policy — build versus request — is in lib/cms/outage.ts. Read it before changing this. */
 export const getCms = cache(async (): Promise<Cms> => {
   if (!supabaseConfigured()) return shipped();
-  const db = supabaseAdmin();
-  const [entries, heroes] = await Promise.all([
-    // Builder pages are read on their own (lib/builder/store.ts), not with every page render.
-    db.from("cms_entries").select("collection, key, data, deleted").neq("collection", "page"),
-    db.from("page_heroes").select("path, title, intro, image_key"),
-  ]);
-  if (entries.error) throw new Error(`cms_entries: ${entries.error.message}`);
-  if (heroes.error) throw new Error(`page_heroes: ${heroes.error.message}`);
-  const heroMap: Record<string, HeroEdit> = {};
-  for (const h of heroes.data ?? []) {
-    const edit: HeroEdit = {};
-    if (h.title) edit.title = h.title;
-    if (h.intro) edit.intro = h.intro;
-    if (h.image_key) edit.imageKey = h.image_key;
-    if (Object.keys(edit).length) heroMap[h.path] = edit;
-  }
-  return applyEdits(entries.data ?? [], heroMap);
+  return readOrFallBack(
+    "cms_entries + page_heroes",
+    async () => {
+      const db = supabaseAdmin();
+      const [entries, heroes] = await Promise.all([
+        // Builder pages are read on their own (lib/builder/store.ts), not with every page render.
+        db.from("cms_entries").select("collection, key, data, deleted").neq("collection", "page"),
+        db.from("page_heroes").select("path, title, intro, image_key"),
+      ]);
+      if (entries.error) throw new Error(`cms_entries: ${entries.error.message}`);
+      if (heroes.error) throw new Error(`page_heroes: ${heroes.error.message}`);
+      const heroMap: Record<string, HeroEdit> = {};
+      for (const h of heroes.data ?? []) {
+        const edit: HeroEdit = {};
+        if (h.title) edit.title = h.title;
+        if (h.intro) edit.intro = h.intro;
+        if (h.image_key) edit.imageKey = h.image_key;
+        if (Object.keys(edit).length) heroMap[h.path] = edit;
+      }
+      return applyEdits(entries.data ?? [], heroMap);
+    },
+    shipped(),
+  );
 });
 
 export async function getService(slug: string) {
