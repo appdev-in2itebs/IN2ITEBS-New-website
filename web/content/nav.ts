@@ -41,7 +41,7 @@ export const pillars: PracticeSummary[] = [
 /** Enterprise Platforms — nine pages. Managed Services is its own page, not a paragraph on four others. */
 export const enterprisePlatformsChildren: NavItem[] = [
   { label: "SAP", href: "/services/sap/" },
-  { label: "Fixed Start", href: "/services/fixed-start/" },
+  { label: "Converged Pulse", href: "/services/converged-pulse/" },
   { label: "ECC Prism", href: "/services/ecc-prism/" },
   { label: "RISE and S/4HANA", href: "/services/rise-s4hana/" },
   { label: "SuccessFactors", href: "/services/successfactors/" },

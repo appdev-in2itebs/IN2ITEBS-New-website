@@ -6,7 +6,7 @@ const BRAND = "In2IT EBS";
 const seoTitleOverrides: Record<string, string> = {
   "/services/other-enterprise-solutions/": "Other Enterprise Services",
   "/services/sap-enterprise-solutions/": "SAP Consulting and Implementation",
-  "/services/sap-grow-fast/": "Fixed Start Cloud ERP Services",
+  "/services/sap-grow-fast/": "Converged Pulse Cloud ERP Services",
   "/partners/sap-concur/": "SAP Concur Technology Overview",
   "/partners/oracle/": "Oracle Technology Overview",
   "/partners/microsoft/": "Microsoft Technology Overview",

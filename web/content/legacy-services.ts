@@ -170,7 +170,7 @@ export const serviceGroups: ServiceGroup[] = [
     blurb: "The packaged platforms your core business processes run on — implemented, migrated, extended and run.",
     items: [
       { label: "SAP", href: svc("sap") },
-      { label: "Fixed Start", href: svc("fixed-start") },
+      { label: "Converged Pulse", href: svc("converged-pulse") },
       { label: "ECC Prism", href: svc("ecc-prism") },
       { label: "RISE and S/4HANA", href: svc("rise-s4hana") },
       { label: "SuccessFactors", href: svc("successfactors") },
@@ -445,31 +445,41 @@ export const servicePages: ServicePage[] = [
   },
   {
     /**
-     * RENAMED FROM "GROW Fast", 18 November 2026.
+     * THIS PAGE WAS RENAMED TWICE, AND THE SECOND TIME WAS THE CORRECT ONE.
      *
-     * SAP ships a product called SAP GROW Fast. An SAP partner running its own offer under the
-     * same name does not read as a coincidence to a buyer — it reads as SAP's programme — and
-     * partner agreements generally do not permit incorporating an SAP product name into a
-     * partner's own offering name. The old URL 301s here, so nothing is lost.
+     * It shipped as "GROW Fast", which was wrong: SAP ships a product called SAP GROW Fast and a
+     * partner may not put an SAP product name on its own offer. It was then renamed "Fixed
+     * Start", which was also wrong, for a reason that only became visible on reading SAP's own
+     * partner profile: In2IT already holds three SAP-qualified package names, and one of them is
+     * this offer.
      *
-     * "Fixed Start" is ours and says the actual differentiator: scope, duration and price are all
-     * three fixed before signature. That is the promise the page is built on.
+     *   In2IT Converged Pulse for SAP GROW Fast
+     *   "Integrated cloud ERP for growing businesses, live in 12 weeks. Brings together Finance,
+     *    Sales and Procurement on SAP Cloud ERP, enhanced with SAP SuccessFactors Employee
+     *    Central." — sap.com/partners/profile/in2it-enterprise-business-services
+     *
+     * That is the same offer this page describes, under a name SAP has reviewed and published.
+     * The approved construction is <our name> for <SAP product>, which is why "for SAP GROW Fast"
+     * is permitted here and "GROW Fast" alone never is. See content/qpps.ts.
+     *
+     * Both earlier URLs 301 here, so nothing is lost. The lesson worth keeping: before naming an
+     * offer, read what SAP has already qualified — the answer may be on the partner profile.
      */
-    slug: "fixed-start",
+    slug: "converged-pulse",
     diagram: {
       src: "/diagrams/m3-grow-fast.svg",
-      alt: "The Fixed Start timeline: a fixed scope agreed in weeks one and two, configuration and validation through the middle weeks, and go-live on a date set at the start.",
+      alt: "The Converged Pulse timeline: a fixed scope agreed in weeks one and two, configuration and validation through the middle weeks, and go-live on a date set at the start.",
     },
-    name: "Fixed Start",
+    name: "Converged Pulse",
     title: "A real ERP, on a date you can plan around",
     group: "enterprise-platforms",
     icon: "rocket",
     sourceUrl: "https://www.in2itebs.com/services/grow-fast/", // pre-rename source
-    metaTitle: "Fixed Start — packaged SAP S/4HANA Cloud",
+    metaTitle: "Converged Pulse — SAP Cloud ERP in 12 weeks",
     metaDescription:
       "A packaged implementation of SAP S/4HANA Cloud Public Edition with a fixed scope, a fixed duration and a fixed price — all three stated before you sign.",
     intro: [
-      "Fixed Start is our packaged implementation of SAP S/4HANA Cloud Public Edition, delivered under SAP's GROW programme, with a fixed scope, a fixed duration and a fixed price. All three are stated before you sign, and all three are ours to hold.",
+      "In2IT Converged Pulse for SAP GROW Fast is our packaged implementation of SAP Cloud ERP — Finance, Sales and Procurement, with SuccessFactors Employee Central alongside it — live in twelve weeks. It is one of three packages SAP has qualified and published, and it carries a fixed scope, a fixed duration and a fixed price, all three stated before you sign.",
     ],
     sectionsHeading: "The shape of it",
     layout: "steps",

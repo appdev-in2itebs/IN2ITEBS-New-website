@@ -101,10 +101,15 @@ export const packagesFor = (practice: QualifiedPackage["practice"]) =>
 /**
  * Delivery counts SAP publishes on our partner profile, by solution area.
  *
- * These are SAP's numbers, not ours — which is exactly why they are worth printing. A buyer can
- * check every one of them against sap.com without asking us for anything.
+ * These are SAP's numbers, not ours, which is exactly what makes them worth having: a buyer can
+ * check every one against sap.com without asking us for anything.
  *
- * Read 18 November 2026. Re-read before a bid: SAP updates the profile as engagements close.
+ * NOT PUBLISHED ON THE SITE, by the Managing Director's decision of 18 November 2026. SAP revises
+ * the profile as engagements close, so a figure printed here goes stale between bids unless
+ * somebody re-reads the profile — and a stale number on a page about honesty is worse than no
+ * number. They are recorded for bid teams, who can cite the live profile directly.
+ *
+ * Read 18 November 2026. Re-read before quoting any of them.
  */
 export const sapPublishedDeliveries = [
   { area: "Talent management", india: 25 },

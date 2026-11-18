@@ -172,9 +172,9 @@ export const insightBodies: Record<
       { type: "heading", text: "Our own packaged version of this" },
       {
         type: "paragraph",
-        text: "Fixed Start is our packaged implementation of S/4HANA Cloud Public Edition under the GROW programme, with a fixed scope, a fixed duration and a fixed price — all three stated before signature, and all three ours to hold. It is not for everyone, and the assessment that decides whether it fits is deliberately the first conversation rather than the last.",
+        text: "In2IT Converged Pulse for SAP GROW Fast is our own packaged version of this, and one of three packages SAP has reviewed and published. Finance, Sales and Procurement on SAP Cloud ERP with Employee Central alongside, live in twelve weeks, with scope, duration and price all three stated before signature. It is not for everyone, and the conversation that decides whether it fits is deliberately the first one rather than the last.",
       },
-      { type: "link", text: "Fixed Start", href: "/services/fixed-start/" },
+      { type: "link", text: "Converged Pulse", href: "/services/converged-pulse/" },
     ],
   },
 
