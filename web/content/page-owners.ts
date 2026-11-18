@@ -64,16 +64,40 @@ export const mailboxes: Record<OwnerRole, string> = {
 /**
  * Mailboxes that exist today, and what each is for on the public site.
  *
+ * ALL TEN ARE LIVE as of 18 November 2026, confirmed by the Managing Director. The six role
+ * aliases — marketing@, alliances@, apps@, engineering@, advisory@, legal@ — were created by
+ * internal IT, and sales@ is confirmed. Before that date only the four below the line existed,
+ * which is why the register was documentation and the site pointed almost everything at info@.
+ *
  * `hiring@` is the candidate intake address and is what the careers pages use — not `hr@`, which
  * is the internal HR role mailbox and should not collect CVs. `accounts@` is billing and supplier
  * queries, which belong on the contact page rather than in a sales funnel.
+ *
+ * ── THE THING TO WATCH NOW ───────────────────────────────────────────────────────────────────
+ * A mailbox existing and a mailbox being read are different facts, and only the first one is
+ * recorded here. An address published on a buyer-facing page with nobody watching it is worse
+ * than no address: it converts a prospect's interest into evidence that we are slow. Put two
+ * people on each before pointing anything public at it, and keep them as shared mailboxes rather
+ * than forwards — a forward fails silently when the person leaves.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
  */
 export const existingMailboxes = new Set([
   "info@in2itebs.com",
   "hr@in2itebs.com",
   "hiring@in2itebs.com",
   "accounts@in2itebs.com",
+  // Created 18 November 2026.
+  "marketing@in2itebs.com",
+  "alliances@in2itebs.com",
+  "apps@in2itebs.com",
+  "engineering@in2itebs.com",
+  "advisory@in2itebs.com",
+  "sales@in2itebs.com",
+  "legal@in2itebs.com",
 ]);
+
+/** Every mailbox in the register is live, so nothing public has to be held back for a bounce. */
+export const allMailboxesLive = Object.values(mailboxes).every((m) => existingMailboxes.has(m));
 
 /** Public contact points, by what the visitor is actually trying to do. */
 export const publicMailboxes = {

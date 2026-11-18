@@ -163,3 +163,37 @@ test("every page in the sitemap has an accountable owner", async () => {
   const unowned = (await sitemap()).map((e) => new URL(e.url).pathname).filter((p) => !ownerOf(p));
   assert.deepEqual(unowned, []);
 });
+
+/**
+ * Every owning role resolves to a mailbox that exists.
+ *
+ * All ten were confirmed live on 18 November 2026. The failure this guards against is the next
+ * role: somebody adds a ninth owner with a ninth alias, nobody creates the alias, and a page's
+ * accountable contact quietly bounces. The register is only useful if the address at the end of
+ * it works, so the build says so rather than a person noticing.
+ *
+ * It does NOT prove anybody reads the mailbox. That one needs a human.
+ */
+test("every owning role resolves to a mailbox that exists", async () => {
+  const { mailboxes, existingMailboxes } = await import("../content/page-owners");
+  const missing = Object.entries(mailboxes)
+    .filter(([, address]) => !existingMailboxes.has(address))
+    .map(([role, address]) => `${role} -> ${address}`);
+  assert.deepEqual(missing, []);
+});
+
+/**
+ * Legal and privacy enquiries reach Legal, not the catch-all.
+ *
+ * A data subject request under the DPDP Act carries a statutory response window, and it used to
+ * land in info@ alongside everything else. Pinned because it is the kind of routing that gets
+ * reverted by a well-meaning find-and-replace.
+ */
+test("the legal pages send enquiries to legal@, not to info@", async () => {
+  const { readFile } = await import("node:fs/promises");
+  for (const page of ["privacy-policy", "privacy-notice", "disclaimer"]) {
+    const source = await readFile(new URL(`../app/legal/${page}/page.tsx`, import.meta.url), "utf8");
+    assert.match(source, /mailto:legal@in2itebs\.com/, `${page} should contact legal@`);
+    assert.doesNotMatch(source, /mailto:info@in2itebs\.com/, `${page} should not contact info@`);
+  }
+});

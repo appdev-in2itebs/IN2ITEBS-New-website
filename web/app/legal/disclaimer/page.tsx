@@ -172,7 +172,7 @@ export default function DisclaimerPage() {
               </p>
               <p>
                 Please send any questions or comments, or report violations with regard to this website, to{" "}
-                <a href="mailto:info@in2itebs.com">info@in2itebs.com</a>.
+                <a href="mailto:legal@in2itebs.com">legal@in2itebs.com</a>.
               </p>
             </div>
           </Reveal>
