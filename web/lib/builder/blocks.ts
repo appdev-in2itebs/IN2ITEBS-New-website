@@ -427,6 +427,7 @@ export const isBlockType = (t: unknown): t is BlockType => typeof t === "string"
 export const HOME_SECTIONS = {
   hero: "Hero (video)",
   clients: "Client logos",
+  industries: "Industry strip",
   services: "Services",
   tools: "Interactive tools",
   metrics: "Ecosystem numbers",

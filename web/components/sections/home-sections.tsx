@@ -7,6 +7,7 @@ import { clients } from "@/content/clients";
 import { EcosystemMetrics } from "@/components/sections/ecosystem-metrics";
 import { HomePartners } from "@/components/sections/home-partners";
 import { HomeServices } from "@/components/sections/home-services";
+import { IndustryStrip } from "@/components/sections/industry-strip";
 import { ToolsBand } from "@/components/sections/tools-band";
 import { HomeTeam } from "@/components/sections/home-team";
 import { YoutubeRibbon } from "@/components/sections/youtube-ribbon";
@@ -48,6 +49,10 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
         </Container>
       </section>
     ),
+    // Added 18 November 2026. The homepage named no industry anywhere above the fold, while the
+    // nine industry pages were the strongest copy on the site with nothing routing to them. One
+    // band, one click. See components/sections/industry-strip.tsx.
+    industries: <IndustryStrip />,
     // The existing site puts the service grid straight under the client ribbon; so do we.
     services: <HomeServices />,
     // Added 12 November 2026. The two diagnostics had no path to them from anywhere a visitor

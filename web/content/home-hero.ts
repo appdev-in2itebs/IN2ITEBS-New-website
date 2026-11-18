@@ -17,9 +17,14 @@ export const homeHeroSlides: HeroSlide[] = [
   {
     id: "brand",
     frames: "slide-1",
-    label: "Enterprise transformation, under control",
+    label: "SAP for asset-heavy and regulated India",
     heading: ["Change with confidence.", "Run without compromise."],
-    body: "In2IT EBS connects enterprise platforms, digital engineering and managed operations through one accountable transformation partner.",
+    // Rewritten 18 November 2026. The previous body described a category — "connects enterprise
+    // platforms, digital engineering and managed operations through one accountable
+    // transformation partner" — which is true of every firm in this market and names nobody. The
+    // replacement names four sectors, names the condition that unites them (somebody is always
+    // checking), and puts a number a reader can verify in the first screen.
+    body: "We run SAP for mining, power, manufacturing and the public sector — the estates where an audit, a tender or a regulator is always watching. 500+ people, four delivery centres, one accountable partner.",
     cta: { href: "/contact/", label: "Talk to us" },
     secondary: { href: "/services/", label: "See our services" },
   },
