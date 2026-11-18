@@ -28,7 +28,7 @@ function OfficeCard({ office }: { office: Office }) {
       </div>
       <p className="text-sm leading-relaxed text-foreground-muted">{office.address}</p>
       <div className="mt-auto flex flex-col gap-1 pt-2 text-sm">
-        <a href={`mailto:${office.email}`} className="font-medium text-action hover:underline">
+        <a href={`mailto:${office.email}`} className="inline-block min-h-6 font-medium text-action hover:underline">
           {office.email}
         </a>
         {office.phone ? <span className="text-foreground-muted">{office.phone}</span> : null}
@@ -127,7 +127,10 @@ export default async function ContactPage() {
                   {regionalContacts.map((r) => (
                     <div key={r.region} className="flex flex-col gap-1">
                       <span className="label-caps text-foreground-muted">{r.region}</span>
-                      <a href={`mailto:${r.email}`} className="text-sm font-medium text-action hover:underline">
+                      <a
+                        href={`mailto:${r.email}`}
+                        className="text-sm inline-block min-h-6 font-medium text-action hover:underline"
+                      >
                         {r.email}
                       </a>
                     </div>
@@ -152,7 +155,10 @@ export default async function ContactPage() {
                     <div key={row.who}>
                       <dt className="text-sm text-foreground-muted">{row.what}</dt>
                       <dd className="mt-1">
-                        <a href={`mailto:${row.who}`} className="font-medium text-action hover:underline">
+                        <a
+                          href={`mailto:${row.who}`}
+                          className="inline-block min-h-6 font-medium text-action hover:underline"
+                        >
                           {row.who}
                         </a>
                       </dd>

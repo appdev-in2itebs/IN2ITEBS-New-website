@@ -69,7 +69,10 @@ export default function CaseStudiesPage() {
             </SectionHeading>
             <p className="mt-6 text-[0.95rem] leading-relaxed text-foreground-muted">
               To request a named reference or the full version of an anonymised study, get in touch via our{" "}
-              <Link href="/contact/" className="font-semibold text-action underline-offset-4 hover:underline">
+              <Link
+                href="/contact/"
+                className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
+              >
                 contact page
               </Link>
               .

@@ -569,7 +569,7 @@ function NavyCta({ p }: { p: P }) {
               </Button>
               <a
                 href={`mailto:${site.primaryEmail}`}
-                className="text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
+                className="inline-block min-h-6 text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
               >
                 {site.primaryEmail}
               </a>

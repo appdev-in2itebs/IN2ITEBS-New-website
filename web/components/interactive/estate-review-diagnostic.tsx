@@ -309,7 +309,7 @@ export function EstateReviewDiagnostic() {
         </div>
 
         <details className="mt-8">
-          <summary className="cursor-pointer text-sm font-semibold text-action underline-offset-4 hover:underline">
+          <summary className="cursor-pointer text-sm inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline">
             Show this as text, to copy or send to a colleague
           </summary>
           <pre className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-card border border-border-subtle bg-surface-subtle p-5 text-sm text-foreground-muted">

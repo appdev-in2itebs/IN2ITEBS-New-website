@@ -239,7 +239,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
               meaning. The last paragraph is ours.{" "}
               <a
                 href={SAP_PROFILE_URL}
-                className="font-semibold text-action underline-offset-4 hover:underline"
+                className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
                 target="_blank"
                 rel="noreferrer"
               >

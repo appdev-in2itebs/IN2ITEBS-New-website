@@ -159,7 +159,7 @@ export default function IndustriesPage() {
                   className="group glass-card flex h-full flex-col justify-between gap-6 rounded-surface p-7"
                 >
                   <h3 className="text-h3 font-bold leading-snug text-foreground">{ind.name}</h3>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold">
+                  <span className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-gold">
                     See clients in this sector
                     <ArrowUpRight
                       size={16}

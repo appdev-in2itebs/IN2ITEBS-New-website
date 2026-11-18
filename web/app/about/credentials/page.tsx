@@ -145,7 +145,7 @@ export default function CredentialsPage() {
             <p className="mt-5 text-sm text-foreground-muted">
               <Link
                 href="/about/credentials/awards/"
-                className="font-semibold text-action underline-offset-4 hover:underline"
+                className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
               >
                 The certificate for each
               </Link>{" "}
@@ -198,7 +198,7 @@ export default function CredentialsPage() {
           The certificates and the accreditation marks behind all of this are on{" "}
           <Link
             href="/about/credentials/awards/"
-            className="font-semibold text-action underline-offset-4 hover:underline"
+            className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
           >
             awards and certificates
           </Link>
@@ -255,7 +255,7 @@ export default function CredentialsPage() {
           <p>
             <Link
               href="/about/where-we-stand/"
-              className="font-semibold text-action underline-offset-4 hover:underline"
+              className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
             >
               Where we stand
             </Link>{" "}

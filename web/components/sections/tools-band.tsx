@@ -71,7 +71,10 @@ export function ToolsBand({
                   <span className="text-sm font-semibold text-foreground">{tool.name}</span>
                   <span className="text-sm text-foreground-muted">{tool.duration}</span>
                 </span>
-                <span aria-hidden className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-action">
+                <span
+                  aria-hidden
+                  className="mt-5 inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action"
+                >
                   Open it
                   <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </span>

@@ -135,7 +135,10 @@ export default async function InsightPage({ params }: { params: Promise<{ slug: 
               </p>
             )}
             <div className="mt-10">
-              <Link href="/insights/" className="inline-flex items-center gap-2 text-sm font-semibold text-action">
+              <Link
+                href="/insights/"
+                className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action"
+              >
                 ← All insights
               </Link>
             </div>

@@ -31,7 +31,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 
       <Link
         href={href}
-        className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        className="mt-5 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
       >
         {linkLabel}
         <ArrowRight

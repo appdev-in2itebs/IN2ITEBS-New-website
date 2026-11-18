@@ -68,7 +68,10 @@ export default function AwardsPage() {
       <V2Section id="back" eyebrow="The rest of the picture" heading="Where these sit" tone="subtle">
         <div className="max-w-measure space-y-5 text-foreground-muted">
           <p>
-            <Link href="/about/credentials/" className="font-semibold text-action underline-offset-4 hover:underline">
+            <Link
+              href="/about/credentials/"
+              className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
+            >
               Credentials
             </Link>{" "}
             carries the partnerships and appraisals these certificates evidence, our security and audit posture, and the
@@ -77,7 +80,7 @@ export default function AwardsPage() {
           <p>
             <Link
               href="/about/where-we-stand/"
-              className="font-semibold text-action underline-offset-4 hover:underline"
+              className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
             >
               Where we stand
             </Link>{" "}

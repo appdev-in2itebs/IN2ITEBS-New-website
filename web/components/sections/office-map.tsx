@@ -459,7 +459,7 @@ export function OfficeMap({ offices = shippedOffices }: { offices?: Office[] }) 
                       {shownOffice.email && (
                         <a
                           href={`mailto:${shownOffice.email}`}
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-action hover:underline"
+                          className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action hover:underline"
                         >
                           <Mail aria-hidden size={15} className="shrink-0" />
                           {shownOffice.email}
@@ -468,7 +468,7 @@ export function OfficeMap({ offices = shippedOffices }: { offices?: Office[] }) 
                       {shownOffice.phone && (
                         <a
                           href={`tel:${shownOffice.phone.replace(/\s+/g, "")}`}
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-action hover:underline"
+                          className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action hover:underline"
                         >
                           <Phone aria-hidden size={15} className="shrink-0" />
                           {shownOffice.phone}

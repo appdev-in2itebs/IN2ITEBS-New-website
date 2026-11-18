@@ -70,7 +70,10 @@ export async function V2Hero({
                     <span key={`${crumb.label}-${index}`} className="inline-flex items-center gap-2">
                       {index > 0 ? <span aria-hidden>/</span> : null}
                       {crumb.href && !last ? (
-                        <Link href={crumb.href} className="transition-colors hover:text-action">
+                        <Link
+                          href={crumb.href}
+                          className="inline-flex min-h-6 items-center transition-colors hover:text-action"
+                        >
                           {crumb.label}
                         </Link>
                       ) : (
@@ -280,7 +283,10 @@ export function V2Rail({
                 className="group flex h-full min-h-32 flex-col justify-between rounded-feature border border-border-subtle/70 bg-surface p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-gold-soft/70 hover:shadow-glass"
               >
                 <span className="text-base font-semibold leading-snug text-foreground">{item.label}</span>
-                <span aria-hidden className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-action">
+                <span
+                  aria-hidden
+                  className="mt-6 inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action"
+                >
                   Open <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
@@ -351,7 +357,7 @@ export function V2Closing({
               </Button>
               <a
                 href={`mailto:${site.primaryEmail}`}
-                className="text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
+                className="inline-block min-h-6 text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
               >
                 {site.primaryEmail}
               </a>
