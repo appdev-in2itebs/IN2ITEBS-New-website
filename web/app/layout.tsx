@@ -52,6 +52,11 @@ export const metadata: Metadata = {
   },
   description:
     "An SAP Gold Partner with 380+ SAP consultants across eleven practices, delivering enterprise platforms, advisory and digital engineering in more than thirty countries.",
+  // Declared site-wide so aggregators and retrieval pipelines find the articles without scraping
+  // the listing page and guessing at dates. See app/insights/feed.xml/route.ts.
+  alternates: {
+    types: { "application/rss+xml": [{ url: "/insights/feed.xml", title: "In2IT EBS — Insights" }] },
+  },
 };
 
 /** One theme since 2026-09-15 (dark mode and its cookie script were removed at the owner's request). */

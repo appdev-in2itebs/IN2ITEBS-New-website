@@ -1,5 +1,5 @@
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/services/how-we-price/", {
@@ -107,6 +107,7 @@ export default function HowWePricePage() {
   return (
     <>
       <BreadcrumbJsonLd path="/services/how-we-price/" name="How we price" />
+      <FaqJsonLd route="/services/how-we-price/" />
       <V2Hero
         route="/services/how-we-price/"
         path={[{ label: "Services", href: "/services/" }, { label: "How we price" }]}

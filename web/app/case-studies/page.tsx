@@ -32,12 +32,31 @@ export default function CaseStudiesPage() {
         frame={false}
       />
 
-      {/* The reference-book diagram names clients by sector, so it is behind the same consent
-          gate as the logo wall and the testimonials. A diagram is a publication like any other. */}
+      {/*
+        The reference-book diagram names clients by sector, so it sits behind the same consent
+        gate as the logo wall and the testimonials. A diagram is a publication like any other.
+
+        ── WHY THE ALT TEXT NAMES THEM ──────────────────────────────────────────────────────
+        The alt text used to say which sectors we can evidence and no more, while the picture
+        said who. For a reader that cannot see pictures — a screen reader, a search engine, an
+        assistant assembling a buyer's long-list — that made the single most useful fact on this
+        site unreadable, and "who have you actually done this for" is the first question any
+        buying committee asks.
+
+        It also sat oddly next to the studies below, which publish anonymised by house style.
+        The names are not withheld — ninety-four of them are on the homepage logo wall, and this
+        diagram prints them. They were simply held in the two forms a machine cannot read: a
+        picture, and an image's alt attribute that described the picture instead of its content.
+
+        So no new permission is involved here and no gate is bypassed: `clientIdentityApproved`
+        still governs the whole block, and this text publishes exactly what the picture publishes
+        and nothing the studies withhold. Alt text carries the diagram's content, not a caption
+        for it — same rule as every other diagram on the site.
+      */}
       {clientIdentityApproved ? (
         <DiagramBand
           src="/diagrams/q1-reference-book.svg"
-          alt="The client reference book by sector: the named clients In2IT EBS can evidence in power and utilities, metals and mining, government, manufacturing, consumer goods, pharma and healthcare, technology, banking, and real estate."
+          alt="The client reference book, by sector. Power, utilities and energy: TGNPDCL, a state discom moving from ECC to RISE with S/4HANA; APTRANSCO, transmission, three-year onsite AMS; Delhi Transco, transmission, full-estate AMS; POWERGRID; and a global energy major. Metals, mining and heavy industry: NMDC Limited, iron ore and a Navratna, S/4HANA and AMS; NMDC Steel, integrated steel, S/4HANA; NALCO; the Welspun Group; Triveni Turbines; and Wipro Infrastructure Engineering. Consumer, retail and food: Hero MotoCorp, Bata India, Varun Beverages running Ariba across fourteen countries, WayCool Foods on RISE in eight weeks, and VAHDAM India on GROW with SAP in one year. Government, transport and logistics: Transnet SOC Ltd on S/4HANA on RISE, Kenya Railways Corporation, and CEDA Botswana. Technology, telecom and services: Proximus, Tredence, Livspace, AVASO Technology across GROW, RISE and SuccessFactors, an EdTech unicorn on GROW with SAP, and a global engineering consultancy."
           tone="subtle"
         />
       ) : null}

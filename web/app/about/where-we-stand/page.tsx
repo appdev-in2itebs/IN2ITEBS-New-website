@@ -1,5 +1,5 @@
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd, CapabilityJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, CapabilityJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { FEED_PATH } from "@/lib/capability-feed";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 import { DiagramBand } from "@/components/sections/diagram-band";
@@ -57,6 +57,7 @@ export default function WhereWeStandPage() {
     <>
       <BreadcrumbJsonLd path="/about/where-we-stand/" name="Where we stand" />
       <CapabilityJsonLd />
+      <FaqJsonLd route="/about/where-we-stand/" />
       <V2Hero
         route="/about/where-we-stand/"
         path={[{ label: "About", href: "/about/" }, { label: "Where we stand" }]}
@@ -203,6 +204,28 @@ export default function WhereWeStandPage() {
           Every line was last checked against delivery evidence on{" "}
           {new Date(capabilityReviewed).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
           . A line changes when the evidence changes, not when the wording does.
+        </p>
+        {/*
+          THE FEED, IN VISIBLE TEXT.
+
+          This endpoint existed for weeks and nothing could reach it: robots.txt disallowed the
+          whole of /api/, it appeared in no sitemap, and no page linked it. A machine-readable
+          asset nothing links to does not exist — while the handover document described it as
+          published, which is the exact class of unverifiable claim this page was built to stop.
+
+          Linked from here rather than from a footer because this is the table it serialises, and
+          a tender team screening a long-list with software is the reader it was written for.
+        */}
+        <p className="mt-4 max-w-measure text-sm text-foreground-muted">
+          This table is also published as{" "}
+          <a
+            href={FEED_PATH}
+            className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
+          >
+            structured data
+          </a>{" "}
+          — the same register and the SAP-qualified packages as JSON, built by the same serialiser as this page, with no
+          key and no rate limit. If you are screening a long-list with software, parse that rather than this.
         </p>
       </V2Section>
 

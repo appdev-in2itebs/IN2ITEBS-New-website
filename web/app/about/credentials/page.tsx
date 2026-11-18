@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 import {
   stats,
@@ -79,6 +79,7 @@ export default function CredentialsPage() {
   return (
     <>
       <BreadcrumbJsonLd path="/about/credentials/" name="Credentials" />
+      <FaqJsonLd route="/about/credentials/" />
       <V2Hero
         route="/about/credentials/"
         path={[{ label: "About", href: "/about/" }, { label: "Credentials" }]}

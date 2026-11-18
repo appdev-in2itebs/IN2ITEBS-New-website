@@ -1,5 +1,5 @@
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { deliveryCentres, internationalOffices, legalEntities, headquarters } from "@/content/site";
@@ -65,6 +65,7 @@ export default function MarketsPage() {
   return (
     <>
       <BreadcrumbJsonLd path="/about/markets/" name="Where we operate" />
+      <FaqJsonLd route="/about/markets/" />
       <V2Hero
         route="/about/markets/"
         path={[{ label: "About", href: "/about/" }, { label: "Where we operate" }]}
