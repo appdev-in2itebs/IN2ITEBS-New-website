@@ -114,7 +114,7 @@ export const publicMailboxes = {
 export const ownerRules: { prefix: string; owner: OwnerRole; why?: string }[] = [
   // ── Service pages belong to the practice that has to deliver what they promise ──
   { prefix: "/services/sap/", owner: "Practice — Enterprise Platforms" },
-  { prefix: "/services/grow-fast/", owner: "Practice — Enterprise Platforms" },
+  { prefix: "/services/fixed-start/", owner: "Practice — Enterprise Platforms" },
   { prefix: "/services/ecc-prism/", owner: "Practice — Enterprise Platforms" },
   { prefix: "/services/rise-s4hana/", owner: "Practice — Enterprise Platforms" },
   { prefix: "/services/successfactors/", owner: "Practice — Enterprise Platforms" },

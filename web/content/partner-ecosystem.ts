@@ -38,7 +38,15 @@ export interface PartnerCategory {
 export const partnerCategories: PartnerCategory[] = [
   {
     title: "Application Platforms",
-    intro: "The enterprise platforms we transform and run end-to-end.",
+    /*
+     * Reworded 18 November 2026. This said "the enterprise platforms we transform and run
+     * end-to-end", which was not true of every mark below it: /about/where-we-stand/ publishes
+     * that we hold no designation from Oracle, ServiceNow, Microsoft Dynamics or Adobe and do not
+     * implement them. The contradiction was in this sentence, not in the logos — so the sentence
+     * changed and the logos stayed. Both pages are now true at the same time.
+     */
+    intro:
+      "The platforms our clients run. We implement some of these and integrate to others — \u201cWhere we stand\u201d says which is which, capability by capability.",
     partners: [
       { name: "SAP", note: "Gold Partner", logo: "/logos/partners/sap.svg" },
       { name: "Salesforce", logo: "/logos/partners/salesforce.svg" },

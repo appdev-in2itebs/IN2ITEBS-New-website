@@ -139,7 +139,7 @@ export const serviceGroups: ServiceGroup[] = [
     blurb: "The packaged platforms your core business processes run on — implemented, migrated, extended and run.",
     items: [
       { label: "SAP", href: svc("sap") },
-      { label: "GROW Fast", href: svc("grow-fast") },
+      { label: "Fixed Start", href: svc("fixed-start") },
       { label: "ECC Prism", href: svc("ecc-prism") },
       { label: "RISE and S/4HANA", href: svc("rise-s4hana") },
       { label: "SuccessFactors", href: svc("successfactors") },
@@ -412,21 +412,32 @@ export const servicePages: ServicePage[] = [
     ],
   },
   {
-    slug: "grow-fast",
+    /**
+     * RENAMED FROM "GROW Fast", 18 November 2026.
+     *
+     * SAP ships a product called SAP GROW Fast. An SAP partner running its own offer under the
+     * same name does not read as a coincidence to a buyer — it reads as SAP's programme — and
+     * partner agreements generally do not permit incorporating an SAP product name into a
+     * partner's own offering name. The old URL 301s here, so nothing is lost.
+     *
+     * "Fixed Start" is ours and says the actual differentiator: scope, duration and price are all
+     * three fixed before signature. That is the promise the page is built on.
+     */
+    slug: "fixed-start",
     diagram: {
       src: "/diagrams/m3-grow-fast.svg",
-      alt: "The GROW Fast timeline: a fixed scope agreed in weeks one and two, configuration and validation through the middle weeks, and go-live on a date set at the start.",
+      alt: "The Fixed Start timeline: a fixed scope agreed in weeks one and two, configuration and validation through the middle weeks, and go-live on a date set at the start.",
     },
-    name: "GROW Fast",
+    name: "Fixed Start",
     title: "A real ERP, on a date you can plan around",
     group: "enterprise-platforms",
     icon: "rocket",
-    sourceUrl: "https://www.in2itebs.com/services/grow-fast/",
-    metaTitle: "GROW Fast — a packaged SAP GROW implementation",
+    sourceUrl: "https://www.in2itebs.com/services/grow-fast/", // pre-rename source
+    metaTitle: "Fixed Start — packaged SAP S/4HANA Cloud",
     metaDescription:
       "A packaged implementation of SAP S/4HANA Cloud Public Edition with a fixed scope, a fixed duration and a fixed price — all three stated before you sign.",
     intro: [
-      "GROW Fast is a packaged implementation of SAP S/4HANA Cloud Public Edition with a fixed scope, a fixed duration and a fixed price. All three are stated before you sign, and all three are ours to hold.",
+      "Fixed Start is our packaged implementation of SAP S/4HANA Cloud Public Edition, delivered under SAP's GROW programme, with a fixed scope, a fixed duration and a fixed price. All three are stated before you sign, and all three are ours to hold.",
     ],
     sectionsHeading: "The shape of it",
     layout: "steps",

@@ -28,7 +28,7 @@ const required: [string, string][] = [
   // The two SAP paths got their own ported pages on 2026-09-17; the legacy URLs follow the page
   // that is actually about them, not the one comparing them.
   ["/grow-with-sap", "/insights/grow-with-sap/"],
-  ["/sap-grow-fast", "/services/grow-fast/"],
+  ["/sap-grow-fast", "/services/fixed-start/"],
   ["/sap-rise-with-sap", "/services/rise-s4hana/"],
   ["/other-enterprise-solutions", "/services/enterprise-platforms/"],
   ["/grow-with-sap-leadership-forum-event", "/services/rise-s4hana/"],

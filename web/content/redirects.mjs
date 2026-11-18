@@ -117,7 +117,7 @@ export const redirects = [
     "/insights/igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas/",
   ),
   p("/grow-with-sap", "/insights/grow-with-sap/"),
-  p("/sap-grow-fast", "/services/grow-fast/"),
+  p("/sap-grow-fast", "/services/fixed-start/"),
   p("/grow-with-sap-leadership-forum-event", "/services/rise-s4hana/"),
   // --- SuccessFactors local landing pages and campaigns ---
   p("/in2it-ebs-simplify-hiring", "/insights/in2it-ebs-simplify-hiring/"),
@@ -177,7 +177,7 @@ export const redirects = [
   p("/sap-enterprise-solutions", "/services/sap/"),
   p("/sap-enterprise-solutions/rise-with-sap", "/services/rise-s4hana/"),
   p("/sap-enterprise-solutions/migrations", "/services/rise-s4hana/"),
-  p("/sap-enterprise-solutions/grow-fast", "/services/grow-fast/"),
+  p("/sap-enterprise-solutions/grow-fast", "/services/fixed-start/"),
   p("/sap-enterprise-solutions/successfactors", "/services/successfactors/"),
   p("/sap-enterprise-solutions/rise-vs-grow", "/services/rise-s4hana/"),
   p("/sap-enterprise-solutions/health-check-360", "/services/application-estate-review/"),
@@ -279,7 +279,9 @@ export const redirects = [
   p("/services/sap-concur", "/services/sap/"),
   p("/services/sap-successfactors", "/services/successfactors/"),
   p("/services/cloud-hcm-solution", "/services/successfactors/"),
-  p("/services/sap-grow-fast", "/services/grow-fast/"),
+  p("/services/sap-grow-fast", "/services/fixed-start/"),
+  // Renamed 18 Nov 2026 — SAP ships a product called SAP GROW Fast. See content/legacy-services.ts.
+  p("/services/grow-fast", "/services/fixed-start/"),
   p("/services/rise-with-sap", "/services/rise-s4hana/"),
   p("/services/cloud-migration", "/services/rise-s4hana/"),
   p("/services/other-enterprise-solutions", "/services/enterprise-platforms/"),
