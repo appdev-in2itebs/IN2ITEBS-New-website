@@ -1,6 +1,7 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
+import { DiagramBand } from "@/components/sections/diagram-band";
 import { deliveryCentres, internationalOffices, legalEntities, headquarters } from "@/content/site";
 
 export const metadata = pageMetadata("/about/markets/", {
@@ -86,6 +87,20 @@ export default function MarketsPage() {
           `Offices without a delivery centre: ${internationalOffices.join(", ")}.`,
           `Legal entities in ${legalEntities.map((e) => e.country).join(", ")}. Clients across India and South Asia, Africa, the Middle East, Southeast Asia and ANZ, Europe and North America.`,
         ]}
+      />
+
+      {/*
+        FOUR LAYERS, NOT ONE PIN SET.
+        The overview above states the distinction in prose, which is easy to read past. Drawn as
+        four rows over the same five markets, the delivery-centre row is visibly empty outside
+        India — the honest answer, and the one a footprint map normally hides by giving every
+        location an identical pin.
+      */}
+      <DiagramBand
+        src="/diagrams/z4-footprint-layers.svg"
+        alt="Five markets across, four layers down. Staffed delivery centres exist only in India — Bengaluru, Hyderabad, Delhi NCR and Bhubaneswar — and that row is empty for South Africa, Kenya, Singapore and the UAE. All five markets have an office, a legal entity and a stated data residency position."
+        caption="An office is not a delivery centre, and a legal entity is not either. Four separate questions, four different answers."
+        tone="canvas"
       />
 
       <V2Section id="markets" eyebrow="By market" heading="What we are in each one" tone="subtle">

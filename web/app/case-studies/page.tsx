@@ -42,6 +42,18 @@ export default function CaseStudiesPage() {
         />
       ) : null}
 
+      {/*
+        THE STANDARD THE STUDIES BELOW ARE HELD TO.
+        On the index rather than on every study: it is a rule about all of them, and repeating it
+        under each one would turn a standard into a disclaimer.
+      */}
+      <DiagramBand
+        src="/diagrams/z3-anatomy-number.svg"
+        alt="Two panels compared. The usual form of an outcome claim: a large percentage with four empty slots — what it is a number of, the period it covers, who did the arithmetic and what is not counted, none of them stated. Ours: 70 to 75 per cent, with all four filled in from a Belgian S/4HANA Public Cloud assessment."
+        caption="A figure on a case study here fills all four slots or it does not appear as a figure. That is a build rule, which is why several of these studies carry no percentage at all."
+        tone="canvas"
+      />
+
       {/* CASE STUDY GRID */}
       <Section tone="light">
         <Container>

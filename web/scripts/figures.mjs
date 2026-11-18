@@ -37,16 +37,15 @@ const FIGURE = /\b\d+(?:[.,–-]\d+)*\s?(?:%|per cent|percent)|\b\d+(?:\.\d+)?x\
 /** The prose fields a visitor reads. `metrics` is excluded: those figures carry their provenance. */
 const PROSE_FIELDS = ["scenario", "summary", "differentiator", "outcome", "benefits", "solution", "client"];
 
-export function figureOffenders(
-  caseStudiesPath = "content/case-studies.ts",
-  evidencePath = "content/evidence.ts",
-) {
+export function figureOffenders(caseStudiesPath = "content/case-studies.ts", evidencePath = "content/evidence.ts") {
   const source = readFileSync(caseStudiesPath, "utf8");
   const evidence = readFileSync(evidencePath, "utf8");
 
   // Everything inside a `metrics: [ ... ]` block is provenanced by construction. Blank the block
   // rather than deleting it, so the line numbers in an error still point at the real file.
-  const withoutMetrics = source.replace(/metrics:\s*\[[\s\S]*?\n {4}\],/g, (b) => "\n".repeat(b.split("\n").length - 1));
+  const withoutMetrics = source.replace(/metrics:\s*\[[\s\S]*?\n {4}\],/g, (b) =>
+    "\n".repeat(b.split("\n").length - 1),
+  );
   // Comments explain the rule and quote the examples; they are not published copy.
   const prose = withoutMetrics.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
 
@@ -57,7 +56,8 @@ export function figureOffenders(
   const offenders = [];
   prose.split("\n").forEach((line, i) => {
     // Only lines that are actually published copy, not type definitions or helper code.
-    const isProse = line.includes('"') && PROSE_FIELDS.some((f) => line.includes(`${f}:`) || line.trim().startsWith('"'));
+    const isProse =
+      line.includes('"') && PROSE_FIELDS.some((f) => line.includes(`${f}:`) || line.trim().startsWith('"'));
     if (!isProse) return;
     for (const m of line.match(FIGURE) ?? []) {
       const normalised = m.replace(/\s?(per cent|percent)/i, "%").trim();

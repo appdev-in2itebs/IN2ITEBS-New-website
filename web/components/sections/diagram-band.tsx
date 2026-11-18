@@ -34,13 +34,26 @@ export function DiagramBand({
       <Container>
         <Reveal>
           <figure>
-            {/* The diagrams are drawn at 1760px wide and carry 12px type. Scaled to a phone they
-                would be unreadable, so below roughly 720px the frame scrolls sideways instead of
-                shrinking the drawing. */}
+            {/*
+              The diagrams are drawn at 1760px wide and carry 12.5px type, so this frame scrolls
+              sideways rather than shrinking the drawing.
+
+              That was always the stated intent and the number never matched it. At
+              `min-w-[44rem]` a diagram rendered 704px wide inside a 350px phone frame — a scale
+              of 0.4, which puts the body type at 5px. It scrolled, and it was still unreadable:
+              the cost of a horizontal scroller with none of the benefit. Measured on a real
+              390px viewport on 18 November 2026 rather than estimated.
+
+              `min-w-[110rem]` is 1760px, so the drawing renders at its own scale and the reader
+              scrolls across it full size. That is several screens wide on a phone, which is the
+              honest trade for a dense reference diagram — and every page carrying one also
+              carries the same content as text, so nobody depends on the picture.
+            */}
             <div className="overflow-x-auto rounded-card border border-border-subtle bg-surface">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={alt} className="block h-auto w-full min-w-[44rem]" loading="lazy" decoding="async" />
+              <img src={src} alt={alt} className="block h-auto w-full min-w-[110rem]" loading="lazy" decoding="async" />
             </div>
+            <p className="mt-3 text-xs text-foreground-muted md:hidden">Scroll the diagram sideways to read it.</p>
             {caption ? <figcaption className="mt-4 text-sm text-foreground-muted">{caption}</figcaption> : null}
           </figure>
         </Reveal>

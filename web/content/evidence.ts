@@ -123,7 +123,11 @@ export interface Metric {
  * first sentence into the results, it is an outcome claim and belongs under `Metric`.
  */
 export const CLIENT_FACTS: { figure: string; about: string }[] = [
-  { figure: "98%", about: "The EdTech client's own published coverage of India's pin codes — their figure, their scale, not our result" },
+  {
+    figure: "98%",
+    about:
+      "The EdTech client's own published coverage of India's pin codes — their figure, their scale, not our result",
+  },
 ];
 
 export const UNPROVENANCED: { figure: string; study: string; needs: string }[] = [

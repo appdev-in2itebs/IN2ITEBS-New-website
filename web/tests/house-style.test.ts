@@ -121,7 +121,10 @@ test("the figure gate fires on a new unsourced percentage", () => {
   // As with the adjective gate: an empty result from a broken scanner looks exactly like an empty
   // result from clean copy, so the scanner has to be shown catching something.
   const probe = "tests/__figure_probe__.ts";
-  writeFileSync(probe, ['export const x = {', '  differentiator: "Delivered a 47% improvement in throughput.",', "};"].join("\n"));
+  writeFileSync(
+    probe,
+    ["export const x = {", '  differentiator: "Delivered a 47% improvement in throughput.",', "};"].join("\n"),
+  );
   try {
     const hits = figureOffenders(probe, "content/evidence.ts");
     assert.equal(hits.length, 1, `expected one hit, got ${JSON.stringify(hits)}`);
@@ -140,7 +143,11 @@ test("every published metric carries what it is a number of, a window and a meas
       assert.ok(m.of.trim().length > 15, `${study.slug}: "${m.value}" does not say what it is a number of`);
       assert.ok(m.window.trim().length > 10, `${study.slug}: "${m.value}" has no usable measurement window`);
       assert.ok(m.attribution in ATTRIBUTION_LABELS, `${study.slug}: "${m.value}" has an unknown attribution`);
-      assert.doesNotMatch(m.of, /^\s*(the|a|an)?\s*(result|outcome|improvement)s?\s*$/i, `${study.slug}: circular baseline`);
+      assert.doesNotMatch(
+        m.of,
+        /^\s*(the|a|an)?\s*(result|outcome|improvement)s?\s*$/i,
+        `${study.slug}: circular baseline`,
+      );
     }
   }
 });
