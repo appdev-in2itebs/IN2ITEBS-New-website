@@ -20,6 +20,7 @@ import {
 import { getServiceGroup, flattenItems, type ServicePage } from "@/content/legacy-services";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/motion/reveal";
+import { packagesFor, SAP_PROFILE_URL } from "@/content/qpps";
 
 /** Every service page the existing site's menu lists, in the approved design (components/sections/v2.tsx). */
 export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: string } }) {
@@ -36,6 +37,7 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
     ...(page.extraSections
       ? [{ id: "detail", label: page.extraSections.anchorLabel ?? page.extraSections.heading }]
       : []),
+    ...(page.qualifiedPackages ? [{ id: "qualified", label: "Qualified by SAP" }] : []),
     ...(siblings.length ? [{ id: "related", label: `More in ${group?.name ?? "Services"}` }] : []),
     { id: "talk", label: "Talk to us" },
   ];
@@ -198,6 +200,55 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
             <EccMaintenanceChecker />
           </Container>
         </section>
+      ) : null}
+      {page.qualifiedPackages ? (
+        <V2Section
+          id="qualified"
+          eyebrow="Qualified by SAP"
+          heading="Packages SAP has reviewed and listed."
+          tone="canvas"
+        >
+          <Reveal className="max-w-measure">
+            <p className="text-lg leading-relaxed text-foreground-muted">
+              A qualified partner-packaged solution is not a name we chose for ourselves. SAP reviews the package and
+              then lists it on our partner profile, in SAP&rsquo;s own words. These are the ones registered against this
+              practice, and you can check every one of them on sap.com without asking us for anything.
+            </p>
+          </Reveal>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {packagesFor(page.qualifiedPackages).map((pkg) => (
+              <article
+                key={pkg.name}
+                className="flex h-full flex-col rounded-feature border border-border-subtle bg-surface p-7"
+              >
+                <span className="label-caps text-gold">SAP qualified</span>
+                <h3 className="mt-3 font-display text-h3 font-semibold leading-snug text-foreground">{pkg.short}</h3>
+                <p className="mt-1 text-sm text-foreground-muted">{pkg.name}</p>
+                <p className="mt-4 text-sm font-semibold text-action">{pkg.forWhom}</p>
+                <p className="mt-3 text-foreground-muted">{pkg.sapSummary}</p>
+                <p className="mt-4 border-t border-border-subtle pt-4 text-sm leading-relaxed text-foreground-muted">
+                  {pkg.ours}
+                </p>
+                {pkg.live ? <p className="mt-auto pt-5 text-sm font-semibold text-foreground">{pkg.live}</p> : null}
+              </article>
+            ))}
+          </div>
+          <Reveal className="mt-10 max-w-measure">
+            <p className="text-sm text-foreground-muted">
+              The wording above in each card&rsquo;s middle paragraph is SAP&rsquo;s, trimmed for length and not for
+              meaning. The last paragraph is ours.{" "}
+              <a
+                href={SAP_PROFILE_URL}
+                className="font-semibold text-action underline-offset-4 hover:underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Our SAP partner profile
+              </a>{" "}
+              carries the full list and the delivery record behind it.
+            </p>
+          </Reveal>
+        </V2Section>
       ) : null}
       {page.toolsBand ? <ToolsBand currentPath={`/services/${page.slug}/`} /> : null}
       {siblings.length ? (

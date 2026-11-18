@@ -134,6 +134,14 @@ export interface ServicePage {
    * that already carries a diagnostic is harmless rather than duplicative.
    */
   toolsBand?: boolean;
+  /**
+   * Show the SAP-qualified partner-packaged solutions registered against this practice.
+   *
+   * These are a designation SAP grants and SAP publishes, so the band links back to SAP's own
+   * partner profile — a claim a buyer can check without asking us is worth more than one they
+   * have to take on trust.
+   */
+  qualifiedPackages?: "sap" | "successfactors";
   heroObject?: HeroImageKey;
   icon: ServiceIconKey;
   metaTitle?: string;
@@ -352,6 +360,7 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ ENTERPRISE PLATFORMS
   {
     slug: "sap",
+    qualifiedPackages: "sap",
     interactive: "sap-toolchain",
     toolsBand: true,
     diagram: {
@@ -671,6 +680,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "successfactors",
+    qualifiedPackages: "successfactors",
     name: "SuccessFactors",
     title: "HR systems fail quietly. Payroll fails on the 28th.",
     group: "enterprise-platforms",
