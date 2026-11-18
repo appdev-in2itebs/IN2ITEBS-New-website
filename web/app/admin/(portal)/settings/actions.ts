@@ -11,7 +11,13 @@ function valueFrom(key: SettingKey, form: FormData) {
   if (key === "announcement")
     return { enabled: form.get("enabled") === "on", text: s("text"), linkUrl: s("linkUrl"), linkLabel: s("linkLabel") };
   if (key === "contact")
-    return { email: s("email"), hrEmail: s("hrEmail"), accountsEmail: s("accountsEmail"), phone: s("phone") };
+    return {
+      email: s("email"),
+      salesEmail: s("salesEmail"),
+      hrEmail: s("hrEmail"),
+      accountsEmail: s("accountsEmail"),
+      phone: s("phone"),
+    };
   return {
     enabled: form.get("enabled") === "on",
     name: s("name"),

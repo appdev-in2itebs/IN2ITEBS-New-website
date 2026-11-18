@@ -22,6 +22,18 @@ export const contactSchema = z.object({
   hrEmail: z.string().trim().email().max(254).default("hiring@in2itebs.com"),
   /** Billing, invoices and supplier queries. Shown on the contact page, kept out of the sales path. */
   accountsEmail: z.string().trim().email().max(254).default("accounts@in2itebs.com"),
+  /**
+   * Where an enquiry submitted through a form on the site is DELIVERED.
+   *
+   * Deliberately separate from `email` above, which is the address the site DISPLAYS. They answer
+   * different questions: a visitor who wants to write to us themselves should see info@, the
+   * catch-all; a lead the site captured is new business and belongs with whoever owns the
+   * pipeline. Collapsing the two into one field is how a tender enquiry ends up behind forty CVs.
+   *
+   * Set to sales@ by the Managing Director's decision of 18 November 2026, when the alias went
+   * live. If sales@ ever stops being watched, change this back here rather than in code.
+   */
+  salesEmail: z.string().trim().email().max(254).default("sales@in2itebs.com"),
   phone: z.string().trim().max(40).default(""),
 });
 

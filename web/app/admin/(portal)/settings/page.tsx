@@ -84,11 +84,17 @@ export default async function SettingsPage({
 
         <Card>
           <h2 className="mb-1 text-lg font-semibold">Contact details</h2>
-          <p className="mb-4 text-sm text-foreground-muted">Used by the assistant when it cannot answer.</p>
+          <p className="mb-4 text-sm text-foreground-muted">
+            The enquiries address is what the site shows a visitor. The new business address is where an enquiry
+            submitted through a form is actually delivered — they are separate on purpose.
+          </p>
           <form action={saveSettings} className="space-y-4">
             <input type="hidden" name="key" value="contact" />
-            <Field label="Enquiries email">
+            <Field label="Enquiries email (shown on the site)">
               <input name="email" type="email" required defaultValue={contact.email} className={input} />
+            </Field>
+            <Field label="New business email (where form enquiries are delivered)">
+              <input name="salesEmail" type="email" required defaultValue={contact.salesEmail} className={input} />
             </Field>
             <Field label="Careers email (where applications and CVs go)">
               <input name="hrEmail" type="email" required defaultValue={contact.hrEmail} className={input} />

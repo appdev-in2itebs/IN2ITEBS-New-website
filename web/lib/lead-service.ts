@@ -82,9 +82,13 @@ async function markDelivered(id: string) {
  * in the assistant, and never discover that lead delivery was still going somewhere else. It now
  * reads the configured address, so there is one place to change it and no deploy to do it.
  *
- * The default is still info@. Moving new business to sales@ is a routing decision for whoever
- * owns the pipeline, not something a code change should make on their behalf — and an enquiry
- * delivered to a mailbox nobody has opened yet is worse than one sitting in a busy inbox.
+ * It reads `contact.salesEmail`, not `contact.email`. The first is where an enquiry GOES; the
+ * second is what the site SHOWS. A visitor writing to us themselves should see the catch-all; a
+ * lead the site captured is new business and belongs with whoever owns the pipeline.
+ *
+ * The default is sales@, live since 18 November 2026. If it stops being watched, change it in
+ * /admin/settings rather than here — and note that nothing in this file can tell whether anybody
+ * is reading the other end. That one needs a person.
  */
 export async function configuredTransport(lead: Lead, requestId: string) {
   const url = process.env.LEAD_WEBHOOK_URL;
@@ -92,8 +96,8 @@ export async function configuredTransport(lead: Lead, requestId: string) {
   if (!url || !token || new URL(url).protocol !== "https:") throw new Error("transport unavailable");
   const { getSettings } = await import("./cms/store");
   const recipient = await getSettings()
-    .then((s) => s.contact.email)
-    .catch(() => defaultSettings.contact.email);
+    .then((s) => s.contact.salesEmail)
+    .catch(() => defaultSettings.contact.salesEmail);
   const response = await fetch(url, {
     method: "POST",
     redirect: "error",

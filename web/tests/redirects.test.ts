@@ -189,6 +189,23 @@ test("every owning role resolves to a mailbox that exists", async () => {
  * land in info@ alongside everything else. Pinned because it is the kind of routing that gets
  * reverted by a well-meaning find-and-replace.
  */
+/**
+ * The address the site SHOWS and the address an enquiry GOES TO are different settings.
+ *
+ * They were one field, and lead delivery ignored it anyway. If a future change collapses them
+ * again, a visitor-facing catch-all becomes the new-business inbox without anybody deciding to
+ * do that — so the distinction is pinned.
+ */
+test("displayed contact and lead delivery are separate settings", async () => {
+  const { defaultSettings } = await import("../lib/cms/settings");
+  const { contact } = defaultSettings;
+  assert.equal(contact.email, "info@in2itebs.com", "the site shows the catch-all");
+  assert.equal(contact.salesEmail, "sales@in2itebs.com", "enquiries are delivered to new business");
+  assert.notEqual(contact.email, contact.salesEmail);
+  const unique = new Set([contact.email, contact.salesEmail, contact.hrEmail, contact.accountsEmail]);
+  assert.equal(unique.size, 4, "one mailbox, one job");
+});
+
 test("the legal pages send enquiries to legal@, not to info@", async () => {
   const { readFile } = await import("node:fs/promises");
   for (const page of ["privacy-policy", "privacy-notice", "disclaimer"]) {
