@@ -1,6 +1,7 @@
 // Asserts that the artefacts in .next match SITE_ENV. Runs automatically after `next build` (postbuild).
 import { readFileSync, existsSync } from "node:fs";
 import { houseStyleOffenders } from "./house-style.mjs";
+import { figureOffenders, unprovenancedCount } from "./figures.mjs";
 const env = process.env.SITE_ENV;
 if (env !== "production" && env !== "preview") {
   console.error(`check-build: SITE_ENV must be production or preview, got ${JSON.stringify(env)}`);
@@ -103,8 +104,25 @@ if (adjectiveHits.length)
     `unfalsifiable adjectives in site copy — say the number, the name or the mechanism instead:\n    ${adjectiveHits.join("\n    ")}`,
   );
 
+/**
+ * THE FIGURE GATE. No percentage in a case study without its provenance — either a `Metric`, or a
+ * named entry in UNPROVENANCED / CLIENT_FACTS. See scripts/figures.mjs for why this is a build
+ * failure rather than a guideline: the rule already existed in writing and changed nothing,
+ * because a working method is changed by a build that stops, not by a document saying it should.
+ */
+const figureHits = figureOffenders();
+if (figureHits.length)
+  failures.push(
+    `quantified claims with no recorded provenance — add a Metric (what the number is of, the window, who measured it) or name it in content/evidence.ts:\n    ${figureHits.join("\n    ")}`,
+  );
+
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);
 }
+const owed = unprovenancedCount();
+if (owed)
+  console.log(
+    `check-build: ${owed} inherited figure${owed === 1 ? "" : "s"} still unsourced (content/evidence.ts). Each needs a baseline, a window and a measurer, or it comes out of the copy.`,
+  );
 console.log(`check-build: ok (SITE_ENV=${env}, indexing=${indexingEnabled}, noindex=${hasNoindex})`);

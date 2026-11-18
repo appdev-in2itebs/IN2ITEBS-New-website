@@ -4,7 +4,6 @@ import { Container } from "@/components/ui/container";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { capabilities, capabilityExpires, capabilityReviewed, longDate } from "@/content/capability-status";
 import { qualifiedPackages, SAP_PROFILE_URL } from "@/content/qpps";
-import { publicCorrections } from "@/content/corrections";
 
 /**
  * "WHAT ONLY WE CAN SAY" — the homepage's proof block.
@@ -18,15 +17,21 @@ import { publicCorrections } from "@/content/corrections";
  * ── THE TEST EVERY LINE HERE HAS TO PASS ─────────────────────────────────────────────────────
  * A line earns a place in this band only if a competitor with fifty thousand consultants
  * *structurally cannot* put it on their own site. Not "would not" — could not. That is a much
- * harder test than it sounds, and it is why there are four lines and not ten.
+ * harder test than it sounds, and it is why there are three lines and not ten.
  *
  *   "We publish what we cannot do"      — a firm that bids everything cannot publish a no.
  *   "Our claims expire"                 — needs a build that fails, not a promise that doesn't.
- *   "We publish what we got wrong"      — needs someone senior to accept the cost in public.
  *   "SAP describes our packages, not us" — needs SAP to have actually done it.
  *
  * Marketing superlatives fail this test by construction, which is the point: there is nothing in
  * this band to write, only things to have already done.
+ *
+ * A fourth line — a public corrections log — was built and then withdrawn on the Managing
+ * Director's call. Worth remembering why, because the idea will come back: publishing your own
+ * errata is commercially asymmetric in a way the other three are not. The register and the expiry
+ * date cost nothing to maintain once the discipline exists; an errata page costs something every
+ * time it is honest, and that cost lands on whoever has to approve the entry. Three lines that
+ * hold is worth more than four where one is quietly stopped being updated.
  *
  * ── WHY THE NUMBERS ARE COMPUTED, AND THE DATES ARE NOT ──────────────────────────────────────
  * Every figure here is counted from the file it describes. Nobody can update the register and
@@ -58,12 +63,6 @@ export function HomeManifesto() {
       label: "How it is kept",
     },
     {
-      claim: "We publish what we got wrong.",
-      body: `A dated list of the claims we have corrected or withdrawn, including the ones that cost us something to withdraw. ${publicCorrections.length} entries so far, oldest kept, nothing quietly deleted.`,
-      href: "/about/what-we-got-wrong/",
-      label: "Read the corrections",
-    },
-    {
       claim: "SAP describes our packages. We don’t.",
       body: `${qualifiedPackages.length} partner-packaged solutions that SAP reviewed and listed on our partner profile, in SAP’s own wording. You can read every one of them on sap.com without asking us for anything.`,
       href: SAP_PROFILE_URL,
@@ -89,15 +88,17 @@ export function HomeManifesto() {
             id="manifesto-heading"
             className="heading-plain mt-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-bold leading-[1.05] tracking-[-0.035em]"
           >
-            Four claims you can check without asking us.
+            Three claims you can check without asking us.
           </h2>
           <p className="mt-6 max-w-[52ch] text-base leading-relaxed text-on-brand/75">
-            Every firm in this market says it is honest. These are the four places you can test whether we are, and each
-            one links to the thing itself rather than to a page about it.
+            Every firm in this market says it is honest. These are the three places you can test whether we are, and
+            each one links to the thing itself rather than to a page about it.
           </p>
         </Reveal>
 
-        <Stagger className="mt-14 grid gap-px overflow-hidden rounded-feature bg-on-brand/15 md:grid-cols-2">
+        {/* Three across, not two: at two columns the third claim sits alone on its own row with a
+            blank beside it, which reads as a card somebody forgot to write. */}
+        <Stagger className="mt-14 grid gap-px overflow-hidden rounded-feature bg-on-brand/15 md:grid-cols-3">
           {claims.map((c, i) => (
             <StaggerItem key={c.claim} className="h-full">
               <div className="flex h-full flex-col bg-brand p-8 md:p-10">

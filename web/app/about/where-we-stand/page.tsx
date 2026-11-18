@@ -2,7 +2,6 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, CapabilityJsonLd } from "@/components/seo/json-ld";
 import { FEED_PATH } from "@/lib/capability-feed";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
-import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import {
   capabilities,
@@ -269,14 +268,7 @@ export default function WhereWeStandPage() {
                   We print the two dates rather than &ldquo;verified recently&rdquo; because a page can be built once
                   and served for months afterwards. Fixed dates stay true for as long as they are on the screen; a
                   countdown would start lying the day after it was rendered, which is the exact failure this page exists
-                  to prevent.{" "}
-                  <Link
-                    href="/about/what-we-got-wrong/"
-                    className="inline-block min-h-6 font-semibold text-gold-on-brand underline underline-offset-4"
-                  >
-                    When we get something wrong, it goes here
-                  </Link>
-                  .
+                  to prevent.
                 </p>
                 {/*
                   Published for the bid team that parses a long-list before anyone reads it, and
@@ -285,8 +277,8 @@ export default function WhereWeStandPage() {
                   first — an endpoint you have to ask permission to read is the PDF problem again.
                 */}
                 <p className="border-t border-on-brand/20 pt-4 text-sm text-on-brand/70">
-                  If you would rather parse this than read it, the whole register &mdash; statuses, review dates,
-                  SAP&rsquo;s qualified packages and the corrections log &mdash; is available as JSON at{" "}
+                  If you would rather parse this than read it, the whole register &mdash; every line, its status, the
+                  review dates and SAP&rsquo;s qualified packages &mdash; is available as JSON at{" "}
                   <a
                     href={FEED_PATH}
                     className="inline-block min-h-6 font-semibold text-gold-on-brand underline underline-offset-4"

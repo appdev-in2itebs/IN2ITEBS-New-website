@@ -9,7 +9,6 @@ import {
   STATUS_LABELS,
 } from "@/content/capability-status";
 import { qualifiedPackages, sapProfileReviewed, SAP_PROFILE_URL } from "@/content/qpps";
-import { publicCorrections, correctionsReviewed, reducedCount } from "@/content/corrections";
 
 /**
  * THE CAPABILITY FEED — the register as data, not as a page.
@@ -31,8 +30,6 @@ import { publicCorrections, correctionsReviewed, reducedCount } from "@/content/
  * date, and a build that fails when it goes stale. We have that, so this file is a serialiser
  * over files that already exist rather than a new thing to keep up to date. A competitor would
  * have to build the discipline before they could publish the format.
- *
- * It also includes the corrections log, which is the part nobody else will copy.
  *
  * ── ONE SERIALISER, TWO CONSUMERS ────────────────────────────────────────────────────────────
  * `capabilityFeed()` is the single source for both /api/capabilities (the JSON endpoint) and the
@@ -96,22 +93,6 @@ export function capabilityFeed() {
         live: p.live ?? null,
         sapSummary: p.sapSummary,
         ours: p.ours,
-      })),
-    },
-    corrections: {
-      url: `${SITE_URL}/about/what-we-got-wrong/`,
-      reviewed: correctionsReviewed,
-      count: publicCorrections.length,
-      reducedAClaim: reducedCount,
-      note: "Claims we published on this site and then corrected or withdrew. Entries are added and never removed.",
-      entries: publicCorrections.map((c) => ({
-        date: c.date,
-        heading: c.heading,
-        published: c.published,
-        correct: c.correct,
-        action: c.action,
-        where: c.where ?? null,
-        reducedAClaim: Boolean(c.reduced),
       })),
     },
   };

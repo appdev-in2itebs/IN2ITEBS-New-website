@@ -2,16 +2,18 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { writeFileSync, unlinkSync, mkdirSync, rmSync } from "node:fs";
 import { BANNED, EXEMPT, houseStyleOffenders } from "../scripts/house-style.mjs";
-import { corrections, publicCorrections, reducedCount, correctionsReviewed } from "../content/corrections";
 import { capabilities, capabilityExpires, capabilityReviewed, longDate } from "../content/capability-status";
 import { capabilityFeed, capabilityJsonLd, FEED_VERSION } from "../lib/capability-feed";
+import { figureOffenders } from "../scripts/figures.mjs";
 import { servicePages } from "../content/legacy-services";
+import { caseStudies } from "../content/case-studies";
+import { ATTRIBUTION_LABELS, CLIENT_FACTS, UNPROVENANCED } from "../content/evidence";
 
 /**
- * The house style, the corrections log and the capability feed — the three mechanisms added on
- * 18 November 2026 whose whole value is that somebody cannot quietly switch them off.
+ * The house style, the capability feed and the figure gate — the mechanisms added on 18 November
+ * 2026 whose whole value is that somebody cannot quietly switch them off.
  *
- * Each one is a claim the site makes about its own honesty. A claim about honesty that nothing
+ * Each one is a claim the site makes about its own rigour. A claim about rigour that nothing
  * verifies is the most expensive kind of claim to be caught making, so each gets a test that
  * fails loudly rather than a comment asking people to be careful.
  */
@@ -48,31 +50,6 @@ test("every banned word is a valid regex, and the exemption list stays short", (
   assert.ok(EXEMPT.size <= 2, `${EXEMPT.size} files are exempt from the house style; justify each one`);
 });
 
-// ───────────────────────────────────────────────────────────────── corrections
-
-test("the corrections log keeps its curation rule", () => {
-  assert.ok(publicCorrections.length > 0, "the page renders nothing without entries");
-  // The rule that makes the page worth reading: entries have to have cost something. A log that
-  // drifts to all-typos is a firm performing humility while conceding nothing.
-  assert.ok(reducedCount > 0, "no correction on the log reduced a claim — this is a changelog, not an errata page");
-  assert.ok(
-    reducedCount / publicCorrections.length >= 0.3,
-    `only ${reducedCount} of ${publicCorrections.length} corrections reduced a claim; the log is drifting towards typos`,
-  );
-});
-
-test("every correction is dated, sourced, and says what we published", () => {
-  for (const c of corrections) {
-    assert.match(c.date, /^\d{4}-\d{2}-\d{2}$/, `${c.heading}: bad date`);
-    assert.ok(Date.parse(c.date), `${c.heading}: unparseable date`);
-    assert.ok(c.source.trim().length, `${c.heading}: no commit cited, so nobody can check it`);
-    for (const field of ["published", "correct", "action"] as const) {
-      assert.ok(c[field].trim().length > 20, `${c.heading}: ${field} is too short to be a real account`);
-    }
-  }
-  assert.ok(Date.parse(correctionsReviewed), "correctionsReviewed is not a date");
-});
-
 // ─────────────────────────────────────────────────────────── the capability feed
 
 test("the JSON feed and the JSON-LD are built from the same register", () => {
@@ -92,8 +69,6 @@ test("the feed publishes a review date and an expiry that follows from it", () =
     Date.parse(feed.register.expires) > Date.parse(feed.register.reviewed),
     "a register that expires before it was reviewed is a broken clock",
   );
-  // The corrections log rides along in the feed, which is the part nobody will copy.
-  assert.equal(feed.corrections.count, publicCorrections.length);
 });
 
 test("the feed is JSON-serialisable with no undefined holes", () => {
@@ -101,7 +76,6 @@ test("the feed is JSON-serialisable with no undefined holes", () => {
   // rather than see null. Every optional in the serialiser is written as `?? null` for this reason.
   const round = JSON.parse(JSON.stringify(capabilityFeed()));
   for (const p of round.sapQualifiedPackages.packages) assert.ok("live" in p, "a package lost its `live` key");
-  for (const e of round.corrections.entries) assert.ok("where" in e, "a correction lost its `where` key");
 });
 
 test("the staleness clock is published as fixed dates, not a countdown", () => {
@@ -135,4 +109,51 @@ test("blueprint layout is only used where the sections are a sequence", () => {
       `/services/${p.slug}/: a numbered sequence of ${p.sections.length} is a list, not a blueprint`,
     );
   }
+});
+
+// ───────────────────────────────────────────────────────────── outcome figures
+
+test("no quantified claim in a case study without recorded provenance", () => {
+  assert.deepEqual(figureOffenders(), []);
+});
+
+test("the figure gate fires on a new unsourced percentage", () => {
+  // As with the adjective gate: an empty result from a broken scanner looks exactly like an empty
+  // result from clean copy, so the scanner has to be shown catching something.
+  const probe = "tests/__figure_probe__.ts";
+  writeFileSync(probe, ['export const x = {', '  differentiator: "Delivered a 47% improvement in throughput.",', "};"].join("\n"));
+  try {
+    const hits = figureOffenders(probe, "content/evidence.ts");
+    assert.equal(hits.length, 1, `expected one hit, got ${JSON.stringify(hits)}`);
+    assert.match(hits[0], /"47%"/);
+  } finally {
+    unlinkSync(probe);
+  }
+});
+
+test("every published metric carries what it is a number of, a window and a measurer", () => {
+  const withMetrics = caseStudies.filter((c) => c.metrics?.length);
+  assert.ok(withMetrics.length > 0, "the metric mechanism is built but no study uses it");
+  for (const study of withMetrics) {
+    for (const m of study.metrics ?? []) {
+      // The type enforces presence; this enforces that nobody satisfied it with a placeholder.
+      assert.ok(m.of.trim().length > 15, `${study.slug}: "${m.value}" does not say what it is a number of`);
+      assert.ok(m.window.trim().length > 10, `${study.slug}: "${m.value}" has no usable measurement window`);
+      assert.ok(m.attribution in ATTRIBUTION_LABELS, `${study.slug}: "${m.value}" has an unknown attribution`);
+      assert.doesNotMatch(m.of, /^\s*(the|a|an)?\s*(result|outcome|improvement)s?\s*$/i, `${study.slug}: circular baseline`);
+    }
+  }
+});
+
+test("the unsourced-figure list is specific enough to be closed", () => {
+  // A migration list only shrinks if each line says what is actually needed to clear it.
+  for (const u of UNPROVENANCED) {
+    assert.ok(u.needs.includes("?"), `"${u.figure}" (${u.study}) does not pose the question that would clear it`);
+    assert.ok(u.study.trim().length > 5, `"${u.figure}" does not say which claim it is`);
+  }
+  for (const f of CLIENT_FACTS) {
+    assert.ok(f.about.trim().length > 20, `"${f.figure}" does not say whose fact it is`);
+  }
+  // If this ever reaches zero the migration is done and the list should go, not grow.
+  assert.ok(UNPROVENANCED.length <= 5, `${UNPROVENANCED.length} unsourced figures — the list is meant to shrink`);
 });

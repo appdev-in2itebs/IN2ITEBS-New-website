@@ -9,6 +9,7 @@ import { PageHero } from "@/components/sections/page-hero";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { DiagramBand } from "@/components/sections/diagram-band";
+import { MetricsBand } from "@/components/sections/metrics-band";
 import { HeroMotif, practiceIcon } from "@/components/sections/hero-motif";
 import { publicCaseStudies, getCaseStudy, canonicalCaseStudySlug } from "@/content/case-studies";
 
@@ -119,6 +120,16 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </Section>
 
       {study.diagram ? <DiagramBand src={study.diagram.src} alt={study.diagram.alt} tone="subtle" /> : null}
+
+      {/*
+        The figures come before the narrative of what we delivered, not after it. A reader who is
+        going to check a number wants it early; a reader who is not will scroll past the band
+        either way. Renders nothing when a study has no sourced figures, which is most of them.
+      */}
+      <MetricsBand
+        metrics={study.metrics}
+        heading={study.metrics?.length === 1 ? "One figure, sourced." : "The figures, sourced."}
+      />
 
       {/* WHAT WE DELIVERED */}
       <Section tone="light">

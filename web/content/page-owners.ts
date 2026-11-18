@@ -153,11 +153,6 @@ export const ownerRules: { prefix: string; owner: OwnerRole; why?: string }[] = 
     owner: "Marketing and Communications",
     why: "Monthly review against delivery evidence. The build fails if it goes 90 days unchecked — see scripts/check-build.mjs.",
   },
-  {
-    prefix: "/about/what-we-got-wrong/",
-    owner: "Marketing and Communications",
-    why: "Entries are added, never removed, and only when a correction cost something. The curation rule at the top of content/corrections.ts is the page's entire value — a log of typos is worse than no log.",
-  },
 
   // ── Careers ──
   { prefix: "/careers/", owner: "Human Resources" },

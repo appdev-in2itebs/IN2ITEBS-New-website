@@ -211,25 +211,6 @@ test("a busy model API (429) is retried, so a crowd of visitors still gets answe
   }
 });
 
-test("the device voice, when used, is a female one", async () => {
-  const { pickVoice } = await import("../components/chat/voice");
-  const v = (name: string, lang: string) => ({ name, lang }) as SpeechSynthesisVoice;
-  const voices = [
-    v("Microsoft Ravi - English (India)", "en-IN"),
-    v("Microsoft Heera - English (India)", "en-IN"),
-    v("Microsoft Hemant - Hindi (India)", "hi-IN"),
-    v("Microsoft Kalpana - Hindi (India)", "hi-IN"),
-    v("Google US English", "en-US"),
-  ];
-  assert.equal(pickVoice(voices, "en-IN")?.name, "Microsoft Heera - English (India)");
-  assert.equal(pickVoice(voices, "hi-IN")?.name, "Microsoft Kalpana - Hindi (India)");
-  // Only a male voice for the language: still that language rather than silence.
-  assert.equal(
-    pickVoice([v("Microsoft Ravi - English (India)", "en-IN")], "en-IN")?.name,
-    "Microsoft Ravi - English (India)",
-  );
-});
-
 test("questions about the company's leadership are never blocked as off-topic; private details are", async () => {
   const { aboutLeadership } = await import("../lib/assistant/links");
   const index = siteIndex();
@@ -314,13 +295,13 @@ test("voice gets a compact prompt; an interruption and a requested language are 
   assert.doesNotMatch(text, /cut in while you were still answering/);
 });
 
-test("spoken answers never read out page addresses", async () => {
+test("assistant answers never read out page addresses", async () => {
+  // The spoken half of this test left with the chat widget on 18 November 2026. `withoutAddresses`
+  // still ships — the admin assistant uses it — so the text half stays.
   const { withoutAddresses } = await import("../lib/assistant/links");
-  const { speakable } = await import("../components/chat/voice");
   const said =
     "Sudhansu Mishra is our COO. [/about/#leadership] See [Leadership](/about/#leadership) or https://example.com/x (/contact/).";
   assert.equal(withoutAddresses(said), "Sudhansu Mishra is our COO. See Leadership or.");
-  for (const t of [said, "Visit /contact/ for more."]) assert.doesNotMatch(speakable(t), /\/|https?:/);
 });
 
 test("asking to talk in a language is recognised at once; merely naming one is not", async () => {

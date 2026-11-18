@@ -2,6 +2,7 @@
  *  Named studies are publishable; anonymised stay anonymised (no client name/logo). */
 
 import { namedCaseStudiesApproved } from "./compliance";
+import type { Metric } from "./evidence";
 
 export type SapPath = "GROW" | "RISE" | "ECC" | "AMS";
 
@@ -26,6 +27,20 @@ export interface CaseStudy {
    * the brand suffix adds 12.
    */
   metaTitle?: string;
+  /**
+   * Quantified outcomes, with their provenance.
+   *
+   * A number only belongs here when we can say what it is a number OF, over what WINDOW, and WHO
+   * measured it. If any of those is missing the number does not become a metric — it stays in the
+   * prose as a claim, and `UNPROVENANCED` in content/evidence.ts names it so the gap is a list
+   * somebody can close rather than a thing nobody notices.
+   *
+   * An empty `metrics` is a perfectly good case study. Several of the strongest ones here publish
+   * no percentage at all, because the evidence is a purchase-order register and a register proves
+   * duration and breadth rather than business outcomes. Do not add outcome claims to strengthen a
+   * study — the duration is the claim.
+   */
+  metrics?: Metric[];
   /** A full-width diagram shown after the challenge. `src` is a file in /public/diagrams/. */
   diagram?: { src: string; alt: string };
   /**
@@ -141,9 +156,30 @@ export const caseStudies: CaseStudy[] = [
       "Proximus NXT IT, the IT services subsidiary of the Proximus Group, had run a heavily customised SAP ECC estate for about fifteen years. With extended maintenance beginning in 2027 and support ending in 2030, and a business model that had moved to managed services, subscription and pay-as-you-use while the system had not, it needed to know whether SAP S/4HANA Public Cloud could carry the whole of it — before committing to a build.",
     summary:
       "A Belgian B2B ICT operator tested 700+ requirements against S/4HANA Public Cloud standard before committing to a build, and found most of them already met.",
+    /**
+     * The first case study with its figures sourced. Both come from the assessment's own record —
+     * the requirement log and the effort plan — which is why they can state what they are numbers
+     * of. Neither is an outcome: this engagement produced a decision, not a running system, and
+     * saying so is what makes the two figures worth reading. See content/evidence.ts.
+     */
+    metrics: [
+      {
+        value: "70–75%",
+        of: "More than 700 catalogued requirements across finance, quote-to-bill and fulfilment",
+        window: "The fit-to-standard assessment, tested requirement by requirement",
+        attribution: "measured-by-us",
+        excludes: "Requirements the client withdrew during the workshops, which were logged and not counted either way",
+      },
+      {
+        value: "30–35%",
+        of: "The design-and-test effort in the implementation plan, against the same plan without a mapped integration architecture",
+        window: "Planned effort for the build, not effort realised — the build had not started",
+        attribution: "our-estimate",
+      },
+    ],
     benefits: [
-      "Of more than 700 requirements across finance, quote-to-bill and fulfilment, the assessment found 70–75% met by standard — the number that decides whether a public-cloud build is viable at all",
-      "A mapped integration architecture cut the design-and-test effort in the plan by an estimated 30–35%",
+      "Most of the requirement set was already met by standard — the finding that decides whether a public-cloud build is viable at all",
+      "A mapped integration architecture took a substantial share of design-and-test effort out of the plan",
       "Clean core confirmed with no modification to the standard, so the platform stays upgrade-safe through SAP's release cycle",
       "Quote-to-bill standardised across subscription and pay-as-you-use models, replacing spreadsheet and low-code workarounds",
       "A phased, implementation-ready roadmap with an effort and cost baseline the business case could be written from",

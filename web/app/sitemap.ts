@@ -38,7 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about/partnerships/",
     "/about/markets/",
     "/about/where-we-stand/",
-    "/about/what-we-got-wrong/",
     // Careers
     "/careers/",
     "/careers/our-culture/",
