@@ -55,7 +55,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...industries.map((i) => `/industries/${i.slug}/`),
     ...legacyIndustries.map((i) => `/industries/${i.slug}/`),
     ...articles.map((p) => `/insights/${p.slug}/`),
-    ...publicCaseStudies.filter((c) => c.named).map((c) => `/case-studies/${c.slug}/`),
+    // Every published study, not only the named ones.
+    //
+    // This filtered on `named` and therefore listed nothing at all, because the house style is to
+    // publish anonymously: sixteen case-study pages were being prerendered, linked from
+    // /case-studies/, and left out of the sitemap. The filter conflated two different things —
+    // whether a client is named, and whether the study publishes. `publicCaseStudies` already
+    // answers the second, which is the only one a sitemap cares about.
+    ...publicCaseStudies.map((c) => `/case-studies/${c.slug}/`),
   ];
 
   // Pages published from the admin's page builder.

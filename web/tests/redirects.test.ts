@@ -174,6 +174,22 @@ test("every page in the sitemap has an accountable owner", async () => {
  *
  * It does NOT prove anybody reads the mailbox. That one needs a human.
  */
+/**
+ * Every published case study is in the sitemap.
+ *
+ * The sitemap filtered on `named`, which listed nothing: the house style publishes anonymously,
+ * so no study is ever named, and sixteen pages of our best evidence were invisible to search
+ * while being linked from /case-studies/. Pinned because the same conflation — "anonymous" with
+ * "not for publication" — is an easy one to make twice.
+ */
+test("every published case study is in the sitemap", async () => {
+  const { default: sitemap } = await import("../app/sitemap");
+  const { publicCaseStudies } = await import("../content/case-studies");
+  const paths = new Set((await sitemap()).map((e) => new URL(e.url).pathname));
+  const missing = publicCaseStudies.map((c) => `/case-studies/${c.slug}/`).filter((p) => !paths.has(p));
+  assert.deepEqual(missing, []);
+});
+
 test("every owning role resolves to a mailbox that exists", async () => {
   const { mailboxes, existingMailboxes } = await import("../content/page-owners");
   const missing = Object.entries(mailboxes)

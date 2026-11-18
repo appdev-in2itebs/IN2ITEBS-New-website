@@ -165,6 +165,13 @@ test("anonymised case studies leak no client name or identifying detail", async 
     "Odisha",
     "Delhi",
     "Gold Category",
+    // Belgium and telecom stay in the published study by decision; the parent group, its listing
+    // and the revenue figure do not, because those three together name the company.
+    "Proximus",
+    "Euronext",
+    "PROX",
+    "EPS",
+    "230M",
     // Every named client, whole. Distinctive parts of a name are listed by hand rather than split
     // out mechanically, because "Engineering" and "India" are words an anonymised study is
     // entitled to use and a test that cries wolf gets deleted.

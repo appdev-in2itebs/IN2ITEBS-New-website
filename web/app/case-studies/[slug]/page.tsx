@@ -20,9 +20,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const study = getCaseStudy(slug);
   if (!study) return pageMetadata(`/case-studies/${slug}/`, { title: "Case study" });
+  /*
+   * `${client} — ${featuredSolution}` ran to 142 characters on the longest study and past 60 on
+   * every single one, because both halves are already full sentences under the house style:
+   * "A beverage bottling group, South Asia and Africa" plus "GROW with SAP Public Cloud" is a
+   * paragraph, not a title tag.
+   *
+   * Nobody noticed because these pages were absent from the sitemap, so no audit crawled them.
+   * The title is now the client label alone, which is what a searcher would recognise and what
+   * the H1 already says; the solution stays on the page, where it belongs.
+   *
+   * The description falls back to a sentence boundary rather than a hard 155-character cut, so a
+   * study without its own summary does not end mid-word.
+   */
+  const fallback = study.scenario.slice(0, 152);
+  const cut = fallback.lastIndexOf(". ");
   return pageMetadata(`/case-studies/${slug}/`, {
-    title: `${study.client} — ${study.featuredSolution}`,
-    description: study.summary ?? study.scenario.slice(0, 155),
+    title: study.metaTitle ?? study.client,
+    description: study.summary ?? (cut > 70 ? fallback.slice(0, cut + 1) : `${fallback.trimEnd()}…`),
   });
 }
 
@@ -33,8 +48,20 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
   if (moved) permanentRedirect(`/case-studies/${moved}/`);
   if (!study) notFound();
 
-  // First word of the featured solution becomes the headline accent.
-  const accentWord = study.featuredSolution.split(" ")[0];
+  /*
+   * The first word of the featured solution becomes the headline accent — but only where the
+   * client label is a short name.
+   *
+   * It was written when every study was named: "TGNPDCL" plus an italic "RISE" reads as one
+   * headline. Under the anonymised house style the label is a sector-and-region phrase, and
+   * "A B2B ICT services operator, Belgium S/4HANA" reads as a label with a product name stuck
+   * to the end of it.
+   *
+   * A comma is the tell: the house style writes "<what they are>, <where>", and a real company
+   * name does not contain one. The subhead carries the solution either way, so nothing is lost.
+   */
+  const labelIsPhrase = study.client.includes(",");
+  const accentWord = labelIsPhrase ? undefined : study.featuredSolution.split(" ")[0];
 
   const facts = [
     { value: study.industry, label: "Industry" },

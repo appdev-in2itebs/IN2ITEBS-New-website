@@ -17,6 +17,15 @@ export interface CaseStudy {
   region: string;
   scenario: string;
   summary?: string; // ≤155 characters, used as the page meta description (named studies only)
+  /**
+   * The <title> tag, where the client label is too long for one.
+   *
+   * "A multinational beverage bottling group, South Asia and Africa" is a good H1 and a 74-
+   * character title tag. The label stays where it works; this carries the searchable form, which
+   * is keyword-led because nobody searches for an anonymised label. Keep it under 48 characters:
+   * the brand suffix adds 12.
+   */
+  metaTitle?: string;
   /** A full-width diagram shown after the challenge. `src` is a file in /public/diagrams/. */
   diagram?: { src: string; alt: string };
   /**
@@ -41,6 +50,7 @@ export interface CaseStudy {
     region?: string;
     differentiator?: string;
     featuredSolution?: string;
+    metaTitle?: string;
   };
   benefits: string[];
   solution: string[];
@@ -97,9 +107,65 @@ export const caseStudies: CaseStudy[] = [
       "In2IT EBS recommended a centralised package — enabling IFRS and US GAAP financial close, consolidated reporting and operational consistency across regions.",
   },
   {
+    /**
+     * Our first European reference, and the only study here where the assessment IS the
+     * engagement — no migration followed it in scope. That makes it the natural companion to
+     * /services/ecc-prism/ and the clearest statement that we sell the thinking on its own.
+     *
+     * ── ON THE ANONYMISATION ─────────────────────────────────────────────────────────────────
+     * The Managing Director asked to keep Belgium and the telecom sector, which narrows this a
+     * long way: a B2B ICT arm of a Belgian telecoms operator is close to a single company. Three
+     * details are therefore withheld rather than reworded, because together they would make the
+     * sector-and-region framing decorative: the parent group, its stock listing, and the revenue
+     * figure. What is kept is operational scale — headcount and contract volume — which carries
+     * the credibility without being the fingerprint.
+     */
+    slug: "proximus-nxt",
+    anonymous: {
+      slug: "b2b-ict-operator-belgium",
+      client: "A B2B ICT services operator, Belgium",
+      scenario:
+        "The IT services arm of a Belgian telecommunications operator had run a heavily customised SAP ECC estate for about fifteen years. With extended maintenance beginning in 2027 and support ending in 2030, and a business model that had moved to managed services, subscription and pay-as-you-use while the system had not, it needed to know whether SAP S/4HANA Public Cloud could carry the whole of it — before committing to a build.",
+      summary:
+        "A Belgian B2B ICT operator tested 700+ requirements against S/4HANA Public Cloud standard before committing to a build, and found most of them already met.",
+      region: "Belgium, scaling to the Benelux",
+    },
+    client: "Proximus NXT IT",
+    named: true,
+    industry: "Technology & Telecom",
+    sapPath: "GROW",
+    featuredSolution: "S/4HANA Public Cloud discovery assessment and proof of concept",
+    employees: "800+",
+    region: "Belgium, scaling to the Benelux",
+    scenario:
+      "Proximus NXT IT, the IT services subsidiary of the Proximus Group, had run a heavily customised SAP ECC estate for about fifteen years. With extended maintenance beginning in 2027 and support ending in 2030, and a business model that had moved to managed services, subscription and pay-as-you-use while the system had not, it needed to know whether SAP S/4HANA Public Cloud could carry the whole of it — before committing to a build.",
+    summary:
+      "A Belgian B2B ICT operator tested 700+ requirements against S/4HANA Public Cloud standard before committing to a build, and found most of them already met.",
+    benefits: [
+      "Of more than 700 requirements across finance, quote-to-bill and fulfilment, the assessment found 70–75% met by standard — the number that decides whether a public-cloud build is viable at all",
+      "A mapped integration architecture cut the design-and-test effort in the plan by an estimated 30–35%",
+      "Clean core confirmed with no modification to the standard, so the platform stays upgrade-safe through SAP's release cycle",
+      "Quote-to-bill standardised across subscription and pay-as-you-use models, replacing spreadsheet and low-code workarounds",
+      "A phased, implementation-ready roadmap with an effort and cost baseline the business case could be written from",
+    ],
+    solution: [
+      "Fit-to-standard, Show and Tell and Golden Flow workshops against every end-to-end scenario",
+      "Adoption over adaptation — every deviation from standard challenged and logged",
+      "Solution Order-led modelling proven in the proof of concept",
+      "Baselined migration objects, target integration architecture and security controls",
+      "Outcome-based fixed-price delivery model with KPIs and governance",
+      "~30,000 active contracts in scope",
+    ],
+    differentiator:
+      "The risk in a programme like this is not technical. It is rebuilding fifteen years of accumulated complexity in code because nobody tested whether the standard already did it. Every deviation was challenged and logged before a line was written, which is why the answer came back as a number rather than an opinion.",
+    outcome:
+      "The assessment was the deliverable. It produced a decision — adopt the standard, in phases, on a known effort baseline — rather than a proposal for the next phase of work.",
+  },
+  {
     slug: "tgnpdcl",
     anonymous: {
       slug: "state-power-distribution-south-india",
+      metaTitle: "SAP ECC to RISE for a power utility",
       client: "A state power distribution utility, southern India",
       scenario:
         "A state-owned electricity distribution utility migrated its existing SAP ERP estate from ECC (SOH) to RISE with S/4HANA, with phased delivery, document management, analytics and integration uplift.",
@@ -176,6 +242,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "waycool-foods",
     anonymous: {
       slug: "agri-commerce-distribution-india",
+      metaTitle: "SAP for an agri-commerce distributor",
       differentiator:
         "An eight-week end-to-end lift and shift to Azure — mapping a complex agri-commerce process set onto a digital platform.",
       client: "An agri-commerce and food distribution business, India",
@@ -313,6 +380,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "kenya-railways",
     anonymous: {
       slug: "state-railway-operator-east-africa",
+      metaTitle: "SAP for a national railway operator",
       client: "A state-owned national railway operator, East Africa",
       scenario:
         "A state corporation under a national ministry of transport, operating a mainline of roughly nine hundred kilometres within a network of several thousand. A ten-month fresh implementation moved the business from legacy systems to SAP ECC.",
@@ -351,6 +419,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "aptransco",
     anonymous: {
       slug: "state-power-transmission-south-india",
+      metaTitle: "SAP for a power transmission utility",
       client: "A state power transmission utility, southern India",
       scenario:
         "A state electricity transmission corporation engaged In2IT EBS for a three-year onsite application-management engagement to stabilise a critical ERP backbone.",
@@ -383,9 +452,10 @@ export const caseStudies: CaseStudy[] = [
     slug: "delhi-transco",
     anonymous: {
       slug: "state-power-transmission-north-india",
+      metaTitle: "SAP for a state transmission utility",
       client: "A state power transmission utility, northern India",
       summary:
-        "Annual maintenance support across a state transmission utility's SAP ERP estate — resolving downtime, automating legacy processes and keeping operations running.",
+        "Annual maintenance support across a state transmission utility's SAP ERP estate — resolving downtime, automating legacy processes and keeping it running.",
       region: "Northern India",
     },
     client: "Delhi Transco Limited",
@@ -444,6 +514,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "welspun-group",
     anonymous: {
       slug: "diversified-manufacturing-group-india",
+      metaTitle: "SAP for a diversified manufacturer",
       client: "A diversified manufacturing group, India and the UK",
       scenario:
         "What began in May 2018 as two ABAP consultants on a data-entry automation project for a textiles business became, over seven years, eighty-nine purchase orders across thirteen companies within one diversified manufacturing group — each one a separate procurement process that could have gone elsewhere.",
@@ -523,6 +594,7 @@ export const caseStudies: CaseStudy[] = [
     slug: "varun-beverages",
     anonymous: {
       slug: "beverage-bottling-group-south-asia-africa",
+      metaTitle: "SuccessFactors for a bottling group",
       client: "A multinational beverage bottling group, South Asia and Africa",
       scenario:
         "A large beverage bottling group runs operations across the Indian subcontinent and Africa. One people system had to run across all of it — and then the pieces each country's revenue authority demanded had to be built on top.",
