@@ -240,7 +240,7 @@ export const servicePages: ServicePage[] = [
     group: "advisory",
     icon: "lightbulb",
     sourceUrl: "https://www.in2itebs.com/services/advisory/",
-    metaTitle: "Advisory — transformation strategy, architecture and governance",
+    metaTitle: "SAP & Enterprise Advisory Services",
     metaDescription:
       "Transformation strategy, enterprise architecture, governance and data protection — delivered by the people who also build and run the systems.",
     intro: [
@@ -285,7 +285,7 @@ export const servicePages: ServicePage[] = [
     group: "digital-data-ai",
     icon: "cpu",
     sourceUrl: "https://www.in2itebs.com/services/digital-data-ai/",
-    metaTitle: "Digital, Data & AI — application engineering, data and AI",
+    metaTitle: "Digital, Data & AI Services",
     metaDescription:
       "Engineering around and beyond the packaged core: applications, the integration spine, data engineering, enterprise data management and applied AI.",
     intro: [
@@ -340,9 +340,9 @@ export const servicePages: ServicePage[] = [
     group: "enterprise-platforms",
     icon: "boxes",
     sourceUrl: "https://www.in2itebs.com/services/sap/",
-    metaTitle: "SAP Gold Partner — S/4HANA, SuccessFactors, Ariba, BTP",
+    metaTitle: "SAP Gold Partner — S/4HANA & SuccessFactors",
     metaDescription:
-      "An SAP Gold Partner with 380+ SAP consultants across eleven practices, delivering S/4HANA and ECC, SuccessFactors and Payroll, Ariba and SRM, BTP and Joule.",
+      "An SAP Gold Partner with 380+ consultants across eleven practices: S/4HANA, ECC, SuccessFactors, Payroll, Ariba, BTP and Joule.",
     intro: [
       "Every firm claims SAP depth. Below is ours, as numbers and named modules. If a module is not on this page, we have not configured it in production, and we would rather tell you that than find out together on your project.",
     ],
@@ -473,9 +473,9 @@ export const servicePages: ServicePage[] = [
     group: "enterprise-platforms",
     icon: "prism",
     sourceUrl: "https://www.in2itebs.com/services/ecc-prism/",
-    metaTitle: "ECC Prism — the SAP ECC maintenance decision, assessed",
+    metaTitle: "SAP ECC End of Support: 2027, 2030 or 2033",
     metaDescription:
-      "2027, 2030 or 2033 — most ECC customers do not know which maintenance date applies to them. ECC Prism establishes which, and gets the estate safe to it.",
+      "2027, 2030 or 2033 — most ECC customers do not know which maintenance date applies to them. ECC Prism establishes which, and gets you safe to it.",
     intro: [
       "Most ECC customers believe they are facing a single deadline. They are facing three, they are eligible for only one of them, and almost nobody has checked which.",
     ],
@@ -579,7 +579,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://www.in2itebs.com/services/successfactors/",
     metaTitle: "SAP SuccessFactors implementation and support",
     metaDescription:
-      "Employee Central, Payroll, Recruiting, Performance and the rest of the SuccessFactors suite — implemented, integrated and supported by our largest practice.",
+      "Employee Central, Payroll, Recruiting and Performance — implemented, integrated and supported by our largest SAP practice.",
     intro: [
       "SuccessFactors is our largest practice by headcount. Most of what we have learned in it is about the parts that do not demo well — payroll parallel runs, statutory reporting, the integration back to finance, and what happens in the second year.",
     ],
@@ -625,7 +625,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://www.in2itebs.com/services/smart-meter-to-cash/",
     metaTitle: "Smart Meter to Cash — metering to billed revenue",
     metaDescription:
-      "Turning metering investment into billed and collected revenue for electricity and water utilities, with one partner accountable for the whole flow from meter to cash.",
+      "Turning metering investment into billed and collected revenue for electricity and water utilities, with one partner accountable end to end.",
     intro: [
       "Utilities are rolling out metering faster than they can build the teams to run it. The meters go in, the reads do not reach billing, customers stay on estimated bills, and the business case quietly stops being true.",
       "Every one of those gaps sits between two suppliers. The meter vendor, the communications provider, the meter-data system, the billing team and the collections function each hold up their own service level while the revenue sits in the space between them. Nobody's target is breached and the money does not arrive. That is not a technology problem — it is an accountability problem, and it is solved by one party owning the whole flow.",
@@ -667,7 +667,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://www.in2itebs.com/services/managed-services/",
     metaTitle: "SAP managed services and application support",
     metaDescription:
-      "Application management for SAP estates — published severity bands, response and resolution targets, monthly service reporting and service credits when we miss.",
+      "SAP application management with published severity bands, response and resolution targets, monthly reporting and service credits when we miss.",
     intro: [
       "Implementation is a project with an end date. Support is a relationship with none. This page states what we commit to, what we measure, and what happens when we miss — because a support proposal that does not say those three things is asking you to find out later.",
     ],
@@ -921,7 +921,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://www.in2itebs.com/services/enterprise-data-management/",
     metaTitle: "Enterprise data management for SAP estates",
     metaDescription:
-      "Data strategy, governance, quality, migration, archiving and managed data operations for SAP-centric enterprises — bought as an assessment, a wave, or a service.",
+      "Data strategy, governance, quality, migration and archiving for SAP estates — bought as an assessment, a wave, or an ongoing service.",
     intro: [
       "Around two-thirds of the effort in a transformation programme touches data — and none of that effort ends at go-live. Master data decays daily. Retention obligations outlive the systems that created the records.",
       "Data gets treated as a task inside somebody else's programme. It is given to whoever is free, scoped by how long the cutover window is, and declared finished on the day the system goes live. Three things then happen: master data drifts because nobody owns it, reporting becomes distrusted because the masters disagree, and years of statutory retention obligation sit on a legacy system kept alive purely so somebody can look things up. None of those is a migration problem. All three are consequences of treating data as a phase.",

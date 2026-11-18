@@ -28,7 +28,21 @@ export interface IndustrySection {
 export interface LegacyIndustry {
   slug: string;
   name: string;
+  /** The editorial headline. Renders as the page's H1 — never as the <title>; see metaTitle. */
   title?: string;
+  /**
+   * The <title> tag, when it should differ from the headline above — which, for every industry
+   * page, it should.
+   *
+   * "Where the tonnage and the ledger have to be the same number" is a good H1 and an unusable
+   * title tag: nobody searches that string. They search "SAP implementation partner mining
+   * India". The audit of 18 November 2026 found all nine industry pages using their headline as
+   * the <title>, carrying no keyword at all and running past the 60-character truncation point.
+   *
+   * So the headline stays where it works and the title carries the keyword. Keep this under 46
+   * characters: the brand suffix adds 14.
+   */
+  metaTitle?: string;
   intro: string[];
   image?: string;
   sectionsHeading?: string;
@@ -44,11 +58,12 @@ const src = (slug: string) => `https://www.in2itebs.com/industries/${slug}/`;
 export const legacyIndustries: LegacyIndustry[] = [
   {
     slug: "metals-mining-steel",
+    metaTitle: "SAP for Mining & Metals in India",
     name: "Metals, mining and steel",
     title: "Where the tonnage and the ledger have to be the same number",
     sourceUrl: src("metals-mining-steel"),
     metaDescription:
-      "SAP for mining and metals — grade-based contract pricing, gate and weighbridge control, fleet integration and statutory levies, delivered at Navratna public sector undertakings.",
+      "SAP for mining and metals: grade-based contract pricing, weighbridge control, fleet integration and statutory levies, proven at Navratna PSUs.",
     customers: [],
     intro: [
       "Volume leakage in mining is rarely a single fraud event. It is small, unrecorded discrepancies at the gate, repeated daily — and a commercial system that learns about them weeks later, if at all.",
@@ -84,11 +99,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "power-utilities",
+    metaTitle: "SAP for Power & Water Utilities",
     name: "Power and utilities",
     title: "Meters installed is not revenue collected",
     sourceUrl: src("power-utilities"),
     metaDescription:
-      "SAP for power generation, transmission, distribution and water — meter-to-cash, contract accounting, asset management and the first utility RISE migration in India.",
+      "SAP for power generation, transmission, distribution and water — meter-to-cash, contract accounting and asset management for Indian utilities.",
     customers: [],
     intro: [
       "Six pressures are reshaping how utilities run, and every one of them lands on the ERP core: revenue and water losses, ageing ERP estates, asset reliability, the energy transition, affordability and collections, and scrutiny from regulators, lenders and investors.",
@@ -124,11 +140,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "government-public-sector",
+    metaTitle: "SAP for PSUs & State Government",
     name: "Government and public sector",
     title: "Built for the buyer who has to show their working",
     sourceUrl: src("government-public-sector"),
     metaDescription:
-      "SAP for public sector undertakings, state utilities and state-owned enterprises — delivered under open tender, national audit and statutory reporting obligations.",
+      "SAP for public sector undertakings and state-owned enterprises, delivered under open tender, national audit and statutory reporting obligations.",
     customers: [],
     intro: [
       "A large part of our work is for public sector undertakings, state utilities and state-owned enterprises operating under national audit. That shapes how we build, not just what we say.",
@@ -164,11 +181,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "manufacturing",
+    metaTitle: "SAP for Manufacturing & Engineering",
     name: "Manufacturing",
     title: "Where the shop floor and the ledger have to agree",
     sourceUrl: src("manufacturing"),
     metaDescription:
-      "SAP for manufacturing and industrial engineering — S/4HANA conversions, RISE migrations, engineering project lifecycles and plant maintenance.",
+      "SAP for manufacturing and industrial engineering — S/4HANA conversions, RISE migrations, project lifecycles and plant maintenance.",
     customers: [],
     intro: [
       "Manufacturers do not buy ERP. They buy the ability to know what a product costs, where a batch went, and whether the plant can commit to a date — and to still know it after the system changes.",
@@ -195,11 +213,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "consumer-goods-distribution",
+    metaTitle: "SAP for Consumer Goods & Retail",
     name: "Consumer goods and distribution",
     title: "One business, and a different tax authority in every market",
     sourceUrl: src("consumer-goods-distribution"),
     metaDescription:
-      "SAP and SuccessFactors for consumer goods, food and beverage and retail — global HR platforms, statutory e-invoicing integrations and cloud migrations across Asia and Africa.",
+      "SAP and SuccessFactors for consumer goods, food and beverage and retail — global HR, statutory e-invoicing and cloud migration across Asia and Africa.",
     customers: [],
     intro: [
       "A multinational consumer business does not have one compliance problem. It has one per country, and each one arrives with a statutory deadline and no glamour.",
@@ -231,11 +250,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "pharma-healthcare-life-sciences",
+    metaTitle: "SAP for Pharma & Life Sciences",
     name: "Pharma, healthcare and life sciences",
     title: "The implementation is a project. The audit trail is forever.",
     sourceUrl: src("pharma-healthcare-life-sciences"),
     metaDescription:
-      "SAP SuccessFactors and S/4HANA for pharmaceutical manufacturers, hospital groups, biotech and diagnostics — eight evidenced engagements across the sector.",
+      "SAP and SuccessFactors for pharmaceutical manufacturers, hospital groups, biotech and diagnostics — eight evidenced engagements in the sector.",
     customers: [],
     intro: [
       "People systems carry more regulatory weight here than in most industries. Training records, qualification currency and who was certified to do what on which date are not HR niceties in a plant making sterile antibiotics or a hospital running theatres — they are evidence in an inspection.",
@@ -267,11 +287,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "technology-digital-natives",
+    metaTitle: "SAP for Technology & Scale-ups",
     name: "Technology and digital natives",
     title: "A real ERP, before the spreadsheets become the risk",
     sourceUrl: src("technology-digital-natives"),
     metaDescription:
-      "SAP S/4HANA Cloud and SuccessFactors for technology businesses, digital natives and scale-ups — including internet, edtech, data science and IT services companies.",
+      "SAP S/4HANA Cloud and SuccessFactors for technology businesses, digital natives and scale-ups moving off spreadsheets onto a real ERP.",
     customers: [],
     intro: [
       "Companies growing faster than their systems. Finance is closing the month by hand, the business has outgrown what it started on, and nobody has the appetite for a multi-year programme.",
@@ -303,11 +324,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "banking-financial-services",
+    metaTitle: "SAP for Banking & Development Finance",
     name: "Banking and financial services",
     title: "Development finance, with the audit scrutiny that comes with it",
     sourceUrl: src("banking-financial-services"),
     metaDescription:
-      "SAP S/4HANA for development finance institutions and lenders — brownfield conversion on RISE, with public-sector financial process and compliance alignment.",
+      "SAP S/4HANA for development finance institutions and lenders — brownfield conversion on RISE, with public-sector compliance alignment.",
     customers: [],
     intro: [
       "A short page, deliberately. We have one evidenced reference in this sector and we would rather say so than pad it.",
@@ -326,11 +348,12 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "real-estate-infrastructure",
+    metaTitle: "SAP for Real Estate & Infrastructure",
     name: "Real estate and infrastructure",
     title: "Workspace and property operations on a cloud core",
     sourceUrl: src("real-estate-infrastructure"),
     metaDescription:
-      "SAP S/4HANA Cloud for real estate, workspace and property operations — implementation, managed support and licensing.",
+      "SAP S/4HANA Cloud for real estate, workspace and property operations — implementation, managed support and licensing from one partner.",
     customers: [],
     intro: ["A short page, deliberately. One evidenced reference, and we would rather say so than pad it."],
     sectionsHeading: "What we have delivered",

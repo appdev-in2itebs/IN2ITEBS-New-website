@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const legacy = await getEditedIndustry(slug);
   if (legacy)
     return pageMetadata(`/industries/${slug}/`, {
-      title: legacy.title ?? legacy.name,
+      title: legacy.metaTitle ?? legacy.title ?? legacy.name,
       description: legacy.metaDescription,
     });
   const ind = getIndustry(slug);

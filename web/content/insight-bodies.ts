@@ -1,5 +1,24 @@
 /**
- * Article bodies, transcribed from in2itebs.com (re-captured 2026-09-21 against the live pages).
+ * Article bodies.
+ *
+ * ── REWRITTEN 18 NOVEMBER 2026 ───────────────────────────────────────────────────────────────
+ * Four of these were transcribed from the live site and were, on inspection, SAP's marketing
+ * written in SAP's voice about SAP's products — "a holistic program", "empowers organizations",
+ * "in today's fast-paced, technology-driven landscape" — with one carrying SAP's own campaign
+ * line as its strapline and another running under a named executive's byline. Three problems in
+ * one: a copyright exposure, no argument only we could make, and a voice that contradicts the
+ * rest of this site, where /about/where-we-stand/ publishes what we cannot do.
+ *
+ * They were rewritten rather than deleted, so the slugs, the URLs and the inbound links survive.
+ * Every claim in the new text is one this repository already evidences: the module set in
+ * content/capability-status.ts, the RISE Validated Partner gap, the hyperscaler boundary, and the
+ * narrow AI position. If a claim here stops being true, the capability table is the source of
+ * truth and this file follows it, not the other way round.
+ *
+ * The two Simplify pages are In2IT's own partner packages and are left as the live site has them.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ *
+ * Originally transcribed from in2itebs.com (re-captured 2026-09-21 against the live pages).
  * The text is the live site's, block for block and word for word: its section headings, its bold
  * sub-headings, its inline images (under /public/insights/body) and its author photos, in the live
  * order. Only the site chrome around the article (header, footer, comment form, share bar), the
@@ -25,231 +44,140 @@ export const insightBodies: Record<
     blocks: [
       {
         type: "paragraph",
-        text: "In the modern business landscape, effective Human Capital Management (HCM) is essential for driving success. Organizations need to attract, retain, and develop talent while optimizing HR operations to maintain a competitive edge. SAP SuccessFactors, a leading cloud-based HCM suite, enables businesses to modernize HR functions and align them with strategic objectives. As a trusted SAP SuccessFactors Implementation Partner, In2IT Enterprise Business Services supports organizations across India, Singapore, Kenya, Dubai, UAE, the USA, and South Africa in achieving operational excellence and maximizing their workforce potential.",
+        text: "Most SuccessFactors programmes in India are sequenced around what the HR team wants to fix first. That is the wrong input, and it is the most common reason a rollout stalls at module three.",
+      },
+      { type: "heading", text: "Why sequencing beats module selection" },
+      {
+        type: "paragraph",
+        text: "The suite is modular, which makes it tempting to treat the order as a matter of priority: recruitment hurts most, so start with Recruiting. The problem is that every module downstream of Employee Central reads its organisational structure, its position management and its employee master from Employee Central. Start elsewhere and you build the second module against a structure you have not yet agreed.",
       },
       {
         type: "paragraph",
-        text: "The Strategic Value of SAP SuccessFactors",
+        text: "We run Employee Central, Recruiting, Onboarding, Performance and Goals, Compensation, Succession and Learning in production across several sectors. The programmes that went smoothly settled the organisational model first. The ones that did not, re-did it later at three times the cost.",
+      },
+      { type: "heading", text: "The four decisions to take before configuration starts" },
+      {
+        type: "paragraph",
+        text: "Position management or job-based. This is the one that is genuinely hard to reverse, and in organisations with sanctioned strength — public sector undertakings especially — position management is usually the only model that reconciles with how establishment is actually controlled.",
         strong: true,
       },
       {
         type: "paragraph",
-        text: "SAP SuccessFactors is not merely an HR tool; it is a comprehensive platform designed to address the entire employee lifecycle, from recruitment to retirement. By integrating advanced analytics, artificial intelligence, and machine learning, SAP SuccessFactors empowers organizations to make data-driven decisions, enhance employee experiences, and build a future-ready workforce. Its modular architecture allows businesses to tailor solutions to their unique needs, ensuring scalability and flexibility in an ever-changing business environment.",
-      },
-      {
-        type: "paragraph",
-        text: "Exploring the Core Modules of SAP SuccessFactors:",
+        text: "Where payroll sits. SuccessFactors Employee Central Payroll, a third-party Indian payroll, or the existing SAP payroll kept in place. Each is defensible. What is not defensible is deciding after Employee Central is configured, because the integration pattern differs in each case.",
         strong: true,
       },
       {
         type: "paragraph",
-        text: "Employee Central (EC): Serving as the backbone of SAP SuccessFactors, Employee Central consolidates all HR data into a single, unified system. This centralized approach ensures data accuracy, compliance, and real-time access to critical workforce insights, enabling HR leaders to make informed decisions that align with organizational goals.",
-      },
-      {
-        type: "paragraph",
-        text: "Recruitment and Onboarding: In a competitive talent market, attracting and retaining top talent is paramount. SAP SuccessFactors’ Recruitment and Onboarding modules streamline the hiring process by leveraging AI-driven candidate matching, automated workflows, and personalized onboarding experiences. This not only reduces time-to-hire but also ensures a seamless transition for new hires, fostering engagement from day one.",
-      },
-      {
-        type: "paragraph",
-        text: "Performance and Goals: Aligning individual performance with organizational objectives is essential for driving productivity and accountability. The Performance and Goals module facilitates continuous feedback, transparent goal-setting, and data-driven performance evaluations. By fostering a culture of recognition and development, organizations can enhance employee motivation and retention.",
-      },
-      {
-        type: "paragraph",
-        text: "Learning Management: In a world where skills are rapidly evolving, continuous learning is critical for organizational resilience. SAP SuccessFactors’ Learning Management module offers personalized, on-demand training programs that empower employees to upskill and adapt to changing business needs. This not only enhances individual performance but also ensures the organization remains competitive in a dynamic market.",
-      },
-      {
-        type: "paragraph",
-        text: "Compensation Management: Fair and equitable compensation is a key driver of employee satisfaction and loyalty. The Compensation Management module enables organizations to design and implement competitive pay structures that reflect performance, market trends, and organizational priorities. By aligning compensation with business outcomes, companies can attract and retain top talent while maintaining fiscal responsibility.",
-      },
-      {
-        type: "paragraph",
-        text: "Succession and Development: Leadership continuity is a critical factor in long-term organizational success. The Succession and Development module identifies high-potential employees, nurtures their leadership capabilities, and ensures readiness for key roles. By proactively addressing talent gaps, organizations can mitigate risks and maintain operational stability.",
-      },
-      {
-        type: "paragraph",
-        text: "Workforce Analytics and Planning: In an era of data-driven decision-making, actionable insights are indispensable. SAP SuccessFactors’ Workforce Analytics and Planning module provides advanced data visualization, predictive analytics, and scenario modeling capabilities. These tools enable HR leaders to anticipate workforce trends, optimize resource allocation, and align talent strategies with business objectives.",
-      },
-      {
-        type: "paragraph",
-        text: "In2IT EBS: Delivering Strategic HCM Transformation",
+        text: "How many legal entities, and whether they share a process. Groups with multiple registered entities often assume a single template and discover statutory divergence during user acceptance testing.",
         strong: true,
       },
       {
         type: "paragraph",
-        text: "As a seasoned SAP SuccessFactors Implementation Partner, In2IT EBS combines deep domain expertise, cutting-edge technology, and a client-centric approach to deliver transformative HCM solutions. Our global presence, spanning India, Singapore, Kenya, Dubai, UAE, the USA, and South Africa, allows us to cater to diverse organizational needs while adhering to local regulations and cultural nuances.",
-      },
-      {
-        type: "paragraph",
-        text: "Our team of certified SAP SuccessFactors consultants collaborates closely with clients to understand their unique challenges and objectives. From initial strategy development to post-implementation support, we ensure a seamless transition to SAP SuccessFactors, enabling organizations to maximize their investment and achieve measurable outcomes.",
-      },
-      {
-        type: "paragraph",
-        text: "Why Partner with In2IT EBS?",
+        text: "Who owns data quality in the legacy system. Migration surfaces every gap in the records you have been living with. Somebody needs to own the cleanup before the cutover, not during it.",
         strong: true,
       },
+      { type: "heading", text: "On the AI capability" },
       {
         type: "paragraph",
-        text: "Global Expertise: With a strong presence across multiple regions, we leverage internationally recognized best practices to deliver solutions that align with industry standards, regulatory requirements, and business objectives. Our deep understanding SAP Solutions of ensures that our offerings are not only innovative but also strategically tailored to meet the unique challenges of each market.",
+        text: "SAP has extended AI across the suite and the demonstrations are genuinely impressive. Our position on it is narrower than the marketing: we have delivered advisory work on feasibility, and agents built with Joule Studio on SAP Business AI Platform are an investment for us rather than something we can point at a reference for.",
       },
       {
         type: "paragraph",
-        text: "End-to-End SAP Solutions: Our comprehensive service offerings encompass every stage of the implementation lifecycle, from planning and deployment to training and ongoing support. This holistic approach guarantees long-term success and sustained value.",
+        text: "If an implementation partner tells you their AI capability is proven, ask which client, which module and which month it went live. We would expect to be asked the same.",
       },
+      { type: "heading", text: "What a realistic first phase looks like" },
       {
         type: "paragraph",
-        text: "Proven Industry Expertise: With a track record of successful implementations across diverse industries, we possess the expertise to address complex HR challenges and deliver tailored solutions that drive business outcomes.",
+        text: "Employee Central with the organisational model agreed and signed, one payroll integration, and one downstream module chosen because it shares the most data with Employee Central rather than because it is the loudest complaint. Everything else follows more cheaply once that is stable.",
       },
-      {
-        type: "paragraph",
-        text: "Unlocking the Full Potential of SAP SuccessFactors",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "Implementing SAP SuccessFactors is not just about adopting new technology; it is about redefining how organizations manage their most valuable asset—their people. In2IT EBS ensures that every implementation is aligned with the customers strategic vision, supported by robust change management and user adoption strategies. By focusing on these critical elements, we enable organizations to fully leverage the capabilities of SAP SuccessFactors and achieve transformative results.",
-      },
-      {
-        type: "paragraph",
-        text: "Driving Tangible Business Outcomes",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "Through our SAP SuccessFactors implementations, organizations can realize the following benefits:",
-      },
-      {
-        type: "paragraph",
-        text: "Enhanced Employee Engagement: By delivering personalized and intuitive employee experiences, organizations can foster a culture of engagement and loyalty.",
-      },
-      {
-        type: "paragraph",
-        text: "Data-Driven Decision-Making: Access to real-time workforce insights enables HR leaders to make informed, strategic decisions that drive business growth.",
-      },
-      {
-        type: "paragraph",
-        text: "Operational Efficiency: Automation of routine HR tasks frees up resources, allowing HR teams to focus on strategic initiatives that add value.",
-      },
-      {
-        type: "paragraph",
-        text: "Future-Ready Workforce:",
-      },
-      {
-        type: "paragraph",
-        text: "By investing in employee development and succession planning, organizations can build a resilient workforce capable of navigating industry disruptions.",
-      },
-      {
-        type: "paragraph",
-        text: "The AI-Powered HR: How SAP SuccessFactors is Transforming HR Operations",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "HR has evolved beyond simply managing personnel to leveraging intelligent technologies that drive business success. SAP SuccessFactors, powered by AI, is transforming HR operations by enabling organizations to boost efficiency, enhance employee experiences, and make data-driven decisions.",
-      },
-      {
-        type: "paragraph",
-        text: "Revolutionizing HR with AI",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "SAP SuccessFactors integrates AI to automate repetitive tasks, optimize talent acquisition, and enhance workforce planning. AI-driven analytics provide deep insights into employee performance, retention trends, and engagement levels, allowing HR leaders to make proactive, informed decisions.",
-      },
-      {
-        type: "paragraph",
-        text: "Enhanced Employee Experience",
-      },
-      {
-        type: "paragraph",
-        text: "With AI-powered chatbots and virtual assistants, employees get instant responses to HR queries, reducing dependency on HR teams. Personalized learning recommendations ensure employees stay ahead in their careers, fostering a culture of continuous growth.",
-      },
-      {
-        type: "paragraph",
-        text: "Data-Driven Decision Making",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "AI in SAP SuccessFactors enables predictive analytics to forecast workforce trends, identify skill gaps, and recommend succession plans. This empowers HR teams to align talent strategy with business goals effectively.",
-      },
-      {
-        type: "paragraph",
-        text: "Compliance and Risk Management",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "AI-driven compliance tools help organizations stay ahead of regulatory requirements by automating policy updates and monitoring workforce compliance in real time, reducing risks and ensuring governance.",
-      },
-      {
-        type: "paragraph",
-        text: "Conclusion",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "In a rapidly evolving and competitive business landscape, organizations must embrace innovation and adaptability to maintain a leading position. SAP SuccessFactors offers a comprehensive platform to transform HR operations, empowering businesses to attract, develop, and retain top talent while achieving operational efficiency. By integrating AI, SAP SuccessFactors is revolutionizing HR into a strategic function that drives business value, enabling organizations to build agile, data-driven, and employee-centric workplaces. As a trusted SAP SuccessFactors implementation partner, In2IT EBS is dedicated to delivering tailored strategies that align with your organizational objectives and drive long-term growth. Whether your operations span India, Singapore, Kenya, Dubai, the UAE, the USA, or Africa, our team is prepared to collaborate with you on your journey to workforce excellence. Together, let’s redefine the future of work, unlock new opportunities for success, and ensure long-term resilience in an ever-changing business landscape.",
-      },
+      { type: "link", text: "Our SuccessFactors practice", href: "/services/successfactors/" },
     ],
   },
+
   "igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas": {
     blocks: [
       {
-        type: "image",
-        src: "/insights/body/MicrosoftTeams-image-1024x122.png",
-        alt: "",
+        type: "paragraph",
+        text: "SAP has extended AI across the SuccessFactors suite, and the gap between what is demonstrated at a conference and what you can put in front of an HR team next quarter is wider than the announcements suggest. Here is how we separate the two.",
+      },
+      { type: "heading", text: "Three capabilities worth understanding" },
+      {
+        type: "paragraph",
+        text: "Generative assistance in authoring. Job descriptions, learning recommendations and summaries generated from data already in the suite. This is the most mature of the three and the easiest to pilot, because a bad output is visible immediately and costs nothing to discard.",
+        strong: true,
       },
       {
         type: "paragraph",
-        text: "At the annual SuccessConnect event at the Venetian Convention Center in Las Vegas, SAP unveiled how AI now encompasses the entire SAP SuccessFactors Human Experience Management Suite, enhancing the employee experience and informing all people decisions, including talent recruitment, internal mobility, learning, and performance management.",
+        text: "Joule, the natural-language assistant embedded in the solutions. Useful where a user knows what they want but not where the system keeps it. Its value depends almost entirely on how clean your configuration is — an assistant over a badly modelled org structure answers confidently and wrongly.",
+        strong: true,
       },
       {
         type: "paragraph",
-        text: "These are the following the following AI capabilities showcased at SuccessConnect:",
+        text: "The talent intelligence hub, which puts a single skills model behind recruiting, learning, development, performance and succession. This is the one with the largest potential and the longest runway, because it only pays back once the skills data underneath it is real.",
+        strong: true,
+      },
+      { type: "heading", text: "Our position, stated narrowly" },
+      {
+        type: "paragraph",
+        text: "We have delivered advisory work on AI feasibility. Agents built with Joule Studio on SAP Business AI Platform are an investment for us, not a reference we can point you at. We have delivered applied AI in narrow production scopes elsewhere — document and computer vision work at a state undertaking — and the broader agentic claim is not one we make yet.",
       },
       {
         type: "paragraph",
-        text: "Generative AI: use cases help people leaders and recruiters create job descriptions and help employees find personalized learning recommendations to fuel their career development and growth.",
+        text: "We publish that distinction because the alternative is letting a demonstration stand in for delivery evidence, and in this market that happens often enough to be worth guarding against.",
+      },
+      { type: "heading", text: "How we would suggest approaching it" },
+      {
+        type: "paragraph",
+        text: "Pick one process where a wrong answer is cheap and visible, run it for a quarter, and measure whether anybody chose to keep using it once the novelty wore off. Adoption after ninety days is the only metric here that predicts anything.",
       },
       {
         type: "paragraph",
-        text: "Joule: a natural language built directly into the solutions that power mission-critical processes, Joule is a copilot that truly understands business",
+        text: "And before any of it, check the configuration underneath. Every AI capability in the suite reads the same organisational data as every other module, and none of them improve it.",
       },
-      {
-        type: "paragraph",
-        text: "The talent intelligence hub: enables organizations to better understand, build, and leverage the skills of their workforces. It can connect individual skills, attributes, strengths, and preferences to both people and experiences through SAP SuccessFactors solutions. By having talent intelligence integrated in SAP SuccessFactors HXM Suite, customers can have the power and simplicity of a single skills model from recruiting, onboarding, learning, and development, all the way through to performance and succession.",
-      },
-      {
-        type: "paragraph",
-        text: "AI Now Spans the Entire SAP SuccessFactors Human Experience Management Suite to Guide Every People Decision.",
-      },
-      {
-        type: "paragraph",
-        text: "For further details please reach us at info@in2itebs.com or the following phone numbers:",
-      },
-      {
-        type: "paragraph",
-        text: "India: +91 7042088080",
-      },
-      {
-        type: "paragraph",
-        text: "Singapore: +65 98239131",
-      },
-      {
-        type: "paragraph",
-        text: "Dubai: +971 56 238 7950",
-      },
+      { type: "link", text: "Where we stand, capability by capability", href: "/about/where-we-stand/" },
     ],
   },
+
   "grow-with-sap": {
     blocks: [
-      { type: "heading", text: "Leadership Forum" },
-      { type: "paragraph", text: "Quickly and Confidently Adopt Cloud ERP" },
-      // The original "Register Now" pointed at an event registration page for an event that has
-      // happened. It now points at the page the article is about.
-      { type: "link", text: "RISE and S/4HANA", href: "/services/rise-s4hana/" },
+      {
+        type: "paragraph",
+        text: "GROW is SAP's route to S/4HANA Cloud Public Edition for organisations that do not want a two-year programme. The constraint it imposes is the point of it, and it is also the thing most buyers do not price properly.",
+      },
+      { type: "heading", text: "What the model actually trades" },
+      {
+        type: "paragraph",
+        text: "Public Edition is a standardised cloud ERP on a fixed release cycle. You adopt SAP's process model rather than configuring your own, extensions sit outside the core, and SAP upgrades the system on its schedule rather than yours.",
+      },
+      {
+        type: "paragraph",
+        text: "In exchange you get a go-live measured in weeks, a predictable subscription, and no upgrade project ever again. For a business that has outgrown spreadsheets or a local accounting package, that trade is usually correct. For one with twenty years of process variation it usually is not, and a partner who does not tell you which you are is not worth engaging.",
+      },
+      { type: "heading", text: "Three questions to settle before you sign" },
+      {
+        type: "paragraph",
+        text: "Which of your processes genuinely cannot change? Not which ones you would prefer to keep — which ones are fixed by a regulator, a customer contract or a statutory filing. That list is the real test of whether Public Edition fits, and it is almost always shorter than the first draft.",
+        strong: true,
+      },
+      {
+        type: "paragraph",
+        text: "What happens to your extensions at the next release? Anything built outside the core has to be regression-tested on SAP's cycle, not yours. Ask who does that work and whether it is inside the price you have been quoted.",
+        strong: true,
+      },
+      {
+        type: "paragraph",
+        text: "Is the quoted price the whole price? Licence, implementation, integration to the systems you are keeping, data migration and the first year of support are five separate numbers. A fixed price that covers one of them is not a fixed price.",
+        strong: true,
+      },
+      { type: "heading", text: "Our own packaged version of this" },
+      {
+        type: "paragraph",
+        text: "Fixed Start is our packaged implementation of S/4HANA Cloud Public Edition under the GROW programme, with a fixed scope, a fixed duration and a fixed price — all three stated before signature, and all three ours to hold. It is not for everyone, and the assessment that decides whether it fits is deliberately the first conversation rather than the last.",
+      },
+      { type: "link", text: "Fixed Start", href: "/services/fixed-start/" },
     ],
   },
+
   "in2it-ebs-simplify-talent-2": {
     blocks: [
       {
@@ -598,211 +526,66 @@ export const insightBodies: Record<
   },
   "how-rise-with-sap-s-4hana-cloud-can-transform-your-business": {
     author: "Sridhar Ayalam",
-    authorRole: "SAP Delivery Head, In2IT EBS",
+    authorRole: "Chief Solutions Officer, In2IT EBS",
+    authorDate: "18 November 2026",
     blocks: [
       {
-        type: "heading",
-        text: "How Rise with SAP S/4HANA Cloud Can Transform Your Business",
+        type: "paragraph",
+        text: "RISE with SAP is sold as a destination. It is closer to a contracting model, and the difference decides how much of your migration it actually covers.",
+      },
+      { type: "heading", text: "What RISE is, stated plainly" },
+      {
+        type: "paragraph",
+        text: "RISE bundles S/4HANA Cloud Private Edition, the infrastructure it runs on, and a defined set of SAP-delivered services into one subscription with one SAP contract. That is the whole of it. It is a commercial wrapper around things that previously sat in three or four agreements, and the value of the wrapper is real: one renewal date, one escalation path, one party accountable for the platform layer.",
       },
       {
         type: "paragraph",
-        text: "SAP S/4HANA Cloud is a next-generation enterprise resource planning (ERP) software solution that enables businesses to gain real-time insights and analytics for better decision-making. It is a cloud-based platform that offers various modules, including finance, procurement, supply chain, manufacturing, and sales. Rise with SAP, on the other hand, is a holistic program designed to help businesses simplify their digital transformation journey and accelerate their time-to-value. It provides end-to-end support for businesses to migrate to SAP S/4HANA Cloud, including deployment, customization, and ongoing maintenance and support.",
+        text: "What it does not do is perform your conversion. The migration, the custom code, the interfaces, the data and the decisions about what your processes should look like afterwards are all still yours, and they are where the programme succeeds or fails.",
+      },
+      { type: "heading", text: "The question that actually decides your timeline" },
+      {
+        type: "paragraph",
+        text: "Brownfield or greenfield is the decision, and most organisations settle it on the wrong grounds — usually a preference for a clean start that does not survive contact with twenty years of process variation.",
       },
       {
         type: "paragraph",
-        text: "Digital transformation has become essential for businesses to stay competitive and relevant in today’s fast-paced, technology-driven landscape. It is a process of adopting digital technologies and modernizing business processes to improve efficiency, reduce costs, and enhance customer experiences. The need for digital transformation has been further amplified by the COVID-19 pandemic, which has accelerated the adoption of digital technologies across various industries.",
+        text: "A brownfield conversion carries your history across, including the parts you do not like. It is faster, it is cheaper, and it protects the configuration decisions somebody made for a reason nobody now remembers. A greenfield build gives you a standard core and makes you re-earn every deviation from it. That is healthy, and it is also a two-year conversation with your business about why things are the way they are.",
       },
       {
         type: "paragraph",
-        text: "By leveraging the power of SAP S/4HANA Cloud and Rise with SAP, businesses can streamline their digital transformation journey and gain a competitive edge in their industry. These solutions provide businesses with the agility and flexibility to adapt to changing market conditions and customer demands, which is crucial in today’s uncertain business environment.",
+        text: "Our own position is a matter of record: brownfield conversions and RISE migrations are in production here, including at state utilities and public sector undertakings. That is where our evidence is, and it is where we will argue from.",
       },
+      { type: "heading", text: "Who runs the infrastructure, and why it matters to your contract" },
       {
-        type: "heading",
-        text: "Benefits of SAP S/4HANA Cloud",
+        type: "paragraph",
+        text: "Under RISE, SAP contracts with a hyperscaler for the region and the infrastructure. We design and run the estate on top of it. We do not resell hosting or hardware, and we will name the hyperscaler before you sign rather than after.",
       },
       {
         type: "paragraph",
-        text: "SAP S/4HANA Cloud offers several benefits to businesses, including:",
+        text: "This matters more than it sounds. Where in-country data residency is a regulatory requirement rather than a preference — which it is for most of the public-sector and utility work we do — the region selection is a contractual term, not an implementation detail. Settle it in the commercial conversation.",
+      },
+      { type: "heading", text: "One thing to check before a public-sector tender" },
+      {
+        type: "paragraph",
+        text: "Some Indian public-sector tenders now use the RISE with SAP Validated Partner designation as a pre-qualification criterion. We do not hold it. Where a tender requires it, we are not eligible to bid alone and would need to bid with a partner who holds it.",
       },
       {
         type: "paragraph",
-        text: "Improved agility and efficiency: SAP S/4HANA Cloud provides businesses with a flexible and scalable platform that can adapt to changing business needs. It offers real-time insights into business operations, enabling businesses to make data-driven decisions quickly. It also simplifies business processes, reduces manual effort, and improves operational efficiency.",
+        text: "We would rather state that at the start of a pursuit than discover it at submission. If you are building a tender and the designation matters to you, ask every bidder for it in writing and check the answer against SAP's own partner directory.",
+      },
+      { type: "heading", text: "What we would ask you before quoting" },
+      {
+        type: "paragraph",
+        text: "How much custom code is in scope, and how much of it is still executed. What your database position is today. Whether you have a date you are working to, and where that date came from. Whether in-country hosting is a requirement or a preference. And which of your interfaces have an owner who still works here.",
       },
       {
         type: "paragraph",
-        text: "Real-time insights and analytics: SAP S/4HANA Cloud provides businesses with real-time analytics that enable them to gain insights into their operations, customers, and markets. It offers predictive analytics capabilities that can help businesses forecast trends and identify opportunities for growth.",
+        text: "Those five answers move a RISE estimate more than any other input. If a partner quotes you without asking them, the number is a placeholder.",
       },
-      {
-        type: "paragraph",
-        text: "Better decision-making capabilities: With real-time insights and analytics, businesses can make informed decisions quickly. SAP S/4HANA Cloud provides businesses with a unified view of their operations, enabling them to make decisions based on a holistic view of their business.",
-      },
-      {
-        type: "paragraph",
-        text: "Enhanced customer experiences: SAP S/4HANA Cloud enables businesses to provide personalized and seamless customer experiences. It enables businesses to streamline their sales and service processes, provide customers with real-time updates, and respond to customer queries quickly.",
-      },
-      {
-        type: "paragraph",
-        text: "By leveraging these benefits, businesses can improve their operations, reduce costs, and enhance customer experiences, among other benefits.",
-      },
-      {
-        type: "heading",
-        text: "What is Rise with SAP?",
-      },
-      {
-        type: "paragraph",
-        text: "Rise with SAP is a comprehensive program designed to help businesses simplify their digital transformation journey and accelerate their time-to-value. It provides end-to-end support for businesses to migrate to SAP S/4HANA Cloud, including deployment, customization, and ongoing maintenance and support.",
-      },
-      {
-        type: "paragraph",
-        text: "The program offers several features and benefits, including:",
-      },
-      {
-        type: "paragraph",
-        text: "Flexible commercial models: Rise with SAP offers flexible commercial models that enable businesses to pay for what they use. It provides businesses with predictable costs and reduced risk, enabling them to manage their budgets more effectively.",
-      },
-      {
-        type: "paragraph",
-        text: "Tailored solutions: Rise with SAP provides businesses with tailored solutions that meet their specific needs. It offers pre-configured industry solutions and templates that enable businesses to accelerate their deployment and reduce the time-to-value.",
-      },
-      {
-        type: "paragraph",
-        text: "Simplified migration: Rise with SAP simplifies the migration process for businesses. It provides end-to-end support for migration, including data migration, system integration, and testing. It also offers tools and accelerators that enable businesses to reduce the time and effort required for migration.",
-      },
-      {
-        type: "paragraph",
-        text: "Continuous innovation: Rise with SAP enables businesses to stay up-to-date with the latest innovations and updates from SAP. It provides ongoing maintenance and support, including bug fixes, security patches, and system updates.",
-      },
-      {
-        type: "paragraph",
-        text: "By leveraging the features and benefits of Rise with SAP, businesses can simplify their digital transformation journey and achieve their goals quickly and efficiently.",
-      },
-      {
-        type: "heading",
-        text: "How to Get Started with Rise with SAP S/4HANA Cloud",
-      },
-      {
-        type: "paragraph",
-        text: "Getting started with Rise with SAP and SAP S/4HANA Cloud is a straightforward process. Here are the steps businesses can take to begin their digital transformation journey:",
-      },
-      {
-        type: "paragraph",
-        text: "Step 1: Assess the Current State",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "The first step is to assess the current state of the business. Businesses need to identify their pain points, challenges, and opportunities. They should also identify their business goals and objectives and determine how SAP S/4HANA Cloud can help them achieve these goals.",
-      },
-      {
-        type: "paragraph",
-        text: "Step 2: Plan the Migration",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "The second step is to plan the migration to SAP S/4HANA Cloud. Businesses need to determine which modules and features they need and how they want to deploy the system. They should also consider the timeline, budget, and resource requirements for the migration.",
-      },
-      {
-        type: "paragraph",
-        text: "Step 3: Choose the Right Partner",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "Choosing the right partner is crucial for a successful migration. Businesses should look for a partner with experience in SAP S/4HANA Cloud deployment and migration. They should also consider factors such as pricing, support, and customer service.",
-      },
-      {
-        type: "paragraph",
-        text: "Step 4: Deploy and Customize",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "Once the planning is complete, the next step is to deploy and customize the system. Businesses should work closely with their partner to ensure a smooth deployment and customization process. They should also consider training and change management to ensure that employees are prepared for the new system.",
-      },
-      {
-        type: "paragraph",
-        text: "Step 5: Maintain and Support",
-        strong: true,
-      },
-      {
-        type: "paragraph",
-        text: "The final step is to maintain and support the system. Businesses should consider ongoing maintenance and support to ensure that the system is up-to-date and running smoothly. They should also consider future upgrades and enhancements to the system.",
-      },
-      {
-        type: "paragraph",
-        text: "By following these steps, businesses can successfully migrate to SAP S/4HANA Cloud with Rise with SAP and enjoy the benefits of a modern, cloud-based ERP system.",
-      },
-      {
-        type: "heading",
-        text: "Conclusion",
-      },
-      {
-        type: "paragraph",
-        text: "In conclusion, Rise with SAP S/4HANA Cloud is a comprehensive program that provides businesses with end-to-end support for their digital transformation journey. It offers several benefits, including improved agility, real-time insights and analytics, better decision-making capabilities, and enhanced customer experiences. With Rise with SAP, businesses can simplify their migration to SAP S/4HANA Cloud and accelerate their time-to-value.",
-      },
-      {
-        type: "paragraph",
-        text: "To get started with Rise with SAP, businesses should assess their current state, plan the migration, choose the right partner, deploy and customize the system, and maintain and support the system. By following these steps, businesses can successfully migrate to SAP S/4HANA Cloud and achieve their business goals.",
-      },
-      {
-        type: "paragraph",
-        text: "In today’s digital age, businesses need to leverage modern technologies such as cloud-based ERP systems to stay competitive and grow their businesses. Rise with SAP S/4HANA Cloud provides businesses with a platform to achieve these goals and drive their digital transformation journey.",
-      },
-      {
-        type: "heading",
-        text: "Additional Resources",
-      },
-      {
-        type: "paragraph",
-        text: "For businesses interested in learning more about Rise with SAP S/4HANA Cloud, SAP offers several additional resources, including:",
-      },
-      {
-        type: "paragraph",
-        text: "SAP website: The SAP website provides detailed information on Rise with SAP S/4HANA Cloud, including features, benefits, and pricing models.",
-      },
-      {
-        type: "paragraph",
-        text: "SAP Community: The SAP Community is a platform for SAP users to connect, learn, and share knowledge. It offers forums, blogs, and other resources on Rise with SAP S/4HANA Cloud and other SAP products and solutions.",
-      },
-      {
-        type: "paragraph",
-        text: "SAP Learning Hub: The SAP Learning Hub is an online learning platform that provides training and certification courses on SAP products and solutions. It offers courses on Rise with SAP S/4HANA Cloud deployment, migration, and customization.",
-      },
-      {
-        type: "paragraph",
-        text: "SAP Partners: SAP has a network of partners that offer deployment, migration, and customization services for SAP S/4HANA Cloud. Businesses can find a partner in their region by visiting the SAP website.",
-      },
-      {
-        type: "paragraph",
-        text: "By leveraging these resources, businesses can learn more about Rise with SAP S/4HANA Cloud and how it can help them achieve their business goals. They can also find partners and training courses to support their digital transformation journey.",
-      },
-      {
-        type: "heading",
-        text: "In2IT EBS – A Gold Partner of SAP",
-      },
-      {
-        type: "paragraph",
-        text: "Are you searching for a reliable partner to implement Rise with SAP S/4HANA Cloud and provide expert Application Management and Cloud (AMC) support? Look no further than In2IT EBS (www.in2itebs.com), a leading SAP partner with more than 6 years of experience in delivering end-to-end SAP solutions.",
-      },
-      {
-        type: "paragraph",
-        text: "At In2IT EBS, our team of experts has successfully implemented Rise with SAP S/4HANA Cloud for numerous clients across various industries. We understand that each business has unique requirements, and we work closely with our clients to tailor the solution and ensure a smooth migration process.",
-      },
-      {
-        type: "paragraph",
-        text: "Once the implementation is complete, we provide ongoing AMC support to ensure that our clients’ systems are running smoothly and efficiently. Our comprehensive support services include monitoring, issue resolution, system enhancements, and regular system maintenance.",
-      },
-      {
-        type: "paragraph",
-        text: "We are committed to delivering top-quality solutions and services that empower our clients to achieve their business objectives. With our extensive knowledge of SAP solutions and our customer-centric approach, we can help businesses streamline their operations and drive growth.",
-      },
-      {
-        type: "paragraph",
-        text: "Choose In2IT EBS as your trusted partner for Rise with SAP S/4HANA Cloud implementation and AMC support and experience the benefits of working with a reliable SAP partner. Get in touch with us today to learn more about our services and how we can help your business achieve success.",
-      },
+      { type: "link", text: "Our RISE and S/4HANA practice", href: "/services/rise-s4hana/" },
     ],
   },
+
   "coronavirus-lockdown-leads-to-more-gaming-and-e-sports": {
     blocks: [
       {
