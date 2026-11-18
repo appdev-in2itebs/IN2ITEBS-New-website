@@ -5,8 +5,9 @@
  * page here has at least one named engagement evidenced by a purchase order or a signed contract.
  * The five that were retired had navigation entries and nothing else.
  *
- * "14+ industry verticals" remains an approved fact and stays on the About page as a statement of
- * reach. The PAGES exist where there is something to show.
+ * The reach figure on the About page used to read "14+ industry verticals", which agreed with
+ * nothing: the master data standard counts nine industry groups across thirty verticals, and this
+ * file holds nine pages. It now reads nine, which both of those agree on. See content/site.ts.
  *
  * Client names on this page are published only where written consent exists. Where it does not,
  * the engagement is described by sector and region and the name is withheld — never implied.

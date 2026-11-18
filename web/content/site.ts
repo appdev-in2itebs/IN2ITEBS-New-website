@@ -10,7 +10,20 @@ import type { Region, Stat } from "./types";
  * Nothing on this site, in a deck or in a proposal may cite a figure that is not in this block.
  * If a document needs a number that is not here, it comes back here to be added first.
  *
- * Reviewed every six months. Next review: May 2027.
+ * ── WHY THESE ARE ALL "+" NUMBERS, AND WHY NONE OF THEM SAYS "CERTIFIED" ─────────────────────
+ * Headcount changes every month, so a precise figure on a website is wrong within weeks. A floor
+ * claim is not: "380+" only becomes false if the number falls below 380, which it will not. That
+ * is the whole reason this block is written the way it is, and it is why the figures can survive
+ * between reviews.
+ *
+ * What a floor claim cannot survive is a word that makes it auditable. "500+ people" is provable
+ * from payroll. "500+ certified consultants" is a different claim: somebody in a tender can ask
+ * for the certificate register, and the register has to contain five hundred certificates. We do
+ * not publish that word anywhere, and our SAP partner profile should not either.
+ *
+ * Reviewed every six months, and `statsReviewed` below is a build gate rather than a reminder —
+ * scripts/check-build.mjs fails a production build when it goes stale, so these cannot rot by
+ * being forgotten.
  *
  * DELIVERY CENTRES: FOUR. Settled by the Managing Director on 12 November 2026, matching the
  * submitted Ghana MoF IFMIS proposal. A delivery centre is a staffed centre you can visit, and all
@@ -24,24 +37,46 @@ export const stats: Stat[] = [
   { value: "170+", label: "Engineers in development, data, cloud and quality" },
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered in" },
-  { value: "10+", label: "Years of experience" },
+  // "10+ Years of experience" was removed on 18 November 2026. It had said 10+ for several years,
+  // which means it was either stale or understating, and nobody was ever going to remember to
+  // move it. A figure that ages on its own does not belong in a block reviewed twice a year.
   { value: "4", label: "Delivery centres in India" },
   { value: "50+", label: "SAP clients" },
 ];
 
 /**
  * Reach, not capability. These say how widely the firm has worked; they are not a claim that every
- * vertical or accelerator has a page behind it. Nine industry pages exist, because nine are the
- * ones with something to show. Kept from Amendment Brief v5 and published in the Ghana bid.
+ * group or accelerator has a page behind it.
+ *
+ * Nothing on the website renders this block — it exists for decks and bids, which is exactly why
+ * it matters that it agrees with the site. A figure that appears only in a proposal is the one
+ * nobody checks.
  */
 export const reachStats: Stat[] = [
-  { value: "14+", label: "Industry verticals" },
+  // Was "14+ Industry verticals", which matched neither of the two places that define them: the
+  // master data standard has nine industry groups across thirty verticals, and this site has nine
+  // industry pages. Nine is the number both of those agree on.
+  { value: "9", label: "Industry groups we publish pages for" },
   { value: "12+", label: "Strategic partners" },
   { value: "10+", label: "Proprietary accelerators" },
 ];
 
 /** Headline four, for the home page and the SAP hub. */
 export const headlineStats: Stat[] = stats.slice(0, 4);
+
+/**
+ * The date a person last checked every figure above against the source it comes from.
+ *
+ * This is a gate, not a note. `scripts/check-build.mjs` fails a production build once it is older
+ * than STATS_REVIEW_MAX_AGE_DAYS, so a stale number cannot reach the live site by being
+ * forgotten — only by somebody editing this date without doing the check, which is a different
+ * and much more visible kind of failure.
+ *
+ * Six months rather than three: these are floor claims, and a floor claim does not drift the way
+ * a precise one does.
+ */
+export const statsReviewed = "2026-11-18";
+export const STATS_REVIEW_MAX_AGE_DAYS = 200;
 
 /**
  * Footer credential strip.

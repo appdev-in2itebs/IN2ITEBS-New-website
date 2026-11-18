@@ -70,6 +70,26 @@ if (!reviewed) {
     );
 }
 
+/**
+ * The same gate on the corporate facts block.
+ *
+ * Every figure on this site, in a deck and in a bid comes from content/site.ts, which makes it
+ * the one file where a stale number does the most damage — it propagates into documents that are
+ * already in a client's hands. Six months, then the build stops.
+ */
+const siteSource = readFileSync("content/site.ts", "utf8");
+const statsAt = siteSource.match(/statsReviewed = "(\d{4}-\d{2}-\d{2})"/)?.[1];
+const statsMaxAge = Number(siteSource.match(/STATS_REVIEW_MAX_AGE_DAYS = (\d+)/)?.[1] ?? 200);
+if (!statsAt) {
+  failures.push("content/site.ts has no statsReviewed date");
+} else {
+  const ageDays = Math.floor((Date.now() - Date.parse(statsAt)) / 86_400_000);
+  if (ageDays > statsMaxAge)
+    failures.push(
+      `the corporate facts in content/site.ts were last checked ${ageDays} days ago (limit ${statsMaxAge}). Check each figure against its source and update statsReviewed.`,
+    );
+}
+
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);

@@ -171,6 +171,8 @@ export const serviceGroups: ServiceGroup[] = [
     items: [
       { label: "SAP", href: svc("sap") },
       { label: "Converged Pulse", href: svc("converged-pulse") },
+      { label: "Converged Flow", href: svc("converged-flow") },
+      { label: "Converged Momentum", href: svc("converged-momentum") },
       { label: "ECC Prism", href: svc("ecc-prism") },
       { label: "RISE and S/4HANA", href: svc("rise-s4hana") },
       { label: "SuccessFactors", href: svc("successfactors") },
@@ -501,6 +503,99 @@ export const servicePages: ServicePage[] = [
     closing: [
       "Who buys this: companies growing faster than their systems. The spreadsheets have stopped being funny, finance is closing the month by hand, and nobody has the appetite for a multi-year programme. The honest answer is that a packaged implementation on standard processes will serve you better, and for considerably less money. The discipline is in accepting the standard process rather than rebuilding your current one inside a new system.",
       "What is not included: processes outside the published scope, custom development beyond the stated extension allowance, and integration to systems not on the list. None of that is a trap — it is the reason the price can be fixed at all, and anything on it can be added as a priced change request with its own date, agreed in writing before any work starts.",
+    ],
+  },
+  {
+    /**
+     * In2IT Converged Flow for SAP GROW Fast — SAP-qualified, see content/qpps.ts.
+     *
+     * The sector has no industry page of its own. Mill products sit under Consumer goods and
+     * distribution in the master data standard, under the Agribusiness and plantations vertical,
+     * and that is where this page points. If the package wins work, the industry page is the
+     * next thing to build.
+     */
+    slug: "converged-flow",
+    name: "Converged Flow",
+    title: "A batch you can trace, from the field to the invoice",
+    group: "enterprise-platforms",
+    icon: "refresh",
+    sourceUrl: "https://www.sap.com/partners/profile/in2it-enterprise-business-services",
+    metaTitle: "Converged Flow — SAP Cloud ERP for mill products",
+    metaDescription:
+      "SAP-qualified packaged ERP for sugar, rice, wheat, textile and metal mills — production planning, batch traceability and quality, live in 16 weeks.",
+    intro: [
+      "In2IT Converged Flow for SAP GROW Fast is a packaged implementation of SAP Cloud ERP built for mill products — sugar, rice, wheat, textile and metal. It is one of three packages SAP has reviewed and published, and it goes live in sixteen weeks.",
+      "What makes a mill different from a factory is the batch. Yield varies with the input, quality varies within a run, and the question somebody will eventually ask is which lot a given bag, bale or coil came from. That answer is either designed in at implementation or it does not exist.",
+    ],
+    sectionsHeading: "What the package carries",
+    sections: [
+      {
+        title: "Production planning for variable yield",
+        icon: "settings",
+        body: "Planning that works when the output of a run is not a fixed multiple of its input. Season, moisture, grade and recovery all move, and a plan that assumes they do not is a plan the shop floor overrides by hand.",
+      },
+      {
+        title: "Batch traceability, both directions",
+        icon: "search",
+        body: "Forward from an input lot to everything made from it, and backward from a despatched unit to the inputs, the run and the quality results behind it. This is the part that cannot be retro-fitted, and the part a recall question or a customer audit turns on.",
+      },
+      {
+        title: "Quality management in the run",
+        icon: "check-circle",
+        body: "Inspection points inside the process rather than at the end of it, so a quality escape is caught while the lot can still be diverted instead of after it has shipped.",
+      },
+      {
+        title: "Finance that reconciles to the weighbridge",
+        icon: "line-chart",
+        body: "Procurement, inventory and costing on the same cloud core, so what was weighed in, what was produced and what was invoiced are three views of one number rather than three systems to argue between.",
+      },
+    ],
+    closing: [
+      "Who it is for: mills and batch processors that have outgrown spreadsheets and a local accounting package, and that need traceability to be a property of the system rather than a folder somebody maintains. If your processes genuinely cannot change, a packaged cloud implementation is the wrong answer and we will say so in the first conversation.",
+      "What it shares with the rest of the family: a fixed scope, a fixed duration and a fixed price, all three stated before you sign. SAP's own description of the package is on our partner profile, and this page does not claim anything beyond it.",
+    ],
+  },
+  {
+    /** In2IT Converged Momentum for SAP GROW Fast — SAP-qualified, see content/qpps.ts. */
+    slug: "converged-momentum",
+    name: "Converged Momentum",
+    title: "Project profitability you can see during the project",
+    group: "enterprise-platforms",
+    icon: "briefcase",
+    sourceUrl: "https://www.sap.com/partners/profile/in2it-enterprise-business-services",
+    metaTitle: "Converged Momentum — SAP ERP for services firms",
+    metaDescription:
+      "SAP-qualified packaged ERP for professional services — real-time project profitability, AI-assisted resourcing and automated billing, in 16 weeks.",
+    intro: [
+      "In2IT Converged Momentum for SAP GROW Fast is a packaged implementation of SAP Cloud ERP for firms that bill against projects. It is one of three packages SAP has reviewed and published, and it goes live in sixteen weeks.",
+      "The problem it addresses is a familiar one: the spreadsheet tells you last month. By the time a project's margin is visible it has already been earned or lost, and the conversation that could have changed it happened three weeks too late.",
+    ],
+    sectionsHeading: "What the package carries",
+    sections: [
+      {
+        title: "Project profitability, in the week",
+        icon: "line-chart",
+        body: "Cost and revenue recognised against the project as time and expense are recorded, not reconstructed at month end. The number a project manager sees on Thursday is the number finance will see.",
+      },
+      {
+        title: "Resourcing with the demand visible",
+        icon: "users",
+        body: "Assignment against the pipeline and the committed book rather than against whoever asked loudest, with the bench and the over-commitment both visible to the people who can act on them.",
+      },
+      {
+        title: "Billing that follows the contract",
+        icon: "file-text",
+        body: "Time and materials, fixed price with milestones, retainers and capped arrangements, each billed as agreed rather than re-derived by hand every cycle.",
+      },
+      {
+        title: "One core, not four systems",
+        icon: "layers",
+        body: "Finance, projects, procurement and sales on a single cloud ERP, so the handoffs that usually live in spreadsheets — timesheet to invoice, invoice to revenue, revenue to margin — are transactions instead.",
+      },
+    ],
+    closing: [
+      "Who it is for: consultancies, engineering and IT services firms, agencies and other project-billing businesses at the point where the spreadsheets have stopped being funny. It is the package we use ourselves, which is worth saying plainly rather than implying.",
+      "What it shares with the rest of the family: a fixed scope, a fixed duration and a fixed price, all three stated before you sign. SAP's own description is on our partner profile, and this page does not claim anything beyond it.",
     ],
   },
   {

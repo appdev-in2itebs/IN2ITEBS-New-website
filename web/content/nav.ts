@@ -42,6 +42,8 @@ export const pillars: PracticeSummary[] = [
 export const enterprisePlatformsChildren: NavItem[] = [
   { label: "SAP", href: "/services/sap/" },
   { label: "Converged Pulse", href: "/services/converged-pulse/" },
+  { label: "Converged Flow", href: "/services/converged-flow/" },
+  { label: "Converged Momentum", href: "/services/converged-momentum/" },
   { label: "ECC Prism", href: "/services/ecc-prism/" },
   { label: "RISE and S/4HANA", href: "/services/rise-s4hana/" },
   { label: "SuccessFactors", href: "/services/successfactors/" },
