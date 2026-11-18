@@ -464,7 +464,7 @@ export const servicePages: ServicePage[] = [
     sourceUrl: "https://www.in2itebs.com/services/ecc-prism/",
     metaTitle: "ECC Prism — the SAP ECC maintenance decision, assessed",
     metaDescription:
-      "2027, 2030 or 2035 — most ECC customers do not know which maintenance date applies to them. ECC Prism establishes which one, gets the estate safe to it, and runs it.",
+      "2027, 2030 or 2033 — most ECC customers do not know which maintenance date applies to them. ECC Prism establishes which, and gets the estate safe to it.",
     intro: [
       "Most ECC customers believe they are facing a single deadline. They are facing three, they are eligible for only one of them, and almost nobody has checked which.",
     ],
@@ -476,7 +476,7 @@ export const servicePages: ServicePage[] = [
         icon: "search",
         body: "Which maintenance door you are actually eligible for, what your custom code and database position allow, and what the real risk is in each year between now and your chosen date.",
         bullets: [
-          "Eligibility finding — 2027, 2030 or 2035",
+          "Eligibility finding — 2027, 2030 or 2033",
           "Custom code and Z-object inventory",
           "Security and compliance exposure, year by year",
           "A costed comparison against migrating now",
