@@ -105,12 +105,23 @@ jobs:
       # self-hosted deployment shape — was found by hand during handover. That was luck, not
       # process.
       #
-      # Threshold is `critical`, deliberately. zod@3 carries a known high advisory whose fix is a
-      # major version upgrade, and whose public exposure is already closed by the 16 KB body cap
-      # on every public endpoint. Failing on `high` today would mean a red build on every commit
-      # until that upgrade lands, and a CI signal everybody ignores is worse than none.
+      # TWO THRESHOLDS, because they answer different questions.
       #
-      # Lower this to `high` the day zod@4 ships. Leaving it at `critical` forever is how the
-      # next advisory gets missed.
-      - name: npm audit
+      # What ships is held to `high`. `--omit=dev` is the dependency set that actually reaches
+      # the Worker, and as of the zod@4 upgrade it carries zero advisories at any severity. There
+      # is no reason to accept a high in code that serves the public, so this one is strict and
+      # should stay strict.
+      #
+      # The build toolchain is held to `critical`. eslint, prettier, playwright and wrangler pull
+      # a long tail of transitive packages whose advisories are mostly denial-of-service via
+      # crafted input that never reaches them here — currently one, brace-expansion, reachable
+      # only through eslint's own glob handling and fixable only by a major bump of
+      # @eslint/eslintrc. Failing the build on that would make CI red for a risk nobody is
+      # carrying, and a CI signal everybody ignores is worse than none.
+      #
+      # If the first of these ever goes red, stop and fix it rather than lowering it.
+      - name: npm audit — what ships
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: npm audit — build toolchain
         run: npm audit --audit-level=critical
