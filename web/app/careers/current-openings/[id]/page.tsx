@@ -147,14 +147,15 @@ export default async function JobPage({ params }: Props) {
             <aside className="lg:col-span-4">
               <div className="sticky top-28 rounded-feature border border-border-subtle bg-surface p-6 shadow-glass">
                 <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground-muted">Job summary</h2>
+                {/* A dl may only group dt/dd inside a div, so the icon sits in the dt (WCAG: axe definition-list). */}
                 <dl className="mt-4 space-y-3">
                   {facts.map(({ icon: Icon, label, value }) => (
-                    <div key={label} className="flex gap-3">
-                      <Icon size={18} aria-hidden className="mt-0.5 shrink-0 text-gold" />
-                      <div>
-                        <dt className="text-xs text-foreground-muted">{label}</dt>
-                        <dd className="text-sm font-semibold text-foreground">{value}</dd>
-                      </div>
+                    <div key={label}>
+                      <dt className="flex items-center gap-3 text-xs text-foreground-muted">
+                        <Icon size={18} aria-hidden className="shrink-0 text-gold" />
+                        {label}
+                      </dt>
+                      <dd className="pl-[30px] text-sm font-semibold text-foreground">{value}</dd>
                     </div>
                   ))}
                 </dl>
