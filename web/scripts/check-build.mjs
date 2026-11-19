@@ -116,10 +116,50 @@ if (figureHits.length)
     `quantified claims with no recorded provenance — add a Metric (what the number is of, the window, who measured it) or name it in content/evidence.ts:\n    ${figureHits.join("\n    ")}`,
   );
 
+/**
+ * THE CREDENTIAL EXPIRY GATE.
+ *
+ * Every credential this site publishes has a date on which it stops being true, and until now
+ * none of those dates was recorded anywhere. A lapsed ISO certificate would have gone on
+ * publishing indefinitely, caught — if at all — by the 200-day corporate-facts sweep, months
+ * late, by accident.
+ *
+ * Two different severities, deliberately:
+ *   · A MISSING date warns and is counted. Nobody has supplied them yet, and failing the build
+ *     over information the team does not hold turns a gate into an obstacle. Same treatment as
+ *     an UNPROVENANCED figure.
+ *   · A PASSED date FAILS. Publishing a credential that has expired is a different class of
+ *     wrong from publishing one nobody has re-checked — it is a false statement about an
+ *     external body's assessment, on the page a tender reviewer reads first.
+ *   · Thirty days out, it warns, so the renewal is somebody's problem before it is everybody's.
+ */
+const certBlock = siteSource.slice(siteSource.indexOf("export const certifications"));
+const certs = [
+  ...certBlock.matchAll(/name:\s*"([^"]+)",[\s\S]{0,200}?validUntil:\s*(?:"(\d{4}-\d{2}-\d{2})"|null)/g),
+].map((m) => ({ name: m[1], validUntil: m[2] ?? null }));
+const certsMissing = certs.filter((c) => !c.validUntil).map((c) => c.name);
+const certsExpired = [];
+const certsExpiring = [];
+for (const c of certs) {
+  if (!c.validUntil) continue;
+  const daysLeft = Math.floor((Date.parse(c.validUntil) - Date.now()) / 86_400_000);
+  if (daysLeft < 0) certsExpired.push(`${c.name} expired ${-daysLeft} days ago (${c.validUntil})`);
+  else if (daysLeft <= 30) certsExpiring.push(`${c.name} expires in ${daysLeft} days (${c.validUntil})`);
+}
+if (certsExpired.length)
+  failures.push(
+    `a published credential has expired — renew it, or take it off content/site.ts:\n    ${certsExpired.join("\n    ")}`,
+  );
+
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);
 }
+if (certsExpiring.length) for (const c of certsExpiring) console.log(`check-build: RENEWAL DUE — ${c}`);
+if (certsMissing.length)
+  console.log(
+    `check-build: ${certsMissing.length} credential${certsMissing.length === 1 ? " has" : "s have"} no expiry date recorded (${certsMissing.join(", ")}). The site cannot tell whether ${certsMissing.length === 1 ? "it is" : "they are"} still valid.`,
+  );
 const owed = unprovenancedCount();
 if (owed)
   console.log(

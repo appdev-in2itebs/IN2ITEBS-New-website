@@ -101,7 +101,73 @@ export const STATS_REVIEW_MAX_AGE_DAYS = 200;
  *    the Managing Director confirmed that removal on 12 November 2026. It returns only if
  *    Alliances produces it in SAP's own wording, with a date.
  */
-export const footerCertifications = ["CMMI Level 3", "ISO 9001", "ISO/IEC 27001", "SAP Gold Partner"];
+/**
+ * ── THE GAP THE REVIEW DATES DO NOT COVER ────────────────────────────────────────────────────
+ * Every credential on this list expires. CMMI appraisals are valid three years. ISO 9001 and
+ * ISO/IEC 27001 run three-year certification cycles with annual surveillance audits, and a failed
+ * surveillance can suspend a certificate between cycles. SAP Gold Partner renews annually against
+ * targets.
+ *
+ * **None of those dates was recorded anywhere.** The site would go on publishing a lapsed
+ * certificate indefinitely and nothing would stop it — the 200-day corporate-facts review might
+ * catch it eventually, by accident, months late. Meanwhile `/about/credentials/` tells a reader
+ * these are "re-assessed on a cycle", which is a claim about a date the site does not hold.
+ *
+ * That is exactly the failure this codebase exists to prevent, on the one page whose subject is
+ * credentials.
+ *
+ * ── HOW IT WORKS ─────────────────────────────────────────────────────────────────────────────
+ * `validUntil` comes from the certificate, not from memory. `null` means nobody has supplied it.
+ *
+ * While a date is missing the build **warns and counts** rather than failing — the same treatment
+ * `UNPROVENANCED` figures get, because failing over information nobody has yet turns a gate into
+ * an obstacle. Once a date is present it is enforced: 30 days out the build warns, and **past the
+ * date the build fails**, because publishing a lapsed credential is a different class of wrong
+ * from publishing an unverified one.
+ *
+ * To fill these in, the certificates themselves are the source. Compliance holds them and
+ * `public/awards/` has scans of several.
+ */
+export interface Certification {
+  /** Exactly as the issuing body writes it. */
+  name: string;
+  /** The body that granted it — the house rule is that a credential names its issuer. */
+  issuedBy: string | null;
+  /** From the certificate. `null` until somebody supplies it; the build counts these. */
+  validUntil: string | null;
+  /** What is needed, while it is missing. */
+  note?: string;
+}
+
+export const certifications: Certification[] = [
+  {
+    name: "CMMI Level 3",
+    issuedBy: null,
+    validUntil: null,
+    note: "Appraisals are valid three years. Needs the appraisal date and the Lead Appraiser's organisation.",
+  },
+  {
+    name: "ISO 9001",
+    issuedBy: null,
+    validUntil: null,
+    note: "Three-year cycle, annual surveillance. Needs the registrar and the certificate expiry.",
+  },
+  {
+    name: "ISO/IEC 27001",
+    issuedBy: null,
+    validUntil: null,
+    note: "Three-year cycle, annual surveillance. Needs the registrar and the certificate expiry.",
+  },
+  {
+    name: "SAP Gold Partner",
+    issuedBy: "SAP SE",
+    validUntil: null,
+    note: "Renews annually against targets. Needs the current term's end date from Alliances.",
+  },
+];
+
+/** The names, for the footer and the markup. Derived, so the two cannot drift apart. */
+export const footerCertifications = certifications.map((c) => c.name);
 
 /** Bump when site copy changes; feeds sitemap lastModified for pages without their own date. */
 export const contentUpdated = "2026-11-12";
