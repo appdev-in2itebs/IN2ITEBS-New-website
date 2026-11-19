@@ -6,10 +6,10 @@ import { accountCreatedEmail, passwordChangedEmail, passwordCodeEmail, type Code
 import { requireAdmin, type AdminUser } from "./session";
 
 /**
- * Admin passwords change only through a one-time code. Whoever asks (a signed-in admin under
- * My account, someone on the Forgot-password page, or the owner setting a new person's first
- * password), the six-digit code is emailed to the website owner (ADMIN_OWNER_EMAIL), who hands it
- * over if the request is expected. The code is valid ten minutes, allows five guesses and works
+ * Admin passwords change only through a one-time code. A signed-in admin under My account or
+ * someone on the Forgot-password page gets the six digits in their own inbox; when a website owner
+ * (ADMIN_OWNER_EMAIL) sets another person's password from the Users page, the code goes to that
+ * owner. The code is valid ten minutes, allows five guesses and works
  * once; only its HMAC is stored. Nothing here needs the VM: it replaces set-admin-password.sh.
  */
 export const CODE_MINUTES = 10;
@@ -18,7 +18,7 @@ const CODES_PER_WINDOW = 3;
 const WINDOW_MINUTES = 15;
 export const PASSWORD_MIN = 10;
 export const PASSWORD_MAX = 72;
-export const GENERIC_SENT = "If that email belongs to an admin, a one-time code is on its way to the website owners.";
+export const GENERIC_SENT = "If that email belongs to an admin, a one-time code is on its way to that inbox.";
 
 /** The website owners (ADMIN_OWNER_EMAIL, comma-separated): every code goes to all of them. */
 export function ownerEmails(): string[] {
@@ -36,6 +36,18 @@ export function ownerEmails(): string[] {
 export function ownerEmail(): string | null {
   const list = ownerEmails();
   return list.length ? list.join(" and ") : null;
+}
+
+/**
+ * Who receives the code: the person whose password changes, in their own inbox. Only when a website
+ * owner sets someone else's password from the Users page does the code go to that owner, because the
+ * owner is the one typing it in.
+ */
+export function codeRecipients(targetEmail: string, requestedBy: string | null): string[] {
+  const target = targetEmail.toLowerCase();
+  const by = requestedBy?.toLowerCase() ?? null;
+  if (by && by !== target && isOwner(by)) return [by];
+  return [target];
 }
 
 /** The owners manage users and passwords. Until ADMIN_OWNER_EMAIL is set, any admin may. */
@@ -98,9 +110,6 @@ export async function startPasswordCode(input: {
   requestedBy: string | null;
 }): Promise<Started> {
   const targetEmail = input.targetEmail.trim().toLowerCase();
-  const owners = ownerEmails();
-  if (!owners.length)
-    return { ok: false, error: "ADMIN_OWNER_EMAIL is not set, so there is nobody to send the code to." };
   if (!mailConfigured()) return { ok: false, error: "Email is not configured on the server (SMTP settings)." };
   const target = await activeAdmin(targetEmail);
   if (!target) return { ok: true, ticket: randomUUID() };
@@ -132,14 +141,16 @@ export async function startPasswordCode(input: {
   if (error) return { ok: false, error: "Could not create the code. Is migration 0006 applied?" };
 
   try {
+    const to = codeRecipients(targetEmail, input.requestedBy);
     const mail = passwordCodeEmail({
       code,
       purpose: input.purpose,
       targetEmail,
       requestedBy: input.requestedBy,
       expiresMinutes: CODE_MINUTES,
+      toSelf: to[0] === targetEmail,
     });
-    await sendMail({ to: owners, ...mail });
+    await sendMail({ to, ...mail });
   } catch (e) {
     await db.from("admin_password_codes").delete().eq("id", ticket);
     console.error("[admin password] mail failed:", e instanceof Error ? e.message : e);
@@ -224,7 +235,7 @@ export async function finishPasswordCode(input: {
       () => undefined,
       () => undefined,
     );
-  const to = Array.from(new Set([target.email, ...ownerEmails()]));
+  const to = isOwner(target.email) ? [target.email] : Array.from(new Set([target.email, ...ownerEmails()]));
   sendMail({
     to,
     ...passwordChangedEmail({ targetEmail: target.email, purpose, changedBy: actor, at: new Date() }),

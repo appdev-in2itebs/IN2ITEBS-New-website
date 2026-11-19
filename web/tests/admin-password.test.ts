@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hashCode, newCode, sameHash, validPassword, isOwner, ownerEmails, PASSWORD_MIN } from "../lib/admin/password";
+import {
+  codeRecipients,
+  hashCode,
+  isOwner,
+  newCode,
+  ownerEmails,
+  PASSWORD_MIN,
+  sameHash,
+  validPassword,
+} from "../lib/admin/password";
 import { accountCreatedEmail, passwordChangedEmail, passwordCodeEmail } from "../lib/mail/templates";
 
 test("one-time codes are six digits and never stored in clear", () => {
@@ -27,6 +36,11 @@ test("the website owners are the only ones who manage users once ADMIN_OWNER_EMA
   assert.deepEqual(ownerEmails(), ["owner@in2itebs.com", "second@in2itebs.com"]);
   assert.ok(isOwner("owner@in2itebs.com") && isOwner("Second@in2itebs.com"));
   assert.ok(!isOwner("someone@in2itebs.com"));
+  // Everyone gets their own code; only an owner setting another person's password gets that code.
+  assert.deepEqual(codeRecipients("owner@in2itebs.com", "owner@in2itebs.com"), ["owner@in2itebs.com"]);
+  assert.deepEqual(codeRecipients("Sales@in2itebs.com", null), ["sales@in2itebs.com"]);
+  assert.deepEqual(codeRecipients("sales@in2itebs.com", "sales@in2itebs.com"), ["sales@in2itebs.com"]);
+  assert.deepEqual(codeRecipients("sales@in2itebs.com", "second@in2itebs.com"), ["second@in2itebs.com"]);
   delete process.env.ADMIN_OWNER_EMAIL;
   assert.ok(isOwner("someone@in2itebs.com"), "without an owner the old rule (any admin) still applies");
   if (before) process.env.ADMIN_OWNER_EMAIL = before;
@@ -54,6 +68,17 @@ test("admin emails carry the code, the brand and a plain-text twin, with user te
     expiresMinutes: 10,
   });
   assert.ok(!hostile.html.includes("<img src=x"), "addresses are escaped in the HTML");
+
+  const own = passwordCodeEmail({
+    code: "111222",
+    purpose: "change",
+    targetEmail: "sales@in2itebs.com",
+    requestedBy: "sales@in2itebs.com",
+    expiresMinutes: 10,
+    toSelf: true,
+  });
+  assert.ok(own.text.includes("You want to change your admin password (sales@in2itebs.com)"), own.text);
+  assert.ok(own.html.includes("Here is your one-time code"));
 
   const changed = passwordChangedEmail({
     targetEmail: "hr@in2itebs.com",

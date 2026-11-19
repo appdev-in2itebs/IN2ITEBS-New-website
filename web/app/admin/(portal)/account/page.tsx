@@ -7,8 +7,8 @@ import { PasswordCodeForm } from "@/components/admin/password-code-form";
 import { finishMyPassword, startMyPassword } from "./actions";
 
 /**
- * My account: who you are signed in as, and the password change. Press "Send me a code", the
- * website owner receives a six-digit code by email, you enter it with the new password.
+ * My account: who you are signed in as, and the password change. Press "Send me a code", the six
+ * digits arrive in your own inbox, you enter them with the new password.
  */
 export default async function AccountPage({
   searchParams,
@@ -23,11 +23,8 @@ export default async function AccountPage({
       <PageTitle title="My account" intro="Your sign-in details and password." />
       {sp.saved ? <Notice tone="ok">Your password is changed. Use it the next time you sign in.</Notice> : null}
       {sp.error ? <Notice tone="warn">{sp.error}</Notice> : null}
-      {!mailConfigured() || !owner ? (
-        <Notice tone="warn">
-          Password changes need email and a website owner on the server (SMTP settings and ADMIN_OWNER_EMAIL). Ask the
-          web team.
-        </Notice>
+      {!mailConfigured() ? (
+        <Notice tone="warn">Password changes need email on the server (SMTP settings). Ask the web team.</Notice>
       ) : null}
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -60,7 +57,8 @@ export default async function AccountPage({
           {sp.ticket ? (
             <>
               <p className="mb-4 text-sm text-foreground-muted">
-                A one-time code went to {owner}. It works for {CODE_MINUTES} minutes. Enter it with your new password.
+                A one-time code went to your inbox ({admin.email}). It works for {CODE_MINUTES} minutes. Enter it with
+                your new password.
               </p>
               <PasswordCodeForm action={finishMyPassword} ticket={sp.ticket} compact submitLabel="Change my password" />
               <form action={startMyPassword} className="mt-4">
@@ -72,11 +70,11 @@ export default async function AccountPage({
           ) : (
             <>
               <p className="mb-4 text-sm text-foreground-muted">
-                For safety every password change is confirmed with a one-time code that is emailed to the website owner
-                {owner ? ` (${owner})` : ""}. Press the button, get the code from them, then set your new password.
+                For safety every password change is confirmed with a one-time code emailed to you at {admin.email}.
+                Press the button, open the email, then set your new password.
               </p>
               <form action={startMyPassword}>
-                <button type="submit" className={primaryBtn} disabled={!mailConfigured() || !owner}>
+                <button type="submit" className={primaryBtn} disabled={!mailConfigured()}>
                   Send me a code
                 </button>
               </form>

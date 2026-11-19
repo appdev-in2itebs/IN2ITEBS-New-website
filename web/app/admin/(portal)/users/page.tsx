@@ -7,7 +7,7 @@ import { addUser, startUserPassword, updateUser } from "./actions";
 
 /**
  * Who can sign in and what they may open. Changing people, roles and passwords is reserved for the
- * website owner (ADMIN_OWNER_EMAIL); other admins see the list read-only. Passwords are never typed
+ * website owners (ADMIN_OWNER_EMAIL); other admins see the list read-only. Passwords are never typed
  * here directly: "Reset password" and "Add person" lead to the one-time code screen.
  */
 export default async function UsersPage({
@@ -31,8 +31,8 @@ export default async function UsersPage({
       {sp.error ? <Notice tone="warn">{sp.error}</Notice> : null}
       {!owner ? (
         <Notice tone="warn">
-          No website owner is set on the server (ADMIN_OWNER_EMAIL), so one-time codes cannot be sent and any admin may
-          change users. Ask the web team to set it.
+          No website owner is set on the server (ADMIN_OWNER_EMAIL), so any admin may change users. Ask the web team to
+          set it.
         </Notice>
       ) : !manage ? (
         <Notice tone="info">Only the website owners ({owner}) add people, change roles and reset passwords.</Notice>
@@ -104,7 +104,7 @@ export default async function UsersPage({
           <h2 className="mb-1 text-lg font-semibold">Add a person</h2>
           <p className="mb-4 text-sm text-foreground-muted">
             They get an email that their account exists. On the next screen you set their first password with a one-time
-            code{owner ? ` sent to ${owner}` : ""}, then share that password with them privately.
+            code sent to your inbox ({admin.email}), then share that password with them privately.
           </p>
           <form action={addUser} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">

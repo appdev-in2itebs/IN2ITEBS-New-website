@@ -13,10 +13,22 @@ const RULE = "#dbe3ec";
 
 export type CodePurpose = "reset" | "change" | "set";
 
-const PURPOSE_TEXT: Record<CodePurpose, { title: string; line: string }> = {
-  reset: { title: "Password reset", line: "asked to reset the admin password for" },
-  change: { title: "Password change", line: "wants to change the admin password for" },
-  set: { title: "New admin account", line: "is setting the first password for the new admin account" },
+const PURPOSE_TEXT: Record<CodePurpose, { title: string; line: string; self: string }> = {
+  reset: {
+    title: "Password reset",
+    line: "asked to reset the admin password for",
+    self: "asked to reset your admin password",
+  },
+  change: {
+    title: "Password change",
+    line: "wants to change the admin password for",
+    self: "want to change your admin password",
+  },
+  set: {
+    title: "New admin account",
+    line: "is setting the first password for the new admin account",
+    self: "are setting the first password for your admin account",
+  },
 };
 
 export function siteOrigin() {
@@ -92,14 +104,21 @@ export function passwordCodeEmail(input: {
   targetEmail: string;
   requestedBy: string | null;
   expiresMinutes: number;
+  /** True when the code goes to the person whose password changes. */
+  toSelf?: boolean;
 }) {
-  const { code, purpose, targetEmail, requestedBy, expiresMinutes } = input;
+  const { code, purpose, targetEmail, requestedBy, expiresMinutes, toSelf } = input;
   const who = requestedBy && requestedBy !== targetEmail ? requestedBy : targetEmail;
   const t = PURPOSE_TEXT[purpose];
   const digit = (d: string) =>
     `<span style="display:inline-block;width:40px;height:52px;line-height:52px;margin:0 3px;background:#ffffff;border:1px solid #c7d7e6;border-radius:10px;font-family:'JetBrains Mono',Consolas,'Courier New',monospace;font-size:28px;font-weight:600;color:${NAVY};text-align:center;">${d}</span>`;
+  const intro = toSelf
+    ? p(`You ${esc(t.self)} (${strong(targetEmail)}). Here is your one-time code.`)
+    : p(
+        `${strong(who)} ${esc(t.line)} ${strong(targetEmail)}. Give them this one-time code only if you expect this request.`,
+      );
   const body = `
-    ${p(`${strong(who)} ${esc(t.line)} ${strong(targetEmail)}. Give them this one-time code only if you expect this request.`)}
+    ${intro}
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:22px 0 18px;"><tr>
       <td align="center" style="background:${TILE};border-radius:16px;padding:22px 12px;">
         <div style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:${INK_MUTED};font-weight:600;margin-bottom:12px;">One-time code</div>
@@ -107,18 +126,24 @@ export function passwordCodeEmail(input: {
         <div style="font-size:13px;color:${INK_MUTED};margin-top:12px;">Valid for ${expiresMinutes} minutes &middot; works once</div>
       </td>
     </tr></table>
-    ${p(`They enter it on the admin screen together with the new password. Nothing changes until the code is entered.`)}`;
-  const aside = `Did not expect this? Do nothing: the code expires on its own and the password stays as it is. The request came through the admin at ${host()}.`;
+    ${p(
+      toSelf
+        ? `Enter it on the admin screen together with your new password. Nothing changes until the code is entered.`
+        : `They enter it on the admin screen together with the new password. Nothing changes until the code is entered.`,
+    )}`;
+  const aside = `${toSelf ? "Did not ask for this?" : "Did not expect this?"} Do nothing: the code expires on its own and the password stays as it is. The request came through the admin at ${host()}.`;
   const subject = `${code} is your In2IT admin code (${t.title.toLowerCase()} for ${targetEmail})`;
   const text = [
     `In2IT EBS website admin: ${t.title}`,
     ``,
-    `${who} ${t.line} ${targetEmail}.`,
+    toSelf ? `You ${t.self} (${targetEmail}).` : `${who} ${t.line} ${targetEmail}.`,
     ``,
     `One-time code: ${code}`,
     `Valid for ${expiresMinutes} minutes, works once.`,
     ``,
-    `They enter it on the admin screen with the new password. If you did not expect this, do nothing: the code expires on its own.`,
+    toSelf
+      ? `Enter it on the admin screen with your new password. If you did not ask for this, do nothing: the code expires on its own.`
+      : `They enter it on the admin screen with the new password. If you did not expect this, do nothing: the code expires on its own.`,
     ``,
     `In2IT EBS | Converged Intelligence | ${siteOrigin()}/admin/`,
   ].join("\n");
@@ -148,10 +173,10 @@ export function passwordChangedEmail(input: {
   const body = `
     ${p(`The admin password for ${strong(targetEmail)} ${what} on ${strong(when)}${by}.`)}
     ${p(`Sign in at <a href="${siteOrigin()}/admin/login/" style="color:${ACCENT};font-weight:600;text-decoration:none;">${host()}/admin/login</a> with the new password.`)}`;
-  const aside = `If this was not you, reset the password straight away from the sign-in page: the one-time code goes to the website owner, so nobody can change it without them.`;
+  const aside = `If this was not you, reset the password straight away from the sign-in page and tell the website owners.`;
   const subject = `In2IT admin password ${what} for ${targetEmail}`;
   const byText = changedBy && changedBy !== targetEmail ? `, confirmed by ${changedBy}` : "";
-  const text = `In2IT EBS website admin\n\nThe admin password for ${targetEmail} ${what} on ${when}${byText}.\nSign in at ${siteOrigin()}/admin/login/ with the new password.\n\nIf this was not you, reset the password from the sign-in page; the one-time code goes to the website owner.`;
+  const text = `In2IT EBS website admin\n\nThe admin password for ${targetEmail} ${what} on ${when}${byText}.\nSign in at ${siteOrigin()}/admin/login/ with the new password.\n\nIf this was not you, reset the password from the sign-in page and tell the website owners.`;
   return {
     subject,
     text,
@@ -174,10 +199,10 @@ export function accountCreatedEmail(input: {
   const { targetEmail, name, role, ownerEmail } = input;
   const body = `
     ${p(`Hello${name ? ` ${esc(name)}` : ""}, an account on the In2IT EBS website admin was created for ${strong(targetEmail)} with the role ${strong(role)}.`)}
-    ${p(`${strong(ownerEmail)} sets your first password and will share it with you privately. After that you can change it yourself under <em>My account</em>; every change is confirmed with a one-time code sent to the website owner.`)}
+    ${p(`${strong(ownerEmail)} sets your first password and will share it with you privately. After that you can change it yourself under <em>My account</em>; every change is confirmed with a one-time code sent to your own inbox.`)}
     <p style="margin:22px 0 10px;"><a href="${siteOrigin()}/admin/login/" style="display:inline-block;background:${ACCENT};color:#ffffff;font-weight:600;font-size:15px;padding:13px 22px;border-radius:12px;text-decoration:none;">Open the admin</a></p>`;
   const subject = `Your In2IT admin account (${role})`;
-  const text = `Hello${name ? ` ${name}` : ""},\n\nAn account on the In2IT EBS website admin was created for ${targetEmail} with the role ${role}.\n${ownerEmail} sets your first password and will share it with you privately. You can change it later under My account; every change is confirmed with a one-time code sent to the website owner.\n\nSign in: ${siteOrigin()}/admin/login/`;
+  const text = `Hello${name ? ` ${name}` : ""},\n\nAn account on the In2IT EBS website admin was created for ${targetEmail} with the role ${role}.\n${ownerEmail} sets your first password and will share it with you privately. You can change it later under My account; every change is confirmed with a one-time code sent to your own inbox.\n\nSign in: ${siteOrigin()}/admin/login/`;
   return {
     subject,
     text,
