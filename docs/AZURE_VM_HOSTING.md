@@ -58,6 +58,13 @@ Admin sign-ins were recreated (Supabase passwords cannot be exported); the tempo
 `.website-runtime/vm-admin-temporary-passwords.txt` on the machine that ran the copy. Public sign-up is
 disabled; new admins are added in Studio (Authentication) plus a row in `admin_users`.
 
+Deploys (2026-11-19): `/srv/in2it/deploy.sh [tarball]` takes a lock so two deploys serialise, refuses to start
+with under 2.5 GB free, removes half-built releases, keeps two releases and logs to `/srv/in2it/logs/deploy.log`.
+The CI forced command (`ci-deploy.sh`) saves each upload under its own name and runs the deploy detached, so a
+dropped SSH session cannot kill a build. A weekly rebuild (`rebuild-current.sh`, Mondays 03:30 UTC) refreshes
+build-time figures such as the year. Backups are kept 7 days. The 30 GB disk fills quickly (two apps plus 14 GB
+of Docker images): enlarge it to 64 GB in the Azure portal when possible.
+
 Backups run nightly (`/srv/in2it/backup.sh`, log in `/srv/in2it/logs/backup.log`) into `/srv/backups`.
 Restore the database with `gunzip -c postgres.sql.gz | docker exec -i supabase-db psql -U postgres -d postgres`
 and the files with `tar -xzf storage.tar.gz -C /srv/supabase/volumes`. Copying `/srv/backups` off the VM
