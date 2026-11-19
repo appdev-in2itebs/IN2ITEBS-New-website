@@ -22,9 +22,27 @@ export function clientAddress(request: Request) {
   );
 }
 
+/**
+ * ── READ THIS BEFORE TRUSTING THE LIMIT BELOW ────────────────────────────────────────────────
+ * These buckets live in module scope, which on Cloudflare Workers means **per isolate, not per
+ * site**. Cloudflare runs many isolates per location and recycles them freely, so traffic spread
+ * across them gets roughly `max × (live isolates)` through before anything trips, and a burst
+ * landing on a cold isolate starts from zero. Locally, and on a single Node process, it behaves
+ * exactly as it reads — which is what makes it convincing and wrong.
+ *
+ * It is kept because it is not load-bearing. What actually protects the public endpoints is the
+ * 16 KB body cap in `readJson` and the origin check above, both of which hold per request in
+ * every isolate. This limiter stops an accidental retry loop and a lazy script, and that is the
+ * whole of what it is claimed to do.
+ *
+ * **Do not cite it as rate limiting in a security questionnaire or a tender response.** Making
+ * that claim true means moving the state somewhere shared — a Durable Object keyed on the
+ * client, or KV with a short TTL. Until that exists, this comment is the honest version of the
+ * control, which is the standard the rest of this codebase holds its claims to.
+ */
 const buckets = new Map<string, { start: number; count: number }>();
 
-/** True when `key` has made more than `max` calls in the last `windowMs`. */
+/** True when `key` has exceeded `max` calls in `windowMs` — per isolate, not per site. See above. */
 export function rateLimited(key: string, max: number, windowMs = 60_000) {
   const now = Date.now();
   if (buckets.size > 5000) for (const [k, v] of buckets) if (now - v.start >= windowMs) buckets.delete(k);

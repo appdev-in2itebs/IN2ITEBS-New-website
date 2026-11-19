@@ -34,8 +34,9 @@ diagnose. Recover first, cut over deliberately.
 1. **Authorise the GitHub repository** (`appdev-in2itebs/IN2ITEBS-New-website`) as a session
    source. Nothing else can happen first. The exact proxy error is:
    _"not in this session's authorized repository set, so the proxy will not inject a credential."_
-2. **Set `NEXT_PUBLIC_SITE_URL=https://www.in2itebs.com`.** Canonical tags are wrong until it is
-   set, and www is the confirmed canonical.
+2. **The apex → www redirect**, as a DNS or edge rule. www is the confirmed canonical.
+   _(`NEXT_PUBLIC_SITE_URL` is belt and braces — see §3. `lib/utils.ts` already pins the canonical
+   host whenever `SITE_ENV=production`, so this item is infrastructure, not code.)_
 3. **Rotate the staging admin password** that was pasted into a chat transcript.
 4. **Check the Cloudflare zone's AI-bot defaults** (§5).
 5. **Someone other than the author reads the code.** Not ceremony: 35 commits and ~200 files have
@@ -44,39 +45,63 @@ diagnose. Recover first, cut over deliberately.
 
 ---
 
-## 2 · The Next.js support window has closed — read this before deploying
+## 2 · Next.js 15 is out of support — and 16 has been costed
 
-The Cloudflare adapter now **refuses to build this app** without an override flag:
+The Cloudflare adapter refuses to build this app without an override:
 
 ```
 ERROR Next.js version 15.5.29 is not supported by the Next.js team.
 Major versions are supported for 2 years from their release date.
 ```
 
-It is right. **Next.js 15.0.0 was released 21 October 2024, so the window closed 21 October
-2026** — about four weeks ago. Current is **16.4.6**; Next 16 shipped 22 October 2025 and has had
-thirteen months to settle.
+It is right. **Next.js 15.0.0 shipped 21 October 2024, so the window closed 21 October 2026.**
+Current is **16.4.6**. The pinned `15.5.29` is a 3 November 2026 security backport, so it is
+patched today — what has gone is the guarantee of a patch for the _next_ advisory.
 
-**This is not a reason to stop a deploy today.** The pinned `15.5.29` was published 3 November
-2026 on the `backport` tag, so it carries the latest security backports and is patched as of now.
-
-**It is a reason to schedule the Next 16 upgrade as real work, soon.** What has actually changed:
-there is no longer a guarantee of future patches, so the next advisory in this major may not get
-one. The CTO review did not catch this because the version was inside its window when the branch
-was started, and the clock ran out mid-engagement — which is its own small lesson about pinned
-dependencies on a long branch.
-
-Until then the build needs:
+Until the upgrade lands the build needs:
 
 ```bash
-npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion
+SITE_ENV=production npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion
 ```
 
-**Do not bury that flag in `package.json` without a comment.** A flag with the word
-_dangerously_ in it, silently added to a script, is how a team forgets it is running an
-out-of-support framework.
+**Do not bury that flag in `package.json` without a comment.** A flag with the word _dangerously_
+in it, quietly added to a script, is how a team forgets what it is running.
 
----
+### What the Next 16 upgrade actually costs — measured, not estimated
+
+The upgrade was attempted on a throwaway branch and reverted. It is **not** a clean swap, and it
+is **not** a large project either. Precisely:
+
+- `npm install next@latest eslint-config-next@latest` installs without complaint.
+- **`tsc --noEmit` passes clean.** No type changes anywhere in ~35,000 lines.
+- **One config file must change.** `eslint-config-next@16` ships flat config natively, so the
+  `FlatCompat` wrapper in `eslint.config.mjs` breaks — it produces a circular reference eslint
+  cannot serialise, and it surfaces as a stack trace inside `config-validator.js` rather than as
+  anything resembling a config error. The fix is to import `eslint-config-next/core-web-vitals`
+  and `eslint-config-next/typescript` directly and spread them; both export arrays.
+- **One asset must be re-encoded.** The Turbopack build fails on `app/favicon.ico`:
+  _"The PNG is not in RGBA format"_. Re-save it as RGBA and it passes.
+- **Sixteen lint problems across eleven files**, all from the React Compiler rules that Next 16
+  turns on: `set-state-in-effect` ×6, `refs` ×4, `purity` ×2, `immutability` ×2, `use-memo` ×1,
+  `static-components` ×1.
+
+**Read that last number carefully before anyone panics.** A meaningful share are false positives
+against **async Server Components** — both `purity` hits are `Date.now()` inside
+`export default async function`, which runs on the server and cannot cause a hydration mismatch,
+and the `static-components` hit is a lookup from a map rather than a component defined in render.
+
+The genuine ones cluster in `/admin` client components — the page builder, the visual editor,
+`count-up`, `splash` — with four in public client components: `header`, `region-preference`,
+`brand-hero` and `demo-form`.
+
+### The recommendation
+
+**Do it, as its own pull request, with its own review.** Roughly half a day. It should not be
+stacked onto this branch, because the genuine fixes change the behaviour of interactive
+components and this branch has not yet been reviewed by anybody.
+
+Whoever picks it up is not starting cold: every issue is enumerated above, `tsc` is known clean,
+and the only two mechanical changes are the eslint config and the favicon.
 
 ## 3 · Environment
 
@@ -87,10 +112,20 @@ Thirteen variables are read. Five matter for a public deploy; the rest degrade g
 | Variable                               | Value                      | Why                                                                                                                                                                                     |
 | -------------------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SITE_ENV`                             | `production`               | Read at build time. Decides `robots.txt` and the `X-Robots-Tag` header. **The build refuses to start without it.** Also set it in `wrangler.jsonc` `vars` — it currently says `preview` |
-| `NEXT_PUBLIC_SITE_URL`                 | `https://www.in2itebs.com` | Canonical tags, sitemap, JSON-LD, the capability feed                                                                                                                                   |
+| `NEXT_PUBLIC_SITE_URL`                 | `https://www.in2itebs.com` | Preview hosts only — production pins the canonical itself; see below                                                                                                                    |
 | `SUPABASE_URL`                         | the project origin         | The /admin content overlay                                                                                                                                                              |
 | `SUPABASE_SECRET_KEY`                  | secret                     | As above                                                                                                                                                                                |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | public                     | Admin sign-in                                                                                                                                                                           |
+
+**`NEXT_PUBLIC_SITE_URL` is less load-bearing than the CTO review claimed.** `lib/utils.ts` pins
+`SITE_URL` to `https://www.in2itebs.com` whenever `SITE_ENV=production` — put there precisely
+because an Azure VM was once left on `SITE_ENV=preview` after DNS had cut over. So canonical tags
+are **correct in a production build with the variable unset**, and the review's "canonical tags are
+wrong until this is set" was overstated. Set it anyway for preview environments, where it does
+decide the host.
+
+What genuinely remains is the **apex → www redirect**, which is a DNS or edge rule. The application
+has nothing to say about a request that never reaches it.
 
 **If Supabase is unset or unreachable, the site still builds and serves** — every page renders
 from `content/*.ts` and the build logs exactly which reads fell back. `/admin` will not work.
