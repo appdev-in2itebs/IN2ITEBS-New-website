@@ -1,8 +1,20 @@
 import type { Region, Stat } from "./types";
 
+/** Incorporated in Karnataka in 2016 (CIN U72900KA2016PTC147788). */
+export const incorporatedYear = 2016;
+
+/**
+ * Years in business, derived from the incorporation year rather than typed in, so the figure can
+ * never go stale (it read "10+" for years before 2026-11-19). It is fixed at build time through
+ * NEXT_PUBLIC_BUILD_YEAR (next.config.mjs), so server and browser always agree; a weekly scheduled
+ * rebuild on the server picks up each new year.
+ */
+const buildYear = Number(process.env.NEXT_PUBLIC_BUILD_YEAR) || new Date().getUTCFullYear();
+export const yearsOfExperience = buildYear - incorporatedYear;
+
 /** Headline figures from Amendment Brief v5, including the user-confirmed 500+ professionals. */
 export const stats: Stat[] = [
-  { value: "10+", label: "Years of experience" },
+  { value: `${yearsOfExperience}+`, label: "Years of experience" },
   { value: "500+", label: "Professionals" },
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered" },

@@ -21,6 +21,9 @@ if (process.env.NODE_ENV === "production" && siteEnv !== "production" && siteEnv
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // The year the build ran, inlined into server and client bundles alike so figures derived from it
+  // (years in business, content/site.ts) cannot differ between the two.
+  env: { NEXT_PUBLIC_BUILD_YEAR: String(new Date().getUTCFullYear()) },
   // `next dev` writes into its own folder so it can never overwrite a production build in .next
   // (running it on the server once took the live site down with "Could not find a production build").
   distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
