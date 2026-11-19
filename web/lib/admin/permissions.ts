@@ -43,6 +43,7 @@ export const SECTIONS = {
   faqs: { label: "Chatbot answers", href: "/admin/faqs/", group: "ai", roles: ["admin", "editor"] },
   settings: { label: "Settings", href: "/admin/settings/", group: "admin", roles: ["admin", "editor"] },
   users: { label: "Users", href: "/admin/users/", group: "admin", roles: ["admin"] },
+  account: { label: "My account", href: "/admin/account/", group: "admin", roles: ["admin", "sales", "hr", "editor"] },
 } as const satisfies Record<
   string,
   { label: string; href: string; group: Group; roles: readonly Role[]; menu?: false }

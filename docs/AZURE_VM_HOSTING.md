@@ -91,7 +91,22 @@ on the VM except deploy. The VM's host key is pinned in the workflow. Cloudflare
 3. On the VM: `/srv/in2it/go-live.sh` (refuses to run until DNS points here; gets the certificate, switches
    to `SITE_ENV=production`, rebuilds).
 
-Change an admin's password on the VM: `/srv/in2it/set-admin-password.sh email@in2itebs.com`.
+Admin passwords no longer need the VM. Since 2026-11-19 every password change goes through the admin
+itself with a one-time code (`lib/admin/password.ts`):
+
+- **Forgot password**: `/admin/login/reset/` asks for the email; a six-digit code is emailed to the website
+  owner (`ADMIN_OWNER_EMAIL`), who passes it on; the person enters it with the new password.
+- **My account** (`/admin/account/`): a signed-in admin changes their own password the same way.
+- **Users** (`/admin/users/`): only the owner adds people, changes roles and resets passwords. A new person
+  gets a login nobody knows the password of, the owner sets the first password on the code screen and shares
+  it privately. Other admins see the list read-only.
+- Codes live in `admin_password_codes` (migration 0006) as HMACs only: ten minutes, five guesses, single use,
+  at most three per account per quarter hour. Each change is written to `admin_audit` and confirmed by email to
+  the person and the owner.
+- Env on the VM (`/srv/in2it/shared/.env.local`): `ADMIN_OWNER_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`,
+  `SMTP_PASS`, `MAIL_FROM` (see `web/.env.example`). Mail goes out through the Microsoft 365 mailbox
+  appdev@in2itebs.com on port 587.
+- `/srv/in2it/set-admin-password.sh` remains only as a break-glass tool if the owner's mailbox is unreachable.
 
 ## Other applications on the VM
 
