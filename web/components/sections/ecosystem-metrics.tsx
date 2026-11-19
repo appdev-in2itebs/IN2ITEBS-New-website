@@ -13,7 +13,7 @@ const statIcons: Record<string, LucideIcon> = {
   "Global customers": Globe,
   "Countries delivered": MapPin,
   "Industry verticals": Factory,
-  "Industries we serve": Factory,
+  "Industry groups we publish pages for": Factory,
   "Packaged accelerators": Zap,
   "Strategic partners": Handshake,
   "Proprietary accelerators": Cpu,

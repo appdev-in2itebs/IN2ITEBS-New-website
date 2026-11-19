@@ -1,5 +1,4 @@
 import type { Region, Stat } from "./types";
-import { legacyIndustries } from "./legacy-industries";
 
 /** Incorporated in Karnataka in 2016 (CIN U72900KA2016PTC147788). */
 export const incorporatedYear = 2016;
@@ -13,16 +12,14 @@ export const incorporatedYear = 2016;
 const buildYear = Number(process.env.NEXT_PUBLIC_BUILD_YEAR) || new Date().getUTCFullYear();
 export const yearsOfExperience = buildYear - incorporatedYear;
 
-/** The industry pages in the menu, counted from the list that builds them, so the figure is checkable. */
-export const industriesServed = legacyIndustries.length;
-
 /** Headline figures from Amendment Brief v5, including the user-confirmed 500+ professionals. */
 export const stats: Stat[] = [
   { value: `${yearsOfExperience}+`, label: "Years of experience" },
   { value: "500+", label: "Professionals" },
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered" },
-  { value: String(industriesServed), label: "Industries we serve" },
+  // Nine industry groups per the master data standard (IBS Plan v2.0 §16); Live Site Fixes, 19 Nov 2026, item 2.
+  { value: "9", label: "Industry groups we publish pages for" },
   { value: "12+", label: "Packaged accelerators" },
   { value: "12+", label: "Strategic partners" },
   { value: "10+", label: "Proprietary accelerators" },
