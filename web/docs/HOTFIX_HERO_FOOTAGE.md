@@ -17,7 +17,7 @@ rendered onto the walls — sampled at 12fps into 1,205 stills and played back a
 extraction script that built them carries this note:
 
 > `HERO_SOURCE points at another folder of video1.mp4 … video5.mp4 (e.g. the clips with the Gemini
-sparkle removed, 2026-10-06)`
+> sparkle removed, 2026-10-06)`
 
 Three separate problems, in order of seriousness:
 
