@@ -19,7 +19,7 @@ export const stats: Stat[] = [
   { value: "150+", label: "Global customers" },
   { value: "30+", label: "Countries delivered" },
   // Nine industry groups per the master data standard (IBS Plan v2.0 §16); Live Site Fixes, 19 Nov 2026, item 2.
-  { value: "9", label: "Industry groups we publish pages for" },
+  { value: "9+", label: "Industry groups we publish pages for" },
   { value: "12+", label: "Packaged accelerators" },
   { value: "12+", label: "Strategic partners" },
   { value: "10+", label: "Proprietary accelerators" },
