@@ -14,12 +14,54 @@ export function badOrigin(request: Request) {
   return Boolean(origin && !sameSite && !allowedOrigins(request).has(origin));
 }
 
+/**
+ * Has anybody noticed we cannot see the visitor's address? Logged once per process.
+ *
+ * ── WHY THIS WARNING EXISTS ──────────────────────────────────────────────────────────────────
+ * `clientAddress` returns null unless Cloudflare set `cf-connecting-ip` or the operator set
+ * TRUST_PROXY_HEADERS=1. Null is the safe default: trusting `x-forwarded-for` with no trusted
+ * ingress in front lets anybody spoof an address and defeat the limit entirely.
+ *
+ * But null is not harmless, and it fails in a direction nobody expects. Every caller keys its
+ * bucket as `` `apply:${hashIp(ip) ?? "anon"}` `` — so with no address, **every visitor on the
+ * internet shares the single bucket "anon"**. The limit stops being five attempts per visitor and
+ * becomes five attempts per minute across the whole site.
+ *
+ * Measured on 19 November 2026 against a production build, seven requests from seven different
+ * `x-forwarded-for` addresses:
+ *
+ *   TRUST_PROXY_HEADERS unset — the SIXTH VISITOR is refused with 429, having made one request.
+ *   TRUST_PROXY_HEADERS=1     — all seven pass; one address making seven attempts is refused on
+ *                               its own sixth. Which is the intended behaviour.
+ *
+ * That matters now because the deployment target is Azure behind a reverse proxy rather than
+ * Cloudflare, so `cf-connecting-ip` will never arrive and the variable is the only way the app
+ * can see a visitor. A misconfiguration that quietly turns a per-visitor limit into a site-wide
+ * one, on the careers application form, is the kind of thing that is noticed as "the site is
+ * broken" weeks later. So it says so.
+ */
+let warnedAboutProxyHeaders = false;
+
 export function clientAddress(request: Request) {
-  return (
-    request.headers.get("cf-connecting-ip") ??
-    (process.env.TRUST_PROXY_HEADERS === "1" ? request.headers.get("x-forwarded-for")?.split(",")[0].trim() : null) ??
-    null
-  );
+  const cloudflare = request.headers.get("cf-connecting-ip");
+  if (cloudflare) return cloudflare;
+  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0].trim();
+  if (process.env.TRUST_PROXY_HEADERS === "1") return forwarded ?? null;
+  if (forwarded && !warnedAboutProxyHeaders) {
+    warnedAboutProxyHeaders = true;
+    console.warn(
+      "api-guard: requests carry x-forwarded-for but TRUST_PROXY_HEADERS is not 1, so no visitor " +
+        "address is resolved and every visitor shares one rate-limit bucket. Set TRUST_PROXY_HEADERS=1 " +
+        "if a trusted proxy sits in front of this app and overwrites the header.",
+    );
+  }
+  return null;
+}
+
+/** True when the app can see a visitor's address, so per-visitor limits actually apply. */
+export function clientAddressResolvable(request?: Request) {
+  if (process.env.TRUST_PROXY_HEADERS === "1") return true;
+  return Boolean(request?.headers.get("cf-connecting-ip"));
 }
 
 /**
