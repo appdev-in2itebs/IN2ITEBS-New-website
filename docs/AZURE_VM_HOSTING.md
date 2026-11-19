@@ -93,43 +93,11 @@ on the VM except deploy. The VM's host key is pinned in the workflow. Cloudflare
 
 Change an admin's password on the VM: `/srv/in2it/set-admin-password.sh email@in2itebs.com`.
 
-## In2Recruit on the same VM
+## Other applications on the VM
 
-Moved from the InsForge cloud on 2026-10-14. Repo: https://github.com/In2ITEBSLtd/In2Recruit.
-
-| What | Where |
-| --- | --- |
-| App | https://recruit.57-159-30-28.sslip.io (later recruit.in2itebs.com); pm2 app `in2recruit`, 127.0.0.1:3200 |
-| Code | `/srv/recruit/app` -> `releases/<ts>` (3 kept); env in `/srv/recruit/shared/.env.local` |
-| Backend | self-hosted InsForge in Docker, `/srv/insforge` (`docker-compose.restart.yml` override makes Postgres restart on reboot) (`docker compose ps|logs`), API on 127.0.0.1:7130, dashboard https://insforge.57-159-30-28.sslip.io (login: `ROOT_ADMIN_USERNAME/PASSWORD` in `/srv/insforge/.env`) |
-| Database | Postgres 15 in the `insforge-postgres-1` container, 127.0.0.1:5442; `/srv/recruit/apply-migrations.sh <release>` applies the repo's SQL in order and records it |
-| CV text extraction | Apache Tika container `in2recruit-tika` on 127.0.0.1:9998 (same image the cloud used) |
-| Scheduled jobs | `/srv/recruit/cron.sh <route>` from appuser's crontab: offer-watchdog every 15 min, feedback-scan hourly, expiry/preboarding/consistency nightly, digests 03:30 UTC; log in `/srv/recruit/logs/cron.log` |
-| Deploys | `.github/workflows/deploy.yml` in the repo: check job, then SSH to the VM with the `VM_SSH_KEY` secret (forced command `/srv/recruit/ci-deploy.sh`) |
-| Backups | included in the nightly `/srv/in2it/backup.sh` (InsForge dump, files, config) |
-
-Fresh-install notes: the repo's migrations were written against the cloud database, so three things were
-set by hand before they applied cleanly: the `role_permissions(role, resource)` unique index must exist before
-`001`, `user_profiles.auth_user_id` is `text` (not uuid) and `user_profiles.role` is the `app_role` enum
-(created by hand with every role value in use). One migration (`20261001065249`) was applied as a patched
-copy that skips tables which never had the `authenticated_workspace` policy.
-
-AI: the OpenRouter key is in `/srv/recruit/shared/.env.local`. The OpenRouter account has no credits, so the
-model the app shipped with (`google/gemma-4-26b-a4b-it`, paid) is refused; the `ai_settings` row and
-`OPENROUTER_MODEL` are set to `dots-studio/dots-3-note-preview:free`, which passed the workbench and JD
-extraction routes (free models are rate-limited per day). To use the original model, add credits at
-openrouter.ai and change the model in the app's AI settings page.
-
-Data: copied from the InsForge cloud project on 2026-10-14 with `/srv/recruit/sync-from-cloud.py`
-(cloud URL and API key in `/srv/recruit/shared/cloud.env`). It syncs the cloud's catalogs first (enum
-types, tables, columns, constraints, indexes, all functions, triggers, policies, RLS flags), then every
-public table, then `auth.users` including password hashes (so existing passwords keep working), then the
-files through the storage API, and reloads PostgREST. Re-runnable: it truncates and reloads. After the
-first run 17 duplicate constraints created by the migrations (`*_fkey` twins of the cloud's `*_fkey1`)
-had to be dropped, otherwise PostgREST reports two relationships between the same tables.
-
-App address: https://in2recruit.57-159-30-28.sslip.io (`recruit.` redirects). Still to do: point
-`in2recruit.in2itebs.com` at the VM, then delete the InsForge cloud project.
+Other In2IT teams run their own containers on this VM (the `in2erp-*` and `in2crm` containers from
+ghcr.io/appdev-in2itebs). They are not part of this repository or its deploys; leave them alone when
+clearing disk or restarting services.
 
 ## Redeploy by hand
 
