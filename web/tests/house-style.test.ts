@@ -1,8 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { writeFileSync, unlinkSync, mkdirSync, rmSync } from "node:fs";
+import { writeFileSync, unlinkSync, mkdirSync, rmSync, readFileSync } from "node:fs";
 import { BANNED, EXEMPT, houseStyleOffenders } from "../scripts/house-style.mjs";
-import { capabilities, capabilityExpires, capabilityReviewed, longDate } from "../content/capability-status";
+import {
+  capabilities,
+  capabilityExpires,
+  capabilityReviewed,
+  longDate,
+  platformsWeDoNotImplement,
+} from "../content/capability-status";
 import { capabilityFeed, capabilityJsonLd, FEED_VERSION } from "../lib/capability-feed";
 import { figureOffenders } from "../scripts/figures.mjs";
 import { servicePages } from "../content/legacy-services";
@@ -163,4 +169,55 @@ test("the unsourced-figure list is specific enough to be closed", () => {
   }
   // If this ever reaches zero the migration is done and the list should go, not grow.
   assert.ok(UNPROVENANCED.length <= 5, `${UNPROVENANCED.length} unsourced figures — the list is meant to shrink`);
+});
+
+/**
+ * THE CAPABILITY-CLAIM GATE, tested rather than trusted.
+ *
+ * The gate itself lives in scripts/check-build.mjs and runs after every build. This test runs in
+ * the check job, minutes earlier, and — more to the point — proves the gate catches the defect it
+ * was written for. The November review's single recurring finding was six defects that shipped
+ * because a check existed and nobody exercised it. A gate added in response to that finding, and
+ * then not exercised, would be the finding happening again.
+ */
+test("no copy claims we deliver a platform the register marks ahead of us", () => {
+  assert.ok(platformsWeDoNotImplement.length > 0, "the vendor list is empty — the claim gate is blind");
+  const ahead = capabilities.filter((c) => c.status === "ahead");
+  assert.ok(
+    ahead.some((c) => platformsWeDoNotImplement.every((v) => !v.includes(" ") || c.capability.includes(v))),
+    "platformsWeDoNotImplement has drifted away from the register's own 'Ahead of us' lines",
+  );
+
+  const DELIVERY =
+    /practices?\b|we implement|we deliver|we run\b|implement and customise|plan, implement|transform and run/i;
+  const EXONERATING =
+    /no designation|do not implement|ahead of us|are not on this list|which is which|Microsoft Azure|Microsoft 365/i;
+  const scan = (label: string, text: string) => {
+    for (const line of text.split("\n")) {
+      if (/^\s*(\/\/|\*|\/\*)/.test(line)) continue;
+      if (EXONERATING.test(line) || !DELIVERY.test(line)) continue;
+      for (const vendor of platformsWeDoNotImplement) {
+        assert.ok(
+          !new RegExp(`\\b${vendor}\\b`).test(line),
+          `${label} claims we deliver ${vendor}: ${line.trim().slice(0, 120)}`,
+        );
+      }
+    }
+  };
+
+  // The copy that actually ships, read the way the gate reads it.
+  scan("content/home-hero.ts", readFileSync("content/home-hero.ts", "utf8"));
+  scan("content/services.ts", readFileSync("content/services.ts", "utf8"));
+  scan("components/sections/pillars.tsx", readFileSync("components/sections/pillars.tsx", "utf8"));
+
+  // And the gate's own teeth: the sentence that was live on 19 November must not pass.
+  assert.throws(
+    () =>
+      scan(
+        "regression",
+        '  body: "Explore SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices for your teams.",',
+      ),
+    /claims we deliver Oracle/,
+    "the claim gate no longer catches the sentence it was written for",
+  );
 });

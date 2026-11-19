@@ -58,7 +58,20 @@ export const homeHeroSlides: HeroSlide[] = [
     id: "platforms",
     label: "People, finance & customer platforms",
     heading: ["Connect people, processes and performance."],
-    body: "Explore SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices for the systems your teams rely on every day.",
+    /*
+     * Reworded 19 November 2026. This read "SuccessFactors, Workday, Salesforce, Oracle and
+     * Microsoft practices", which /about/where-we-stand/ contradicts in terms: the register
+     * publishes Oracle, ServiceNow, Microsoft Dynamics and Adobe as "Ahead of us — we hold no
+     * designation from any of them and we do not implement them."
+     *
+     * It survived every gate because it is a sentence rather than a figure, and the checks that
+     * run on each build read figures, banned words and review dates. None of them read a
+     * marketing sentence against the register. scripts/check-build.mjs now does.
+     *
+     * This is the most-read page on the site, so of the two statements this was the one costing
+     * the most. The register is the least copyable asset here and not the one to undermine.
+     */
+    body: "Explore our SuccessFactors, Salesforce and Workday practices for the systems your teams rely on every day.",
     cta: { href: "/services/enterprise-platforms/", label: "See our platform practices" },
     secondary: { href: "/contact/", label: "Talk to us" },
   },

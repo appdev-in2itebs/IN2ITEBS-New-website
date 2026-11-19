@@ -72,8 +72,13 @@ export const services: ServiceCard[] = [
   {
     slug: "other-enterprise-solutions",
     name: "Other Enterprise Solutions",
+    // "Oracle, Microsoft and SAP" removed 19 November 2026 — see content/home-hero.ts. We hold no
+    // designation from Oracle or Microsoft Dynamics and do not implement them; naming them beside
+    // SAP in a list of platforms we "plan, implement and customise" said otherwise. The card keeps
+    // its place: integrating to a system we do not sell is real work, and saying which is which is
+    // the distinction /about/partnerships/ already draws.
     blurb:
-      "Enterprises keep changing with the market. We help you plan, implement and customise the leading platforms — Oracle, Microsoft and SAP — around what the organisation needs next.",
+      "Enterprises keep changing with the market. We implement the platforms we are designated for and integrate to the systems around them — and the capability register says which is which, line by line.",
     href: "/services/enterprise-platforms/",
   },
   {

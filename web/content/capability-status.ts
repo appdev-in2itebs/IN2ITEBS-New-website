@@ -56,6 +56,33 @@ export const STATUS_LABELS: Record<CapabilityStatus, { label: string; meaning: s
   },
 };
 
+/**
+ * The vendors the register marks "Ahead of us" — the ones we hold no designation from and do not
+ * implement. Declared as its own list because a build gate reads it.
+ *
+ * ── WHY THIS IS DATA AND NOT INFERRED ────────────────────────────────────────────────────────
+ * On 19 November 2026 the homepage was advertising "SuccessFactors, Workday, Salesforce, Oracle
+ * and Microsoft practices" while this file published Oracle and Microsoft Dynamics as platforms
+ * we do not implement. Two further copies of the claim sat on /about/ and in the services list.
+ * Whichever page a buyer read second, one of them had told them something untrue.
+ *
+ * scripts/check-build.mjs now fails the build on any copy naming one of these inside a delivery
+ * sentence. Deriving the list by parsing the register was tried first and was wrong: it read
+ * "RISE with SAP Validated Partner designation" as a claim about RISE, which we do deliver, and
+ * "24×7 network and security operations centre" as a claim about security. What the gate needs is
+ * a list of VENDORS, which is not the same thing as a list of capabilities — so it is written
+ * down rather than guessed at.
+ *
+ * Keep it in step with the "Other platforms" line below. If a designation is obtained, the status
+ * changes and the name comes off this list in the same commit, not a later one.
+ *
+ * "Microsoft" appears without "Dynamics" deliberately. The designation we lack is for Dynamics,
+ * but a reader who meets "Microsoft practices" on the homepage takes the broader claim. The gate
+ * exempts "Microsoft Azure" and "Microsoft 365" — a hyperscaler we really do deliver RISE on, and
+ * a product estate we really do work alongside.
+ */
+export const platformsWeDoNotImplement = ["Oracle", "ServiceNow", "Microsoft Dynamics", "Microsoft", "Adobe"];
+
 /** The date a person last checked every line below against delivery evidence. */
 export const capabilityReviewed = "2026-11-12";
 

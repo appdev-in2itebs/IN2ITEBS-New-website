@@ -1,5 +1,5 @@
 // Asserts that the artefacts in .next match SITE_ENV. Runs automatically after `next build` (postbuild).
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { houseStyleOffenders } from "./house-style.mjs";
 import { figureOffenders, unprovenancedCount } from "./figures.mjs";
 const env = process.env.SITE_ENV;
@@ -149,6 +149,68 @@ for (const c of certs) {
 if (certsExpired.length)
   failures.push(
     `a published credential has expired — renew it, or take it off content/site.ts:\n    ${certsExpired.join("\n    ")}`,
+  );
+
+/*
+ * ── THE CAPABILITY-CLAIM GATE ────────────────────────────────────────────────────────────────
+ *
+ * No copy on this site may name a platform the register marks "Ahead of us" in a sentence that
+ * says we deliver it.
+ *
+ * Added 19 November 2026, after the content compendium put the homepage and
+ * /about/where-we-stand/ in the same document for the first time. The homepage advertised
+ * "SuccessFactors, Workday, Salesforce, Oracle and Microsoft practices" while the register
+ * published Oracle and Microsoft Dynamics as platforms we hold no designation for and do not
+ * implement. Two further copies of the same claim sat on /about/ and in the services list. All
+ * three had been live for weeks.
+ *
+ * Why no existing gate saw it: the house-style gate reads adjectives, the figure gate reads
+ * numbers, the review gates read dates. A marketing sentence carries none of those. The defect
+ * class was invisible to every check — the same shape as the six findings in the November
+ * review, where a check existed, was trusted, and could not see the thing that was wrong.
+ *
+ * What it deliberately does NOT do: it does not ban the NAME. "RISE with SAP is delivered on
+ * Microsoft Azure" is true and must keep working, and so must the register's own sentence saying
+ * we hold no designation. It bans the name inside a delivery verb, which is where a claim lives.
+ *
+ * The vendor list is read from `platformsWeDoNotImplement` rather than derived from the register
+ * rows. Deriving it was the first attempt and it was wrong — splitting the capability strings
+ * turned "RISE with SAP Validated Partner designation" into a claim about RISE, which we deliver,
+ * and "24×7 network and security operations centre" into a claim about security. A list of
+ * vendors is not a list of capabilities, so content/capability-status.ts states it outright.
+ */
+const AHEAD_NAMES = (capabilitySource.match(/platformsWeDoNotImplement = \[([^\]]*)\]/)?.[1] ?? "")
+  .split(",")
+  .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+  .filter(Boolean);
+if (!AHEAD_NAMES.length)
+  failures.push("content/capability-status.ts no longer exports platformsWeDoNotImplement — the claim gate is blind");
+const DELIVERY_VERBS =
+  /practices?\b|we implement|we deliver|we run\b|implement and customise|plan, implement|transform and run/i;
+// A line that states the limit, or names the hyperscaler and the productivity estate, is not a claim.
+const EXONERATING =
+  /no designation|do not implement|ahead of us|are not on this list|which is which|Microsoft Azure|Microsoft 365/i;
+const claimHits = [];
+for (const root of ["content", "components/sections", "app"]) {
+  const files = readdirSync(root, { recursive: true })
+    .filter((f) => /\.(ts|tsx)$/.test(f))
+    .map((f) => `${root}/${f}`);
+  for (const file of files) {
+    readFileSync(file, "utf8")
+      .split("\n")
+      .forEach((line, n) => {
+        if (/^\s*(\/\/|\*|\/\*)/.test(line)) return; // a comment explaining the rule is not a claim
+        if (EXONERATING.test(line) || !DELIVERY_VERBS.test(line)) return;
+        for (const name of AHEAD_NAMES) {
+          if (new RegExp(`\\b${name}\\b`).test(line))
+            claimHits.push(`${file}:${n + 1} — "${name}" in a delivery sentence`);
+        }
+      });
+  }
+}
+if (claimHits.length)
+  failures.push(
+    `a platform the register marks "Ahead of us" appears in a sentence claiming we deliver it:\n    ${claimHits.join("\n    ")}\n    Either the register is out of date or the copy is. Fix one — do not leave both published.`,
   );
 
 if (failures.length) {
