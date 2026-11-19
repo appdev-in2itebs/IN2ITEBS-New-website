@@ -6,6 +6,29 @@ import type { Office } from "./types";
  *  Mumbai, Chennai and Kolkata were listed here briefly from the live site's /contact/ page and
  *  removed again on 2026-09-17 at the owner's request. `coords` is the city centre and exists only
  *  to place each office on the map in `components/sections/office-map.tsx`. */
+/*
+ * ── WHY FOUR OFFICES LOST THE "delivery-centre" TAG ──────────────────────────────────────────
+ *
+ * Singapore, Dubai, Kenya and South Africa carried `delivery-centre` in `kind` until 19 November
+ * 2026. Every page that talks about this says the opposite, and says it emphatically:
+ *
+ *   · /about/markets/ — "Offices without a delivery centre: Singapore, Dubai, Nairobi,
+ *     Johannesburg", above a diagram whose whole point is that the delivery-centre row is empty
+ *     outside India.
+ *   · content/site.ts — `deliveryCentres` is the four Indian cities, and the headline figure is
+ *     "4 Delivery centres in India".
+ *   · The submitted bids, which is where the definition came from: a delivery centre is somewhere
+ *     staffed that you can visit. An office is not one and a legal entity is not one either.
+ *
+ * Nothing read the tag, so nothing broke and nothing complained. That is what made it worth
+ * fixing rather than leaving: the obvious way to count delivery centres in future is
+ * `offices.filter(o => o.kind.includes("delivery-centre"))`, and that would have returned eight —
+ * publishing the exact number the markets page exists to refute, in a figure a tender can check
+ * against our own bids.
+ *
+ * Found by the content compendium, which printed `kind` in a table beside the figure.
+ * tests/metadata.test.ts now asserts the two sources agree.
+ */
 export const offices: Office[] = [
   {
     slug: "bangalore",
@@ -58,7 +81,7 @@ export const offices: Office[] = [
     slug: "singapore",
     name: "Singapore",
     legalEntity: "In2IT Enterprise Business Services Pte Ltd",
-    kind: ["global-entity", "delivery-centre"],
+    kind: ["global-entity"],
     address: "531A Upper Cross Street, #04-95, Hong Lim Complex, Singapore 051531",
     city: "Singapore",
     country: "Singapore",
@@ -69,7 +92,7 @@ export const offices: Office[] = [
     slug: "dubai",
     name: "Dubai",
     legalEntity: "IN2IT EB Solutions LLC",
-    kind: ["global-entity", "delivery-centre"],
+    kind: ["global-entity"],
     address: "Office 805-131, PR1005 Building, Port Saeed, Deira, Dubai, UAE",
     city: "Dubai",
     country: "UAE",
@@ -80,7 +103,7 @@ export const offices: Office[] = [
     slug: "kenya",
     name: "Kenya",
     legalEntity: "In2IT Enterprise Business Services Kenya Limited",
-    kind: ["global-entity", "delivery-centre"],
+    kind: ["global-entity"],
     address: "Purshottam Place, 7th Floor, Westlands Road, Museum Hill, P.O. Box 66217-00800, Nairobi",
     city: "Nairobi",
     country: "Kenya",
@@ -91,7 +114,7 @@ export const offices: Office[] = [
     slug: "south-africa",
     name: "South Africa",
     legalEntity: "IN2IT Enterprise Business Services (Pty) Ltd",
-    kind: ["global-entity", "delivery-centre"],
+    kind: ["global-entity"],
     address: "9 Kinross Street, Germiston South, Germiston, Gauteng – 1401",
     city: "Germiston",
     country: "South Africa",

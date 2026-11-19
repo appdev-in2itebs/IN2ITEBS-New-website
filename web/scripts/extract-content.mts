@@ -25,7 +25,7 @@ import { qualifiedPackages, sapPublishedDeliveries, SAP_PROFILE_URL } from "../c
 import { ATTRIBUTION_LABELS, UNPROVENANCED, CLIENT_FACTS } from "../content/evidence";
 import { clients } from "../content/clients";
 import { offices } from "../content/offices";
-import { site } from "../content/site";
+import { stats, certifications, statsReviewed, legalEntities, deliveryCentres, reachStats } from "../content/site";
 
 const out: string[] = [];
 const w = (s = "") => out.push(s);
@@ -111,8 +111,14 @@ for (const ind of legacyIndustries) {
     }
   }
 
+  // Not a consent question — client identity has been approved since 12 November. `customers` is
+  // empty on all nine pages, and the marks that would fill it are stranded under the old slugs.
   w(
-    `*Client logos published on this page: ${ind.customers.length ? ind.customers.length : "none — logo consent not confirmed"}.*`,
+    `*Client marks shown on this page: ${
+      ind.customers.length
+        ? `${ind.customers.length}`
+        : "none. The row is built and client identity is approved; the marks are stranded under the pre-restructure slugs and have not been wired up"
+    }.*`,
   );
   w();
 }
@@ -440,15 +446,28 @@ para(
   `${clients.length} clients, published by the Managing Director's decision of 12 November 2026: nothing signed prohibits identifying our clients, and showing who you work for is ordinary practice in this industry. If a client ever asks to be removed, remove that client rather than turning the whole wall off — one objection is not a reason to hide everyone.`,
 );
 
+para(
+  "The marks themselves are reproduced below each table. A client's trademark is the thing actually being published, and a name in a list is not it — so whoever signs this off should be looking at the mark, not reading that one exists.",
+);
+
+const plateSlug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 const sectors = [...new Set(clients.flatMap((c) => c.sectors))].sort();
 for (const s of sectors) {
   const inSector = clients.filter((c) => c.sectors.includes(s));
+  pb();
   w(`## ${esc(s)} — ${inSector.length}`);
   w();
   rows(
     ["Client", "Logo published"],
     inSector.map((c) => [esc(c.name), c.logo ? "yes" : "wordmark"]),
   );
+  w(`![The client marks published for ${esc(s)}.](plates/clients-${plateSlug(s)}.png)`);
+  w();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -461,25 +480,77 @@ para(
   'Every figure the site publishes comes from here. The word "certified" is banned sitewide: "500+ people" is provable from payroll, "500+ certified consultants" is a claim a tender can demand a register for.',
 );
 
-const s = site as Record<string, unknown>;
-if (Array.isArray(s.stats)) {
-  w("## The statistics band");
+/*
+ * These are SEPARATE module exports, not properties of `site`.
+ *
+ * The first version of this read `site.stats` and `site.certifications`, guarded by
+ * `Array.isArray(...)`. `site` carries neither, so both guards were false, both sections rendered
+ * as nothing, and the build and the document both succeeded — the statistics band and the
+ * credentials table were simply absent from Part 9 and no error said so.
+ *
+ * Caught on 19 November by looking for the credentials table to put the certificate photographs
+ * beside it. A guard that silently skips is the same failure this project keeps finding: the
+ * check ran, reported nothing, and could not see what was wrong. There is now a hard assertion
+ * below instead of a guard.
+ */
+if (!stats.length || !certifications.length)
+  throw new Error("content/site.ts exports no stats or no certifications — Part 9 would publish an empty section");
+
+w("## The statistics band");
+w();
+w(`*Every figure below was last checked against its source on ${esc(statsReviewed)}.*`);
+w();
+rows(
+  ["Figure", "Label"],
+  stats.map((x) => [`**${esc(x.value)}**`, esc(x.label)]),
+);
+
+if (reachStats?.length) {
+  w("## Reach");
   w();
   rows(
     ["Figure", "Label"],
-    (s.stats as { value: string; label: string }[]).map((x) => [`**${esc(x.value)}**`, esc(x.label)]),
+    reachStats.map((x) => [`**${esc(x.value)}**`, esc(x.label)]),
   );
 }
-if (Array.isArray(s.certifications)) {
-  w("## Credentials");
+
+w("## Credentials");
+w();
+rows(
+  ["Credential", "Valid until"],
+  certifications.map((c) => [
+    esc(c.name),
+    (c as { validUntil?: string | null }).validUntil
+      ? esc(String((c as { validUntil?: string | null }).validUntil))
+      : "**not recorded — the build warns on every run**",
+  ]),
+);
+// /about/credentials/awards/ says, in Part 1, that it publishes the photograph rather than the
+// name "because a name is a claim and a certificate is evidence". A document that reproduces that
+// sentence and then shows neither undercuts it, so the evidence comes with it.
+w("![The award and accreditation certificates In2IT EBS publishes, photographed.](plates/credentials.png)");
+w();
+w(
+  "*The certificates themselves, as `/about/credentials/awards/` publishes them. The page's own rule: we publish the photograph rather than the name, because a name is a claim and a certificate is evidence.*",
+);
+w();
+
+if (legalEntities?.length) {
+  w("## Legal entities");
   w();
   rows(
-    ["Credential", "Valid until"],
-    (s.certifications as { name: string; validUntil: string | null }[]).map((c) => [
-      esc(c.name),
-      c.validUntil ? esc(c.validUntil) : "**not recorded — the build warns on every run**",
-    ]),
+    ["Country", "Registered name"],
+    legalEntities.map((e) => [esc(e.country), esc(e.name)]),
   );
+}
+
+if (deliveryCentres?.length) {
+  w("## Staffed delivery centres");
+  w();
+  para(
+    "A delivery centre is somewhere staffed that you can visit. That definition is why the number is four and not eight — an office and a legal entity are not the same thing as a centre, and the Footprint diagram draws those as separate rows.",
+  );
+  bullets([...deliveryCentres]);
 }
 
 w("## Offices and entities");

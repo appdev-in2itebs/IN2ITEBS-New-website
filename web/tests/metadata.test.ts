@@ -51,7 +51,8 @@ test("named case studies carry a summary of at most 155 characters", () => {
   for (const article of insights) assert.ok(article.excerpt.length <= 160, article.slug);
 });
 import sitemap from "../app/sitemap";
-import { contentUpdated } from "../content/site";
+import { contentUpdated, deliveryCentres, stats } from "../content/site";
+import { offices } from "../content/offices";
 test("every sitemap entry has a valid lastModified and the homepage is included", async () => {
   const entries = await sitemap();
   assert.ok(entries.some((e) => e.url === "https://www.in2itebs.com/"));
@@ -195,4 +196,45 @@ test("anonymised case studies leak no client name or identifying detail", async 
         offenders.push(`${study.slug}: "${tell}"`);
   }
   assert.deepEqual([...new Set(offenders)], []);
+});
+
+/**
+ * THE DELIVERY-CENTRE COUNT HAS ONE ANSWER.
+ *
+ * Three places state it — `deliveryCentres` in content/site.ts, the `delivery-centre` tag in
+ * content/offices.ts, and the headline figure — and until 19 November 2026 the second disagreed
+ * with the other two: Singapore, Dubai, Kenya and South Africa were all tagged as delivery
+ * centres, which would have made the count eight.
+ *
+ * Nothing read the tag, so nothing broke. That is exactly why it needed a test: the obvious way
+ * to count them in future is to filter on the tag, and that would have published the number
+ * /about/markets/ exists to refute, in a figure a tender can check against our own bids.
+ *
+ * A delivery centre is somewhere staffed that you can visit. An office is not one and a legal
+ * entity is not one either.
+ */
+test("the delivery centres agree, however you count them", () => {
+  const tagged = offices.filter((o) => o.kind.includes("delivery-centre"));
+  // The two lists name the same places differently — the Delhi NCR centre is the Noida office —
+  // so match on either the office's name or its city rather than demanding one spelling.
+  const unmatched = deliveryCentres.filter(
+    (centre) => !tagged.some((o) => o.name.includes(centre) || o.city.includes(centre) || centre.includes(o.city)),
+  );
+  assert.deepEqual(unmatched, [], "a delivery centre in content/site.ts has no tagged office in content/offices.ts");
+  assert.equal(
+    tagged.length,
+    deliveryCentres.length,
+    `content/offices.ts tags ${tagged.length} delivery centres; content/site.ts lists ${deliveryCentres.length}`,
+  );
+  assert.ok(
+    tagged.every((o) => o.country === "India"),
+    "a delivery centre outside India — the bids, the markets page and the footprint diagram all say there are none",
+  );
+  const headline = stats.find((s) => /delivery centre/i.test(s.label));
+  assert.ok(headline, "no delivery-centre figure in the statistics band");
+  assert.equal(
+    Number(headline.value.replace(/\D/g, "")),
+    tagged.length,
+    `the statistics band says ${headline.value} delivery centres; the data has ${tagged.length}`,
+  );
 });

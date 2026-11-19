@@ -27,8 +27,22 @@ const howEachPageWorks = [
     body: "An overview, SAP solution offerings and capability sub-sections drawn from our delivery experience in that industry.",
   },
   {
-    title: "Clients in this sector",
-    body: "Logos for that industry only, grouped exactly as they appear in our portfolio — no client is shown on a sector it isn't placed in.",
+    /*
+     * Reworded 19 November 2026. This promised "logos for that industry only, grouped exactly as
+     * they appear in our portfolio" — and not one industry page shows a logo row.
+     *
+     * Not a consent problem: client identity has been approved since 12 November. The row is
+     * driven by `customers` in content/legacy-industries.ts, which is empty on all nine, and the
+     * 116 marks that would fill it sit under the OLD fourteen industry slugs while
+     * legacy-industry-page.tsx builds `/industries/<current slug>/<logo>`. The restructure renamed
+     * every slug and nothing connected the two, so the path cannot resolve for any of them.
+     *
+     * So this page was advertising a section that does not exist on the page it sends you to.
+     * Wiring the marks up is a content decision — which clients, on what evidence — and until it
+     * is taken, this says what the pages actually do. See claude/image-asset-inventory.md.
+     */
+    title: "Who we have delivered for",
+    body: "The named engagements behind each sector, and the clients we publish a reference for — listed on the client page rather than implied by a wall of marks.",
   },
   {
     title: "Case studies, on request",
