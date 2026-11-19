@@ -1,5 +1,5 @@
 import { supabaseAdmin, supabaseProjectUrl } from "@/lib/supabase";
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 
 /**
  * The media library: images uploaded in /admin/media to the public "media" bucket, plus helpers the

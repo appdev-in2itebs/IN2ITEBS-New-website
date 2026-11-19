@@ -1,5 +1,6 @@
 import { cache } from "react";
-import { supabaseAdmin, supabaseConfigured, unreachable } from "@/lib/supabase";
+import { supabaseAdmin, supabaseConfigured } from "@/lib/supabase";
+import { readOrFallBack } from "@/lib/cms/outage";
 import { servicePages, type ServicePage, type ServiceSection } from "@/content/legacy-services";
 import { legacyIndustries, type LegacyIndustry, type IndustrySection } from "@/content/legacy-industries";
 import { partnerPages, type PartnerPage } from "@/content/partner-pages";
@@ -11,7 +12,7 @@ import { testimonials } from "@/content/testimonials";
 import { homeHeroSlides, type HeroSlide } from "@/content/home-hero";
 import { stats } from "@/content/site";
 import type { Stat } from "@/content/types";
-import { blockedInsightSlugs, blockedOfficeSlugs, clientEvidenceApproved } from "@/content/compliance";
+import { blockedInsightSlugs, blockedOfficeSlugs, clientTestimonialsApproved } from "@/content/compliance";
 import type { Insight, Leader, Office, Testimonial } from "@/content/types";
 
 /**
@@ -19,9 +20,9 @@ import type { Insight, Leader, Office, Testimonial } from "@/content/types";
  * saved in /admin (Supabase table cms_entries) laid over it. Pages call getCms() while they render;
  * React's cache() makes that one database round trip per page render, however many components ask.
  *
- * Failure policy. Without Supabase credentials (a laptop, CI) the shipped text is used. With them, a
- * failed query throws: during an on-demand refresh that makes Next keep serving the last good page,
- * instead of caching the shipped text over a live edit; during a deploy it fails the build loudly.
+ * Failure policy. Without Supabase credentials (a laptop, CI) the shipped text is used. With them,
+ * the two failure cases are deliberately different — see the note above `getCms()` at the foot of
+ * this file before changing either.
  */
 
 export type ArticleBody = { author?: string; authorRole?: string; authorDate?: string; blocks: InsightBlock[] };
@@ -71,7 +72,7 @@ const shipped = (): Cms => ({
     .map((i) => ({ ...i, body: insightBodies[i.slug] })),
   leadership,
   offices: offices.filter((office) => !blockedOfficeSlugs.has(office.slug)),
-  testimonials: clientEvidenceApproved ? testimonials : [],
+  testimonials: clientTestimonialsApproved ? testimonials : [],
   homeHero: homeHeroSlides,
   stats,
   heroes: {},
@@ -116,7 +117,7 @@ export function applyEdits(rows: Row[], heroes: Record<string, HeroEdit> = {}): 
     articles: [...added, ...kept].filter((article) => !blockedInsightSlugs.has(article.slug)),
     leadership: list("leadership", base.leadership),
     offices: list<Office>("offices", base.offices).filter((office) => !blockedOfficeSlugs.has(office.slug)),
-    testimonials: clientEvidenceApproved ? list("testimonials", base.testimonials) : [],
+    testimonials: clientTestimonialsApproved ? list("testimonials", base.testimonials) : [],
     homeHero: list("home-hero", base.homeHero),
     stats: list("stats", base.stats),
     heroes,
@@ -125,33 +126,32 @@ export function applyEdits(rows: Row[], heroes: Record<string, HeroEdit> = {}): 
   return result;
 }
 
+/** Failure policy — build versus request — is in lib/cms/outage.ts. Read it before changing this. */
 export const getCms = cache(async (): Promise<Cms> => {
   if (!supabaseConfigured()) return shipped();
-  const db = supabaseAdmin();
-  const [entries, heroes] = await Promise.all([
-    // Builder pages are read on their own (lib/builder/store.ts), not with every page render.
-    db.from("cms_entries").select("collection, key, data, deleted").neq("collection", "page"),
-    db.from("page_heroes").select("path, title, intro, image_key"),
-  ]);
-  // When the database cannot be reached, serve the shipped content rather than a 500 on every page;
-  // the admin's edits reappear as soon as it is back. Query errors still surface, they mean a schema problem.
-  if (unreachable(entries.error?.message) || unreachable(heroes.error?.message)) {
-    console.error(
-      `cms: Supabase unreachable (${entries.error?.message ?? heroes.error?.message}); serving shipped content`,
-    );
-    return shipped();
-  }
-  if (entries.error) throw new Error(`cms_entries: ${entries.error.message}`);
-  if (heroes.error) throw new Error(`page_heroes: ${heroes.error.message}`);
-  const heroMap: Record<string, HeroEdit> = {};
-  for (const h of heroes.data ?? []) {
-    const edit: HeroEdit = {};
-    if (h.title) edit.title = h.title;
-    if (h.intro) edit.intro = h.intro;
-    if (h.image_key) edit.imageKey = h.image_key;
-    if (Object.keys(edit).length) heroMap[h.path] = edit;
-  }
-  return applyEdits(entries.data ?? [], heroMap);
+  return readOrFallBack(
+    "cms_entries + page_heroes",
+    async () => {
+      const db = supabaseAdmin();
+      const [entries, heroes] = await Promise.all([
+        // Builder pages are read on their own (lib/builder/store.ts), not with every page render.
+        db.from("cms_entries").select("collection, key, data, deleted").neq("collection", "page"),
+        db.from("page_heroes").select("path, title, intro, image_key"),
+      ]);
+      if (entries.error) throw new Error(`cms_entries: ${entries.error.message}`);
+      if (heroes.error) throw new Error(`page_heroes: ${heroes.error.message}`);
+      const heroMap: Record<string, HeroEdit> = {};
+      for (const h of heroes.data ?? []) {
+        const edit: HeroEdit = {};
+        if (h.title) edit.title = h.title;
+        if (h.intro) edit.intro = h.intro;
+        if (h.image_key) edit.imageKey = h.image_key;
+        if (Object.keys(edit).length) heroMap[h.path] = edit;
+      }
+      return applyEdits(entries.data ?? [], heroMap);
+    },
+    shipped(),
+  );
 });
 
 export async function getService(slug: string) {

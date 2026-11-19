@@ -1,4 +1,4 @@
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 import type { Field } from "@/lib/cms/registry";
 
 /**

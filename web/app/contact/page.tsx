@@ -5,11 +5,12 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { DemoForm } from "@/components/forms/demo-form";
 import { contactsFor } from "@/content/offices";
 import type { Office } from "@/content/types";
 import { getCms } from "@/lib/cms/content";
+import { publicMailboxes } from "@/content/page-owners";
 import { footerCertifications } from "@/content/site";
 
 export const metadata = pageMetadata("/contact/", {
@@ -27,7 +28,7 @@ function OfficeCard({ office }: { office: Office }) {
       </div>
       <p className="text-sm leading-relaxed text-foreground-muted">{office.address}</p>
       <div className="mt-auto flex flex-col gap-1 pt-2 text-sm">
-        <a href={`mailto:${office.email}`} className="font-medium text-action hover:underline">
+        <a href={`mailto:${office.email}`} className="inline-block min-h-6 font-medium text-action hover:underline">
           {office.email}
         </a>
         {office.phone ? <span className="text-foreground-muted">{office.phone}</span> : null}
@@ -52,7 +53,7 @@ export default async function ContactPage() {
         accentWord="transformation"
         subhead="Start your transformation, or reach the office nearest you."
         cta={false}
-        media={<HeroObject name="pages/contact" />}
+        media={<HeroFigure figureKey="pages/contact" />}
         frame={false}
       />
 
@@ -126,7 +127,10 @@ export default async function ContactPage() {
                   {regionalContacts.map((r) => (
                     <div key={r.region} className="flex flex-col gap-1">
                       <span className="label-caps text-foreground-muted">{r.region}</span>
-                      <a href={`mailto:${r.email}`} className="text-sm font-medium text-action hover:underline">
+                      <a
+                        href={`mailto:${r.email}`}
+                        className="text-sm inline-block min-h-6 font-medium text-action hover:underline"
+                      >
                         {r.email}
                       </a>
                     </div>
@@ -134,6 +138,35 @@ export default async function ContactPage() {
                 </div>
               </div>
             </Reveal>
+
+            <div className="border-t border-gold-soft/40 pt-10">
+              <Reveal className="flex flex-col gap-5">
+                <Eyebrow>Who to write to</Eyebrow>
+                <p className="max-w-measure text-sm text-foreground-muted">
+                  Role mailboxes, not individuals — so a message still reaches the right desk when somebody changes job.
+                </p>
+                <dl className="grid gap-4 sm:grid-cols-2">
+                  {[
+                    { what: "Anything at all", who: publicMailboxes.general },
+                    { what: "A requirement, a tender or a quote", who: publicMailboxes.newBusiness },
+                    { what: "Applying for a role, or sending a CV", who: publicMailboxes.careers },
+                    { what: "Invoices, billing and suppliers", who: publicMailboxes.accounts },
+                  ].map((row) => (
+                    <div key={row.who}>
+                      <dt className="text-sm text-foreground-muted">{row.what}</dt>
+                      <dd className="mt-1">
+                        <a
+                          href={`mailto:${row.who}`}
+                          className="inline-block min-h-6 font-medium text-action hover:underline"
+                        >
+                          {row.who}
+                        </a>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </Reveal>
+            </div>
 
             <div className="border-t border-gold-soft/40 pt-10">
               <Reveal className="flex flex-col gap-5">

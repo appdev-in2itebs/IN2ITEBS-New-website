@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { ServicePageV2 } from "@/components/sections/service-page-v2";
 import { servicePages } from "@/content/legacy-services";
 import { getService } from "@/lib/cms/content";
@@ -31,6 +31,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <BreadcrumbJsonLd path={`/services/${page.slug}/`} name={page.name} />
+      <FaqJsonLd route={`/services/${page.slug}/`} />
       <ServicePageV2 page={page} />
     </>
   );

@@ -17,37 +17,33 @@ import { insightBodies } from "./insight-bodies";
 export const insights: Insight[] = [
   {
     slug: "revolutionizing-hr-with-sap-successfactors-a-strategic-approach-to-modern-hcm-solutions",
-    title: "Revolutionizing HR with SAP SuccessFactors: A Strategic Approach to Modern HCM Solutions",
-    date: "",
-    dateLabel: "25 Feb",
+    title: "The SuccessFactors sequencing decision most HR teams get backwards",
+    date: "2026-11-18",
+    dateLabel: "18 Nov",
     category: "SuccessFactors",
     excerpt:
-      "In the modern business landscape, effective Human Capital Management (HCM) is essential for driving success. Organizations need to attract, retain, and…",
-    image: "/insights/revolutionizing-hr-with-sap-successfactors-a-strategic-approach-to-modern-hcm-solutions.jpg",
+      "Programmes are usually sequenced around what hurts most. That is the wrong input, and it is why rollouts stall at module three.",
   },
   {
     slug: "igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas",
-    title:
-      "Igniting Organizational Potential: SAP SuccessFactors AI Innovations Revealed at SAP SuccessConnect, Las Vegas",
-    date: "",
-    dateLabel: "12 Oct",
+    title: "SuccessFactors AI: what is generally available, and what is still a roadmap",
+    date: "2026-11-18",
+    dateLabel: "18 Nov",
     category: "AI",
     excerpt:
-      "At the annual SuccessConnect event at the Venetian Convention Center in Las Vegas, SAP unveiled how AI now encompasses the entire SAP SuccessFactors Human…",
-    image:
-      "/insights/igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas.jpg",
+      "Three capabilities worth understanding, our own position stated narrowly, and the one metric that predicts whether a pilot survives.",
   },
   {
-    // An event landing page on the live site rather than a written article: a forum title, a
-    // strapline and a "Register Now" button. Its "Read more" opens exactly that here, like every
-    // other card, so nothing that is not on the live page is shown.
+    // Was an expired event landing page carrying SAP's own campaign strapline, "Quickly and
+    // Confidently Adopt Cloud ERP" — SAP's words, used verbatim by several SAP partners. Rewritten
+    // 18 November 2026 into an article with an argument of its own. Slug kept for the inbound links.
     slug: "grow-with-sap",
-    title: "GROW WITH SAP",
-    date: "",
-    dateLabel: "17 Aug",
+    title: "What GROW with SAP commits to, and three questions to settle first",
+    date: "2026-11-18",
+    dateLabel: "18 Nov",
     category: "SAP",
-    excerpt: "Quickly and Confidently Adopt Cloud ERP",
-    image: "/insights/grow-with-sap.jpg",
+    excerpt:
+      "The constraint is the point of it, and it is the thing most buyers do not price properly. What the model trades, and how to test the fit.",
   },
   {
     slug: "in2it-ebs-simplify-talent-2",
@@ -57,7 +53,6 @@ export const insights: Insight[] = [
     category: "SuccessFactors",
     excerpt:
       "SimplifyTalent, an SAP Qualified Partner Package which leverages the global best practices of SAP SuccessFactors software solution portfolio aligning with…",
-    image: "/insights/in2it-ebs-simplify-talent-2.jpg",
   },
   {
     slug: "in2it-ebs-simplify-hiring",
@@ -67,16 +62,15 @@ export const insights: Insight[] = [
     category: "SuccessFactors",
     excerpt:
       "Simplify Hiring is an SAP Qualified Partner Package which leverages the global best practices of SAP SuccessFactors solution portfolio, aligning with…",
-    image: "/insights/in2it-ebs-simplify-hiring.png",
   },
   {
     slug: "how-rise-with-sap-s-4hana-cloud-can-transform-your-business",
-    title: "How Rise with SAP S/4HANA Cloud Can Transform Your Business",
-    date: "",
-    dateLabel: "17 Jul",
+    title: "What RISE actually changes, and what it does not",
+    date: "2026-11-18",
+    dateLabel: "18 Nov",
     category: "SAP",
-    excerpt: "Explore how RISE with SAP supports S/4HANA Cloud migration, process change and enterprise planning.",
-    image: "/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business.png",
+    excerpt:
+      "RISE is sold as a destination. It is closer to a contracting model, and the difference decides how much of your migration it covers.",
   },
 ];
 

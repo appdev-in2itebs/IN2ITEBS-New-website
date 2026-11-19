@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   BLOCKS,
+  DEFAULT_HOME_ORDER,
   HOME_SECTIONS,
   blockProblem,
   defaultHomeBlocks,
@@ -50,9 +51,22 @@ test("a save keeps known blocks and fields only", () => {
 
 test("homepage sections are kept only on the homepage, once each", () => {
   const blocks = [...defaultHomeBlocks(), { id: "x", type: "section", props: { section: "services" } }];
-  assert.equal(sanitizeBlocks(blocks, anyPicture, true).length, Object.keys(HOME_SECTIONS).length);
+  assert.equal(sanitizeBlocks(blocks, anyPicture, true).length, defaultHomeBlocks().length);
   assert.equal(sanitizeBlocks(blocks, anyPicture, false).length, 0);
   assert.equal(sanitizeBlocks([{ id: "y", type: "section", props: { section: "evil" } }], anyPicture, true).length, 0);
+});
+
+test("the shipped homepage order names real sections, and no section twice", () => {
+  for (const s of DEFAULT_HOME_ORDER) {
+    assert.ok(s in HOME_SECTIONS, `${s} is in the homepage order but not in HOME_SECTIONS`);
+  }
+  assert.equal(new Set(DEFAULT_HOME_ORDER).size, DEFAULT_HOME_ORDER.length, "a section is listed twice");
+  // The sections deliberately held back from the homepage. If one of these comes back, that is a
+  // decision someone should make on purpose — so the test names them rather than counting them.
+  const held = (Object.keys(HOME_SECTIONS) as (keyof typeof HOME_SECTIONS)[]).filter(
+    (s) => !(DEFAULT_HOME_ORDER as readonly string[]).includes(s),
+  );
+  assert.deepEqual(held.sort(), ["map", "metrics", "team", "youtube"]);
 });
 
 test("publishing names the first required field left empty", () => {

@@ -62,7 +62,7 @@ export const awards: Award[] = [
 ];
 
 export const qualityStatement =
-  "Certification versions and validity dates are under formal review. Only memberships that can be stated without an unverified standard version are shown below.";
+  "In2IT EBS is CMMI Level 3 appraised and certified to ISO 9001 and ISO/IEC 27001. Edition years and validity dates are confirmed from the certificates themselves rather than published here, and we will send the current certificate on request.";
 
 export const accreditations: Accreditation[] = [
   {

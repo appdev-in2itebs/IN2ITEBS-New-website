@@ -5,10 +5,12 @@ import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
+import { DiagramBand } from "@/components/sections/diagram-band";
 import { publicCaseStudies } from "@/content/case-studies";
+import { clientIdentityApproved } from "@/content/compliance";
 
 export const metadata = pageMetadata("/case-studies/", {
   title: "Clients & Case Studies",
@@ -26,8 +28,49 @@ export default function CaseStudiesPage() {
         headline="Enterprise delivery,"
         accentWord="shown by sector."
         subhead="Anonymised engagements are published while named-client permissions and supporting evidence are verified."
-        media={<HeroObject name="pages/case-studies" />}
+        media={<HeroFigure figureKey="pages/case-studies" />}
         frame={false}
+      />
+
+      {/*
+        The reference-book diagram names clients by sector, so it sits behind the same consent
+        gate as the logo wall and the testimonials. A diagram is a publication like any other.
+
+        ── WHY THE ALT TEXT NAMES THEM ──────────────────────────────────────────────────────
+        The alt text used to say which sectors we can evidence and no more, while the picture
+        said who. For a reader that cannot see pictures — a screen reader, a search engine, an
+        assistant assembling a buyer's long-list — that made the single most useful fact on this
+        site unreadable, and "who have you actually done this for" is the first question any
+        buying committee asks.
+
+        It also sat oddly next to the studies below, which publish anonymised by house style.
+        The names are not withheld — ninety-four of them are on the homepage logo wall, and this
+        diagram prints them. They were simply held in the two forms a machine cannot read: a
+        picture, and an image's alt attribute that described the picture instead of its content.
+
+        So no new permission is involved here and no gate is bypassed: `clientIdentityApproved`
+        still governs the whole block, and this text publishes exactly what the picture publishes
+        and nothing the studies withhold. Alt text carries the diagram's content, not a caption
+        for it — same rule as every other diagram on the site.
+      */}
+      {clientIdentityApproved ? (
+        <DiagramBand
+          src="/diagrams/q1-reference-book.svg"
+          alt="The client reference book, by sector. Power, utilities and energy: TGNPDCL, a state discom moving from ECC to RISE with S/4HANA; APTRANSCO, transmission, three-year onsite AMS; Delhi Transco, transmission, full-estate AMS; POWERGRID; and a global energy major. Metals, mining and heavy industry: NMDC Limited, iron ore and a Navratna, S/4HANA and AMS; NMDC Steel, integrated steel, S/4HANA; NALCO; the Welspun Group; Triveni Turbines; and Wipro Infrastructure Engineering. Consumer, retail and food: Hero MotoCorp, Bata India, Varun Beverages running Ariba across fourteen countries, WayCool Foods on RISE in eight weeks, and VAHDAM India on GROW with SAP in one year. Government, transport and logistics: Transnet SOC Ltd on S/4HANA on RISE, Kenya Railways Corporation, and CEDA Botswana. Technology, telecom and services: Proximus, Tredence, Livspace, AVASO Technology across GROW, RISE and SuccessFactors, an EdTech unicorn on GROW with SAP, and a global engineering consultancy."
+          tone="subtle"
+        />
+      ) : null}
+
+      {/*
+        THE STANDARD THE STUDIES BELOW ARE HELD TO.
+        On the index rather than on every study: it is a rule about all of them, and repeating it
+        under each one would turn a standard into a disclaimer.
+      */}
+      <DiagramBand
+        src="/diagrams/z3-anatomy-number.svg"
+        alt="Two panels compared. The usual form of an outcome claim: a large percentage with four empty slots — what it is a number of, the period it covers, who did the arithmetic and what is not counted, none of them stated. Ours: 70 to 75 per cent, with all four filled in from a Belgian S/4HANA Public Cloud assessment."
+        caption="A figure on a case study here fills all four slots or it does not appear as a figure. That is a build rule, which is why several of these studies carry no percentage at all."
+        tone="canvas"
       />
 
       {/* CASE STUDY GRID */}
@@ -57,7 +100,10 @@ export default function CaseStudiesPage() {
             </SectionHeading>
             <p className="mt-6 text-[0.95rem] leading-relaxed text-foreground-muted">
               To request a named reference or the full version of an anonymised study, get in touch via our{" "}
-              <Link href="/contact/" className="font-semibold text-action underline-offset-4 hover:underline">
+              <Link
+                href="/contact/"
+                className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
+              >
                 contact page
               </Link>
               .

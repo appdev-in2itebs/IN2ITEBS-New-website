@@ -1,6 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Bento, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/careers/our-culture/", {
@@ -34,7 +34,7 @@ export default function OurCulturePage() {
         path={[{ label: "Career", href: "/careers/" }, { label: "Our Culture" }]}
         title="Our Culture"
         lead="At In2IT EBS, our performance-oriented culture and responsible approach are the foundations of our success. We strive to maintain a fun and positive work environment, encouraging our employees to enjoy themselves at work and think outside the box."
-        media={<HeroObject name="careers/our-culture" />}
+        media={<HeroFigure figureKey="careers/our-culture" />}
       />
       <V2StickyNav
         anchors={[

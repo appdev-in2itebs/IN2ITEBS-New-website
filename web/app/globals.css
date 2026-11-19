@@ -174,7 +174,11 @@ html:not([data-motion-ready]) .client-ribbon {
 @layer base {
   :root {
     color-scheme: light;
-    --font-display: var(--font-plex), "Helvetica Neue", Arial, sans-serif;
+    /* Newsreader is the brand's display face. This line previously aliased it to --font-plex,
+       which meant every heading on the site rendered in the body face and the italic accent rule
+       could not be executed at all. Georgia is the fallback because it ships with Office and macOS
+       and is the nearest serif in colour and warmth. */
+    --font-display: var(--font-newsreader), Georgia, Cambria, serif;
     --font-plex: "IBM Plex Sans", Calibri, system-ui, sans-serif;
 
     /* Semantic theme roles. Values are OKLCH channels so Tailwind opacity modifiers remain available. */
@@ -197,13 +201,23 @@ html:not([data-motion-ready]) .client-ribbon {
     --color-feedback-success: 39% 0.09 155;
     --color-feedback-error: 46% 0.13 19;
 
-    /* Accent roles. Gold/amber was dropped on 2026-09-17 at the owner's request — the accent is a
-       deep teal that reads clearly on white, on the navy brand ground and over video. The token
-       names still say "gold" so the swap stays one edit; only these values decide the colour. */
-    --color-gold: 48% 0.12 196;
-    --color-gold-display: 54% 0.13 196;
-    --color-gold-on-brand: 80% 0.13 196;
-    --color-gold-soft: 72% 0.1 196;
+    /* Accent roles.
+       2026-09-17: gold/amber was dropped at the owner's request in favour of a deep teal.
+       2026-11-12: returned to the brand palette at the owner's request, after an audit found the
+       teal (#007174) appeared in no brand book and had become the de facto accent on every
+       eyebrow on the site.
+
+       Two values, because one accent cannot serve both surfaces. Steel Blue is 4.90:1 on white
+       and 3.36:1 on navy — it fails on navy. Muted Sand is 9.73:1 on navy and 1.69:1 on white —
+       it fails on white. So light surfaces take Steel Blue and navy takes Sand, which is the rule
+       brand book v2.0 sets.
+
+       The token names still say "gold" so the swap stays one edit, exactly as the previous note
+       intended. Only these values decide the colour. */
+    --color-gold: 54.57% 0.092 246.3; /* Steel Blue #3F75A3 — on white and off-white */
+    --color-gold-display: 54.57% 0.092 246.3;
+    --color-gold-on-brand: 82.77% 0.047 100.6; /* Muted Sand #CDC8A5 — on navy */
+    --color-gold-soft: 82.77% 0.047 100.6;
     --color-glass: 99.2% 0.003 255;
     --color-glass-line: 100% 0 0;
     --shadow-glass: 0 1px 2px rgb(21 33 61 / 0.04), 0 20px 50px -24px rgb(21 33 61 / 0.28);
@@ -275,10 +289,11 @@ html:not([data-motion-ready]) .client-ribbon {
     --color-feedback-success: 82% 0.1 160;
     --color-feedback-error: 80% 0.115 13;
 
-    --color-gold: 82% 0.13 196;
-    --color-gold-display: 88% 0.1 196;
-    --color-gold-on-brand: 82% 0.13 196;
-    --color-gold-soft: 88% 0.1 196;
+    /* Dark theme: both surfaces are dark, so both take Muted Sand. */
+    --color-gold: 82.77% 0.047 100.6;
+    --color-gold-display: 82.77% 0.047 100.6;
+    --color-gold-on-brand: 82.77% 0.047 100.6;
+    --color-gold-soft: 82.77% 0.047 100.6;
     --color-glass: 17.9% 0.019 270.1;
     --color-glass-line: 100% 0 0;
     --shadow-glass: 0 20px 50px -15px rgb(0 0 0 / 0.7);
@@ -366,12 +381,18 @@ html:not([data-motion-ready]) .client-ribbon {
      over any `color` set here, so an `<Accent>` word takes the gradient's gold tail as its accent
      rather than a second colour of its own. That is the intended reading, not a defect. */
   .accent {
-    @apply font-display not-italic text-action;
-    font-weight: 650;
+    /* Brand book v2.0: one accent phrase per title, Newsreader ITALIC, Steel Blue on light and
+       Muted Sand on navy. This rule previously forced `not-italic`, which removed the italic half
+       of the only distinctive typographic device the brand has — and it had to, because Newsreader
+       was never loading and an italic Plex accent reads as an error rather than a device. With the
+       display face loading, the rule can do what the brand book asks. */
+    @apply font-display italic;
+    color: oklch(var(--color-gold));
+    font-weight: 600;
   }
 
   .theme-on-brand .accent {
-    color: oklch(var(--color-fg-brand-muted));
+    color: oklch(var(--color-gold-on-brand));
   }
 
   /* Inverse surfaces keep their foreground contract in every root theme. */
@@ -592,17 +613,20 @@ html:not([data-motion-ready]) .client-ribbon {
   .text-gold {
     color: oklch(var(--color-gold));
   }
-  .text-gradient-heading,
-  main h1,
-  main h2 {
+  /* Headings are solid colour, not gradient-clipped.
+     Every h1 and h2 in main used to be painted with a gradient and clipped to the text, which made
+     the computed colour rgba(0,0,0,0). Three consequences: the accent phrase could not take a
+     colour of its own, because the inherited transparent fill won; the heading degraded badly in
+     forced-colours and high-contrast modes; and it printed unpredictably. The brand book asks for
+     navy headings with one accent phrase, which is what this now does. */
+  .text-gradient-heading {
     background-image: var(--gradient-heading);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
   }
-  main .theme-on-brand h1,
-  main .theme-on-brand h2 {
+  .theme-on-brand .text-gradient-heading {
     background-image: var(--gradient-heading-on-brand);
   }
   .text-gradient-numeral {

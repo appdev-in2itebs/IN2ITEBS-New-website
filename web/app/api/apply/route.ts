@@ -21,7 +21,10 @@ export async function POST(request: Request) {
   if (Number(request.headers.get("content-length") ?? 0) > CV_MAX_BYTES + 64_000)
     return json(413, { ok: false, error: "The CV must be 5 MB or smaller." });
   if (!supabaseConfigured())
-    return json(503, { ok: false, error: "Online applications are not available yet. Please email hr@in2itebs.com." });
+    return json(503, {
+      ok: false,
+      error: "Online applications are not available yet. Please email hiring@in2itebs.com.",
+    });
 
   let form: FormData;
   try {
@@ -50,7 +53,10 @@ export async function POST(request: Request) {
   const upload = await db.storage.from("resumes").upload(path, bytes, { contentType: type.mime, upsert: false });
   if (upload.error) {
     console.error(JSON.stringify({ event: "cv_upload_failed" }));
-    return json(503, { ok: false, error: "We could not upload your CV. Please try again or email hr@in2itebs.com." });
+    return json(503, {
+      ok: false,
+      error: "We could not upload your CV. Please try again or email hiring@in2itebs.com.",
+    });
   }
   const d = parsed.data;
   const { error } = await db.from("job_applications").insert({
@@ -74,7 +80,7 @@ export async function POST(request: Request) {
     console.error(JSON.stringify({ event: "application_save_failed" }));
     return json(503, {
       ok: false,
-      error: "We could not save your application. Please try again or email hr@in2itebs.com.",
+      error: "We could not save your application. Please try again or email hiring@in2itebs.com.",
     });
   }
   console.info(JSON.stringify({ event: "application_saved" }));

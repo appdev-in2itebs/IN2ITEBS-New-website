@@ -243,8 +243,8 @@ export const CONTENT_TYPES = {
         itemLabel: "slide",
         titleKey: "label",
         max: 5,
-        keep: ["id", "frames"],
-        hint: "Five slides, each over its own film. Drag to change the order.",
+        keep: ["id"],
+        hint: "Five slides of copy over the brand ground. Drag to change the order.",
         fields: [
           { key: "label", label: "Small label", kind: "text", max: 80, required: true },
           {
@@ -349,7 +349,9 @@ export function pathsToRefresh(type: ContentType, key: string): { path: string; 
     case "industries":
       return [{ path: `/industries/${key}/` }];
     case "partners":
-      return [{ path: `/partners/${key}/` }, { path: "/partners/" }];
+      // Partners no longer have a page each: the one page that lists them is what to revalidate,
+      // along with the homepage partner strip.
+      return [{ path: "/about/partnerships/" }, { path: "/" }];
     case "news":
       return [{ path: `/insights/${key}/` }, { path: "/insights/" }, { path: "/" }, { path: "/sitemap.xml" }];
     case "leadership":

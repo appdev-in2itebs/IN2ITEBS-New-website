@@ -423,11 +423,18 @@ export const BLOCKS = {
 export type BlockType = keyof typeof BLOCKS;
 export const isBlockType = (t: unknown): t is BlockType => typeof t === "string" && t in BLOCKS;
 
-/** The homepage's own sections, in the order the site ships them. */
+/**
+ * Every homepage section the builder can place. This is the catalogue, not the running order —
+ * `DEFAULT_HOME_ORDER` below decides what actually ships, and anything in here but not in that
+ * list stays available to add from the builder's panel.
+ */
 export const HOME_SECTIONS = {
   hero: "Hero (video)",
   clients: "Client logos",
+  manifesto: "What only we can say",
+  industries: "Industry strip",
   services: "Services",
+  tools: "Interactive tools",
   metrics: "Ecosystem numbers",
   partners: "Partners",
   team: "Leadership",
@@ -439,8 +446,46 @@ export const HOME_SECTIONS = {
 export type HomeSection = keyof typeof HOME_SECTIONS;
 export const HOME_KEY = "home";
 
+/**
+ * THE HOMEPAGE, AS IT SHIPS — eight bands under the hero, down from eleven.
+ *
+ * ── WHAT CAME OFF, AND WHY ───────────────────────────────────────────────────────────────────
+ * The page ran hero → logos → industries → services → tools → metrics → partners → leadership →
+ * testimonials → YouTube → news → map. Eleven bands after the hero, and the last four were all
+ * answering the same question — "who are you" — which the visitor stopped asking somewhere around
+ * band six. The page was 14,000 pixels and spent its final third on material that has its own
+ * page and a navigation link pointing at it.
+ *
+ *   metrics  → folded into Partners. Two consecutive bands about the partner ecosystem is one
+ *              band about the partner ecosystem and one band of repetition.
+ *   team     → /about/leadership/ exists, is better, and is one click from the header.
+ *   youtube  → a video wall below the fold on a page nobody scrolls that far down.
+ *   map      → /about/ and /contact/ both carry the footprint, and the footer carries the
+ *              addresses. It closed the homepage with logistics.
+ *
+ * None of them are deleted. All four are still in HOME_SECTIONS and can be dropped back in from
+ * the builder in about four seconds, which is the right amount of friction for a decision like
+ * this one.
+ *
+ * ── WHAT WENT ON ─────────────────────────────────────────────────────────────────────────────
+ * `manifesto`, third. See components/sections/home-manifesto.tsx for what it is and why the
+ * homepage needed a band that makes a claim rather than describing a capability.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ */
+export const DEFAULT_HOME_ORDER = [
+  "hero",
+  "clients",
+  "manifesto",
+  "services",
+  "industries",
+  "tools",
+  "partners",
+  "testimonials",
+  "news",
+] as const satisfies readonly HomeSection[];
+
 export const defaultHomeBlocks = (): Block[] =>
-  (Object.keys(HOME_SECTIONS) as HomeSection[]).map((s) => ({
+  DEFAULT_HOME_ORDER.map((s) => ({
     id: `home-${s}`,
     type: "section",
     props: { section: s },

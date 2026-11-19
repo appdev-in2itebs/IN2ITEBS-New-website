@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { loadSiteConfig, type SiteConfig } from "@/components/chat/site-config";
+import { loadSiteConfig, type SiteConfig } from "@/components/layout/site-config";
 
 const DISMISSED = "in2it-announcement-dismissed";
 

@@ -70,7 +70,10 @@ export async function V2Hero({
                     <span key={`${crumb.label}-${index}`} className="inline-flex items-center gap-2">
                       {index > 0 ? <span aria-hidden>/</span> : null}
                       {crumb.href && !last ? (
-                        <Link href={crumb.href} className="transition-colors hover:text-action">
+                        <Link
+                          href={crumb.href}
+                          className="inline-flex min-h-6 items-center transition-colors hover:text-action"
+                        >
                           {crumb.label}
                         </Link>
                       ) : (
@@ -91,7 +94,7 @@ export async function V2Hero({
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 {cta ? (
                   <Button href={site.primaryCta.href} variant="primary" withArrow>
-                    Talk to Us
+                    Talk to us
                   </Button>
                 ) : null}
                 {exploreId ? (
@@ -212,6 +215,47 @@ export function V2Overview({
   );
 }
 
+/**
+ * THE POSITION SLAB.
+ *
+ * ── WHY THIS EXISTS ──────────────────────────────────────────────────────────────────────────
+ * Every service page on this site ended with its best sentence. The `closing[]` paragraphs are
+ * where the writing stops describing the service and states a position — "Depth is a number and a
+ * name. It should not be an adjective anywhere on this site." was the last thing on the SAP page,
+ * below a card grid, where a reader who had already decided would never reach it.
+ *
+ * That is backwards. The sharpest claim is the reason to keep reading, not the reward for having
+ * read. This band takes the first closing paragraph and puts it third on the page, directly after
+ * the overview, on navy, alone.
+ *
+ * ── WHY IT LOOKS LIKE THIS ───────────────────────────────────────────────────────────────────
+ * One column, 60 characters wide, display scale, one Sand hairline above it. No image, no button,
+ * no card, nothing beside it. The constraint is the design: a page that has been alternating
+ * white and off-white sections suddenly goes dark and holds a single thought, and the reader has
+ * nowhere else to look. Add a CTA here and it becomes an advertisement; add an image and it
+ * becomes a banner. It only works while it is the one thing on the screen.
+ *
+ * It renders nothing when a page has no closing paragraph, which is correct — a page with no
+ * position should not be given a slab to put one in.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ */
+export function V2PositionSlab({ children, id }: { children: ReactNode; id?: string }) {
+  if (!children) return null;
+  return (
+    <section id={id} className="theme-on-brand relative isolate overflow-hidden bg-brand py-20 text-on-brand md:py-28">
+      <div aria-hidden className="pointer-events-none absolute inset-0 hero-ambient opacity-60" />
+      <Container className="relative">
+        <Reveal className="max-w-[60ch]">
+          <span aria-hidden className="mb-8 block h-px w-24 bg-gold-on-brand/70" />
+          <p className="font-display text-[clamp(1.6rem,3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.02em] text-on-brand">
+            {children}
+          </p>
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
+
 /** A section frame: eyebrow, bloomed heading, optional note on the right, then whatever it holds. */
 export function V2Section({
   id,
@@ -280,8 +324,11 @@ export function V2Rail({
                 className="group flex h-full min-h-32 flex-col justify-between rounded-feature border border-border-subtle/70 bg-surface p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-gold-soft/70 hover:shadow-glass"
               >
                 <span className="text-base font-semibold leading-snug text-foreground">{item.label}</span>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-action">
-                  Open <ArrowRight size={16} aria-hidden className="transition-transform group-hover:translate-x-1" />
+                <span
+                  aria-hidden
+                  className="mt-6 inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action"
+                >
+                  Open <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
             </StaggerItem>
@@ -318,7 +365,7 @@ export function V2Closing({
   eyebrow = "Looking for Digital Transformation?",
   heading = "Talk to us.",
   body,
-  ctaLabel = "Talk to Us",
+  ctaLabel = "Talk to us",
   ctaHref = site.primaryCta.href,
 }: {
   id?: string;
@@ -351,7 +398,7 @@ export function V2Closing({
               </Button>
               <a
                 href={`mailto:${site.primaryEmail}`}
-                className="text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
+                className="inline-block min-h-6 text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
               >
                 {site.primaryEmail}
               </a>

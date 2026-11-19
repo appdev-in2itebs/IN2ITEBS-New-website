@@ -6,17 +6,19 @@ const BRAND = "In2IT EBS";
 const seoTitleOverrides: Record<string, string> = {
   "/services/other-enterprise-solutions/": "Other Enterprise Services",
   "/services/sap-enterprise-solutions/": "SAP Consulting and Implementation",
-  "/services/sap-grow-fast/": "GROW Fast Cloud ERP Services",
+  "/services/sap-grow-fast/": "Converged Pulse Cloud ERP Services",
   "/partners/sap-concur/": "SAP Concur Technology Overview",
   "/partners/oracle/": "Oracle Technology Overview",
   "/partners/microsoft/": "Microsoft Technology Overview",
   "/industries/banking/": "Banking and Insurance Services",
   "/industries/telecom/": "Telecommunications Industry Services",
   "/insights/revolutionizing-hr-with-sap-successfactors-a-strategic-approach-to-modern-hcm-solutions/":
-    "Modern HCM with SAP SuccessFactors",
+    "SAP SuccessFactors Rollout Sequencing",
   "/insights/igniting-organizational-potential-sap-successfactors-ai-innovations-revealed-at-sap-successconnect-las-vegas/":
-    "SAP SuccessFactors AI Innovations",
-  "/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business/": "How RISE with SAP Can Transform Business",
+    "SAP SuccessFactors AI: What Is Live Today",
+  "/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business/":
+    "What RISE with SAP Changes, and What It Does Not",
+  "/insights/grow-with-sap/": "GROW with SAP: What It Commits To",
 };
 
 export function pageMetadata(path: string, input: Metadata): Metadata {

@@ -7,7 +7,7 @@ import { Eyebrow, Accent, SectionHeading } from "@/components/ui/typography";
 import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { StatBand } from "@/components/sections/stat-band";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
@@ -57,7 +57,7 @@ export default async function AboutPage() {
         eyebrow="Who we are"
         headline="Three pillars."
         accentWord="One converged enterprise."
-        media={<HeroObject name="pages/about" />}
+        media={<HeroFigure figureKey="pages/about" />}
         frame={false}
         subhead="We are structured for Platforms, Advisory and Digital Engineering under shared delivery, governance and account ownership — so you get one accountable partner for the whole transformation, not a patchwork of vendors."
       />
@@ -133,8 +133,8 @@ export default async function AboutPage() {
       </Section>
 
       {/* CREDENTIALS & CERTIFICATIONS — the headline credentials only. The awards themselves, the
-          certificates and the certification text live on /accreditation-awards/, which is a page of
-          its own again rather than a redirect into this one. */}
+          certificates, the issuing bodies and the gap we name on purpose live on
+          /about/credentials/. */}
       <Section tone="light">
         <Container>
           <Reveal className="mb-12 max-w-2xl">
@@ -156,10 +156,10 @@ export default async function AboutPage() {
           </Stagger>
           <Reveal className="mt-10">
             <Link
-              href="/accreditation-awards/"
+              href="/about/credentials/"
               className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-gold hover:underline"
             >
-              See our awards and accreditation <ArrowUpRight aria-hidden size={17} />
+              See every credential and who issued it <ArrowUpRight aria-hidden size={17} />
             </Link>
           </Reveal>
         </Container>

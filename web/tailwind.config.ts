@@ -65,7 +65,7 @@ const config: Config = {
         h3: ["clamp(1.25rem, 1.5vw, 1.5rem)", { lineHeight: "1.25", letterSpacing: "0" }],
       },
       letterSpacing: { label: "0.14em" },
-      maxWidth: { measure: "72ch" },
+      maxWidth: { measure: "68ch" },
       boxShadow: {
         // soft, navy-tinted elevation — no harsh dark shadows
         soft: "0 1px 2px rgba(18,30,59,.06), 0 12px 32px rgba(18,30,59,.08)",

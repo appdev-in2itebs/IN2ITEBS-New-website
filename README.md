@@ -10,7 +10,9 @@ passes CI ships to the Azure VM (see docs/AZURE_VM_HOSTING.md).
 .
 ├── README.md                 # this file
 ├── .github/workflows/        # ci.yml (checks + tests) and deploy.yml (Azure VM over SSH)
-├── docs/                     # ADMIN_AND_CHATBOT_SETUP.md (connect Supabase, first admin),
+├── docs/                     # CONTENT_REBUILD_2026-11.md (READ FIRST: the November 2026 content and
+│                             # structure rebuild, what changed and what is still outstanding),
+│                             # ADMIN_AND_CHATBOT_SETUP.md (connect Supabase, first admin),
 │                             # AZURE_VM_HOSTING.md (the VM, Supabase, go-live), DNS_MIGRATION.md (Cloudflare, historical),
 │                             # website-platform-blueprint.docx (architecture and roadmap)
 ├── assets/hero-images/       # original hero artwork (PNG), one folder per site menu; see its README

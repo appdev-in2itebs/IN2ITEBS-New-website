@@ -79,7 +79,7 @@ export default function PrivacyNoticePage() {
               <h2>8. Contact us</h2>
               <p>
                 For questions about this privacy notice or your personal data, please contact us at{" "}
-                <a href="mailto:info@in2itebs.com">info@in2itebs.com</a>.
+                <a href="mailto:legal@in2itebs.com">legal@in2itebs.com</a>.
               </p>
             </div>
           </Reveal>

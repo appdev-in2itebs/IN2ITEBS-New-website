@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 
 /**
  * Frameless hero media (owner, 2026-09-20): the picture sits on the page rather than inside a
@@ -128,7 +128,7 @@ export function HeroMark({ icon: Icon }: { icon: LucideIcon }) {
 export type HeroImageKey = keyof typeof heroImages;
 
 export function hasHeroImage(key: string): key is HeroImageKey {
-  return key in heroImages;
+  return Object.prototype.hasOwnProperty.call(heroImages, key);
 }
 
 export function HeroObject({ name }: { name: HeroImageKey }) {

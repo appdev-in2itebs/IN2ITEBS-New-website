@@ -10,7 +10,7 @@ import { useAutoplay } from "@/components/motion/use-autoplay";
 import { ClientLogo } from "@/components/sections/client-logo";
 import { clients } from "@/content/clients";
 import { testimonials as shippedTestimonials } from "@/content/testimonials";
-import { clientEvidenceApproved } from "@/content/compliance";
+import { clientTestimonialsApproved } from "@/content/compliance";
 import type { Testimonial } from "@/content/types";
 import { cn } from "@/lib/utils";
 
@@ -112,7 +112,7 @@ export function Testimonials({ testimonials = shippedTestimonials }: { testimoni
     element.scrollTo({ left: index * step, behavior: "smooth" });
   };
 
-  if (!clientEvidenceApproved || !testimonials.length) return null;
+  if (!clientTestimonialsApproved || !testimonials.length) return null;
 
   return (
     <section
