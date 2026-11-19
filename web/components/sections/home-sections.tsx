@@ -21,7 +21,7 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
     clients: null,
     // The existing site puts the service grid straight under the client ribbon; so do we.
     services: <HomeServices />,
-    metrics: <EcosystemMetrics />,
+    metrics: <EcosystemMetrics stats={cms.stats} />,
     partners: <HomePartners />,
     // The leadership sits directly under the ecosystem it is accountable for.
     team: <HomeTeam leadership={cms.leadership} />,

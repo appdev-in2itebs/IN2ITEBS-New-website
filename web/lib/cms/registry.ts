@@ -208,6 +208,28 @@ export const CONTENT_TYPES = {
       },
     ] as Field[],
   },
+  stats: {
+    label: "Statistics band",
+    collection: "stats",
+    shape: "list",
+    intro:
+      "The headline figures on the homepage and /about/. Two are worked out automatically from the site itself until you change them here: years of experience (from the 2016 incorporation year) and industries we serve (the number of industry pages in the menu).",
+    fields: [
+      {
+        key: "items",
+        label: "Figures",
+        kind: "list",
+        itemLabel: "figure",
+        titleKey: "label",
+        max: 8,
+        hint: "Keep the value short, e.g. 500+ or 9. Drag to change the order.",
+        fields: [
+          { key: "value", label: "Value", kind: "text", max: 12, required: true },
+          { key: "label", label: "Label", kind: "text", max: 60, required: true },
+        ],
+      },
+    ] as Field[],
+  },
   homeHero: {
     label: "Homepage hero",
     collection: "home-hero",
@@ -335,6 +357,8 @@ export function pathsToRefresh(type: ContentType, key: string): { path: string; 
     case "testimonials":
     case "homeHero":
       return [{ path: "/" }];
+    case "stats":
+      return [{ path: "/" }, { path: "/about/" }];
     case "offices":
       // The footer and the organisation details are on every page.
       return [{ path: "/", type: "layout" }];

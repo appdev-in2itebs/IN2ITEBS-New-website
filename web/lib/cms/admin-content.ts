@@ -83,6 +83,7 @@ export async function formValue(type: ContentType, key: string): Promise<Record<
     return { ...a, author: a.body?.author, authorRole: a.body?.authorRole, blocks: a.body?.blocks ?? [] };
   }
   if (type === "leadership") return { items: cms.leadership };
+  if (type === "stats") return { items: cms.stats };
   if (type === "testimonials") return { items: cms.testimonials };
   if (type === "homeHero")
     return {
@@ -132,6 +133,7 @@ export function toStored(
   }
 
   const items = (clean.items as Record<string, unknown>[]) ?? [];
+  if (type === "stats") return { key: "list", data: items.map((s) => ({ value: s.value, label: s.label })) };
   if (type === "leadership")
     return {
       key: "list",

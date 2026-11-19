@@ -9,6 +9,8 @@ import { leadership } from "@/content/leadership";
 import { offices } from "@/content/offices";
 import { testimonials } from "@/content/testimonials";
 import { homeHeroSlides, type HeroSlide } from "@/content/home-hero";
+import { stats } from "@/content/site";
+import type { Stat } from "@/content/types";
 import { blockedInsightSlugs, blockedOfficeSlugs, clientEvidenceApproved } from "@/content/compliance";
 import type { Insight, Leader, Office, Testimonial } from "@/content/types";
 
@@ -51,6 +53,8 @@ export type Cms = {
   offices: Office[];
   testimonials: Testimonial[];
   homeHero: HeroSlide[];
+  /** The statistics band on the homepage and /about/; the shipped figures unless the admin edited them. */
+  stats: Stat[];
   heroes: Record<string, HeroEdit>;
   /** Which items carry an edit, for the admin's "edited" badges. */
   edited: Set<string>;
@@ -69,6 +73,7 @@ const shipped = (): Cms => ({
   offices: offices.filter((office) => !blockedOfficeSlugs.has(office.slug)),
   testimonials: clientEvidenceApproved ? testimonials : [],
   homeHero: homeHeroSlides,
+  stats,
   heroes: {},
   edited: new Set(),
 });
@@ -113,6 +118,7 @@ export function applyEdits(rows: Row[], heroes: Record<string, HeroEdit> = {}): 
     offices: list<Office>("offices", base.offices).filter((office) => !blockedOfficeSlugs.has(office.slug)),
     testimonials: clientEvidenceApproved ? list("testimonials", base.testimonials) : [],
     homeHero: list("home-hero", base.homeHero),
+    stats: list("stats", base.stats),
     heroes,
     edited,
   };

@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import { CountUp } from "@/components/ui/count-up";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
-import { stats } from "@/content/site";
+import type { Stat } from "@/content/types";
 
 const statIcons: Record<string, LucideIcon> = {
   "Years of experience": Award,
@@ -13,12 +13,13 @@ const statIcons: Record<string, LucideIcon> = {
   "Global customers": Globe,
   "Countries delivered": MapPin,
   "Industry verticals": Factory,
+  "Industries we serve": Factory,
   "Packaged accelerators": Zap,
   "Strategic partners": Handshake,
   "Proprietary accelerators": Cpu,
 };
 
-export function EcosystemMetrics() {
+export function EcosystemMetrics({ stats }: { stats: Stat[] }) {
   return (
     <section
       id="ecosystem-metrics"

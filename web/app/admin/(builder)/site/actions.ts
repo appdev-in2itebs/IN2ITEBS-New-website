@@ -142,9 +142,10 @@ export async function pageTargets(rawPath: string): Promise<Target[]> {
 
   // Shared content that this page shows.
   if (contentOk) {
-    const lists: ("homeHero" | "leadership" | "testimonials" | "offices")[] = [];
-    if (path === "/") lists.push("homeHero", "leadership", "testimonials", "offices");
-    if (path === "/about/" || path === "/about/our-leadership/") lists.push("leadership");
+    const lists: ("homeHero" | "stats" | "leadership" | "testimonials" | "offices")[] = [];
+    if (path === "/") lists.push("homeHero", "stats", "leadership", "testimonials", "offices");
+    if (path === "/about/") lists.push("stats", "leadership");
+    if (path === "/about/our-leadership/") lists.push("leadership");
     if (path === "/contact/") lists.push("offices");
     for (const t of lists) {
       const value = await formValue(t, "list");

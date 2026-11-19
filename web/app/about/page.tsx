@@ -12,7 +12,7 @@ import { StatBand } from "@/components/sections/stat-band";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { PillarsSection } from "@/components/sections/pillars";
-import { stats, footerCertifications } from "@/content/site";
+import { footerCertifications } from "@/content/site";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
 import { leaderInitials } from "@/content/leadership";
 import { getCms } from "@/lib/cms/content";
@@ -48,7 +48,7 @@ const deliveryCentres = ["Bengaluru", "Hyderabad", "Delhi NCR", "Bhubaneswar"];
 const salesOffices = ["Mumbai", "Chennai", "Singapore", "Dubai", "Nairobi", "Johannesburg"];
 
 export default async function AboutPage() {
-  const { leadership } = await getCms();
+  const { leadership, stats } = await getCms();
   return (
     <>
       <BreadcrumbJsonLd path="/about/" />
