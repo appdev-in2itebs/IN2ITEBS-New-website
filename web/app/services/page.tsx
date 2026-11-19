@@ -15,6 +15,21 @@ export const metadata = pageMetadata("/services/", {
   description: "Explore In2IT EBS services across SAP, cloud, applications, digital engineering, data and AI.",
 });
 
+/*
+ * The heading over the group cards counts the cards.
+ *
+ * It read "Eight groups, one partner." until 19 November 2026, directly above a grid rendering
+ * `serviceGroups` — which the restructure reduced to three. A reader was told eight and could
+ * count three, on the page whose job is to say what we do.
+ *
+ * It was a hardcoded word beside a data-driven list, which is a defect with a shelf life: it was
+ * right when the catalogue had eight groups and forty-six services, and nothing made it wrong
+ * when that changed. So it is derived now, and tests/house-style.test.ts asserts that every
+ * spelled-out count in a heading still matches the list under it.
+ */
+const COUNT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const countWord = (n: number) => COUNT_WORDS[n] ?? String(n);
+
 /** The Services index: the existing site's Services mega-menu laid out as a page, in the approved design. */
 function ItemList({ items, level = 0 }: { items: NavItem[]; level?: number }) {
   return (
@@ -53,7 +68,7 @@ export default function ServicesIndexPage() {
       <V2Section
         id="groups"
         eyebrow="Service groups"
-        heading="Eight groups, one partner."
+        heading={`${countWord(serviceGroups.length).replace(/^./, (c) => c.toUpperCase())} groups, one partner.`}
         note="Choose a group to see what sits inside it, or go straight to a service."
       >
         <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">

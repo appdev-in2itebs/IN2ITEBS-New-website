@@ -11,9 +11,10 @@ import {
 } from "../content/capability-status";
 import { capabilityFeed, capabilityJsonLd, FEED_VERSION } from "../lib/capability-feed";
 import { figureOffenders } from "../scripts/figures.mjs";
-import { servicePages } from "../content/legacy-services";
+import { servicePages, serviceGroups } from "../content/legacy-services";
 import { caseStudies } from "../content/case-studies";
 import { ATTRIBUTION_LABELS, CLIENT_FACTS, UNPROVENANCED } from "../content/evidence";
+import { deliveryCentres, legalEntities } from "../content/site";
 
 /**
  * The house style, the capability feed and the figure gate — the mechanisms added on 18 November
@@ -220,4 +221,90 @@ test("no copy claims we deliver a platform the register marks ahead of us", () =
     /claims we deliver Oracle/,
     "the claim gate no longer catches the sentence it was written for",
   );
+});
+
+/**
+ * SPELLED-OUT COUNTS IN HEADINGS MUST MATCH WHAT THEY COUNT.
+ *
+ * `/services/` carried `heading="Eight groups, one partner."` directly above a grid rendering
+ * `serviceGroups`, which the restructure reduced to three. A reader was told eight and could
+ * count three, on the page whose job is to say what we do. It was right when the catalogue had
+ * eight groups and forty-six services; nothing made it wrong when that changed.
+ *
+ * This is a defect class rather than a typo — a hardcoded word beside a data-driven list — and it
+ * is invisible to every other gate here: it is not an adjective, not a percentage, not a date.
+ * Found on 19 November 2026 by extracting every spelled-out number in the content compendium and
+ * checking each against the data behind it, which is the fourth time that method has caught
+ * something twenty-two build gates could not.
+ *
+ * The check is explicit rather than clever. A regex that paired any number-word with any nearby
+ * list would have to understand page structure to be right, and a gate that is sometimes right is
+ * worse than a short list somebody has to extend. Adding a counted heading means adding a line
+ * here, and that is the intended cost.
+ */
+test("every counted heading matches the list it counts", () => {
+  const WORDS: Record<string, number> = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    ten: 10,
+    eleven: 11,
+    twelve: 12,
+    nineteen: 19,
+  };
+
+  const counted: { file: string; phrase: RegExp; actual: number; what: string; derivedFrom?: string }[] = [
+    {
+      file: "app/services/page.tsx",
+      phrase: /(\w+) groups, one partner/i,
+      actual: serviceGroups.length,
+      what: "service group cards",
+      // Preferred state: the heading counts the array, so there is no word to go stale.
+      derivedFrom: "countWord(serviceGroups.length)",
+    },
+    {
+      file: "app/about/markets/page.tsx",
+      phrase: /(\w+) entities, four delivery centres/i,
+      actual: legalEntities.length,
+      what: "legal entities",
+    },
+    {
+      file: "app/about/markets/page.tsx",
+      phrase: /entities, (\w+) delivery centres/i,
+      actual: deliveryCentres.length,
+      what: "delivery centres",
+    },
+  ];
+
+  for (const c of counted) {
+    // Comments quote the old wording to explain the fix; a comment is not a heading.
+    const source = readFileSync(c.file, "utf8")
+      .split("\n")
+      .filter((line) => !/^\s*(\/\/|\*|\/\*)/.test(line))
+      .join("\n");
+    const m = source.match(c.phrase);
+    if (!m) {
+      // A heading that counts its own array is the fix this gate exists to push people towards,
+      // so finding one instead of a literal is a pass — as long as it counts the right array.
+      assert.ok(
+        c.derivedFrom && source.includes(c.derivedFrom),
+        `${c.file}: the counted heading matching ${c.phrase} is gone and nothing derives it from ${c.what} — update this test or the page`,
+      );
+      continue;
+    }
+    const word = m[1].toLowerCase();
+    // A heading that derives its own number has nothing to drift; that is the preferred fix.
+    if (!(word in WORDS)) continue;
+    assert.equal(
+      WORDS[word],
+      c.actual,
+      `${c.file} says "${m[0]}" but there are ${c.actual} ${c.what}. Derive the number from the data rather than correcting the word.`,
+    );
+  }
 });
