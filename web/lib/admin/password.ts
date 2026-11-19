@@ -18,17 +18,30 @@ const CODES_PER_WINDOW = 3;
 const WINDOW_MINUTES = 15;
 export const PASSWORD_MIN = 10;
 export const PASSWORD_MAX = 72;
-export const GENERIC_SENT = "If that email belongs to an admin, a one-time code is on its way to the website owner.";
+export const GENERIC_SENT = "If that email belongs to an admin, a one-time code is on its way to the website owners.";
 
-export function ownerEmail(): string | null {
-  const v = process.env.ADMIN_OWNER_EMAIL?.trim().toLowerCase();
-  return v || null;
+/** The website owners (ADMIN_OWNER_EMAIL, comma-separated): every code goes to all of them. */
+export function ownerEmails(): string[] {
+  return Array.from(
+    new Set(
+      (process.env.ADMIN_OWNER_EMAIL ?? "")
+        .split(/[,;\s]+/)
+        .map((e) => e.trim().toLowerCase())
+        .filter((e) => e.includes("@")),
+    ),
+  );
 }
 
-/** The website owner manages users and passwords. Until ADMIN_OWNER_EMAIL is set, any admin may. */
+/** The owners as one readable string for screens and emails, or null when none is set. */
+export function ownerEmail(): string | null {
+  const list = ownerEmails();
+  return list.length ? list.join(" and ") : null;
+}
+
+/** The owners manage users and passwords. Until ADMIN_OWNER_EMAIL is set, any admin may. */
 export function isOwner(email: string) {
-  const owner = ownerEmail();
-  return owner ? email.toLowerCase() === owner : true;
+  const owners = ownerEmails();
+  return owners.length ? owners.includes(email.toLowerCase()) : true;
 }
 
 export async function requireOwner(): Promise<AdminUser> {
@@ -85,8 +98,9 @@ export async function startPasswordCode(input: {
   requestedBy: string | null;
 }): Promise<Started> {
   const targetEmail = input.targetEmail.trim().toLowerCase();
-  const owner = ownerEmail();
-  if (!owner) return { ok: false, error: "ADMIN_OWNER_EMAIL is not set, so there is nobody to send the code to." };
+  const owners = ownerEmails();
+  if (!owners.length)
+    return { ok: false, error: "ADMIN_OWNER_EMAIL is not set, so there is nobody to send the code to." };
   if (!mailConfigured()) return { ok: false, error: "Email is not configured on the server (SMTP settings)." };
   const target = await activeAdmin(targetEmail);
   if (!target) return { ok: true, ticket: randomUUID() };
@@ -125,7 +139,7 @@ export async function startPasswordCode(input: {
       requestedBy: input.requestedBy,
       expiresMinutes: CODE_MINUTES,
     });
-    await sendMail({ to: owner, ...mail });
+    await sendMail({ to: owners, ...mail });
   } catch (e) {
     await db.from("admin_password_codes").delete().eq("id", ticket);
     console.error("[admin password] mail failed:", e instanceof Error ? e.message : e);
@@ -210,8 +224,7 @@ export async function finishPasswordCode(input: {
       () => undefined,
       () => undefined,
     );
-  const owner = ownerEmail();
-  const to = Array.from(new Set([target.email, owner].filter((x): x is string => Boolean(x))));
+  const to = Array.from(new Set([target.email, ...ownerEmails()]));
   sendMail({
     to,
     ...passwordChangedEmail({ targetEmail: target.email, purpose, changedBy: actor, at: new Date() }),

@@ -35,7 +35,7 @@ export default async function UsersPage({
           change users. Ask the web team to set it.
         </Notice>
       ) : !manage ? (
-        <Notice tone="info">Only the website owner ({owner}) adds people, changes roles and resets passwords.</Notice>
+        <Notice tone="info">Only the website owners ({owner}) add people, change roles and reset passwords.</Notice>
       ) : null}
       <Table head={["Person", "Role", "Access", "Added", "Password"]} empty={!users?.length}>
         {users?.map((u) => (

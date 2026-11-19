@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hashCode, newCode, sameHash, validPassword, isOwner, PASSWORD_MIN } from "../lib/admin/password";
+import { hashCode, newCode, sameHash, validPassword, isOwner, ownerEmails, PASSWORD_MIN } from "../lib/admin/password";
 import { accountCreatedEmail, passwordChangedEmail, passwordCodeEmail } from "../lib/mail/templates";
 
 test("one-time codes are six digits and never stored in clear", () => {
@@ -21,10 +21,11 @@ test("new passwords need length, a letter and a number", () => {
   assert.match(validPassword("onlylettershere") ?? "", /number/);
 });
 
-test("the website owner is the only one who manages users once ADMIN_OWNER_EMAIL is set", () => {
+test("the website owners are the only ones who manage users once ADMIN_OWNER_EMAIL is set", () => {
   const before = process.env.ADMIN_OWNER_EMAIL;
-  process.env.ADMIN_OWNER_EMAIL = "Owner@in2itebs.com";
-  assert.ok(isOwner("owner@in2itebs.com"));
+  process.env.ADMIN_OWNER_EMAIL = "Owner@in2itebs.com, second@in2itebs.com";
+  assert.deepEqual(ownerEmails(), ["owner@in2itebs.com", "second@in2itebs.com"]);
+  assert.ok(isOwner("owner@in2itebs.com") && isOwner("Second@in2itebs.com"));
   assert.ok(!isOwner("someone@in2itebs.com"));
   delete process.env.ADMIN_OWNER_EMAIL;
   assert.ok(isOwner("someone@in2itebs.com"), "without an owner the old rule (any admin) still applies");
