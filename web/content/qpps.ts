@@ -112,7 +112,7 @@ export const qualifiedPackages: QualifiedPackage[] = [
       "Leverages the SAP SuccessFactors solution portfolio, enabling organisations across all industries to implement the end-to-end spectrum of core HR.",
     ours: "A packaged core HR build, shaped by what Indian organisations actually have to run — establishment, statutory reporting and the payroll hand-off — rather than by a global template.",
     scopeSource:
-      "Transcribed from the package artwork on /insights/in2it-ebs-simplify-talent-2/ (Picture3.jpg and Picture4.jpg), 18 November 2026.",
+      "Transcribed from the package artwork that was published on /insights/in2it-ebs-simplify-talent-2/. The artwork is kept at docs/source/qpp-artwork/Picture3.jpg and Picture4.jpg so the scope can be checked against it; it is no longer served, because a scope is text. Transcribed 18 November 2026.",
     scope: [
       {
         group: "Employee Central core",
@@ -181,7 +181,7 @@ export const qualifiedPackages: QualifiedPackage[] = [
       "Leverages the global best practices of the SAP SuccessFactors solution portfolio, for recruitment and onboarding.",
     ours: "Recruiting and Onboarding taken together, because the hand-off between them is where candidates are lost and where the first impression of the employer is actually made.",
     scopeSource:
-      "Transcribed from the package artwork on /insights/in2it-ebs-simplify-hiring/ (t1.png), 18 November 2026. Four spellings corrected against the original.",
+      "Transcribed from the package artwork that was published on /insights/in2it-ebs-simplify-hiring/, kept at docs/source/qpp-artwork/t1.png. Transcribed 18 November 2026; four spellings corrected against the original.",
     scope: [
       {
         group: "Requisition management",

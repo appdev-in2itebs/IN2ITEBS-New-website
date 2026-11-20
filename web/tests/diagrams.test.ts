@@ -2,6 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
+import {
+  imageLicences,
+  OUR_OWN_IMAGE_FOLDERS,
+  TRADEMARK_IMAGE_FOLDERS,
+  APPROVED_PROVIDERS,
+} from "../content/image-licences";
 
 /**
  * THE DIAGRAM PALETTE GATE.
@@ -92,45 +98,88 @@ test("every diagram referenced in content exists on disk", () => {
 });
 
 /**
- * NO PHOTOGRAPHY.
+ * NO PHOTOGRAPHY WITHOUT RECORDED PROVENANCE.
  *
- * The 190-odd stock images came out on 18 November 2026 — unresolvable licensing, and the deeper
- * point that a stock photograph is the visual form of an unfalsifiable adjective on a site that
- * fails its own build over the written kind. See content/hero-images.ts.
+ * Until 20 November 2026 this test banned the category outright: the 190-odd inherited
+ * photographs came off because their licences could not be established, and the gate stopped any
+ * coming back.
  *
- * This is the gate that keeps it that way. Photography will be proposed again, reasonably, by
- * somebody who was not here for the licence problem — and the honest answer then is a decision
- * taken deliberately, not a JPEG that arrives in a pull request and is never mentioned.
+ * The Managing Director has since decided that licensed imagery may be used while the company
+ * builds its own library over twelve months. So the rule changes shape rather than relaxing. A
+ * bitmap that is not demonstrably ours, and is not a third-party mark, needs a line in
+ * content/image-licences.ts naming the provider, the licence reference, what it depicts and
+ * whether a model generated it.
  *
- * What is allowed: our own event photography (ours), client and partner logos (a consent and
- * trademark question already decided elsewhere), brand marks, and original SVG diagrams.
+ * That is a better gate than the ban was. The ban enforced a decision; this enforces the
+ * paperwork the decision depends on — and the register is what tells us, in twelve months,
+ * exactly which files our own photography has to replace.
  */
-test("no photographic asset has come back into the repository", () => {
+test("every photograph on the site has recorded provenance", () => {
   const PHOTO = /\.(jpe?g|webp|avif)$/i;
-  const ALLOWED = [
-    "public/events", // our own people at our own events
-    "public/awards", // photographs of our own certificates — the evidence, not a stock image
-    "public/logos", // client and partner marks — a separate, live decision
-    "public/partners", // the same, as JPEG
-    "public/industries", // client logos behind the consent gate
-    "public/brand", // our own marks
-    "public/insights/body", // article artwork being retired page by page; four icons left
-    "public/testimonials", // named individuals, behind the per-person consent gate
-    "public/youtube", // thumbnails of our own channel's videos
-    "public/video", // our own clip and its poster frame
-  ];
+  const exempt = [...OUR_OWN_IMAGE_FOLDERS, ...TRADEMARK_IMAGE_FOLDERS];
+  const registered = new Set(imageLicences.map((l) => l.file.replace(/^\/+/, "")));
+
   const offenders: string[] = [];
   const walk = (dir: string) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       const full = path.join(dir, entry.name);
-      const rel = path.relative(process.cwd(), full);
-      if (ALLOWED.some((a) => rel.startsWith(a))) continue;
-      if (entry.isDirectory()) walk(full);
-      else if (PHOTO.test(entry.name)) offenders.push(rel);
+      const rel = path.relative(process.cwd(), full).replace(/\\/g, "/");
+      if (entry.isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!PHOTO.test(entry.name)) continue;
+      if (exempt.some((a) => rel.startsWith(a))) continue;
+      if (registered.has(rel)) continue;
+      offenders.push(rel);
     }
   };
   walk(path.join(process.cwd(), "public"));
-  assert.deepEqual(offenders, []);
+  assert.deepEqual(
+    offenders,
+    [],
+    "a photograph arrived with no entry in content/image-licences.ts. Add one — provider, licence reference, what it depicts, whether a model made it — or take the file out.",
+  );
+});
+
+/**
+ * THE REGISTER HAS TO BE USABLE, NOT MERELY PRESENT.
+ *
+ * A provenance register that accepts "paid plan" as a licence reference records nothing. Each
+ * field is checked for the thing that makes it worth having.
+ *
+ * `depicts` carries the rule that matters: no image may depict a place, person, document or
+ * credential a reader could take to be ours when it is not. A generic office is decoration and
+ * every reader knows it. A generated picture of *our* office, with our logo on the wall, is a
+ * depiction — which is what cost us the hero footage, and what engages the deception limb of
+ * India's IT Rules rather than the labelling limb.
+ */
+test("the image register says enough to be checked", () => {
+  for (const l of imageLicences) {
+    assert.ok(
+      APPROVED_PROVIDERS.includes(l.provider),
+      `${l.file}: "${l.provider}" is not an approved provider. Adding one is a decision, not a pull request.`,
+    );
+    assert.ok(
+      l.reference.trim().length > 4 && !/^(paid|paid plan|subscription|n\/a|none)$/i.test(l.reference.trim()),
+      `${l.file}: "${l.reference}" is not a licence reference anybody could take to the provider and have confirmed.`,
+    );
+    assert.match(l.acquired, /^\d{4}-\d{2}-\d{2}$/, `${l.file}: acquired date is not an ISO date`);
+    assert.ok(
+      l.depicts.trim().split(/\s+/).length >= 3,
+      `${l.file}: "${l.depicts}" does not say what the picture shows.`,
+    );
+    assert.ok(
+      l.approvedBy.trim().includes(" "),
+      `${l.file}: approvedBy is "${l.approvedBy}" — name the person, not the function.`,
+    );
+    // The hard line. A licence does not make a depiction of us honest.
+    assert.doesNotMatch(
+      l.depicts,
+      /\b(our|In2IT|in2it)\b/i,
+      `${l.file} says it depicts "${l.depicts}". A licensed or generated image may not depict us. If it really is ours, it belongs in one of OUR_OWN_IMAGE_FOLDERS instead.`,
+    );
+  }
 });
 
 /**
@@ -234,13 +283,6 @@ test("every bitmap in an exempt folder is one the site actually uses", () => {
       "public/awards/iso-20000-1.png",
       "public/awards/iso-27001.png",
       "public/awards/iso-9001.jpg",
-      // Article artwork from pages whose bodies were rewritten as text — see content/qpps.ts for
-      // why a package's scope is no longer a JPEG.
-      "public/insights/body/MicrosoftTeams-image-1024x122.png",
-      "public/insights/body/Picture2-1024x194.jpg",
-      "public/insights/body/hari1-1024x119.jpg",
-      "public/insights/how-rise-with-sap-s-4hana-cloud-can-transform-your-business.png",
-      "public/insights/in2it-ebs-simplify-hiring.png",
       // Marks carried for clients the site does not currently publish a reference for.
       "public/logos/deck-clients/mrs-bectors.png",
       "public/logos/deck-clients/p42-Image24.png",
