@@ -12,6 +12,7 @@ import { MotionObserver } from "@/components/motion/motion-observer";
 import { PageLoader } from "@/components/layout/page-loader";
 import { SiteChrome } from "@/components/layout/site-chrome";
 import { Announcement } from "@/components/layout/announcement";
+import { ChatWidget } from "@/components/chat/chat-widget";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/layout/google-tag-manager";
 
 /**
@@ -87,6 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
             <ScrollDown />
             <Announcement />
+            <ChatWidget />
           </SiteChrome>
         </RegionProvider>
       </body>
