@@ -3,7 +3,7 @@ import { legacyIndustries, type LegacyIndustry } from "@/content/legacy-industri
 import { partnerPages, type PartnerPage } from "@/content/partner-pages";
 import { offices as shippedOffices } from "@/content/offices";
 import { leadership as shippedLeadership } from "@/content/leadership";
-import { caseStudies } from "@/content/case-studies";
+import { publicCaseStudies } from "@/content/case-studies";
 import type { Leader, Office } from "@/content/types";
 import { tokens, type SiteEntry } from "./engine";
 
@@ -141,8 +141,9 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
       keywords: [...tokens(leader.name), "leadership"],
       aliases: [...tokens(leader.title.replace(/\(.*?\)/g, "")), ...titleShort(leader.title)],
     });
-  // Named case studies have a page of their own (the anonymised ones are only on /case-studies/).
-  for (const c of caseStudies.filter((s) => s.named))
+  // Every published study has a page of its own. publicCaseStudies is what the pages and the sitemap
+  // use, so the assistant shows a client's name only once namedCaseStudiesApproved says it may.
+  for (const c of publicCaseStudies)
     entries.push({
       title: c.client,
       summary: clip(c.summary ?? c.outcome ?? c.scenario),

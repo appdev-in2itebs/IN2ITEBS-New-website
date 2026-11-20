@@ -273,6 +273,17 @@ export const redirects = [
   // The live telecom page describes metals and mining, so it goes where its content belongs.
   p("/industries/telecom", "/industries/technology-digital-natives/"),
   p("/industries/textiles", "/industries/consumer-goods-distribution/"),
+  // The slugs the live site serves on 20 Nov 2026 (its own sitemap); same targets as the names above.
+  p("/industries/bfsi", "/industries/banking-financial-services/"),
+  p("/industries/chemicals-fertilizers", "/industries/manufacturing/"),
+  p("/industries/energy-utilities", "/industries/power-utilities/"),
+  p("/industries/engineering-construction", "/industries/real-estate-infrastructure/"),
+  p("/industries/government-psu", "/industries/government-public-sector/"),
+  p("/industries/healthcare-life-sciences", "/industries/pharma-healthcare-life-sciences/"),
+  p("/industries/media-telecom", "/industries/technology-digital-natives/"),
+  p("/industries/metals-mining", "/industries/metals-mining-steel/"),
+  p("/industries/real-estate", "/industries/real-estate-infrastructure/"),
+  p("/industries/textiles-apparel", "/industries/consumer-goods-distribution/"),
 
   // --- The parallel /services/ tree collapses onto the three pillars ---
   p("/services/sap-enterprise-solutions", "/services/sap/"),

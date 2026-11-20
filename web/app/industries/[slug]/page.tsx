@@ -100,7 +100,7 @@ export default async function IndustryPage({ params }: { params: Promise<{ slug:
             <Reveal>
               <p className="max-w-measure text-lg leading-relaxed text-foreground-muted">
                 Public enterprises in this sector appear under{" "}
-                <Link href="/industries/government-psu/" className="font-semibold text-action">
+                <Link href="/industries/government-public-sector/" className="font-semibold text-action">
                   Government &amp; PSUs
                 </Link>
                 .
