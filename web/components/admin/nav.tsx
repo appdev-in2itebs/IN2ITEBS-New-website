@@ -14,6 +14,7 @@ import {
   Paintbrush,
   PanelsTopLeft,
   Settings,
+  KeyRound,
   UserCog,
   UserRoundSearch,
   Users,
@@ -36,6 +37,7 @@ const ICONS: Record<Section, LucideIcon> = {
   settings: Settings,
   pages: PanelsTopLeft,
   users: UserCog,
+  account: KeyRound,
 };
 
 export type NavItem = { key: Section; label: string; href: string; group: string };

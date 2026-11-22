@@ -58,6 +58,13 @@ Admin sign-ins were recreated (Supabase passwords cannot be exported); the tempo
 `.website-runtime/vm-admin-temporary-passwords.txt` on the machine that ran the copy. Public sign-up is
 disabled; new admins are added in Studio (Authentication) plus a row in `admin_users`.
 
+Deploys (2026-11-19): `/srv/in2it/deploy.sh [tarball]` takes a lock so two deploys serialise, refuses to start
+with under 2.5 GB free, removes half-built releases, keeps two releases and logs to `/srv/in2it/logs/deploy.log`.
+The CI forced command (`ci-deploy.sh`) saves each upload under its own name and runs the deploy detached, so a
+dropped SSH session cannot kill a build. A weekly rebuild (`rebuild-current.sh`, Mondays 03:30 UTC) refreshes
+build-time figures such as the year. Backups are kept 7 days. The 30 GB disk fills quickly (two apps plus 14 GB
+of Docker images): enlarge it to 64 GB in the Azure portal when possible.
+
 Backups run nightly (`/srv/in2it/backup.sh`, log in `/srv/in2it/logs/backup.log`) into `/srv/backups`.
 Restore the database with `gunzip -c postgres.sql.gz | docker exec -i supabase-db psql -U postgres -d postgres`
 and the files with `tar -xzf storage.tar.gz -C /srv/supabase/volumes`. Copying `/srv/backups` off the VM
@@ -84,45 +91,29 @@ on the VM except deploy. The VM's host key is pinned in the workflow. Cloudflare
 3. On the VM: `/srv/in2it/go-live.sh` (refuses to run until DNS points here; gets the certificate, switches
    to `SITE_ENV=production`, rebuilds).
 
-Change an admin's password on the VM: `/srv/in2it/set-admin-password.sh email@in2itebs.com`.
+Admin passwords no longer need the VM. Since 2026-11-19 every password change goes through the admin
+itself with a one-time code (`lib/admin/password.ts`):
 
-## In2Recruit on the same VM
+- **Forgot password**: `/admin/login/reset/` asks for the email; a six-digit code is emailed to that person's
+  own inbox and they enter it with the new password. Only when a website owner (`ADMIN_OWNER_EMAIL`,
+  comma-separated: appdev@ and ajaya.rout@) sets someone else's password from Users does the code go to that owner.
+- **My account** (`/admin/account/`): a signed-in admin changes their own password the same way.
+- **Users** (`/admin/users/`): only the owners add people, changes roles and resets passwords. A new person
+  gets a login nobody knows the password of, the owner sets the first password on the code screen and shares
+  it privately. Other admins see the list read-only.
+- Codes live in `admin_password_codes` (migration 0006) as HMACs only: ten minutes, five guesses, single use,
+  at most three per account per quarter hour. Each change is written to `admin_audit` and confirmed by email to
+  the person (and to the owners when the person is not one).
+- Env on the VM (`/srv/in2it/shared/.env.local`): `ADMIN_OWNER_EMAIL`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`,
+  `SMTP_PASS`, `MAIL_FROM` (see `web/.env.example`). Mail goes out through the Microsoft 365 mailbox
+  appdev@in2itebs.com on port 587.
+- `/srv/in2it/set-admin-password.sh` remains only as a break-glass tool if the owner's mailbox is unreachable.
 
-Moved from the InsForge cloud on 2026-10-14. Repo: https://github.com/In2ITEBSLtd/In2Recruit.
+## Other applications on the VM
 
-| What | Where |
-| --- | --- |
-| App | https://recruit.57-159-30-28.sslip.io (later recruit.in2itebs.com); pm2 app `in2recruit`, 127.0.0.1:3200 |
-| Code | `/srv/recruit/app` -> `releases/<ts>` (3 kept); env in `/srv/recruit/shared/.env.local` |
-| Backend | self-hosted InsForge in Docker, `/srv/insforge` (`docker-compose.restart.yml` override makes Postgres restart on reboot) (`docker compose ps|logs`), API on 127.0.0.1:7130, dashboard https://insforge.57-159-30-28.sslip.io (login: `ROOT_ADMIN_USERNAME/PASSWORD` in `/srv/insforge/.env`) |
-| Database | Postgres 15 in the `insforge-postgres-1` container, 127.0.0.1:5442; `/srv/recruit/apply-migrations.sh <release>` applies the repo's SQL in order and records it |
-| CV text extraction | Apache Tika container `in2recruit-tika` on 127.0.0.1:9998 (same image the cloud used) |
-| Scheduled jobs | `/srv/recruit/cron.sh <route>` from appuser's crontab: offer-watchdog every 15 min, feedback-scan hourly, expiry/preboarding/consistency nightly, digests 03:30 UTC; log in `/srv/recruit/logs/cron.log` |
-| Deploys | `.github/workflows/deploy.yml` in the repo: check job, then SSH to the VM with the `VM_SSH_KEY` secret (forced command `/srv/recruit/ci-deploy.sh`) |
-| Backups | included in the nightly `/srv/in2it/backup.sh` (InsForge dump, files, config) |
-
-Fresh-install notes: the repo's migrations were written against the cloud database, so three things were
-set by hand before they applied cleanly: the `role_permissions(role, resource)` unique index must exist before
-`001`, `user_profiles.auth_user_id` is `text` (not uuid) and `user_profiles.role` is the `app_role` enum
-(created by hand with every role value in use). One migration (`20261001065249`) was applied as a patched
-copy that skips tables which never had the `authenticated_workspace` policy.
-
-AI: the OpenRouter key is in `/srv/recruit/shared/.env.local`. The OpenRouter account has no credits, so the
-model the app shipped with (`google/gemma-4-26b-a4b-it`, paid) is refused; the `ai_settings` row and
-`OPENROUTER_MODEL` are set to `dots-studio/dots-3-note-preview:free`, which passed the workbench and JD
-extraction routes (free models are rate-limited per day). To use the original model, add credits at
-openrouter.ai and change the model in the app's AI settings page.
-
-Data: copied from the InsForge cloud project on 2026-10-14 with `/srv/recruit/sync-from-cloud.py`
-(cloud URL and API key in `/srv/recruit/shared/cloud.env`). It syncs the cloud's catalogs first (enum
-types, tables, columns, constraints, indexes, all functions, triggers, policies, RLS flags), then every
-public table, then `auth.users` including password hashes (so existing passwords keep working), then the
-files through the storage API, and reloads PostgREST. Re-runnable: it truncates and reloads. After the
-first run 17 duplicate constraints created by the migrations (`*_fkey` twins of the cloud's `*_fkey1`)
-had to be dropped, otherwise PostgREST reports two relationships between the same tables.
-
-App address: https://in2recruit.57-159-30-28.sslip.io (`recruit.` redirects). Still to do: point
-`in2recruit.in2itebs.com` at the VM, then delete the InsForge cloud project.
+Other In2IT teams run their own containers on this VM (the `in2erp-*` and `in2crm` containers from
+ghcr.io/appdev-in2itebs). They are not part of this repository or its deploys; leave them alone when
+clearing disk or restarting services.
 
 ## Redeploy by hand
 
