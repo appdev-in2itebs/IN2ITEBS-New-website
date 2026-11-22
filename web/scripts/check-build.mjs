@@ -20,6 +20,7 @@ const hasNoindex = headerValues.some((v) => /^x-robots-tag: .*noindex/i.test(v))
 // public even while its legacy shared environment still says SITE_ENV=preview.
 const indexingEnabled = env === "production" || process.env.CI !== "true";
 const failures = [];
+let imagePolicyDue = null;
 if (indexingEnabled) {
   if (!/Allow: \//.test(robots) || /Disallow: \/\s*$/m.test(robots))
     failures.push("production build has a robots.txt that blocks crawling");
@@ -213,11 +214,39 @@ if (claimHits.length)
     `a platform the register marks "Ahead of us" appears in a sentence claiming we deliver it:\n    ${claimHits.join("\n    ")}\n    Either the register is out of date or the copy is. Fix one — do not leave both published.`,
   );
 
+/*
+ * ── THE INTERIM IMAGE POLICY'S CLOCK ─────────────────────────────────────────────────────────
+ *
+ * Licensed imagery was allowed back on 20 November 2026 as a workaround while the company builds
+ * its own library over twelve months. A workaround with no end date is not a workaround, it is a
+ * decision nobody admitted taking — so it has the same shape of gate as the capability register:
+ * the build warns from thirty days out and fails the day after.
+ *
+ * Clearing it means replacing the licensed files with our own and emptying the register, or
+ * taking a fresh decision and moving the date deliberately, in a commit, with a name on it.
+ * content/image-licences.ts lists exactly which files are affected.
+ */
+const licenceSource = readFileSync("content/image-licences.ts", "utf8");
+const policyReview = licenceSource.match(/INTERIM_POLICY_REVIEW = "(\d{4}-\d{2}-\d{2})"/)?.[1];
+const licensedCount = (licenceSource.match(/^\s*file:\s*"/gm) ?? []).length;
+if (!policyReview) {
+  failures.push("content/image-licences.ts has no INTERIM_POLICY_REVIEW date — the image policy has no end");
+} else {
+  const daysLeft = Math.floor((Date.parse(policyReview) - Date.now()) / 86_400_000);
+  if (daysLeft < 0)
+    failures.push(
+      `the interim image policy lapsed ${-daysLeft} days ago (${policyReview}). Replace the ${licensedCount} licensed image${licensedCount === 1 ? "" : "s"} in content/image-licences.ts with our own, or take a fresh decision and move the date.`,
+    );
+  else if (daysLeft <= 30)
+    imagePolicyDue = `the interim image policy expires in ${daysLeft} days (${policyReview}); ${licensedCount} licensed image${licensedCount === 1 ? " is" : "s are"} still published`;
+}
+
 if (failures.length) {
   for (const f of failures) console.error(`check-build: ${f}`);
   process.exit(1);
 }
 if (certsExpiring.length) for (const c of certsExpiring) console.log(`check-build: RENEWAL DUE — ${c}`);
+if (imagePolicyDue) console.log(`check-build: IMAGE POLICY — ${imagePolicyDue}`);
 if (certsMissing.length)
   console.log(
     `check-build: ${certsMissing.length} credential${certsMissing.length === 1 ? " has" : "s have"} no expiry date recorded (${certsMissing.join(", ")}). The site cannot tell whether ${certsMissing.length === 1 ? "it is" : "they are"} still valid.`,

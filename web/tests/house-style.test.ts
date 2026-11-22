@@ -308,3 +308,41 @@ test("every counted heading matches the list it counts", () => {
     );
   }
 });
+
+/**
+ * PER-VISITOR RATE LIMITS MUST ACTUALLY BE PER VISITOR.
+ *
+ * Every public endpoint keys its bucket as `` `apply:${hashIp(ip) ?? "anon"}` ``. When no visitor
+ * address can be resolved, that key is the constant "anon" and **the whole internet shares one
+ * bucket** — five attempts a minute across the site rather than per visitor.
+ *
+ * Measured against a production build on 19 November 2026, seven requests from seven different
+ * `x-forwarded-for` addresses: with TRUST_PROXY_HEADERS unset the sixth visitor was refused with
+ * 429 having made one request; with it set, all seven passed and a single address was refused on
+ * its own sixth attempt.
+ *
+ * It matters because the deployment target is Azure behind a reverse proxy, not Cloudflare, so
+ * `cf-connecting-ip` never arrives and the variable is the only way the app sees a visitor. This
+ * test does not assert the variable is set — that is an operator decision per environment — it
+ * asserts the code still FAILS LOUDLY when it is not, because the failure is otherwise silent and
+ * looks like the site being broken.
+ */
+test("the app says so when it cannot see a visitor's address", () => {
+  const guard = readFileSync("lib/api-guard.ts", "utf8");
+  assert.match(guard, /console\.warn/, "clientAddress no longer warns when it is behind an untrusted proxy");
+  assert.match(guard, /export function clientAddressResolvable/, "the health route's probe is gone");
+
+  const health = readFileSync("app/api/health/route.ts", "utf8");
+  assert.match(health, /perVisitorLimitsActive/, "/api/health no longer reports whether per-visitor limits apply");
+
+  // The shared-bucket fallback is the thing being guarded against. If a caller stops using it the
+  // reasoning above needs revisiting rather than the test quietly passing.
+  const callers = ["app/api/apply/route.ts", "app/api/voice/tts/route.ts"];
+  for (const file of callers) {
+    assert.match(
+      readFileSync(file, "utf8"),
+      /\?\?\s*"anon"/,
+      `${file} no longer falls back to the shared "anon" bucket — re-read lib/api-guard.ts before deleting this test`,
+    );
+  }
+});
