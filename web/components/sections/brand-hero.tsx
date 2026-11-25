@@ -182,7 +182,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[center_30%] opacity-100"
+          className="object-contain object-center opacity-100"
         />
       </div>
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
