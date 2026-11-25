@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/container";
+import { Statement } from "@/components/sections/statement";
 import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
@@ -240,20 +241,8 @@ export function V2Overview({
  * ─────────────────────────────────────────────────────────────────────────────────────────────
  */
 export function V2PositionSlab({ children, id }: { children: ReactNode; id?: string }) {
-  if (!children) return null;
-  return (
-    <section id={id} className="theme-on-brand relative isolate overflow-hidden bg-brand py-20 text-on-brand md:py-28">
-      <div aria-hidden className="pointer-events-none absolute inset-0 hero-ambient opacity-60" />
-      <Container className="relative">
-        <Reveal className="max-w-[60ch]">
-          <span aria-hidden className="mb-8 block h-px w-24 bg-gold-on-brand/70" />
-          <p className="font-display text-[clamp(1.6rem,3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.02em] text-on-brand">
-            {children}
-          </p>
-        </Reveal>
-      </Container>
-    </section>
-  );
+  // Centred, and read in word by word with the scroll: components/sections/statement.tsx.
+  return <Statement id={id}>{children}</Statement>;
 }
 
 /** A section frame: eyebrow, bloomed heading, optional note on the right, then whatever it holds. */

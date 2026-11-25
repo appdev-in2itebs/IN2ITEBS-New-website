@@ -2,6 +2,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import Link from "next/link";
 import Image from "next/image";
+import { heroPicture } from "@/components/sections/hero-override";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { ArrowRight } from "lucide-react";
 import { Container, Section } from "@/components/ui/container";
@@ -28,7 +29,11 @@ export default async function InsightsPage() {
         headline="Perspectives on enterprise"
         accentWord="transformation"
         subhead="Points of view from our practices on SAP, SuccessFactors, AI and the technologies reshaping the enterprise."
-        media={<HeroFigure figureKey="about/blogs-articles" />}
+        media={heroPicture(
+          "/generated/pages-insights-telemetry.webp",
+          <HeroFigure figureKey="about/blogs-articles" />,
+          "Perspectives on enterprise transformation — In2IT EBS Insights",
+        )}
         frame={false}
       />
 

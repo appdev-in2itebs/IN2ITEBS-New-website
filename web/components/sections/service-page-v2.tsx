@@ -2,6 +2,7 @@ import { heroPicture } from "@/components/sections/hero-override";
 import { serviceIcon } from "@/components/sections/service-icon";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { DiagramBand } from "@/components/sections/diagram-band";
+import { Explainer, isExplainer } from "@/components/explainers/explainer";
 import { RiseGrowChooser } from "@/components/interactive/rise-grow-chooser";
 import { SapToolchain } from "@/components/sections/sap-toolchain";
 import { EstateReviewDiagnostic } from "@/components/interactive/estate-review-diagnostic";
@@ -88,7 +89,11 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
       />
       <V2PositionSlab>{position}</V2PositionSlab>
       {page.diagram ? (
-        <DiagramBand src={page.diagram.src} alt={page.diagram.alt} caption={page.diagram.caption} tone="subtle" />
+        isExplainer(page.diagram) ? (
+          <Explainer spec={page.diagram} tone="subtle" />
+        ) : (
+          <DiagramBand src={page.diagram.src} alt={page.diagram.alt} caption={page.diagram.caption} tone="subtle" />
+        )
       ) : null}
       {page.sections.length ? (
         <V2Section
@@ -131,12 +136,16 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
       {page.extraSections ? (
         <>
           {page.extraSections.diagram ? (
-            <DiagramBand
-              src={page.extraSections.diagram.src}
-              alt={page.extraSections.diagram.alt}
-              caption={page.extraSections.diagram.caption}
-              tone="canvas"
-            />
+            isExplainer(page.extraSections.diagram) ? (
+              <Explainer spec={page.extraSections.diagram} tone="canvas" />
+            ) : (
+              <DiagramBand
+                src={page.extraSections.diagram.src}
+                alt={page.extraSections.diagram.alt}
+                caption={page.extraSections.diagram.caption}
+                tone="canvas"
+              />
+            )
           ) : null}
           <V2Section
             id="detail"
@@ -177,12 +186,16 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
             ) : null}
           </V2Section>
           {page.extraSections.closingDiagram ? (
-            <DiagramBand
-              src={page.extraSections.closingDiagram.src}
-              alt={page.extraSections.closingDiagram.alt}
-              caption={page.extraSections.closingDiagram.caption}
-              tone="canvas"
-            />
+            isExplainer(page.extraSections.closingDiagram) ? (
+              <Explainer spec={page.extraSections.closingDiagram} tone="canvas" />
+            ) : (
+              <DiagramBand
+                src={page.extraSections.closingDiagram.src}
+                alt={page.extraSections.closingDiagram.alt}
+                caption={page.extraSections.closingDiagram.caption}
+                tone="canvas"
+              />
+            )
           ) : null}
         </>
       ) : null}

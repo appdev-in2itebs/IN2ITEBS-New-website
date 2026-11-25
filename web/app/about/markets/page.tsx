@@ -1,7 +1,10 @@
+import { Explainer } from "@/components/explainers/explainer";
+import { EXPLAINERS } from "@/content/explainers";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
-import { DiagramBand } from "@/components/sections/diagram-band";
 import { deliveryCentres, internationalOffices, legalEntities, headquarters } from "@/content/site";
 
 export const metadata = pageMetadata("/about/markets/", {
@@ -71,6 +74,11 @@ export default function MarketsPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Where we operate" }]}
         title="Registered, staffed and delivering"
         lead="A delivery centre is somewhere you can visit. Every city on this page has people in it. An entity without a staffed office is listed as an entity, not as a delivery centre."
+        media={heroPicture(
+          "/generated/about-markets-telemetry.webp",
+          <HeroFigure figureKey="about/markets" />,
+          "Global operating entities and delivery centres — In2IT EBS",
+        )}
       />
       <V2StickyNav
         anchors={[
@@ -97,12 +105,7 @@ export default function MarketsPage() {
         India — the honest answer, and the one a footprint map normally hides by giving every
         location an identical pin.
       */}
-      <DiagramBand
-        src="/diagrams/z4-footprint-layers.svg"
-        alt="Five markets across, four layers down. Staffed delivery centres exist only in India — Bengaluru, Hyderabad, Delhi NCR and Bhubaneswar — and that row is empty for South Africa, Kenya, Singapore and the UAE. All five markets have an office, a legal entity and a stated data residency position."
-        caption="An office is not a delivery centre, and a legal entity is not either. Four separate questions, four different answers."
-        tone="canvas"
-      />
+      <Explainer spec={EXPLAINERS["z4-footprint-layers"]} tone="canvas" />
 
       <V2Section id="markets" eyebrow="By market" heading="What we are in each one" tone="subtle">
         <div className="space-y-6">

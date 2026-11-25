@@ -1,0 +1,69 @@
+/* Scroll-linked reveals. `--t` (0..1) is set per element by ScrollScene; `--p` (0..1) on the scene.
+   Short transitions smooth the value between scroll frames so fast scrolling still looks continuous. */
+
+.scene {
+  --p: 0;
+}
+.scene [data-sr] {
+  --t: 0;
+  opacity: var(--t);
+  transform: translateY(calc((1 - var(--t)) * 18px));
+  transition:
+    opacity 0.35s linear,
+    transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: opacity, transform;
+}
+.scene [data-sr="left"] {
+  transform: translateX(calc((1 - var(--t)) * -14px));
+}
+.scene [data-sr="right"] {
+  transform: translateX(calc((1 - var(--t)) * 14px));
+}
+.scene [data-sr="scale"] {
+  transform: scale(calc(0.7 + var(--t) * 0.3));
+}
+.scene [data-sr="pop"] {
+  transform: scale(calc(0.4 + var(--t) * 0.6));
+}
+.scene [data-sr="grow-x"] {
+  transform: scaleX(var(--t));
+  transform-origin: left;
+  opacity: 1;
+}
+.scene [data-sr="grow-y"] {
+  transform: scaleY(var(--t));
+  transform-origin: top;
+  opacity: 1;
+}
+.scene [data-sr="fade"] {
+  transform: none;
+}
+.scene [data-sr="wipe"] {
+  opacity: 1;
+  clip-path: inset(0 calc((1 - var(--t)) * 100%) 0 0);
+  transform: none;
+  transition: clip-path 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* a number that counts: pair with a <span> whose width stays fixed */
+.scene [data-sr="rise"] {
+  transform: translateY(calc((1 - var(--t)) * 28px));
+}
+
+/* The finished layout is the no-motion state, and the state before hydration. */
+.scene:not(.scene--live) [data-sr],
+.scene:not(.scene--live) [data-sr="wipe"] {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene [data-sr] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+  .scene {
+    --p: 1;
+  }
+}

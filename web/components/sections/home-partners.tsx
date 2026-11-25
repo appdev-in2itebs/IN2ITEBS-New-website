@@ -31,9 +31,9 @@ export function HomePartners() {
         className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-black/55 via-black/35 to-transparent"
       />
       <Container className="relative">
-        {/* Centred like the rest of the page. The copy over the clip replays on every return, so the
-            eyebrow, the heading and the lead each arrive again whenever the section comes back. */}
-        <Stagger repeat className="mb-10 text-center">
+        {/* Centred like the rest of the page. The copy over the clip arrives once, on the way down;
+            it no longer replays when the section comes back into view (owner, 2026-11-24). */}
+        <Stagger className="mb-10 text-center">
           <StaggerItem>
             <p className="text-sm font-semibold text-gold">Our ecosystem</p>
           </StaggerItem>

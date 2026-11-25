@@ -44,6 +44,7 @@ export interface LegacyIndustry {
    * characters: the brand suffix adds 14.
    */
   metaTitle?: string;
+  heroImage?: string;
   intro: string[];
   image?: string;
   sectionsHeading?: string;
@@ -59,6 +60,7 @@ const src = (slug: string) => `https://www.in2itebs.com/industries/${slug}/`;
 export const legacyIndustries: LegacyIndustry[] = [
   {
     slug: "metals-mining-steel",
+    heroImage: "/generated/heavy-engineering.webp",
     metaTitle: "SAP for Mining & Metals in India",
     name: "Metals, mining and steel",
     title: "Where the tonnage and the ledger have to be the same number",
@@ -100,6 +102,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "power-utilities",
+    heroImage: "/generated/energy-and-utilities.webp",
     metaTitle: "SAP for Power & Water Utilities",
     name: "Power and utilities",
     title: "Meters installed is not revenue collected",
@@ -141,6 +144,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "government-public-sector",
+    heroImage: "/generated/government.webp",
     metaTitle: "SAP for PSUs & State Government",
     name: "Government and public sector",
     title: "Built for the buyer who has to show their working",
@@ -182,6 +186,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "manufacturing",
+    heroImage: "/generated/manufacturing.webp",
     metaTitle: "SAP for Manufacturing & Engineering",
     name: "Manufacturing",
     title: "Where the shop floor and the ledger have to agree",
@@ -214,6 +219,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "consumer-goods-distribution",
+    heroImage: "/generated/fmcg.webp",
     metaTitle: "SAP for Consumer Goods & Retail",
     name: "Consumer goods and distribution",
     title: "One business, and a different tax authority in every market",
@@ -251,6 +257,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "pharma-healthcare-life-sciences",
+    heroImage: "/generated/healthcare-life-science.webp",
     metaTitle: "SAP for Pharma & Life Sciences",
     name: "Pharma, healthcare and life sciences",
     title: "The implementation is a project. The audit trail is forever.",
@@ -288,6 +295,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "technology-digital-natives",
+    heroImage: "/generated/telecom.webp",
     metaTitle: "SAP for Technology & Scale-ups",
     name: "Technology and digital natives",
     title: "A real ERP, before the spreadsheets become the risk",
@@ -325,6 +333,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "banking-financial-services",
+    heroImage: "/generated/banking.webp",
     metaTitle: "SAP for Banking & Development Finance",
     name: "Banking and financial services",
     title: "Development finance, with the audit scrutiny that comes with it",
@@ -349,6 +358,7 @@ export const legacyIndustries: LegacyIndustry[] = [
   },
   {
     slug: "real-estate-infrastructure",
+    heroImage: "/generated/engineering-constructions-ecno.webp",
     metaTitle: "SAP for Real Estate & Infrastructure",
     name: "Real estate and infrastructure",
     title: "Workspace and property operations on a cloud core",

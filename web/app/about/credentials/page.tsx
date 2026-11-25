@@ -1,6 +1,10 @@
+import { Explainer } from "@/components/explainers/explainer";
+import { EXPLAINERS } from "@/content/explainers";
 import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 import {
   stats,
@@ -11,7 +15,6 @@ import {
   headquarters,
 } from "@/content/site";
 import { awards, qualityStatement } from "@/content/awards";
-import { DiagramBand } from "@/components/sections/diagram-band";
 
 export const metadata = pageMetadata("/about/credentials/", {
   title: "Credentials",
@@ -85,6 +88,11 @@ export default function CredentialsPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Credentials" }]}
         title="What we have been assessed on. By people who are not us."
         lead="A credential is only worth the independence of whoever issued it. Below are the partnerships, appraisals and awards we hold, each with the body that granted it and the year. We have left off everything we could not attribute that way."
+        media={heroPicture(
+          "/generated/about-credentials-telemetry.webp",
+          <HeroFigure figureKey="about/credentials" />,
+          "Credentials, compliance and audit — In2IT EBS",
+        )}
       />
       <V2StickyNav
         anchors={[
@@ -115,11 +123,7 @@ export default function CredentialsPage() {
         </dl>
       </V2Overview>
 
-      <DiagramBand
-        src="/diagrams/p2-where-we-are.svg"
-        alt="Where In2IT EBS is registered, staffed and delivering: the Bengaluru headquarters, the four staffed delivery centres in India, the overseas offices and the five legal entities, with the countries each covers."
-        tone="subtle"
-      />
+      <Explainer spec={EXPLAINERS["p2-where-we-are"]} tone="subtle" />
       <V2Section id="sap" eyebrow="Our SAP relationship" heading="Three designations, not one" tone="subtle">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-card border border-border-subtle bg-surface p-7">

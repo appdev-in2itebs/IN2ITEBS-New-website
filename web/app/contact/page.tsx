@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { DemoForm } from "@/components/forms/demo-form";
 import { contactsFor } from "@/content/offices";
 import type { Office } from "@/content/types";
@@ -53,7 +54,11 @@ export default async function ContactPage() {
         accentWord="transformation"
         subhead="Start your transformation, or reach the office nearest you."
         cta={false}
-        media={<HeroFigure figureKey="pages/contact" />}
+        media={heroPicture(
+          "/generated/contact-hero-telemetry.webp",
+          <HeroFigure figureKey="pages/contact" />,
+          "Contact",
+        )}
         frame={false}
       />
 

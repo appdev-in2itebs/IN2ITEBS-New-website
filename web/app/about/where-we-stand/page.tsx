@@ -1,8 +1,11 @@
+import { Explainer } from "@/components/explainers/explainer";
+import { EXPLAINERS } from "@/content/explainers";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, CapabilityJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { FEED_PATH } from "@/lib/capability-feed";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
-import { DiagramBand } from "@/components/sections/diagram-band";
 import { Container } from "@/components/ui/container";
 import {
   capabilities,
@@ -63,6 +66,11 @@ export default function WhereWeStandPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Where we stand" }]}
         title="What we have done, what we are building, and what we cannot do."
         lead="Most firms publish a list of capabilities and let you assume they are all equally real. This is the same list with a status against each line, including the ones where the honest status is that we do not do it."
+        media={heroPicture(
+          "/generated/about-where-we-stand-telemetry.webp",
+          <HeroFigure figureKey="about/where-we-stand" />,
+          "Capability maturity and transparent status — In2IT EBS",
+        )}
       />
       <V2StickyNav
         anchors={[
@@ -106,12 +114,7 @@ export default function WhereWeStandPage() {
         The five "Ahead of us" capabilities are drawn as empty outlines rather than omitted, which
         is the whole reason this picture does not exist on any competitor's site.
       */}
-      <DiagramBand
-        src="/diagrams/z1-depth-profile.svg"
-        alt="The capability register drawn as a grid: four areas across, four evidence levels down. SAP has five capabilities in production, Engineering and data three, Run and operations one, and Other platforms none. Five capabilities across the register are drawn as empty outlines because we do not deliver them at all."
-        caption="The vertical axis is evidence, not volume. The five hollow blocks are the capabilities we do not have."
-        tone="subtle"
-      />
+      <Explainer spec={EXPLAINERS["z1-depth-profile"]} tone="subtle" />
 
       <V2Section id="key" eyebrow="The four statuses" heading="What each one commits us to" tone="subtle">
         <div className="grid gap-6 md:grid-cols-2">
@@ -343,12 +346,7 @@ export default function WhereWeStandPage() {
         subject widens at this point: the two dates above are about this page, and the four gates
         below are about every claim on the site.
       */}
-      <DiagramBand
-        src="/diagrams/z2-claim-lifecycle.svg"
-        alt="Four stages left to right — evidence, recorded, published, expires — above the four checks that run on every build: the capability register at ninety days, the corporate facts at two hundred, the house style, and outcome figures. If any one fails, the whole site stays on its previous version."
-        caption="Four checks run on every build of this site. Any one of them failing stops the whole site publishing, not only the line that failed."
-        tone="canvas"
-      />
+      <Explainer spec={EXPLAINERS["z2-claim-lifecycle"]} tone="canvas" />
 
       <V2Closing
         eyebrow="Found a gap that matters to you?"

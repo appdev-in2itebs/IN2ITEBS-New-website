@@ -92,9 +92,14 @@ test("every diagram referenced in content exists on disk", () => {
     .map((f) => readFileSync(path.join(process.cwd(), "content", f), "utf8"))
     .join("\n");
   const referenced = new Set([...content.matchAll(/"\/diagrams\/([a-z0-9-]+\.svg)"/g)].map((m) => m[1]));
-  assert.ok(referenced.size > 0, "no diagram references found — has the path shape changed?");
+  // Since 23 November 2026 the pages render the diagrams as live explainers (content/explainers.ts,
+  // components/explainers) and no content file points at an SVG; the drawings stay on disk as the
+  // record. Any reference that does appear must still exist.
   const missing = [...referenced].filter((f) => !svgs.includes(f));
   assert.deepEqual(missing, []);
+  const explainers = readFileSync(path.join(process.cwd(), "content", "explainers.ts"), "utf8");
+  for (const key of explainers.matchAll(/^  "([a-z0-9-]+)": \{/gm))
+    assert.ok(svgs.includes(`${key[1]}.svg`), `explainer "${key[1]}" is not named after a diagram on disk`);
 });
 
 /**

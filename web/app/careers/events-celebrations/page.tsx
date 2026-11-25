@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/container";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { V2Hero, V2StickyNav, V2Overview, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/careers/events-celebrations/", {
@@ -121,7 +122,11 @@ export default function EventsCelebrationsPage() {
         path={[{ label: "Career", href: "/careers/" }, { label: "Events & Celebrations" }]}
         title="Events & Celebrations"
         lead="Our offices reflect our brand that we live every day. Our employees are provided with a relaxing and creative workspace to help them get the job done!"
-        media={<HeroFigure figureKey="careers/events-celebrations" />}
+        media={heroPicture(
+          "/generated/careers-events-celebrations-telemetry.webp",
+          <HeroFigure figureKey="careers/events-celebrations" />,
+          "Events and celebrations",
+        )}
       />
       <V2StickyNav
         anchors={[

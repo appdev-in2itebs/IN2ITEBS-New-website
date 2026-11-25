@@ -1,0 +1,488 @@
+/* StageFlow: a staged engagement that builds as the reader scrolls. Colours come from the brand
+   tokens in globals.css (oklch). The rail scrubs against the scene's --p; nodes and decision markers
+   light up when --p passes their position (--at); cards and bullets use the per-element --t from
+   scroll-scene.css. Everything is pinned to its finished state under reduced motion. */
+
+.stage-flow {
+  --sf-navy: oklch(var(--color-bg-brand));
+  --sf-navy-2: oklch(var(--color-fg-logo));
+  --sf-action: oklch(var(--color-action));
+  --sf-action-2: oklch(var(--color-action-hover));
+  --sf-steel: oklch(var(--color-gold));
+  --sf-light: oklch(var(--color-fg-brand-muted));
+  --sf-sand: oklch(var(--color-gold-soft));
+  --sf-ink: oklch(var(--color-fg-primary));
+  --sf-muted: oklch(var(--color-fg-secondary));
+  --sf-rule: oklch(var(--color-border-subtle));
+  --sf-white: oklch(var(--color-bg-surface));
+  --sf-tile: oklch(var(--color-bg-subtle));
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.stage-flow__head {
+  margin-bottom: 28px;
+}
+.stage-flow__eyebrow {
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sf-steel);
+}
+.stage-flow__eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  background: var(--sf-sand);
+}
+.stage-flow__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--sf-ink);
+}
+.stage-flow__title em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--sf-steel);
+}
+
+/* ---- rail ---- */
+.stage-flow__flow {
+  position: relative;
+}
+.stage-flow__rail {
+  position: relative;
+  height: 44px;
+  margin-bottom: 18px;
+}
+.stage-flow__track,
+.stage-flow__progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 21px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--sf-rule);
+}
+.stage-flow__progress {
+  background: linear-gradient(90deg, var(--sf-navy), var(--sf-steel) 55%, var(--sf-light));
+  transform-origin: left;
+  transform: scaleX(var(--p));
+  transition: transform 0.2s linear;
+}
+.stage-flow__node {
+  position: absolute;
+  top: 0;
+  left: calc(var(--at) * 100%);
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  border-radius: 50%;
+  background: var(--sf-white);
+  border: 2px solid var(--sf-rule);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sf-muted);
+  /* lit = 1 once the rail has reached this node */
+  --lit: clamp(0, (var(--p) - var(--at) + 0.08) * 12, 1);
+  transform: scale(calc(0.7 + var(--lit) * 0.3));
+  opacity: calc(0.35 + var(--lit) * 0.65);
+  box-shadow: 0 0 0 calc(var(--lit) * 6px) var(--sf-tile);
+  transition:
+    transform 0.3s var(--ease-out),
+    opacity 0.2s linear,
+    box-shadow 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+}
+.stage-flow__node.is-lit,
+.scene:not(.scene--live) .stage-flow__node {
+  border-color: var(--sf-steel);
+  color: var(--sf-ink);
+}
+.stage-flow__decision {
+  position: absolute;
+  top: 8px;
+  left: calc(var(--at) * 100%);
+  transform: translateX(-50%);
+  padding: 8px 10px;
+  border: 1px dashed var(--sf-light);
+  border-radius: 999px;
+  background: var(--sf-tile);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sf-muted);
+  opacity: clamp(0, (var(--p) - var(--at) + 0.1) * 10, 1);
+  transition: opacity 0.2s linear;
+}
+/* the node border and number take colour from --p too (a border cannot interpolate from a clamp) */
+.stage-flow__node {
+  border-color: color-mix(in oklab, var(--sf-steel) calc(var(--lit) * 100%), var(--sf-rule));
+  color: color-mix(in oklab, var(--sf-ink) calc(var(--lit) * 100%), var(--sf-muted));
+}
+
+/* ---- cards ---- */
+.stage-flow__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr));
+  gap: 24px;
+}
+.stage-flow__card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--sf-rule);
+  background: var(--sf-white);
+  box-shadow:
+    0 1px 2px rgb(18 30 59 / 0.06),
+    0 12px 32px -16px rgb(18 30 59 / 0.25);
+}
+.stage-flow__card:hover {
+  box-shadow:
+    0 2px 4px rgb(18 30 59 / 0.06),
+    0 24px 48px -20px rgb(18 30 59 / 0.35);
+}
+.stage-flow__band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px;
+  overflow: hidden;
+  color: #fff;
+}
+.stage-flow__card--0 .stage-flow__band {
+  background: linear-gradient(135deg, var(--sf-navy), var(--sf-navy-2));
+}
+.stage-flow__card--1 .stage-flow__band {
+  background: linear-gradient(135deg, var(--sf-action-2), var(--sf-action));
+}
+.stage-flow__card--2 .stage-flow__band {
+  background: linear-gradient(135deg, color-mix(in oklab, var(--sf-light) 85%, var(--sf-action)), var(--sf-light));
+  color: var(--sf-ink);
+}
+/* a light sweep that follows the card's own reveal */
+.stage-flow__band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgb(255 255 255 / 0.22) 50%, transparent 70%);
+  transform: translateX(calc(-120% + var(--t, 1) * 240%));
+  transition: transform 0.3s linear;
+}
+.stage-flow__band b {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.stage-flow__chip {
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.14);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+.stage-flow__card--2 .stage-flow__chip {
+  border-color: rgb(18 30 59 / 0.18);
+  background: rgb(18 30 59 / 0.08);
+}
+.stage-flow__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 24px 22px 22px;
+}
+.stage-flow__body h3 {
+  margin: 0 0 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--sf-ink);
+}
+.stage-flow__body h3 small {
+  font-family: var(--font-plex);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--sf-steel);
+}
+.stage-flow__body p {
+  margin: 0 0 18px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--sf-muted);
+}
+.stage-flow__body hr {
+  border: 0;
+  border-top: 1px solid var(--sf-sand);
+  margin: 0 0 14px;
+}
+.stage-flow__body ul {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  gap: 9px;
+}
+.stage-flow__body li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--sf-ink);
+}
+.stage-flow__body li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--sf-steel);
+  transform: scaleX(var(--t, 1));
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out);
+}
+.stage-flow__foot {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--sf-rule);
+}
+.stage-flow__foot span {
+  font-size: 12px;
+  color: var(--sf-muted);
+}
+.stage-flow__foot a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sf-steel);
+  text-decoration: none;
+}
+.stage-flow__foot a::after {
+  content: "\2192";
+  transition: transform 0.25s var(--ease-out);
+}
+.stage-flow__foot a:hover::after {
+  transform: translateX(4px);
+}
+.stage-flow__note {
+  margin-top: 26px;
+  padding: 16px 18px;
+  border-left: 3px solid var(--sf-sand);
+  border-radius: 0 12px 12px 0;
+  background: var(--sf-white);
+}
+.stage-flow__note b {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 15px;
+  color: var(--sf-ink);
+}
+.stage-flow__note span {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--sf-muted);
+}
+
+/* ---- phones and narrow tablets: vertical timeline on the left, cards stacked ---- */
+@media (max-width: 860px) {
+  .stage-flow__flow {
+    padding-left: 34px;
+  }
+  .stage-flow__grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .stage-flow__rail {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 44px;
+    height: auto;
+    margin: 0;
+  }
+  .stage-flow__track,
+  .stage-flow__progress {
+    left: 21px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+  }
+  .stage-flow__progress {
+    transform-origin: top;
+    transform: scaleY(var(--p));
+    background: linear-gradient(180deg, var(--sf-navy), var(--sf-steel) 55%, var(--sf-light));
+  }
+  .stage-flow__node {
+    left: 22px;
+    top: calc(var(--i) * (100% / var(--n)) + 12px);
+  }
+  .stage-flow__decision {
+    display: none;
+  }
+  .stage-flow__note {
+    margin-left: -34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-flow__node {
+    --lit: 1;
+  }
+  .stage-flow__decision {
+    opacity: 1;
+  }
+  .stage-flow__progress {
+    transform: none;
+  }
+}
+
+/* ---- one timeline, left to right, played like a sequence ----
+   --rp is the rail's own progress (the section's --p, slightly compressed so the last card still has
+   room to finish). Each stage owns a window: the rail reaches its node, the node lights, the card
+   slides in along the rail, its points tick in; only then does the rail move on. */
+.scene--live .stage-flow__flow {
+  --rp: clamp(0, var(--p) * 1.12, 1);
+}
+.scene--live .stage-flow__progress {
+  transform: scaleX(var(--rp));
+}
+.stage-flow__tip {
+  position: absolute;
+  top: 22px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--sf-steel);
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--sf-steel) 25%, transparent),
+    0 0 18px 4px color-mix(in oklab, var(--sf-light) 70%, transparent);
+  opacity: 0;
+  transition:
+    left 0.2s linear,
+    opacity 0.3s linear;
+}
+.scene--live .stage-flow__tip {
+  left: calc(var(--rp) * 100%);
+  opacity: calc(var(--rp) * (1 - var(--rp)) * 4 + 0.2 * (1 - var(--rp)));
+}
+.scene--live .stage-flow__node {
+  --lit: clamp(0, (var(--rp) - var(--at) + 0.02) * 16, 1);
+  transform: scale(calc(0.72 + var(--lit) * 0.28));
+  box-shadow:
+    0 0 0 calc(var(--lit) * 7px) var(--sf-tile),
+    0 0 calc(var(--lit) * 22px) calc(var(--lit) * 2px) color-mix(in oklab, var(--sf-light) 60%, transparent);
+}
+.scene--live .stage-flow__decision {
+  opacity: clamp(0, (var(--rp) - var(--at) + 0.04) * 12, 1);
+}
+.scene--live .stage-flow__card {
+  --k: clamp(0, (var(--p) - var(--start, 0)) / 0.12, 1);
+  opacity: var(--k);
+  transform: translateX(calc((1 - var(--k)) * -56px)) scale(calc(0.95 + var(--k) * 0.05));
+  transform-origin: left center;
+  filter: blur(calc((1 - var(--k)) * 3px));
+  transition:
+    opacity 0.3s linear,
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.4s linear,
+    box-shadow 0.35s;
+}
+.scene--live .stage-flow__band::after {
+  transform: translateX(calc(-120% + var(--k, 1) * 240%));
+}
+.scene--live .stage-flow__body li {
+  --kb: clamp(0, (var(--p) - var(--start, 0) - 0.09 - var(--j, 0) * 0.035) / 0.07, 1);
+  opacity: var(--kb);
+  transform: translateX(calc((1 - var(--kb)) * -14px));
+  transition:
+    opacity 0.25s linear,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scene--live .stage-flow__body li::before {
+  transform: scaleX(var(--kb, 1));
+}
+@media (max-width: 860px) {
+  .scene--live .stage-flow__progress {
+    transform: scaleY(var(--rp));
+  }
+  .stage-flow__tip {
+    left: 22px !important;
+    top: 0;
+    margin: -7px 0 0 -7px;
+    transition:
+      top 0.2s linear,
+      opacity 0.3s linear;
+  }
+  .scene--live .stage-flow__tip {
+    top: calc(var(--rp) * 100%);
+  }
+  .scene--live .stage-flow__card {
+    transform: translateY(calc((1 - var(--k)) * 28px));
+    transform-origin: center top;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-flow__card,
+  .stage-flow__body li {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .stage-flow__tip {
+    display: none;
+  }
+}
+
+.scene--live .stage-flow__note {
+  --k: clamp(0, (var(--p) - 0.9) / 0.08, 1);
+  opacity: var(--k);
+  transform: translateY(calc((1 - var(--k)) * 18px));
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-flow__note {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -1,5 +1,7 @@
 import type { NavItem } from "./types";
 import type { HeroImageKey } from "@/components/sections/hero-media";
+import type { DiagramSlot } from "@/components/explainers/explainer";
+import { EXPLAINERS } from "./explainers";
 
 /**
  * SERVICE PAGES — the approved architecture, November 2026.
@@ -118,7 +120,7 @@ export interface ServicePage {
    * in /public/diagrams/. The alt text must carry the diagram's point, not name the picture — see
    * components/sections/diagram-band.tsx.
    */
-  diagram?: { src: string; alt: string; caption?: string };
+  diagram?: DiagramSlot;
   /**
    * A second section group, with its own heading and its own diagram above it.
    *
@@ -136,11 +138,11 @@ export interface ServicePage {
     anchorLabel?: string;
     eyebrow?: string;
     intro?: string;
-    diagram?: { src: string; alt: string; caption?: string };
+    diagram?: DiagramSlot;
     items: ServiceSection[];
     closing?: string[];
     /** A diagram after the closing prose — for showing the output rather than the scope. */
-    closingDiagram?: { src: string; alt: string; caption?: string };
+    closingDiagram?: DiagramSlot;
   };
   /**
    * An interactive block rendered after the sections. Kept as a key rather than a component import
@@ -164,6 +166,7 @@ export interface ServicePage {
    */
   qualifiedPackages?: "sap" | "successfactors";
   heroObject?: HeroImageKey;
+  heroImage?: string;
   icon: ServiceIconKey;
   metaTitle?: string;
   metaDescription: string;
@@ -241,6 +244,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "enterprise-platforms",
     toolsBand: true,
+    heroImage: "/generated/service-enterprise-platforms-telemetry.webp",
     name: "Enterprise Platforms",
     title: "The platforms your business runs on",
     group: "enterprise-platforms",
@@ -285,10 +289,8 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "advisory",
-    diagram: {
-      src: "/diagrams/p1-accelerators.svg",
-      alt: "The accelerators and intellectual property In2IT EBS brings to an engagement, and what each one shortens.",
-    },
+    heroImage: "/generated/pages-advisory-telemetry.webp",
+    diagram: EXPLAINERS["p1-accelerators"],
     name: "Advisory",
     title: "Advisory",
     group: "advisory",
@@ -329,11 +331,9 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "digital-data-ai",
+    heroImage: "/generated/service-digital-data-ai-telemetry.webp",
     toolsBand: true,
-    diagram: {
-      src: "/diagrams/d1-where-it-sits.svg",
-      alt: "Where application engineering, data and AI sit in relation to the SAP core: the channels and users above, the core below, and the layer in between that the two meet in.",
-    },
+    diagram: EXPLAINERS["d1-where-it-sits"],
     name: "Digital, Data & AI",
     title: "Digital, Data & AI",
     group: "digital-data-ai",
@@ -383,13 +383,11 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ ENTERPRISE PLATFORMS
   {
     slug: "sap",
+    heroImage: "/generated/service-sap-telemetry.webp",
     qualifiedPackages: "sap",
     interactive: "sap-toolchain",
     toolsBand: true,
-    diagram: {
-      src: "/diagrams/m1-sap-estate.svg",
-      alt: "The SAP estate we run: an S/4HANA core surrounded by the people, customer, data and integration layers, with the eleven practices that staff each one.",
-    },
+    diagram: EXPLAINERS["m1-sap-estate"],
     name: "SAP",
     title: "Our deepest practice. Measured, not asserted.",
     group: "enterprise-platforms",
@@ -489,10 +487,8 @@ export const servicePages: ServicePage[] = [
      * offer, read what SAP has already qualified — the answer may be on the partner profile.
      */
     slug: "converged-pulse",
-    diagram: {
-      src: "/diagrams/m3-grow-fast.svg",
-      alt: "The Converged Pulse timeline: a fixed scope agreed in weeks one and two, configuration and validation through the middle weeks, and go-live on a date set at the start.",
-    },
+    heroImage: "/generated/service-converged-pulse-telemetry.webp",
+    diagram: EXPLAINERS["m3-grow-fast"],
     name: "Converged Pulse",
     title: "A real ERP, on a date you can plan around",
     group: "enterprise-platforms",
@@ -536,6 +532,7 @@ export const servicePages: ServicePage[] = [
      * next thing to build.
      */
     slug: "converged-flow",
+    heroImage: "/generated/service-converged-flow-telemetry.webp",
     name: "Converged Flow",
     title: "A batch you can trace, from the field to the invoice",
     group: "enterprise-platforms",
@@ -579,6 +576,7 @@ export const servicePages: ServicePage[] = [
   {
     /** In2IT Converged Momentum for SAP GROW Fast — SAP-qualified, see content/qpps.ts. */
     slug: "converged-momentum",
+    heroImage: "/generated/service-converged-momentum-telemetry.webp",
     name: "Converged Momentum",
     title: "Project profitability you can see during the project",
     group: "enterprise-platforms",
@@ -621,10 +619,67 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "ecc-prism",
+    heroImage: "/generated/service-ecc-prism-telemetry.webp",
     interactive: "ecc-maintenance-checker",
+    // Built as live HTML (components/sections/stage-flow.tsx) rather than the drawn
+    // /diagrams/m5-ecc-prism-stages.svg: same words, right fonts, reflows on a phone, and the
+    // build animation gives the reader the order of the three stages.
     diagram: {
-      src: "/diagrams/m5-ecc-prism-stages.svg",
-      alt: "ECC Prism in three stages — assess the estate, decide the disposition, then move — each one priced and sellable on its own, with a decision point between each.",
+      kind: "stages",
+      eyebrow: "ECC PRISM",
+      title: "Three stages.",
+      titleAccent: "Each one sellable on its own.",
+      summary:
+        "ECC Prism in three stages — assess the estate, remediate it to the date you chose, then run it to that date — each one priced and sellable on its own, with a decision point between each.",
+      decisionLabel: "Decision point",
+      stages: [
+        {
+          label: "Stage one",
+          duration: "Six weeks",
+          title: "Assess",
+          body: "We establish which maintenance door you are actually eligible for, what your custom code and database position allow, and what the real risk is in each year between now and your chosen date.",
+          bullets: [
+            "Eligibility finding: 2027, 2030 or 2033",
+            "Custom code and Z-object inventory",
+            "Security and compliance exposure, year by year",
+            "A costed comparison against migrating now",
+          ],
+          foot: "Fixed price, fixed date",
+          link: { label: "Start with the assessment", href: "#tool" },
+        },
+        {
+          label: "Stage two",
+          duration: "Scope-dependent",
+          title: "Remediate",
+          body: "We get the estate into a state where it can run safely to the date you chose, closing the gaps the assessment found, without pretending the date is further away than it is.",
+          bullets: [
+            "Security and patch remediation",
+            "Custom code rationalisation",
+            "Interface and integration hardening",
+            "Documentation the next partner can actually use",
+          ],
+          foot: "Priced from the assessment",
+          link: { label: "What remediation covers", href: "#covers" },
+        },
+        {
+          label: "Stage three",
+          duration: "Annual, renewable",
+          title: "Run",
+          body: "We operate and support the estate to the agreed date under the same SLA as any other managed service, with the migration decision reviewed every year rather than deferred indefinitely.",
+          bullets: [
+            "Application and Basis support",
+            "Statutory and regulatory updates",
+            "Annual migration-readiness review",
+            "Exit on three months' notice, documented",
+          ],
+          foot: "Renewed each year",
+          link: { label: "How the run service works", href: "#covers" },
+        },
+      ],
+      note: {
+        title: "Each stage ends with a decision, not a lock-in.",
+        body: "Buy the assessment alone and take its findings anywhere. Remediate with us or with another partner. Renew the run service a year at a time.",
+      },
     },
     name: "ECC Prism",
     title: "You do not have to move yet. You do have to know when.",
@@ -684,10 +739,7 @@ export const servicePages: ServicePage[] = [
       // Not a picture of the nine cards below — that would be decoration. This one carries the
       // commercial argument, which is the part a reader cannot get from the scope list: where the
       // money comes back from, and why findings from a firm that resells nothing are worth more.
-      diagram: {
-        src: "/diagrams/m7-ecc-prism-economics.svg",
-        alt: "The four levers an ECC assessment finds money in — licences nobody uses, custom code nobody runs, data that should be archived, and reporting running against the transaction system — with the rule that In2IT EBS resells no licences, takes no product commission and names no analytics vendor it is paid to name.",
-      },
+      diagram: EXPLAINERS["m7-ecc-prism-economics"],
       items: [
         {
           title: "Landscape and architecture",
@@ -742,12 +794,7 @@ export const servicePages: ServicePage[] = [
       // A scope list tells a buyer what we will look at. This shows them what lands on their desk
       // at the end, which is the question they are actually asking. Licence position is the page
       // chosen because it is the lever that pays for the engagement.
-      closingDiagram: {
-        src: "/diagrams/x1-prism-licence.svg",
-        alt: "A sample page from an ECC Prism report, covering licence position: four findings on the left — inactive named users, users classified above the role they perform, shared user IDs, and indirect access indicators — with the matching recommendations on the right, and an estimated impact band stating audit exposure falling from medium to low after remediation. Figures are illustrative; a real report carries your own, each citing the system it came from.",
-        caption:
-          "One page from a sample report. The figures are illustrative — yours come from your own estate, and each one cites the system it came from.",
-      },
+      closingDiagram: EXPLAINERS["x1-prism-licence"],
     },
     closing: [
       "Why we built this: because the alternative being offered to most ECC customers is a migration they are not ready to fund, on a timetable set by somebody else's product roadmap rather than by their own business.",
@@ -758,11 +805,9 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "rise-s4hana",
+    heroImage: "/generated/service-rise-s4hana-telemetry.webp",
     interactive: "rise-grow-chooser",
-    diagram: {
-      src: "/diagrams/m2-achieve.svg",
-      alt: "SAP's ACHIEVE delivery method as we run it: seven stages from assess to run, each ending in a sign-off the client controls before the next begins.",
-    },
+    diagram: EXPLAINERS["m2-achieve"],
     name: "RISE and S/4HANA",
     title: "Getting there is the project. Running it is the decade.",
     group: "enterprise-platforms",
@@ -806,6 +851,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "successfactors",
+    heroImage: "/generated/service-successfactors-telemetry.webp",
     qualifiedPackages: "successfactors",
     name: "SuccessFactors",
     title: "HR systems fail quietly. Payroll fails on the 28th.",
@@ -853,11 +899,7 @@ export const servicePages: ServicePage[] = [
       anchorLabel: "Health Check 360",
       intro:
         "Most SuccessFactors estates do not need another implementation. They need somebody to establish what is actually configured, what the business actually does, and where those two have come apart — before any more change is bought. Health Check 360 is a fixed three-week diagnostic that does exactly that, and it is sold on its own.",
-      diagram: {
-        src: "/diagrams/y1-health-check-decisions.svg",
-        alt: "The six decisions every Health Check 360 finding resolves into — retain what works and must not be disturbed, fix what is configured wrongly or failing, optimise what works but is needlessly complex, complete capability that was licensed and stopped halfway, adopt functionality built correctly but unused, and retire what no longer earns its place.",
-        caption: "Retain is a finding too. An assessment that returns only problems has not looked properly.",
-      },
+      diagram: EXPLAINERS["y1-health-check-decisions"],
       items: [
         {
           title: "Solution health",
@@ -904,10 +946,8 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "smart-meter-to-cash",
-    diagram: {
-      src: "/diagrams/n2-meter-to-cash.svg",
-      alt: "The meter-to-cash chain from meter to collection, with revenue leaking at each hand-off between field, billing, collection and the general ledger.",
-    },
+    heroImage: "/generated/service-smart-meter-to-cash-telemetry.webp",
+    diagram: EXPLAINERS["n2-meter-to-cash"],
     name: "Smart Meter to Cash",
     title: "The meters are installed. The revenue is not arriving.",
     group: "enterprise-platforms",
@@ -946,10 +986,8 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "managed-services",
-    diagram: {
-      src: "/diagrams/m4b-severity.svg",
-      alt: "What happens when something breaks: four severity levels, each with the response time it carries, who picks it up and when it escalates.",
-    },
+    heroImage: "/generated/service-managed-services-telemetry.webp",
+    diagram: EXPLAINERS["m4b-severity"],
     name: "Managed Services",
     title: "The year after go-live. And the eight after that.",
     group: "enterprise-platforms",
@@ -994,6 +1032,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "salesforce",
+    heroImage: "/generated/service-salesforce-telemetry.webp",
     name: "Salesforce",
     title: "A certified team. And a straight answer about where we are.",
     group: "enterprise-platforms",
@@ -1031,6 +1070,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "workday",
+    heroImage: "/generated/service-workday-telemetry.webp",
     name: "Workday",
     title: "A certified team. And the same straight answer.",
     group: "enterprise-platforms",
@@ -1069,10 +1109,8 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ DIGITAL, DATA & AI
   {
     slug: "application-engineering",
-    diagram: {
-      src: "/diagrams/d2-five-services.svg",
-      alt: "Five application engineering services — discover, build, modernise, integrate and run — reached through one engagement and delivered by one accountable team.",
-    },
+    heroImage: "/generated/service-application-engineering-telemetry.webp",
+    diagram: EXPLAINERS["d2-five-services"],
     name: "Application Engineering",
     title: "The applications your business runs on. Built, modernised, and kept running.",
     group: "digital-data-ai",
@@ -1119,11 +1157,9 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "application-estate-review",
+    heroImage: "/generated/service-application-estate-review-telemetry.webp",
     interactive: "estate-review-diagnostic",
-    diagram: {
-      src: "/diagrams/e2-portfolio-map.svg",
-      alt: "What an application estate review produces: every application in the estate placed on a map and given a disposition — keep, replace, retire or leave alone.",
-    },
+    diagram: EXPLAINERS["e2-portfolio-map"],
     name: "The Application Estate Review",
     title: "A fixed-scope look at what you are actually running",
     group: "digital-data-ai",
@@ -1165,6 +1201,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "data-engineering-analytics",
+    heroImage: "/generated/service-data-engineering-telemetry.webp",
     name: "Data Engineering and Analytics",
     title: "Reporting that agrees with the ledger",
     group: "digital-data-ai",
@@ -1202,10 +1239,8 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "enterprise-data-management",
-    diagram: {
-      src: "/diagrams/n1-data-layers.svg",
-      alt: "Enterprise data management in three layers — advise, build, run — each bought separately or together, with what each layer delivers.",
-    },
+    heroImage: "/generated/service-enterprise-data-management-telemetry.webp",
+    diagram: EXPLAINERS["n1-data-layers"],
     name: "Enterprise Data Management",
     title: "Data is a lifecycle. Not a project.",
     group: "digital-data-ai",
@@ -1245,6 +1280,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "applied-ai",
+    heroImage: "/generated/service-applied-ai-telemetry.webp",
     name: "Applied AI",
     title: "AI where it moves a number you already report",
     group: "digital-data-ai",

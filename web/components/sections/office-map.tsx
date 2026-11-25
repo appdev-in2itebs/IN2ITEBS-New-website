@@ -192,8 +192,9 @@ export function OfficeMap({ offices = shippedOffices }: { offices?: Office[] }) 
   return (
     <Section tone="light" id="offices" className="relative overflow-hidden">
       <Container>
-        {/* Centred, and the heading rises word by word (owner, 2026-09-17). */}
-        <Reveal repeat className="mx-auto mb-10 max-w-3xl text-center">
+        {/* Centred, and the heading rises word by word (owner, 2026-09-17); once only, no replay on
+            the way back up (owner, 2026-11-24). */}
+        <Reveal className="mx-auto mb-10 max-w-3xl text-center">
           <SectionHeading eyebrow="Global footprint">
             <Words>Where we are.</Words>
           </SectionHeading>

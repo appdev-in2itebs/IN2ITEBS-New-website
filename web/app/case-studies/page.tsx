@@ -1,3 +1,5 @@
+import { Explainer } from "@/components/explainers/explainer";
+import { EXPLAINERS } from "@/content/explainers";
 import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
@@ -6,9 +8,9 @@ import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { CaseStudyGrid } from "@/components/sections/case-study-grid";
 import { CtaSection } from "@/components/sections/cta-section";
-import { DiagramBand } from "@/components/sections/diagram-band";
 import { publicCaseStudies } from "@/content/case-studies";
 import { clientIdentityApproved } from "@/content/compliance";
 
@@ -28,7 +30,11 @@ export default function CaseStudiesPage() {
         headline="Enterprise delivery,"
         accentWord="shown by sector."
         subhead="Anonymised engagements are published while named-client permissions and supporting evidence are verified."
-        media={<HeroFigure figureKey="pages/case-studies" />}
+        media={heroPicture(
+          "/generated/pages-case-studies-telemetry.webp",
+          <HeroFigure figureKey="pages/case-studies" />,
+          "Clients & Case Studies",
+        )}
         frame={false}
       />
 
@@ -53,25 +59,14 @@ export default function CaseStudiesPage() {
         and nothing the studies withhold. Alt text carries the diagram's content, not a caption
         for it — same rule as every other diagram on the site.
       */}
-      {clientIdentityApproved ? (
-        <DiagramBand
-          src="/diagrams/q1-reference-book.svg"
-          alt="The client reference book, by sector. Power, utilities and energy: TGNPDCL, a state discom moving from ECC to RISE with S/4HANA; APTRANSCO, transmission, three-year onsite AMS; Delhi Transco, transmission, full-estate AMS; POWERGRID; and a global energy major. Metals, mining and heavy industry: NMDC Limited, iron ore and a Navratna, S/4HANA and AMS; NMDC Steel, integrated steel, S/4HANA; NALCO; the Welspun Group; Triveni Turbines; and Wipro Infrastructure Engineering. Consumer, retail and food: Hero MotoCorp, Bata India, Varun Beverages running Ariba across fourteen countries, WayCool Foods on RISE in eight weeks, and VAHDAM India on GROW with SAP in one year. Government, transport and logistics: Transnet SOC Ltd on S/4HANA on RISE, Kenya Railways Corporation, and CEDA Botswana. Technology, telecom and services: Proximus, Tredence, Livspace, AVASO Technology across GROW, RISE and SuccessFactors, an EdTech unicorn on GROW with SAP, and a global engineering consultancy."
-          tone="subtle"
-        />
-      ) : null}
+      {clientIdentityApproved ? <Explainer spec={EXPLAINERS["q1-reference-book"]} tone="subtle" /> : null}
 
       {/*
         THE STANDARD THE STUDIES BELOW ARE HELD TO.
         On the index rather than on every study: it is a rule about all of them, and repeating it
         under each one would turn a standard into a disclaimer.
       */}
-      <DiagramBand
-        src="/diagrams/z3-anatomy-number.svg"
-        alt="Two panels compared. The usual form of an outcome claim: a large percentage with four empty slots — what it is a number of, the period it covers, who did the arithmetic and what is not counted, none of them stated. Ours: 70 to 75 per cent, with all four filled in from a Belgian S/4HANA Public Cloud assessment."
-        caption="A figure on a case study here fills all four slots or it does not appear as a figure. That is a build rule, which is why several of these studies carry no percentage at all."
-        tone="canvas"
-      />
+      <Explainer spec={EXPLAINERS["z3-anatomy-number"]} tone="canvas" />
 
       {/* CASE STUDY GRID */}
       <Section tone="light">

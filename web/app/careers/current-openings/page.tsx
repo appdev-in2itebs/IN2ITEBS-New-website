@@ -1,5 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { heroPicture } from "@/components/sections/hero-override";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 import { getOpenOpenings } from "@/lib/cms/store";
@@ -113,7 +114,11 @@ export default async function CurrentOpeningsPage() {
         path={[{ label: "Career", href: "/careers/" }, { label: "Current Openings" }]}
         title="Build a career with endless opportunities"
         lead="Are you prepared to excel in a welcoming, diverse, and open environment where you can continuously learn, develop, and make a lasting impact?"
-        media={<HeroFigure figureKey="careers/current-openings" />}
+        media={heroPicture(
+          "/generated/careers-current-openings-telemetry.webp",
+          <HeroFigure figureKey="careers/current-openings" />,
+          "Current Openings at In2IT EBS",
+        )}
         cta={false}
         exploreId="openings"
       />

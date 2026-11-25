@@ -2,6 +2,8 @@ import Link from "next/link";
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2Section, V2Closing } from "@/components/sections/v2";
+import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { AwardsGrid, AccreditationList } from "@/components/sections/awards";
 import { awards } from "@/content/awards";
 
@@ -42,6 +44,11 @@ export default function AwardsPage() {
         ]}
         title="The certificate, not the claim."
         lead="Every award and accreditation on the credentials page, with the document behind it. We publish the photograph rather than the name, because a name is a claim and a certificate is evidence."
+        media={heroPicture(
+          "/generated/about-awards-telemetry.webp",
+          <HeroFigure figureKey="about/awards" />,
+          "Awards and certificates",
+        )}
       />
 
       <V2Section

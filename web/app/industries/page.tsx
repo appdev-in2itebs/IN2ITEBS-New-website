@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { CtaSection } from "@/components/sections/cta-section";
 import { industries } from "@/content/industries";
@@ -57,7 +58,7 @@ const featuredIndustries = [
     name: "Manufacturing",
     detail: "Automotive, heavy engineering and industrial products",
     href: "/industries/manufacturing/",
-    image: "/stock/automobiles.jpg",
+    image: "/generated/manufacturing.webp",
     Icon: GitBranch,
     className: "md:col-span-7 md:row-span-2",
   },
@@ -65,7 +66,7 @@ const featuredIndustries = [
     name: "Energy & utilities",
     detail: "Critical infrastructure and public enterprises",
     href: "/industries/power-utilities/",
-    image: "/stock/energy-utilities.jpg",
+    image: "/generated/energy-and-utilities.webp",
     Icon: Network,
     className: "md:col-span-5",
   },
@@ -73,7 +74,7 @@ const featuredIndustries = [
     name: "Consumer products",
     detail: "Food, beverage and high-velocity supply chains",
     href: "/industries/consumer-goods-distribution/",
-    image: "/stock/fmcg.jpg",
+    image: "/generated/fmcg.webp",
     Icon: Building2,
     className: "md:col-span-5",
   },
@@ -91,7 +92,11 @@ export default function IndustriesPage() {
         headline="150+ global enterprises. Across regulated, complex"
         accentWord="industries"
         subhead="Selected clients across the sectors where we've delivered SAP, Salesforce, Workday and application transformation programmes."
-        media={<HeroFigure figureKey="pages/industries" />}
+        media={heroPicture(
+          "/generated/industries.webp",
+          <HeroFigure figureKey="pages/industries" />,
+          "Industries served",
+        )}
         frame={false}
       />
 

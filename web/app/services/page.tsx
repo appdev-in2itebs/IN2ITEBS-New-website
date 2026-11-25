@@ -5,6 +5,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ServiceIconTile } from "@/components/sections/service-icon";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { V2Hero, V2StickyNav, V2Section, V2Closing } from "@/components/sections/v2";
 import { ToolsBand } from "@/components/sections/tools-band";
 import { serviceGroups } from "@/content/legacy-services";
@@ -59,7 +60,11 @@ export default function ServicesIndexPage() {
         path={[{ label: "Services" }]}
         title="Everything we do, in one place."
         lead="From SAP enterprise solutions and analytics to cloud, security, digital services and data & AI: the full In2IT EBS service catalogue, each with its own page."
-        media={<HeroFigure figureKey="pages/services" />}
+        media={heroPicture(
+          "/generated/pages-services-telemetry.webp",
+          <HeroFigure figureKey="pages/services" />,
+          "Services",
+        )}
         exploreId="groups"
       />
       <V2StickyNav

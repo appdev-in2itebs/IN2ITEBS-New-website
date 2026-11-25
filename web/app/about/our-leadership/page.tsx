@@ -2,6 +2,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Reveal } from "@/components/motion/reveal";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
+import { heroPicture } from "@/components/sections/hero-override";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 import { getCms } from "@/lib/cms/content";
@@ -28,7 +29,11 @@ export default async function OurLeadershipPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Our Leadership" }]}
         title="Our Leadership"
         lead="Meet Our Leaders"
-        media={<HeroFigure figureKey="about/our-leadership" />}
+        media={heroPicture(
+          "/generated/about-our-leadership-telemetry.webp",
+          <HeroFigure figureKey="about/our-leadership" />,
+          "Leadership at In2IT EBS — Executive briefing",
+        )}
         exploreId="leaders"
       />
       <V2StickyNav

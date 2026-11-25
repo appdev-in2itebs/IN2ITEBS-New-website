@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { StatBand } from "@/components/sections/stat-band";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
@@ -57,7 +58,11 @@ export default async function AboutPage() {
         eyebrow="Who we are"
         headline="Three pillars."
         accentWord="One converged enterprise."
-        media={<HeroFigure figureKey="pages/about" />}
+        media={heroPicture(
+          "/generated/pages-about-telemetry.webp",
+          <HeroFigure figureKey="pages/about" />,
+          "About In2IT EBS",
+        )}
         frame={false}
         subhead="We are structured for Platforms, Advisory and Digital Engineering under shared delivery, governance and account ownership — so you get one accountable partner for the whole transformation, not a patchwork of vendors."
       />

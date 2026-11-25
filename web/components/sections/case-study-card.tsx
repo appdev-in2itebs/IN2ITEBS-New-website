@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CaseStudy } from "@/content/case-studies";
 
@@ -17,29 +18,44 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const clientName = study.client;
 
   return (
-    <article className="group glass-card flex h-full flex-col rounded-surface p-7">
-      <div className="flex flex-wrap gap-2">
-        <span className="glass-pill text-foreground-muted">{study.industry}</span>
-        <span className="glass-gold rounded-full px-3 py-1 text-xs font-semibold">{study.sapPath}</span>
-        {study.named ? null : <span className="glass-pill text-foreground-muted">Client not named</span>}
+    <article className="group glass-card flex h-full flex-col overflow-hidden rounded-surface">
+      {study.heroImage ? (
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface-subtle">
+          <Image
+            src={study.heroImage}
+            alt={study.client}
+            fill
+            sizes="(min-width: 1024px) 26rem, (min-width: 768px) 45vw, 90vw"
+            className="object-contain p-4 transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        </div>
+      ) : null}
+      <div className="flex flex-1 flex-col p-7">
+        <div className="flex flex-wrap gap-2">
+          <span className="glass-pill text-foreground-muted">{study.industry}</span>
+          <span className="glass-gold rounded-full px-3 py-1 text-xs font-semibold">{study.sapPath}</span>
+          {study.named ? null : <span className="glass-pill text-foreground-muted">Client not named</span>}
+        </div>
+
+        <h3 className="mt-4 text-h3 font-bold text-foreground transition-colors group-hover:text-action">
+          {clientName}
+        </h3>
+        <p className="mt-1.5 text-sm font-semibold text-gold">{study.featuredSolution}</p>
+
+        <p className="mt-3 line-clamp-2 flex-1 text-[0.9rem] leading-relaxed text-foreground-muted">{study.scenario}</p>
+
+        <Link
+          href={href}
+          className="mt-5 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+        >
+          {linkLabel}
+          <ArrowRight
+            size={15}
+            strokeWidth={1.75}
+            className="transition-transform duration-200 ease-out group-hover:translate-x-0.5"
+          />
+        </Link>
       </div>
-
-      <h3 className="mt-4 text-h3 font-bold text-foreground transition-colors group-hover:text-action">{clientName}</h3>
-      <p className="mt-1.5 text-sm font-semibold text-gold">{study.featuredSolution}</p>
-
-      <p className="mt-3 line-clamp-2 flex-1 text-[0.9rem] leading-relaxed text-foreground-muted">{study.scenario}</p>
-
-      <Link
-        href={href}
-        className="mt-5 inline-flex min-h-6 items-center gap-1.5 text-sm font-semibold text-foreground transition-colors duration-200 hover:text-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
-      >
-        {linkLabel}
-        <ArrowRight
-          size={15}
-          strokeWidth={1.75}
-          className="transition-transform duration-200 ease-out group-hover:translate-x-0.5"
-        />
-      </Link>
     </article>
   );
 }

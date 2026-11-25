@@ -8,8 +8,10 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
+import { Explainer, isExplainer } from "@/components/explainers/explainer";
 import { DiagramBand } from "@/components/sections/diagram-band";
 import { MetricsBand } from "@/components/sections/metrics-band";
+import { heroPicture } from "@/components/sections/hero-override";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { publicCaseStudies, getCaseStudy, canonicalCaseStudySlug } from "@/content/case-studies";
 
@@ -80,7 +82,11 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         headline={study.client}
         accentWord={accentWord}
         subhead={study.featuredSolution}
-        media={<HeroFigure figureKey={`case-studies/${study.slug}`} />}
+        media={heroPicture(
+          study.heroImage ?? "/generated/pages-case-studies-telemetry.webp",
+          <HeroFigure figureKey={`case-studies/${study.slug}`} />,
+          study.client,
+        )}
       />
 
       {/* FACTS STRIP */}
@@ -119,7 +125,13 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         </Container>
       </Section>
 
-      {study.diagram ? <DiagramBand src={study.diagram.src} alt={study.diagram.alt} tone="subtle" /> : null}
+      {study.diagram ? (
+        isExplainer(study.diagram) ? (
+          <Explainer spec={study.diagram} tone="subtle" />
+        ) : (
+          <DiagramBand src={study.diagram.src} alt={study.diagram.alt} tone="subtle" />
+        )
+      ) : null}
 
       {/*
         The figures come before the narrative of what we delivered, not after it. A reader who is

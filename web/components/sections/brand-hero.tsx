@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
+import Image from "next/image";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { SPLASH_DONE } from "@/components/layout/page-loader";
 import { Container } from "@/components/ui/container";
@@ -86,8 +87,6 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
   const [active, setActive] = useState(0);
   const [rotating, setRotating] = useState(false);
   const [offscreen, setOffscreen] = useState(false);
-  /** Bumped each time the hero comes back into view, to remount the copy and replay its entrance. */
-  const [replay, setReplay] = useState(0);
   const [focused, setFocused] = useState(false);
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
@@ -116,16 +115,10 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
     const apply = () => setRotating(!reduced.matches);
     apply();
     reduced.addEventListener("change", apply);
-    // Coming back to the hero replays the copy. Without this the entrance runs once on load and a
-    // visitor who scrolls down and back up finds a slide that is simply already there. The previous
-    // state is kept in a ref, not read inside a `setState` updater: React may call an updater more
-    // than once, so a bump raised from inside one does not reliably land.
-    let wasOffscreen = false;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (wasOffscreen && entry.isIntersecting) setReplay((n) => n + 1);
-      wasOffscreen = !entry.isIntersecting;
-      setOffscreen(!entry.isIntersecting);
-    });
+    // The copy's entrance runs once per slide. Scrolling back up to the hero does not replay it:
+    // animations play on the way down only (owner's request, 24 November 2026). The observer still
+    // tracks whether the hero is on screen so the slide rotation pauses while it is not.
+    const observer = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
     if (root.current) observer.observe(root.current);
     return () => {
       reduced.removeEventListener("change", apply);
@@ -173,8 +166,25 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
         The quiet figure behind it is drawn, not photographed — the same vocabulary as the
         diagrams, at a few hundred bytes. See components/sections/hero-figure.tsx.
       */}
+      {/*
+        25 November 2026: the generated homepage picture (four people at a console, seen from
+        behind, nobody identifiable; registered in content/image-licences.ts) sits behind the
+        claim the way the live site's hero frames did, under a navy wash so the words stay first.
+        The drawn figure stays underneath it as the fallback while the picture loads.
+      */}
       <div aria-hidden className="pointer-events-none absolute inset-0 isolate opacity-[0.07]">
         <HeroFigure figureKey={`home/${slides[active]?.id ?? "brand"}`} className="h-full w-full" />
+      </div>
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <Image
+          src="/generated/pages-homepage-telemetry.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[center_30%] opacity-[0.42]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand/70 via-brand/35 to-brand" />
       </div>
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
 
@@ -201,7 +211,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
                 )}
               >
                 <motion.div
-                  key={`content-${item.id}-${isActive}-${replay}`}
+                  key={`content-${item.id}-${isActive}`}
                   variants={slideContentVariants}
                   initial="hidden"
                   animate={isActive && entered ? "visible" : "hidden"}

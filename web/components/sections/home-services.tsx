@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -148,9 +149,12 @@ export function HomeServices() {
                   tabIndex={copy > 0 ? -1 : undefined}
                   className="service-card glass-card group flex h-full w-full flex-col overflow-hidden rounded-feature focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
-                  <span className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-brand">
-                    {/* Was a stock photograph of a desk. See content/hero-images.ts. */}
-                    <HeroFigure figureKey={`services/${service.slug}`} className="absolute inset-0" />
+                  <span className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-surface p-3">
+                    {heroPicture(
+                      service.heroImage,
+                      <HeroFigure figureKey={`services/${service.slug}`} className="absolute inset-0" />,
+                      service.name,
+                    )}
                   </span>
 
                   <span className="flex flex-1 flex-col p-5">

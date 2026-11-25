@@ -1,6 +1,8 @@
 import { pageMetadata } from "@/lib/metadata";
 import { AllianceStrip } from "@/components/sections/alliance-strip";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/about/partnerships/", {
@@ -68,6 +70,11 @@ export default function PartnershipsPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Partnerships" }]}
         title="The ones we hold. And what each of them actually gets you."
         lead="A partner logo on a website tells a buyer nothing on its own. For each partnership below we have said what tier it is, what we deliver under it, and — where there is one — where we have delivered it."
+        media={heroPicture(
+          "/generated/about-partnerships-telemetry.webp",
+          <HeroFigure figureKey="about/partnerships" />,
+          "Partnerships and platform alliances — In2IT EBS",
+        )}
       />
       <V2StickyNav
         anchors={[

@@ -1,6 +1,8 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { V2Hero, V2StickyNav, V2Overview, V2Section, V2Closing } from "@/components/sections/v2";
+import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 
 export const metadata = pageMetadata("/services/how-we-price/", {
   title: "How we price",
@@ -113,6 +115,11 @@ export default function HowWePricePage() {
         path={[{ label: "Services", href: "/services/" }, { label: "How we price" }]}
         title="Two commercial models, and who carries which risk in each."
         lead="Most firms in this market publish nothing about how they charge. We think the question a buyer is actually asking is not what it costs but who is exposed when it goes wrong — so this page answers that one."
+        media={heroPicture(
+          "/generated/services-how-we-price-telemetry.webp",
+          <HeroFigure figureKey="services/how-we-price" />,
+          "How we price",
+        )}
       />
       <V2StickyNav
         anchors={[
