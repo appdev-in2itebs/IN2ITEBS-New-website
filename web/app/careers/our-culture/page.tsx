@@ -36,7 +36,7 @@ export default function OurCulturePage() {
         title="Our Culture"
         lead="At In2IT EBS, our performance-oriented culture and responsible approach are the foundations of our success. We strive to maintain a fun and positive work environment, encouraging our employees to enjoy themselves at work and think outside the box."
         media={heroPicture(
-          "/generated/careers-our-culture-telemetry.webp",
+          "/hero/careers-our-culture.webp",
           <HeroFigure figureKey="careers/our-culture" />,
           "Our Culture — Technology innovation and collaborative culture",
         )}

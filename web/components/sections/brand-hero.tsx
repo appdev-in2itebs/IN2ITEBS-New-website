@@ -177,7 +177,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
       </div>
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <Image
-          src="/generated/pages-homepage-telemetry.webp"
+          src="/hero/pages-homepage.webp"
           alt=""
           fill
           priority

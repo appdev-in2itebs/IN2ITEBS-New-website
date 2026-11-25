@@ -83,7 +83,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
         accentWord={accentWord}
         subhead={study.featuredSolution}
         media={heroPicture(
-          study.heroImage ?? "/generated/pages-case-studies-telemetry.webp",
+          study.heroImage ?? "/hero/pages-case-studies.webp",
           <HeroFigure figureKey={`case-studies/${study.slug}`} />,
           study.client,
         )}

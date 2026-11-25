@@ -44,11 +44,7 @@ export default function CareersPage() {
         accentWord="opportunities."
         subhead="Are you ready to thrive in a welcoming, diverse and open environment where you can keep learning, growing and making a lasting impact? You've found your destination."
         cta={false}
-        media={heroPicture(
-          "/generated/careers-hub-telemetry.webp",
-          <HeroFigure figureKey="pages/careers" />,
-          "Careers",
-        )}
+        media={heroPicture("/hero/careers-hub.webp", <HeroFigure figureKey="pages/careers" />, "Careers")}
         frame={false}
       />
 

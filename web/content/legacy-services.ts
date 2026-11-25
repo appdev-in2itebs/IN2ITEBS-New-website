@@ -244,7 +244,7 @@ export const servicePages: ServicePage[] = [
   {
     slug: "enterprise-platforms",
     toolsBand: true,
-    heroImage: "/generated/service-enterprise-platforms-telemetry.webp",
+    heroImage: "/hero/service-enterprise-platforms.webp",
     name: "Enterprise Platforms",
     title: "The platforms your business runs on",
     group: "enterprise-platforms",
@@ -289,7 +289,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "advisory",
-    heroImage: "/generated/pages-advisory-telemetry.webp",
+    heroImage: "/hero/pages-advisory.webp",
     diagram: EXPLAINERS["p1-accelerators"],
     name: "Advisory",
     title: "Advisory",
@@ -331,7 +331,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "digital-data-ai",
-    heroImage: "/generated/service-digital-data-ai-telemetry.webp",
+    heroImage: "/hero/service-digital-data-ai.webp",
     toolsBand: true,
     diagram: EXPLAINERS["d1-where-it-sits"],
     name: "Digital, Data & AI",
@@ -383,7 +383,7 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ ENTERPRISE PLATFORMS
   {
     slug: "sap",
-    heroImage: "/generated/service-sap-telemetry.webp",
+    heroImage: "/hero/service-sap.webp",
     qualifiedPackages: "sap",
     interactive: "sap-toolchain",
     toolsBand: true,
@@ -487,7 +487,7 @@ export const servicePages: ServicePage[] = [
      * offer, read what SAP has already qualified — the answer may be on the partner profile.
      */
     slug: "converged-pulse",
-    heroImage: "/generated/service-converged-pulse-telemetry.webp",
+    heroImage: "/hero/service-converged-pulse.webp",
     diagram: EXPLAINERS["m3-grow-fast"],
     name: "Converged Pulse",
     title: "A real ERP, on a date you can plan around",
@@ -532,7 +532,7 @@ export const servicePages: ServicePage[] = [
      * next thing to build.
      */
     slug: "converged-flow",
-    heroImage: "/generated/service-converged-flow-telemetry.webp",
+    heroImage: "/hero/service-converged-flow.webp",
     name: "Converged Flow",
     title: "A batch you can trace, from the field to the invoice",
     group: "enterprise-platforms",
@@ -576,7 +576,7 @@ export const servicePages: ServicePage[] = [
   {
     /** In2IT Converged Momentum for SAP GROW Fast — SAP-qualified, see content/qpps.ts. */
     slug: "converged-momentum",
-    heroImage: "/generated/service-converged-momentum-telemetry.webp",
+    heroImage: "/hero/service-converged-momentum.webp",
     name: "Converged Momentum",
     title: "Project profitability you can see during the project",
     group: "enterprise-platforms",
@@ -619,7 +619,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "ecc-prism",
-    heroImage: "/generated/service-ecc-prism-telemetry.webp",
+    heroImage: "/hero/service-ecc-prism.webp",
     interactive: "ecc-maintenance-checker",
     // Built as live HTML (components/sections/stage-flow.tsx) rather than the drawn
     // /diagrams/m5-ecc-prism-stages.svg: same words, right fonts, reflows on a phone, and the
@@ -805,7 +805,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "rise-s4hana",
-    heroImage: "/generated/service-rise-s4hana-telemetry.webp",
+    heroImage: "/hero/service-rise-s4hana.webp",
     interactive: "rise-grow-chooser",
     diagram: EXPLAINERS["m2-achieve"],
     name: "RISE and S/4HANA",
@@ -851,7 +851,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "successfactors",
-    heroImage: "/generated/service-successfactors-telemetry.webp",
+    heroImage: "/hero/service-successfactors.webp",
     qualifiedPackages: "successfactors",
     name: "SuccessFactors",
     title: "HR systems fail quietly. Payroll fails on the 28th.",
@@ -946,7 +946,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "smart-meter-to-cash",
-    heroImage: "/generated/service-smart-meter-to-cash-telemetry.webp",
+    heroImage: "/hero/service-smart-meter-to-cash.webp",
     diagram: EXPLAINERS["n2-meter-to-cash"],
     name: "Smart Meter to Cash",
     title: "The meters are installed. The revenue is not arriving.",
@@ -986,7 +986,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "managed-services",
-    heroImage: "/generated/service-managed-services-telemetry.webp",
+    heroImage: "/hero/service-managed-services.webp",
     diagram: EXPLAINERS["m4b-severity"],
     name: "Managed Services",
     title: "The year after go-live. And the eight after that.",
@@ -1032,7 +1032,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "salesforce",
-    heroImage: "/generated/service-salesforce-telemetry.webp",
+    heroImage: "/hero/service-salesforce.webp",
     name: "Salesforce",
     title: "A certified team. And a straight answer about where we are.",
     group: "enterprise-platforms",
@@ -1070,7 +1070,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "workday",
-    heroImage: "/generated/service-workday-telemetry.webp",
+    heroImage: "/hero/service-workday.webp",
     name: "Workday",
     title: "A certified team. And the same straight answer.",
     group: "enterprise-platforms",
@@ -1109,7 +1109,7 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ DIGITAL, DATA & AI
   {
     slug: "application-engineering",
-    heroImage: "/generated/service-application-engineering-telemetry.webp",
+    heroImage: "/hero/service-application-engineering.webp",
     diagram: EXPLAINERS["d2-five-services"],
     name: "Application Engineering",
     title: "The applications your business runs on. Built, modernised, and kept running.",
@@ -1157,7 +1157,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "application-estate-review",
-    heroImage: "/generated/service-application-estate-review-telemetry.webp",
+    heroImage: "/hero/service-application-estate-review.webp",
     interactive: "estate-review-diagnostic",
     diagram: EXPLAINERS["e2-portfolio-map"],
     name: "The Application Estate Review",
@@ -1201,7 +1201,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "data-engineering-analytics",
-    heroImage: "/generated/service-data-engineering-telemetry.webp",
+    heroImage: "/hero/service-data-engineering.webp",
     name: "Data Engineering and Analytics",
     title: "Reporting that agrees with the ledger",
     group: "digital-data-ai",
@@ -1239,7 +1239,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "enterprise-data-management",
-    heroImage: "/generated/service-enterprise-data-management-telemetry.webp",
+    heroImage: "/hero/service-enterprise-data-management.webp",
     diagram: EXPLAINERS["n1-data-layers"],
     name: "Enterprise Data Management",
     title: "Data is a lifecycle. Not a project.",
@@ -1280,7 +1280,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "applied-ai",
-    heroImage: "/generated/service-applied-ai-telemetry.webp",
+    heroImage: "/hero/service-applied-ai.webp",
     name: "Applied AI",
     title: "AI where it moves a number you already report",
     group: "digital-data-ai",

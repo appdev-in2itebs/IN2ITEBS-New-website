@@ -67,7 +67,7 @@ export default function WhereWeStandPage() {
         title="What we have done, what we are building, and what we cannot do."
         lead="Most firms publish a list of capabilities and let you assume they are all equally real. This is the same list with a status against each line, including the ones where the honest status is that we do not do it."
         media={heroPicture(
-          "/generated/about-where-we-stand-telemetry.webp",
+          "/hero/about-where-we-stand.webp",
           <HeroFigure figureKey="about/where-we-stand" />,
           "Capability maturity and transparent status — In2IT EBS",
         )}

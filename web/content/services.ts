@@ -44,7 +44,7 @@ export type ServiceCard = {
 export const services: ServiceCard[] = [
   {
     slug: "rise-with-sap",
-    heroImage: "/generated/service-rise-s4hana-telemetry.webp",
+    heroImage: "/hero/service-rise-s4hana.webp",
     name: "RISE with SAP",
     blurb:
       "SAP S/4HANA is a real-time enterprise resource management suite for digital business, built on the in-memory SAP HANA platform and deployable on-premise, in the cloud or hybrid.",
@@ -52,7 +52,7 @@ export const services: ServiceCard[] = [
   },
   {
     slug: "sap-successfactors",
-    heroImage: "/generated/service-successfactors-telemetry.webp",
+    heroImage: "/hero/service-successfactors.webp",
     name: "SAP SuccessFactors",
     blurb:
       "The SAP SuccessFactors HXM Suite provides cloud-based solutions for core HR and payroll, talent management and the everyday experience of working in your organisation.",
@@ -60,7 +60,7 @@ export const services: ServiceCard[] = [
   },
   {
     slug: "sap-sac",
-    heroImage: "/generated/service-data-engineering-telemetry.webp",
+    heroImage: "/hero/service-data-engineering.webp",
     name: "SAP SAC",
     blurb:
       "SAP Analytics Cloud combines business intelligence, enterprise planning and augmented analytics in one solution on SAP Business Technology Platform, so reporting and planning stop living apart.",
@@ -68,7 +68,7 @@ export const services: ServiceCard[] = [
   },
   {
     slug: "grow-with-sap",
-    heroImage: "/generated/service-converged-pulse-telemetry.webp",
+    heroImage: "/hero/service-converged-pulse.webp",
     name: "Grow with SAP",
     blurb:
       "S/4HANA Public Cloud on pre-configured industry processes — a fit-to-standard path for the mid-market and for net-new business units, on a quarterly release cadence.",
@@ -76,7 +76,7 @@ export const services: ServiceCard[] = [
   },
   {
     slug: "other-enterprise-solutions",
-    heroImage: "/generated/service-enterprise-platforms-telemetry.webp",
+    heroImage: "/hero/service-enterprise-platforms.webp",
     name: "Other Enterprise Solutions",
     // "Oracle, Microsoft and SAP" removed 19 November 2026 — see content/home-hero.ts. We hold no
     // designation from Oracle or Microsoft Dynamics and do not implement them; naming them beside
@@ -89,7 +89,7 @@ export const services: ServiceCard[] = [
   },
   {
     slug: "data-analytics-ai",
-    heroImage: "/generated/service-digital-data-ai-telemetry.webp",
+    heroImage: "/hero/service-digital-data-ai.webp",
     name: "Data Analytics & AI",
     blurb:
       "Structured, unstructured and semi-structured data is rising in volume faster than anyone can read it. Business analytics and intelligence turn that variety into answers you can act on.",
@@ -97,7 +97,7 @@ export const services: ServiceCard[] = [
   },
   {
     slug: "adms",
-    heroImage: "/generated/service-application-engineering-telemetry.webp",
+    heroImage: "/hero/service-application-engineering.webp",
     name: "Application Development & Maintenance Services (ADMS)",
     blurb:
       "Building and maintaining the software a business runs on — development, integration, maintenance and support across both modern and legacy application estates.",

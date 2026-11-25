@@ -21,7 +21,7 @@ export const insights: Insight[] = [
     date: "2026-11-18",
     dateLabel: "18 Nov",
     category: "SuccessFactors",
-    image: "/generated/service-successfactors-telemetry.webp",
+    image: "/hero/service-successfactors.webp",
     excerpt:
       "Programmes are usually sequenced around what hurts most. That is the wrong input, and it is why rollouts stall at module three.",
   },
@@ -31,7 +31,7 @@ export const insights: Insight[] = [
     date: "2026-11-18",
     dateLabel: "18 Nov",
     category: "AI",
-    image: "/generated/service-applied-ai-telemetry.webp",
+    image: "/hero/service-applied-ai.webp",
     excerpt:
       "Three capabilities worth understanding, our own position stated narrowly, and the one metric that predicts whether a pilot survives.",
   },
@@ -44,7 +44,7 @@ export const insights: Insight[] = [
     date: "2026-11-18",
     dateLabel: "18 Nov",
     category: "SAP",
-    image: "/generated/service-converged-pulse-telemetry.webp",
+    image: "/hero/service-converged-pulse.webp",
     excerpt:
       "The constraint is the point of it, and it is the thing most buyers do not price properly. What the model trades, and how to test the fit.",
   },
@@ -54,7 +54,7 @@ export const insights: Insight[] = [
     date: "",
     dateLabel: "26 Jul",
     category: "SuccessFactors",
-    image: "/generated/careers-hub-telemetry.webp",
+    image: "/hero/careers-hub.webp",
     excerpt:
       "SimplifyTalent, an SAP Qualified Partner Package which leverages the global best practices of SAP SuccessFactors software solution portfolio aligning with…",
   },
@@ -64,7 +64,7 @@ export const insights: Insight[] = [
     date: "",
     dateLabel: "26 Jul",
     category: "SuccessFactors",
-    image: "/generated/service-workday-telemetry.webp",
+    image: "/hero/service-workday.webp",
     excerpt:
       "Simplify Hiring is an SAP Qualified Partner Package which leverages the global best practices of SAP SuccessFactors solution portfolio, aligning with…",
   },
@@ -74,7 +74,7 @@ export const insights: Insight[] = [
     date: "2026-11-18",
     dateLabel: "18 Nov",
     category: "SAP",
-    image: "/generated/service-rise-s4hana-telemetry.webp",
+    image: "/hero/service-rise-s4hana.webp",
     excerpt:
       "RISE is sold as a destination. It is closer to a contracting model, and the difference decides how much of your migration it covers.",
   },

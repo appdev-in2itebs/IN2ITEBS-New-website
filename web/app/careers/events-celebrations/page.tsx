@@ -123,7 +123,7 @@ export default function EventsCelebrationsPage() {
         title="Events & Celebrations"
         lead="Our offices reflect our brand that we live every day. Our employees are provided with a relaxing and creative workspace to help them get the job done!"
         media={heroPicture(
-          "/generated/careers-events-celebrations-telemetry.webp",
+          "/hero/careers-events-celebrations.webp",
           <HeroFigure figureKey="careers/events-celebrations" />,
           "Events and celebrations",
         )}

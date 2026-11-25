@@ -31,7 +31,7 @@ export default function CaseStudiesPage() {
         accentWord="shown by sector."
         subhead="Anonymised engagements are published while named-client permissions and supporting evidence are verified."
         media={heroPicture(
-          "/generated/pages-case-studies-telemetry.webp",
+          "/hero/pages-case-studies.webp",
           <HeroFigure figureKey="pages/case-studies" />,
           "Clients & Case Studies",
         )}

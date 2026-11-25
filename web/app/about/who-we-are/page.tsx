@@ -32,7 +32,7 @@ export default function WhoWeArePage() {
         title="Who we are"
         lead="In2IT EBS provides enterprise technology consulting, cloud, managed services and application engineering in India and internationally."
         media={heroPicture(
-          "/generated/about-who-we-are-telemetry.webp",
+          "/hero/about-who-we-are.webp",
           <HeroFigure figureKey="about/who-we-are" />,
           "Who we are — In2IT EBS enterprise consulting and delivery",
         )}

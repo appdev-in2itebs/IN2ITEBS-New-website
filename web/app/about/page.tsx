@@ -58,11 +58,7 @@ export default async function AboutPage() {
         eyebrow="Who we are"
         headline="Three pillars."
         accentWord="One converged enterprise."
-        media={heroPicture(
-          "/generated/pages-about-telemetry.webp",
-          <HeroFigure figureKey="pages/about" />,
-          "About In2IT EBS",
-        )}
+        media={heroPicture("/hero/pages-about.webp", <HeroFigure figureKey="pages/about" />, "About In2IT EBS")}
         frame={false}
         subhead="We are structured for Platforms, Advisory and Digital Engineering under shared delivery, governance and account ownership — so you get one accountable partner for the whole transformation, not a patchwork of vendors."
       />

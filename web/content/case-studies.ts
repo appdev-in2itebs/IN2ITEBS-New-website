@@ -29,7 +29,7 @@ export interface CaseStudy {
    * the brand suffix adds 12.
    */
   metaTitle?: string;
-  /** Hero image path under /public/generated/ for the case study subpage */
+  /** Hero image path under /public/hero/ for the case study subpage */
   heroImage?: string;
   /**
    * Quantified outcomes, with their provenance.
@@ -80,7 +80,7 @@ export interface CaseStudy {
 export const caseStudies: CaseStudy[] = [
   {
     slug: "global-engineering-consultancy",
-    heroImage: "/generated/case-study-civil-engineering-telemetry.webp",
+    heroImage: "/hero/case-study-global-engineering-consultancy.webp",
     client: "Global Engineering Consultancy",
     named: false,
     industry: "Engineering & Construction",
@@ -108,7 +108,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "global-it-services-provider",
-    heroImage: "/generated/case-study-global-it-telemetry.webp",
+    heroImage: "/hero/case-study-global-it-services-provider.webp",
     client: "Global IT Services Provider",
     named: false,
     industry: "IT & Professional Services",
@@ -142,7 +142,7 @@ export const caseStudies: CaseStudy[] = [
      * the credibility without being the fingerprint.
      */
     slug: "proximus-nxt",
-    heroImage: "/generated/case-study-telecom-network-telemetry.webp",
+    heroImage: "/hero/case-study-b2b-ict-operator-belgium.webp",
     anonymous: {
       slug: "b2b-ict-operator-belgium",
       client: "A B2B ICT services operator, Belgium",
@@ -206,7 +206,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "tgnpdcl",
-    heroImage: "/generated/case-study-power-distribution-telemetry.webp",
+    heroImage: "/hero/case-study-state-power-distribution-south-india.webp",
     anonymous: {
       slug: "state-power-distribution-south-india",
       metaTitle: "SAP ECC to RISE for a power utility",
@@ -246,7 +246,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "wipro-infrastructure-engineering",
-    heroImage: "/generated/case-study-hydraulics-robotics-telemetry.webp",
+    heroImage: "/hero/case-study-industrial-engineering-manufacturer-india.webp",
     anonymous: {
       slug: "industrial-engineering-manufacturer-india",
       client: "An industrial engineering manufacturer, India",
@@ -285,7 +285,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "waycool-foods",
-    heroImage: "/generated/case-study-agri-supply-chain-telemetry.webp",
+    heroImage: "/hero/case-study-agri-commerce-distribution-india.webp",
     anonymous: {
       slug: "agri-commerce-distribution-india",
       metaTitle: "SAP for an agri-commerce distributor",
@@ -327,7 +327,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "vahdam-india",
-    heroImage: "/generated/case-study-wellness-fmcg-telemetry.webp",
+    heroImage: "/hero/case-study-direct-to-consumer-wellness-brand-india.webp",
     anonymous: {
       slug: "direct-to-consumer-wellness-brand-india",
       client: "A direct-to-consumer wellness brand, India",
@@ -366,7 +366,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "edtech-unicorn",
-    heroImage: "/generated/case-study-edtech-telemetry.webp",
+    heroImage: "/hero/case-study-edtech-unicorn.webp",
     client: "Indian EdTech Unicorn",
     named: false,
     industry: "IT & Professional Services",
@@ -388,7 +388,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "triveni-turbines",
-    heroImage: "/generated/case-study-industrial-turbine-telemetry.webp",
+    heroImage: "/hero/case-study-industrial-turbine-manufacturer-india.webp",
     anonymous: {
       slug: "industrial-turbine-manufacturer-india",
       client: "An industrial turbine manufacturer, India",
@@ -427,7 +427,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "kenya-railways",
-    heroImage: "/generated/case-study-railway-freight-telemetry.webp",
+    heroImage: "/hero/case-study-state-railway-operator-east-africa.webp",
     anonymous: {
       slug: "state-railway-operator-east-africa",
       metaTitle: "SAP for a national railway operator",
@@ -467,7 +467,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "aptransco",
-    heroImage: "/generated/case-study-transmission-ams-telemetry.webp",
+    heroImage: "/hero/case-study-state-power-transmission-south-india.webp",
     anonymous: {
       slug: "state-power-transmission-south-india",
       metaTitle: "SAP for a power transmission utility",
@@ -501,7 +501,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "delhi-transco",
-    heroImage: "/generated/case-study-grid-reliability-telemetry.webp",
+    heroImage: "/hero/case-study-state-power-transmission-north-india.webp",
     anonymous: {
       slug: "state-power-transmission-north-india",
       metaTitle: "SAP for a state transmission utility",
@@ -564,7 +564,7 @@ export const caseStudies: CaseStudy[] = [
    */
   {
     slug: "welspun-group",
-    heroImage: "/generated/case-study-manufacturing-group-telemetry.webp",
+    heroImage: "/hero/case-study-diversified-manufacturing-group-india.webp",
     anonymous: {
       slug: "diversified-manufacturing-group-india",
       metaTitle: "SAP for a diversified manufacturer",
@@ -605,7 +605,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "odisha-mining-corporation",
-    heroImage: "/generated/case-study-mining-dispatch-telemetry.webp",
+    heroImage: "/hero/case-study-state-mining-undertaking-east-india.webp",
     anonymous: {
       slug: "state-mining-undertaking-east-india",
       client: "A state-owned mining undertaking, eastern India",
@@ -643,7 +643,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "varun-beverages",
-    heroImage: "/generated/case-study-beverage-bottling-telemetry.webp",
+    heroImage: "/hero/case-study-beverage-bottling-group-south-asia-africa.webp",
     anonymous: {
       slug: "beverage-bottling-group-south-asia-africa",
       metaTitle: "SuccessFactors for a bottling group",
@@ -682,7 +682,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "nalco",
-    heroImage: "/generated/case-study-aluminium-smelter-telemetry.webp",
+    heroImage: "/hero/case-study-state-metals-producer-india.webp",
     anonymous: {
       slug: "state-metals-producer-india",
       client: "A state-owned integrated metals producer, India",

@@ -30,7 +30,7 @@ export default async function InsightsPage() {
         accentWord="transformation"
         subhead="Points of view from our practices on SAP, SuccessFactors, AI and the technologies reshaping the enterprise."
         media={heroPicture(
-          "/generated/pages-insights-telemetry.webp",
+          "/hero/pages-insights.webp",
           <HeroFigure figureKey="about/blogs-articles" />,
           "Perspectives on enterprise transformation — In2IT EBS Insights",
         )}

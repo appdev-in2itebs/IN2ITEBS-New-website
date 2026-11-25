@@ -115,7 +115,7 @@ export default async function CurrentOpeningsPage() {
         title="Build a career with endless opportunities"
         lead="Are you prepared to excel in a welcoming, diverse, and open environment where you can continuously learn, develop, and make a lasting impact?"
         media={heroPicture(
-          "/generated/careers-current-openings-telemetry.webp",
+          "/hero/careers-current-openings.webp",
           <HeroFigure figureKey="careers/current-openings" />,
           "Current Openings at In2IT EBS",
         )}

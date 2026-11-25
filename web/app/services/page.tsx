@@ -60,11 +60,7 @@ export default function ServicesIndexPage() {
         path={[{ label: "Services" }]}
         title="Everything we do, in one place."
         lead="From SAP enterprise solutions and analytics to cloud, security, digital services and data & AI: the full In2IT EBS service catalogue, each with its own page."
-        media={heroPicture(
-          "/generated/pages-services-telemetry.webp",
-          <HeroFigure figureKey="pages/services" />,
-          "Services",
-        )}
+        media={heroPicture("/hero/pages-services.webp", <HeroFigure figureKey="pages/services" />, "Services")}
         exploreId="groups"
       />
       <V2StickyNav

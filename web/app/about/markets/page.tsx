@@ -75,7 +75,7 @@ export default function MarketsPage() {
         title="Registered, staffed and delivering"
         lead="A delivery centre is somewhere you can visit. Every city on this page has people in it. An entity without a staffed office is listed as an entity, not as a delivery centre."
         media={heroPicture(
-          "/generated/about-markets-telemetry.webp",
+          "/hero/about-markets.webp",
           <HeroFigure figureKey="about/markets" />,
           "Global operating entities and delivery centres — In2IT EBS",
         )}

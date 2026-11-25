@@ -54,11 +54,7 @@ export default async function ContactPage() {
         accentWord="transformation"
         subhead="Start your transformation, or reach the office nearest you."
         cta={false}
-        media={heroPicture(
-          "/generated/contact-hero-telemetry.webp",
-          <HeroFigure figureKey="pages/contact" />,
-          "Contact",
-        )}
+        media={heroPicture("/hero/contact-hero.webp", <HeroFigure figureKey="pages/contact" />, "Contact")}
         frame={false}
       />
 

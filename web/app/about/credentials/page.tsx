@@ -89,7 +89,7 @@ export default function CredentialsPage() {
         title="What we have been assessed on. By people who are not us."
         lead="A credential is only worth the independence of whoever issued it. Below are the partnerships, appraisals and awards we hold, each with the body that granted it and the year. We have left off everything we could not attribute that way."
         media={heroPicture(
-          "/generated/about-credentials-telemetry.webp",
+          "/hero/about-credentials.webp",
           <HeroFigure figureKey="about/credentials" />,
           "Credentials, compliance and audit — In2IT EBS",
         )}

@@ -45,7 +45,7 @@ export default function AwardsPage() {
         title="The certificate, not the claim."
         lead="Every award and accreditation on the credentials page, with the document behind it. We publish the photograph rather than the name, because a name is a claim and a certificate is evidence."
         media={heroPicture(
-          "/generated/about-awards-telemetry.webp",
+          "/hero/about-credentials-awards.webp",
           <HeroFigure figureKey="about/awards" />,
           "Awards and certificates",
         )}

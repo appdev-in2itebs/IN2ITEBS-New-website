@@ -116,7 +116,7 @@ export default function HowWePricePage() {
         title="Two commercial models, and who carries which risk in each."
         lead="Most firms in this market publish nothing about how they charge. We think the question a buyer is actually asking is not what it costs but who is exposed when it goes wrong — so this page answers that one."
         media={heroPicture(
-          "/generated/services-how-we-price-telemetry.webp",
+          "/hero/services-how-we-price.webp",
           <HeroFigure figureKey="services/how-we-price" />,
           "How we price",
         )}

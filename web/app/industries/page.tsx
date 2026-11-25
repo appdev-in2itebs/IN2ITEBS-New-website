@@ -58,7 +58,7 @@ const featuredIndustries = [
     name: "Manufacturing",
     detail: "Automotive, heavy engineering and industrial products",
     href: "/industries/manufacturing/",
-    image: "/generated/manufacturing.webp",
+    image: "/hero/industries-manufacturing.webp",
     Icon: GitBranch,
     className: "md:col-span-7 md:row-span-2",
   },
@@ -66,7 +66,7 @@ const featuredIndustries = [
     name: "Energy & utilities",
     detail: "Critical infrastructure and public enterprises",
     href: "/industries/power-utilities/",
-    image: "/generated/energy-and-utilities.webp",
+    image: "/hero/industries-power-utilities.webp",
     Icon: Network,
     className: "md:col-span-5",
   },
@@ -74,7 +74,7 @@ const featuredIndustries = [
     name: "Consumer products",
     detail: "Food, beverage and high-velocity supply chains",
     href: "/industries/consumer-goods-distribution/",
-    image: "/generated/fmcg.webp",
+    image: "/hero/industries-consumer-goods-distribution.webp",
     Icon: Building2,
     className: "md:col-span-5",
   },
@@ -93,7 +93,7 @@ export default function IndustriesPage() {
         accentWord="industries"
         subhead="Selected clients across the sectors where we've delivered SAP, Salesforce, Workday and application transformation programmes."
         media={heroPicture(
-          "/generated/industries.webp",
+          "/hero/pages-industries.webp",
           <HeroFigure figureKey="pages/industries" />,
           "Industries served",
         )}

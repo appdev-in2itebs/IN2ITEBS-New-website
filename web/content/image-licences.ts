@@ -90,7 +90,7 @@ export const imageLicences: ImageLicence[] = [
   // generic features, so nobody is identifiable; screens carry unlabelled charts. The source
   // PNGs are kept outside public/, in assets/hero-images/firefly-final-2026-11-25/.
   {
-    file: "public/generated/about-credentials-telemetry.webp",
+    file: "public/hero/about-credentials.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-01",
@@ -101,7 +101,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/about-markets-telemetry.webp",
+    file: "public/hero/about-markets.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-02",
@@ -111,7 +111,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/about-our-leadership-telemetry.webp",
+    file: "public/hero/about-our-leadership.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-03",
@@ -121,7 +121,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/about-partnerships-telemetry.webp",
+    file: "public/hero/about-partnerships.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-04",
@@ -132,7 +132,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/about-where-we-stand-telemetry.webp",
+    file: "public/hero/about-where-we-stand.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-05",
@@ -142,7 +142,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/about-who-we-are-telemetry.webp",
+    file: "public/hero/about-who-we-are.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-06",
@@ -152,7 +152,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/banking.webp",
+    file: "public/hero/industries-banking-financial-services.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-07",
@@ -162,7 +162,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/careers-current-openings-telemetry.webp",
+    file: "public/hero/careers-current-openings.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-08",
@@ -172,7 +172,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/careers-events-celebrations-telemetry.webp",
+    file: "public/hero/careers-events-celebrations.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-09",
@@ -183,7 +183,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/careers-hub-telemetry.webp",
+    file: "public/hero/careers-hub.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-10",
@@ -193,7 +193,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/careers-our-culture-telemetry.webp",
+    file: "public/hero/careers-our-culture.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-11",
@@ -203,7 +203,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-agri-supply-chain-telemetry.webp",
+    file: "public/hero/case-study-agri-commerce-distribution-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-12",
@@ -213,7 +213,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-aluminium-smelter-telemetry.webp",
+    file: "public/hero/case-study-state-metals-producer-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-13",
@@ -224,7 +224,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-beverage-bottling-telemetry.webp",
+    file: "public/hero/case-study-beverage-bottling-group-south-asia-africa.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-14",
@@ -235,7 +235,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-civil-engineering-telemetry.webp",
+    file: "public/hero/case-study-global-engineering-consultancy.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-15",
@@ -245,7 +245,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-grid-reliability-telemetry.webp",
+    file: "public/hero/case-study-state-power-transmission-north-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-16",
@@ -255,7 +255,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-edtech-telemetry.webp",
+    file: "public/hero/case-study-edtech-unicorn.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-17",
@@ -266,7 +266,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-global-it-telemetry.webp",
+    file: "public/hero/case-study-global-it-services-provider.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-18",
@@ -276,7 +276,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-hydraulics-robotics-telemetry.webp",
+    file: "public/hero/case-study-industrial-engineering-manufacturer-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-19",
@@ -286,7 +286,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-industrial-turbine-telemetry.webp",
+    file: "public/hero/case-study-industrial-turbine-manufacturer-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-20",
@@ -296,7 +296,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-mining-dispatch-telemetry.webp",
+    file: "public/hero/case-study-state-mining-undertaking-east-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-21",
@@ -307,7 +307,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-power-distribution-telemetry.webp",
+    file: "public/hero/case-study-state-power-distribution-south-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-22",
@@ -318,7 +318,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-railway-freight-telemetry.webp",
+    file: "public/hero/case-study-state-railway-operator-east-africa.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-23",
@@ -329,7 +329,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-telecom-network-telemetry.webp",
+    file: "public/hero/case-study-b2b-ict-operator-belgium.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-24",
@@ -339,7 +339,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-transmission-ams-telemetry.webp",
+    file: "public/hero/case-study-state-power-transmission-south-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-25",
@@ -349,7 +349,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-wellness-fmcg-telemetry.webp",
+    file: "public/hero/case-study-direct-to-consumer-wellness-brand-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-26",
@@ -359,7 +359,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/case-study-manufacturing-group-telemetry.webp",
+    file: "public/hero/case-study-diversified-manufacturing-group-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-27",
@@ -369,7 +369,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/contact-hero-telemetry.webp",
+    file: "public/hero/contact-hero.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-28",
@@ -379,7 +379,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/energy-and-utilities.webp",
+    file: "public/hero/industries-power-utilities.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-29",
@@ -389,7 +389,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/engineering-constructions-ecno.webp",
+    file: "public/hero/industries-real-estate-infrastructure.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-30",
@@ -399,7 +399,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/fmcg.webp",
+    file: "public/hero/industries-consumer-goods-distribution.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-31",
@@ -409,7 +409,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/government.webp",
+    file: "public/hero/industries-government-public-sector.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-32",
@@ -419,7 +419,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/healthcare-life-science.webp",
+    file: "public/hero/industries-pharma-healthcare-life-sciences.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-33",
@@ -429,7 +429,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/heavy-engineering.webp",
+    file: "public/hero/industries-metals-mining-steel.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-34",
@@ -439,7 +439,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/industries.webp",
+    file: "public/hero/pages-industries.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-35",
@@ -449,7 +449,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/manufacturing.webp",
+    file: "public/hero/industries-manufacturing.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-36",
@@ -459,7 +459,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/pages-about-telemetry.webp",
+    file: "public/hero/pages-about.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-37",
@@ -470,7 +470,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/pages-advisory-telemetry.webp",
+    file: "public/hero/pages-advisory.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-38",
@@ -480,7 +480,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/pages-case-studies-telemetry.webp",
+    file: "public/hero/pages-case-studies.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-39",
@@ -490,7 +490,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/pages-homepage-telemetry.webp",
+    file: "public/hero/pages-homepage.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-40",
@@ -500,7 +500,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/pages-insights-telemetry.webp",
+    file: "public/hero/pages-insights.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-41",
@@ -510,7 +510,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-application-engineering-telemetry.webp",
+    file: "public/hero/service-application-engineering.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-42",
@@ -520,7 +520,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-application-estate-review-telemetry.webp",
+    file: "public/hero/service-application-estate-review.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-43",
@@ -530,7 +530,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-applied-ai-telemetry.webp",
+    file: "public/hero/service-applied-ai.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-44",
@@ -540,7 +540,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-converged-flow-telemetry.webp",
+    file: "public/hero/service-converged-flow.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-45",
@@ -551,7 +551,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-converged-momentum-telemetry.webp",
+    file: "public/hero/service-converged-momentum.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-46",
@@ -561,7 +561,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-converged-pulse-telemetry.webp",
+    file: "public/hero/service-converged-pulse.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-47",
@@ -571,7 +571,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-data-engineering-telemetry.webp",
+    file: "public/hero/service-data-engineering.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-48",
@@ -581,7 +581,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-digital-data-ai-telemetry.webp",
+    file: "public/hero/service-digital-data-ai.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-49",
@@ -591,7 +591,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-ecc-prism-telemetry.webp",
+    file: "public/hero/service-ecc-prism.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-50",
@@ -602,7 +602,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-enterprise-data-management-telemetry.webp",
+    file: "public/hero/service-enterprise-data-management.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-51",
@@ -612,7 +612,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-enterprise-platforms-telemetry.webp",
+    file: "public/hero/service-enterprise-platforms.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-52",
@@ -622,7 +622,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-managed-services-telemetry.webp",
+    file: "public/hero/service-managed-services.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-53",
@@ -632,7 +632,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-rise-s4hana-telemetry.webp",
+    file: "public/hero/service-rise-s4hana.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-54",
@@ -642,7 +642,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-salesforce-telemetry.webp",
+    file: "public/hero/service-salesforce.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-55",
@@ -652,7 +652,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-sap-telemetry.webp",
+    file: "public/hero/service-sap.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-56",
@@ -662,7 +662,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-smart-meter-to-cash-telemetry.webp",
+    file: "public/hero/service-smart-meter-to-cash.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-57",
@@ -673,7 +673,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-successfactors-telemetry.webp",
+    file: "public/hero/service-successfactors.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-58",
@@ -683,7 +683,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/service-workday-telemetry.webp",
+    file: "public/hero/service-workday.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-59",
@@ -693,7 +693,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/telecom.webp",
+    file: "public/hero/industries-technology-digital-natives.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-60",
@@ -703,7 +703,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/pages-services-telemetry.webp",
+    file: "public/hero/pages-services.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-61",
@@ -714,7 +714,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/about-awards-telemetry.webp",
+    file: "public/hero/about-credentials-awards.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-62",
@@ -725,7 +725,7 @@ export const imageLicences: ImageLicence[] = [
     approvedBy: "Rudra Shatapathy",
   },
   {
-    file: "public/generated/services-how-we-price-telemetry.webp",
+    file: "public/hero/services-how-we-price.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
     reference: "firefly-2026-11-25-final-63",

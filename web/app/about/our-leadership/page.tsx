@@ -30,7 +30,7 @@ export default async function OurLeadershipPage() {
         title="Our Leadership"
         lead="Meet Our Leaders"
         media={heroPicture(
-          "/generated/about-our-leadership-telemetry.webp",
+          "/hero/about-our-leadership.webp",
           <HeroFigure figureKey="about/our-leadership" />,
           "Leadership at In2IT EBS — Executive briefing",
         )}

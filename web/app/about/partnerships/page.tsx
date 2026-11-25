@@ -71,7 +71,7 @@ export default function PartnershipsPage() {
         title="The ones we hold. And what each of them actually gets you."
         lead="A partner logo on a website tells a buyer nothing on its own. For each partnership below we have said what tier it is, what we deliver under it, and — where there is one — where we have delivered it."
         media={heroPicture(
-          "/generated/about-partnerships-telemetry.webp",
+          "/hero/about-partnerships.webp",
           <HeroFigure figureKey="about/partnerships" />,
           "Partnerships and platform alliances — In2IT EBS",
         )}
