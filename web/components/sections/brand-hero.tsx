@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import Image from "next/image";
 import { HeroFigure } from "@/components/sections/hero-figure";
 import { SPLASH_DONE } from "@/components/layout/page-loader";
 import { Container } from "@/components/ui/container";
@@ -174,16 +173,6 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
       */}
       <div aria-hidden className="pointer-events-none absolute inset-0 isolate opacity-[0.07]">
         <HeroFigure figureKey={`home/${slides[active]?.id ?? "brand"}`} className="h-full w-full" />
-      </div>
-      <div aria-hidden className="pointer-events-none absolute inset-0">
-        <Image
-          src="/hero/pages-homepage.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-contain object-center opacity-100"
-        />
       </div>
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
 
