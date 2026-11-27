@@ -199,6 +199,13 @@ export function ServicePageV2({ page }: { page: ServicePage & { heroImage?: stri
           ) : null}
         </>
       ) : null}
+      {page.accelerators ? (
+        isExplainer(page.accelerators) ? (
+          <Explainer spec={page.accelerators} tone="canvas" />
+        ) : (
+          <DiagramBand src={page.accelerators.src} alt={page.accelerators.alt} caption={page.accelerators.caption} />
+        )
+      ) : null}
       {/* The interactive blocks carried over from the existing site. The RISE/GROW chooser is the
           only thing on this site that answers a buyer's question before they talk to us, which is
           why it survived the restructure rather than being retired with the page it sat on. */}

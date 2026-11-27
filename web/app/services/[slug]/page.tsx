@@ -6,7 +6,8 @@ import { servicePages } from "@/content/legacy-services";
 import { getService } from "@/lib/cms/content";
 
 export async function generateStaticParams() {
-  return servicePages.map((page) => ({ slug: page.slug }));
+  // /services/advisory/ has its own static route (app/services/advisory/page.tsx).
+  return servicePages.filter((page) => page.slug !== "advisory").map((page) => ({ slug: page.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

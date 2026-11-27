@@ -54,14 +54,19 @@ export const enterprisePlatformsChildren: NavItem[] = [
 ];
 
 /**
- * Advisory — the hub only, for now.
- *
- * Four child pages are specified in the architecture. Two of the four are genuinely sellable and
- * two are aspirational; which is which has not been settled. Publishing four pages before that is
- * decided would put unevidenced claims on the site, which is the defect this rebuild exists to
- * remove. The hub ships; the children ship when the content is settled.
+ * Advisory — the hub and four service pages (owner's production brief, 27 Nov 2026). The four were
+ * held back until each was scoped as a standalone offer with a case study behind it; the brief
+ * settles that, and publishes them under /services/advisory/.
  */
-export const advisoryChildren: NavItem[] = [];
+export const advisoryChildren: NavItem[] = [
+  {
+    label: "Transformation strategy and governance",
+    href: "/services/advisory/transformation-strategy-and-governance/",
+  },
+  { label: "Enterprise architecture", href: "/services/advisory/enterprise-architecture/" },
+  { label: "Data protection and privacy", href: "/services/advisory/data-protection-and-privacy/" },
+  { label: "AI governance", href: "/services/advisory/ai-governance/" },
+];
 
 /** Digital, Data & AI — five pages plus the hub. */
 export const digitalDataAiChildren: NavItem[] = [
@@ -72,10 +77,59 @@ export const digitalDataAiChildren: NavItem[] = [
   { label: "Applied AI", href: "/services/applied-ai/" },
 ];
 
+/**
+ * The Services mega-menu as the owner asked for it on 27 Nov 2026 ("Three practices. One accountable
+ * team."): Advisory, Enterprise Platforms and Digital, Data & AI, each with its line, a short
+ * description, every page in the pillar (the same lists the menu has always carried) and a way into
+ * the pillar page, and the named fixed-scope offers underneath.
+ */
+export const servicesMenuPractices = {
+  eyebrow: "What we do",
+  heading: "Three practices. One accountable team.",
+  intro:
+    "Independent at the advisory layer, deep at the delivery layer. The same people who recommend the platform are the ones answerable when it goes live.",
+  practices: [
+    {
+      name: "Advisory",
+      tagline: "What to build, what to buy, what to leave alone.",
+      body: "Platform selection, business cases and programme assurance — including the recommendations that don't need us.",
+      href: "/services/advisory/",
+      links: [
+        {
+          label: "Transformation strategy and governance",
+          href: "/services/advisory/transformation-strategy-and-governance/",
+        },
+        { label: "Enterprise architecture", href: "/services/advisory/enterprise-architecture/" },
+        { label: "Data protection and DPDP", href: "/services/advisory/data-protection-and-privacy/" },
+        { label: "AI governance", href: "/services/advisory/ai-governance/" },
+      ],
+    },
+    {
+      name: "Enterprise Platforms",
+      tagline: "SAP is our deepest practice, not our only one.",
+      body: "Implementation, migration and managed service across SAP, with Salesforce and Workday alongside.",
+      href: "/services/enterprise-platforms/",
+      links: enterprisePlatformsChildren,
+    },
+    {
+      name: "Digital, Data & AI",
+      tagline: "The applications and data either side of the core.",
+      body: "Build, integrate and modernise the applications that have to agree with the ledger — and put AI to work where a person still decides.",
+      href: "/services/digital-data-ai/",
+      links: digitalDataAiChildren,
+    },
+  ],
+  offers: {
+    heading: "Named offers, fixed scope.",
+    body: "ECC Prism · GROW Fast · Smart Meter to Cash · The Application Estate Review — each with its scope, duration and price shape stated before you sign.",
+    link: { label: "See the offers", href: "/services/how-we-price/" },
+  },
+};
+
 /** The Services mega-menu, grouped by pillar. */
 export const whatWeDoMenu: NavItem[] = [
   { label: "Enterprise Platforms", href: "/services/enterprise-platforms/", children: enterprisePlatformsChildren },
-  { label: "Advisory", href: "/services/advisory/" },
+  { label: "Advisory", href: "/services/advisory/", children: advisoryChildren },
   { label: "Digital, Data & AI", href: "/services/digital-data-ai/", children: digitalDataAiChildren },
 ];
 

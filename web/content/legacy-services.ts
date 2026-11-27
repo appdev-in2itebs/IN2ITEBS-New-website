@@ -132,6 +132,12 @@ export interface ServicePage {
    * Use it sparingly. Two groups is a page with two jobs; three would be a page that should have
    * been split.
    */
+  /**
+   * The accelerators block (our own IP: the Utility Billing QPPS package and the rest). It sat on
+   * the Advisory hub until 27 Nov 2026; the Advisory brief moved it to the SAP and Smart Meter to
+   * Cash pages, because it is delivery IP, not advice.
+   */
+  accelerators?: DiagramSlot;
   extraSections?: {
     heading: string;
     /** Short label for the sticky nav chip. The heading is usually too long to sit in one. */
@@ -212,7 +218,15 @@ export const serviceGroups: ServiceGroup[] = [
     href: svc("advisory"),
     icon: "lightbulb",
     blurb: "Transformation strategy, enterprise architecture, governance, risk and data protection.",
-    items: [],
+    items: [
+      {
+        label: "Transformation strategy and governance",
+        href: "/services/advisory/transformation-strategy-and-governance/",
+      },
+      { label: "Enterprise architecture", href: "/services/advisory/enterprise-architecture/" },
+      { label: "Data protection and DPDP", href: "/services/advisory/data-protection-and-privacy/" },
+      { label: "AI governance", href: "/services/advisory/ai-governance/" },
+    ],
   },
   {
     slug: "digital-data-ai",
@@ -290,17 +304,16 @@ export const servicePages: ServicePage[] = [
   {
     slug: "advisory",
     heroImage: "/hero/pages-advisory.webp",
-    diagram: EXPLAINERS["p1-accelerators"],
     name: "Advisory",
     title: "Advisory",
     group: "advisory",
     icon: "lightbulb",
     sourceUrl: "https://www.in2itebs.com/services/advisory/",
-    metaTitle: "SAP & Enterprise Advisory Services",
+    metaTitle: "Advisory — In2IT EBS",
     metaDescription:
-      "Transformation strategy, enterprise architecture, governance and data protection — delivered by the people who also build and run the systems.",
+      "Four advisory services from In2IT EBS — transformation strategy, enterprise architecture, data protection and AI governance — each with a client case.",
     intro: [
-      "Advice that is never followed by delivery is a deck. Delivery without advice is an order taker. We do both, which means our recommendations have to survive the moment somebody has to build them.",
+      "Advice that is never followed by delivery is a deck. Delivery without advice is order-taking. We do both — so every recommendation we make has to hold up when someone sits down to build it.",
     ],
     sectionsHeading: "Where we advise",
     sections: [
@@ -308,25 +321,26 @@ export const servicePages: ServicePage[] = [
         title: "Transformation strategy and governance",
         icon: "target",
         body: "What to change, in what order, and how the programme is governed so that it can be stopped at a defined moment rather than an undefined one.",
+        href: "/services/advisory/transformation-strategy-and-governance/",
       },
       {
         title: "Enterprise architecture",
         icon: "layers",
         body: "The target estate, the route to it, and the application and cloud decisions that follow from it rather than preceding it.",
+        href: "/services/advisory/enterprise-architecture/",
       },
       {
         title: "Data protection and privacy",
         icon: "lock",
         body: "India's DPDP Act and its equivalents in the markets we operate in — South Africa's POPIA, Kenya's Data Protection Act, Singapore's PDPA and the UAE PDPL.",
+        href: "/services/advisory/data-protection-and-privacy/",
       },
       {
         title: "AI governance",
         icon: "shield-alert",
         body: "Where AI is allowed to act, what it may see, who reviews its output, and the evidence an auditor will ask for.",
+        href: "/services/advisory/ai-governance/",
       },
-    ],
-    closing: [
-      "Each of these is currently delivered inside platform and engineering programmes. Detailed pages follow as each is scoped as a standalone offer.",
     ],
   },
   {
@@ -383,6 +397,7 @@ export const servicePages: ServicePage[] = [
   // ══════════════════════════════════════════════════ ENTERPRISE PLATFORMS
   {
     slug: "sap",
+    accelerators: EXPLAINERS["p1-accelerators"],
     heroImage: "/hero/service-sap.webp",
     qualifiedPackages: "sap",
     interactive: "sap-toolchain",
@@ -946,6 +961,7 @@ export const servicePages: ServicePage[] = [
   },
   {
     slug: "smart-meter-to-cash",
+    accelerators: EXPLAINERS["p1-accelerators"],
     heroImage: "/hero/service-smart-meter-to-cash.webp",
     diagram: EXPLAINERS["n2-meter-to-cash"],
     name: "Smart Meter to Cash",

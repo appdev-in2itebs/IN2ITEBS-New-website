@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { servicePages } from "@/content/legacy-services";
+import { advisoryPages } from "@/content/advisory";
 import { industries } from "@/content/industries";
 import { legacyIndustries } from "@/content/legacy-industries";
 
@@ -52,6 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dynamicPaths = [
     ...servicePages.map((p) => `/services/${p.slug}/`), // every service page, pillar hubs included
+    ...advisoryPages.map((p) => `/services/advisory/${p.slug}/`), // the four Advisory service pages
     ...industries.map((i) => `/industries/${i.slug}/`),
     ...legacyIndustries.map((i) => `/industries/${i.slug}/`),
     ...articles.map((p) => `/insights/${p.slug}/`),

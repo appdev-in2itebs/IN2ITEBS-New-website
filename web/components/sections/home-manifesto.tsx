@@ -107,6 +107,9 @@ export function HomeManifesto() {
               width={949}
               height={683}
               sizes="(min-width: 1024px) 34vw, 0px"
+              // Served as the file itself: it is already a 66 KB WebP cut-out, and on the demo server the
+              // resizer stalled on one width (750) of it, so 1.5x screens were left with an empty column.
+              unoptimized
               className="mx-auto h-auto w-full max-w-[30rem] drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)]"
             />
           </Reveal>

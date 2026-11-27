@@ -30,6 +30,8 @@ export async function V2Hero({
   lead: pageLead,
   media: pageMedia,
   cta = true,
+  ctaLabel = "Talk to us",
+  ctaHref = site.primaryCta.href,
   exploreId = "overview",
   route,
 }: {
@@ -38,6 +40,9 @@ export async function V2Hero({
   lead?: ReactNode;
   media?: ReactNode;
   cta?: boolean;
+  /** The primary button's words and target; the Advisory pages say "Talk to an advisor". */
+  ctaLabel?: string;
+  ctaHref?: string;
   exploreId?: string | null;
   /** This page's URL path, so an edit made in /admin/pages can replace the title, intro or picture. */
   route?: string;
@@ -94,8 +99,8 @@ export async function V2Hero({
             {cta || exploreId ? (
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 {cta ? (
-                  <Button href={site.primaryCta.href} variant="primary" withArrow>
-                    Talk to us
+                  <Button href={ctaHref} variant="primary" withArrow>
+                    {ctaLabel}
                   </Button>
                 ) : null}
                 {exploreId ? (

@@ -744,6 +744,47 @@ export const imageLicences: ImageLicence[] = [
     aiGenerated: true,
     approvedBy: "Rudra Shatapathy",
   },
+  {
+    file: "public/hero/advisory-transformation-strategy.webp",
+    source: "licensed-generative",
+    provider: "Adobe Firefly",
+    reference: "firefly-image5-2026-11-27-adv-01 (2K)",
+    acquired: "2026-11-27",
+    depicts:
+      "A thin steel-blue track on a low plinth rising gently then steeply, with gate posts along it and an early post in sand",
+    aiGenerated: true,
+    approvedBy: "Rudra Shatapathy",
+  },
+  {
+    file: "public/hero/advisory-enterprise-architecture.webp",
+    source: "licensed-generative",
+    provider: "Adobe Firefly",
+    reference: "firefly-image5-2026-11-27-adv-02 (2K)",
+    acquired: "2026-11-27",
+    depicts: "Eight small matte blocks in a ring, each joined by one rod to a central steel-blue hub block",
+    aiGenerated: true,
+    approvedBy: "Rudra Shatapathy",
+  },
+  {
+    file: "public/hero/advisory-data-protection.webp",
+    source: "licensed-generative",
+    provider: "Adobe Firefly",
+    reference: "firefly-image5-2026-11-27-adv-03 (2K)",
+    acquired: "2026-11-27",
+    depicts: "A matte filing drawer half open, its cards sorted and tagged, with a small round lock dial in sand",
+    aiGenerated: true,
+    approvedBy: "Rudra Shatapathy",
+  },
+  {
+    file: "public/hero/advisory-ai-governance.webp",
+    source: "licensed-generative",
+    provider: "Adobe Firefly",
+    reference: "firefly-image5-2026-11-27-adv-04 (2K)",
+    acquired: "2026-11-27",
+    depicts: "Three stepped rails with increasing checkpoints, the last on the top rail a raised sand seal",
+    aiGenerated: true,
+    approvedBy: "Rudra Shatapathy",
+  },
 ];
 
 /**
