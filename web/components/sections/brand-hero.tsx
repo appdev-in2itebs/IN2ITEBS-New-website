@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { HeroFigure } from "@/components/sections/hero-figure";
+import { HeroStreams } from "@/components/sections/hero-streams";
 import { SPLASH_DONE } from "@/components/layout/page-loader";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -171,9 +171,10 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
         claim the way the live site's hero frames did, under a navy wash so the words stay first.
         The drawn figure stays underneath it as the fallback while the picture loads.
       */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 isolate opacity-[0.07]">
-        <HeroFigure figureKey={`home/${slides[active]?.id ?? "brand"}`} className="h-full w-full" />
-      </div>
+      {/* 27 November 2026: the owner chose the "Converged Streams" background (sample C of four):
+          light flowing in from both sides into one core, the picture of "Converged Intelligence".
+          It replaces the faint drawn squares. See components/sections/hero-streams.tsx. */}
+      <HeroStreams className="pointer-events-none absolute inset-0 h-full w-full" />
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
 
       <HeroChrome />
