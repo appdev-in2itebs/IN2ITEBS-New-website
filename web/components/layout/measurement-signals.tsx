@@ -9,17 +9,10 @@ export function MeasurementSignals() {
       const target = new URL(link.href, location.origin);
       if (target.origin !== location.origin) return;
       if (target.pathname === "/contact/") signalMeasurement("contact_click");
-      else if (
-        [
-          "/oracle/",
-          "/microsoft/",
-          "/workday/",
-          "/salesforce/",
-          "/sap-enterprise-solutions/",
-          "/sap-enterprise-solutions/successfactors/",
-        ].includes(target.pathname)
-      )
-        signalMeasurement("practice_click");
+      // A click into any service page is a practice click. The list used to be the five platform
+      // practice URLs; after the November 2026 restructure every service lives under /services/,
+      // so the prefix is the signal and a new service page needs no change here.
+      else if (/^\/services\/[^/]+\/$/.test(target.pathname)) signalMeasurement("practice_click");
     };
     document.addEventListener("click", listener);
     return () => document.removeEventListener("click", listener);

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { FeatureGrid } from "@/components/sections/feature-grid";
 import { CtaSection } from "@/components/sections/cta-section";
 import { social } from "@/content/site";
@@ -43,15 +44,16 @@ export default function CareersPage() {
         accentWord="opportunities."
         subhead="Are you ready to thrive in a welcoming, diverse and open environment where you can keep learning, growing and making a lasting impact? You've found your destination."
         cta={false}
-        media={<HeroObject name="pages/careers" />}
+        media={heroPicture("/hero/careers-hub.webp", <HeroFigure figureKey="pages/careers" />, "Careers")}
         frame={false}
       />
 
       {/* OUR CULTURE */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Our culture"
               lead="Our performance-oriented culture and responsible approach are the foundations of our success. We keep work appealing and let people find their own rhythm — because creativity, dedication and performance are what our business depends on. We encourage achievement through collaboration and innovation."
             >

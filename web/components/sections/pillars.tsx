@@ -9,7 +9,9 @@ const pillars = [
   {
     Icon: Layers,
     name: "Platforms",
-    body: "SAP, SuccessFactors, Salesforce, Workday, Oracle and Microsoft: enterprise platforms connected to your business processes and supported across their lifecycle.",
+    // Oracle and Microsoft removed 19 November 2026 — see content/home-hero.ts for the reasoning.
+    // The register publishes both as "Ahead of us"; this sentence said we ran them.
+    body: "SAP, SuccessFactors, Salesforce and Workday: enterprise platforms connected to your business processes and supported across their lifecycle.",
   },
   {
     Icon: Compass,

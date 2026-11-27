@@ -1,0 +1,557 @@
+/* The four Advisory diagrams (advisory-diagrams.tsx). Colours are the brand tokens, as in the
+   explainers. Everything below the first block is the finished drawing; the `.scene--live` rules at
+   the foot turn the scene's scroll progress --p into motion, each piece arriving at its --at. */
+
+.adv-dg {
+  --dg-navy: oklch(var(--color-bg-brand));
+  --dg-action: oklch(var(--color-action));
+  --dg-steel: oklch(var(--color-gold));
+  --dg-ink: oklch(var(--color-fg-primary));
+  --dg-muted: oklch(var(--color-fg-secondary));
+  --dg-rule: oklch(var(--color-border-subtle));
+  --dg-white: oklch(var(--color-bg-surface));
+  --dg-tint: color-mix(in oklch, oklch(var(--color-gold)) 12%, white);
+  --dg-wire: color-mix(in oklch, oklch(var(--color-gold)) 45%, white);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --k: 1;
+  color: var(--dg-ink);
+}
+.adv-dg__eyebrow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dg-steel);
+}
+
+/* ---------------------------------------------------------------- stage gates */
+.adv-gates {
+  position: relative;
+  padding: 8px 8px 0;
+}
+.adv-gates__head {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  max-width: 24rem;
+  z-index: 2;
+}
+.adv-gates__quote {
+  margin: 14px 0 0;
+  font-size: clamp(18px, 1.8vw, 23px);
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--dg-ink);
+}
+.adv-gates__quote::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 2px;
+  margin-top: 10px;
+  background: oklch(var(--color-gold-soft));
+}
+.adv-gates__plot {
+  position: relative;
+  height: 340px;
+  margin-top: 10px;
+}
+.adv-gates__svg {
+  position: absolute;
+  inset: 0 0 0 0;
+  width: 100%;
+  height: 90%;
+  overflow: visible;
+}
+.adv-gates__area {
+  fill: var(--dg-tint);
+}
+.adv-gates__curve {
+  fill: none;
+  stroke: var(--dg-navy);
+  stroke-width: 2.5;
+}
+.adv-gates__axis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 90%;
+  height: 2px;
+  background: var(--dg-navy);
+  transform-origin: left;
+}
+.adv-gates__mark {
+  position: absolute;
+  top: 0;
+  bottom: 10%;
+  width: 0;
+}
+/* --y is the height of the curve at this gate, as a share of the plot */
+.adv-gates__dot {
+  position: absolute;
+  left: -6px;
+  bottom: calc(var(--y) - 6px);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--dg-action);
+  box-shadow: 0 0 0 4px color-mix(in oklch, oklch(var(--color-action)) 18%, transparent);
+}
+.adv-gates__drop {
+  position: absolute;
+  left: -1px;
+  bottom: 0;
+  height: var(--y);
+  border-left: 2px dashed var(--dg-action);
+  opacity: 0.7;
+  transform-origin: bottom;
+}
+.adv-gates__diamond {
+  position: absolute;
+  left: -11px;
+  bottom: -11px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--dg-navy);
+  background: var(--dg-white);
+  transform: rotate(45deg);
+}
+.adv-gates__labels {
+  position: relative;
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  height: 52px;
+}
+.adv-gates__labels li {
+  position: absolute;
+  top: 0;
+  width: 20%;
+  text-align: center;
+  transform: translateX(-50%);
+}
+.adv-gates__labels li:nth-child(1) {
+  left: 9%;
+}
+.adv-gates__labels li:nth-child(2) {
+  left: 29.5%;
+}
+.adv-gates__labels li:nth-child(3) {
+  left: 50%;
+}
+.adv-gates__labels li:nth-child(4) {
+  left: 70.5%;
+}
+.adv-gates__labels li:nth-child(5) {
+  left: 91%;
+}
+.adv-gates__labels b {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dg-ink);
+}
+.adv-gates__labels span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--dg-muted);
+}
+.adv-gates__time {
+  margin: 16px 0 0;
+  text-align: right;
+  font-size: 13px;
+  color: var(--dg-muted);
+}
+
+/* ---------------------------------------------------------------- eight systems */
+.adv-mesh {
+  display: grid;
+  gap: 40px;
+}
+@media (min-width: 768px) {
+  .adv-mesh {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .adv-mesh__panel + .adv-mesh__panel {
+    border-left: 1px solid var(--dg-rule);
+  }
+}
+.adv-mesh__panel {
+  padding: 4px 24px 8px;
+  text-align: center;
+}
+.adv-mesh__field {
+  position: relative;
+  aspect-ratio: 100 / 92;
+  max-width: 460px;
+  margin: 28px auto 0;
+}
+.adv-mesh__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.adv-mesh__wire,
+.adv-mesh__spoke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+}
+.adv-mesh__wire {
+  stroke: var(--dg-wire);
+  stroke-width: 0.3;
+}
+.adv-mesh__spoke {
+  stroke: var(--dg-action);
+  stroke-width: 0.55;
+}
+.adv-mesh__node {
+  position: absolute;
+  min-width: 5.6em;
+  padding: 6px 10px;
+  border: 1.5px solid var(--dg-navy);
+  border-radius: 6px;
+  background: var(--dg-white);
+  font-size: clamp(11px, 1.15vw, 14px);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--dg-ink);
+  transform: translate(-50%, -50%);
+}
+.adv-mesh__hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  gap: 2px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: var(--dg-navy);
+  color: #fff;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 14px 30px -14px rgb(18 30 59 / 0.6);
+}
+.adv-mesh__hub b {
+  font-size: clamp(12px, 1.2vw, 15px);
+}
+.adv-mesh__hub span {
+  font-size: clamp(11px, 1.05vw, 13px);
+  color: #a3cbe6;
+}
+@media (max-width: 767px) {
+  .adv-mesh__panel {
+    padding-inline: 0;
+  }
+  .adv-mesh__node {
+    min-width: 0;
+    padding: 5px 7px;
+  }
+  .adv-mesh__hub {
+    padding: 7px 9px;
+  }
+  .adv-mesh__hub b {
+    font-size: 11px;
+  }
+  .adv-mesh__hub span {
+    font-size: 10px;
+  }
+}
+.adv-mesh__count {
+  margin: 26px 0 0;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--dg-ink);
+}
+.adv-mesh__sub {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--dg-muted);
+}
+
+/* ---------------------------------------------------------------- DPDP timetable */
+.adv-time {
+  padding: 8px 2% 4px;
+}
+.adv-time__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+.adv-time__event {
+  display: grid;
+  gap: 2px;
+  font-size: 14px;
+  color: var(--dg-muted);
+}
+.adv-time__event b {
+  margin-bottom: 6px;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  color: var(--dg-ink);
+}
+.adv-time__event--end {
+  text-align: right;
+}
+.adv-time__track {
+  position: relative;
+  height: 90px;
+  margin: 8px 9px 0;
+}
+.adv-time__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--dg-navy);
+  transform-origin: left;
+}
+.adv-time__left {
+  position: absolute;
+  left: calc(var(--today) * 100%);
+  right: 0;
+  top: 50%;
+  height: 16px;
+  margin-top: -8px;
+  background: color-mix(in oklch, oklch(var(--color-action)) 22%, white);
+  transform-origin: left;
+}
+.adv-time__today {
+  position: absolute;
+  left: calc(var(--today) * 100%);
+  top: 14px;
+  bottom: 14px;
+  border-left: 2px solid var(--dg-action);
+}
+.adv-time__today span {
+  position: absolute;
+  top: -6px;
+  left: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dg-action);
+}
+.adv-time__months {
+  position: absolute;
+  left: calc(var(--today) * 100%);
+  right: 0;
+  bottom: -4px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dg-action);
+}
+.adv-time__dot {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--dg-navy);
+}
+.adv-time__bottom {
+  position: relative;
+  height: 96px;
+  margin: 0 9px;
+}
+.adv-time__event--mid {
+  position: absolute;
+  right: calc((1 - var(--consent)) * 100% + 28px);
+  top: 18px;
+  text-align: right;
+}
+.adv-time__event--mid::after {
+  content: "";
+  position: absolute;
+  right: -28px;
+  top: -46px;
+  width: 20px;
+  height: 66px;
+  border-right: 2px solid var(--dg-navy);
+  border-bottom: 2px solid var(--dg-navy);
+}
+
+/* ---------------------------------------------------------------- risk tiers */
+.adv-tiers {
+  display: grid;
+  gap: 14px;
+}
+.adv-tiers__phases,
+.adv-tiers__row {
+  display: grid;
+  grid-template-columns: 26% 1fr 15%;
+  gap: 0 4%;
+  align-items: center;
+}
+.adv-tiers__axis {
+  position: relative;
+  height: 20px;
+}
+.adv-tiers__axis span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--dg-steel);
+}
+.adv-tiers__row {
+  min-height: 108px;
+  padding: 18px 24px;
+  border-radius: 10px;
+  background: var(--dg-tint);
+}
+.adv-tiers__row--0 {
+  background: color-mix(in oklch, oklch(var(--color-gold)) 5%, white);
+}
+.adv-tiers__row--2 {
+  background: color-mix(in oklch, oklch(var(--color-gold)) 20%, white);
+}
+.adv-tiers__name b {
+  display: block;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.adv-tiers__name span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--dg-muted);
+}
+.adv-tiers__track {
+  position: relative;
+  height: 40px;
+}
+.adv-tiers__track::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--dg-navy);
+  transform-origin: left;
+  transform: scaleX(var(--k));
+}
+.adv-tiers__phase {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--dg-navy);
+}
+.adv-tiers__control {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border-radius: 5px;
+  background: var(--dg-navy);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.adv-tiers__control--person {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  background: var(--dg-action);
+}
+.adv-tiers__note {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--dg-ink);
+}
+
+/* ---------------------------------------------------------------- motion */
+/* --k: how far this piece has arrived, 0..1, from the scene's progress past its threshold. */
+.scene--live.adv-dg [style*="--at"] {
+  --k: clamp(0, (var(--p) - var(--at)) / 0.1, 1);
+}
+.scene--live .adv-gates__svg {
+  clip-path: inset(0 calc((1 - clamp(0, (var(--p) - 0.08) / 0.82, 1)) * 100%) 0 0);
+  transition: clip-path 0.25s linear;
+}
+.scene--live .adv-gates__axis {
+  transform: scaleX(clamp(0, var(--p) / 0.15, 1));
+}
+.scene--live .adv-gates__dot,
+.scene--live .adv-gates__diamond {
+  opacity: var(--k);
+  scale: calc(0.3 + var(--k) * 0.7);
+  transition:
+    opacity 0.3s linear,
+    scale 0.4s var(--ease-out);
+}
+.scene--live .adv-gates__drop {
+  scale: 1 var(--k);
+  transition: scale 0.4s var(--ease-out);
+}
+.scene--live .adv-gates__labels li,
+.scene--live .adv-mesh__count,
+.scene--live .adv-mesh__sub,
+.scene--live .adv-time__event,
+.scene--live .adv-time__months,
+.scene--live .adv-tiers__name,
+.scene--live .adv-tiers__note {
+  opacity: var(--k);
+  translate: 0 calc((1 - var(--k)) * 12px);
+  transition:
+    opacity 0.3s linear,
+    translate 0.45s var(--ease-out);
+}
+.scene--live .adv-mesh__wire,
+.scene--live .adv-mesh__spoke {
+  stroke-dashoffset: calc(1 - var(--k));
+  transition: stroke-dashoffset 0.3s linear;
+}
+.scene--live .adv-mesh__node,
+.scene--live .adv-mesh__hub,
+.scene--live .adv-time__dot,
+.scene--live .adv-time__today,
+.scene--live .adv-tiers__control {
+  opacity: var(--k);
+  scale: calc(0.5 + var(--k) * 0.5);
+  transition:
+    opacity 0.3s linear,
+    scale 0.4s var(--ease-out);
+}
+.scene--live .adv-time__line {
+  transform: scaleX(clamp(0, (var(--p) - 0.04) / 0.7, 1));
+  transition: transform 0.25s linear;
+}
+.scene--live .adv-time__left {
+  transform: scaleX(var(--k));
+  transition: transform 0.4s var(--ease-out);
+}
+.scene--live .adv-tiers__track::before {
+  transition: transform 0.4s var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .adv-dg * {
+    transition: none !important;
+  }
+}

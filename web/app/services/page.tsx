@@ -4,8 +4,10 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ServiceIconTile } from "@/components/sections/service-icon";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { V2Hero, V2StickyNav, V2Section, V2Closing } from "@/components/sections/v2";
+import { ToolsBand } from "@/components/sections/tools-band";
 import { serviceGroups } from "@/content/legacy-services";
 import type { NavItem } from "@/content/types";
 
@@ -13,6 +15,21 @@ export const metadata = pageMetadata("/services/", {
   title: "Services",
   description: "Explore In2IT EBS services across SAP, cloud, applications, digital engineering, data and AI.",
 });
+
+/*
+ * The heading over the group cards counts the cards.
+ *
+ * It read "Eight groups, one partner." until 19 November 2026, directly above a grid rendering
+ * `serviceGroups` — which the restructure reduced to three. A reader was told eight and could
+ * count three, on the page whose job is to say what we do.
+ *
+ * It was a hardcoded word beside a data-driven list, which is a defect with a shelf life: it was
+ * right when the catalogue had eight groups and forty-six services, and nothing made it wrong
+ * when that changed. So it is derived now, and tests/house-style.test.ts asserts that every
+ * spelled-out count in a heading still matches the list under it.
+ */
+const COUNT_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const countWord = (n: number) => COUNT_WORDS[n] ?? String(n);
 
 /** The Services index: the existing site's Services mega-menu laid out as a page, in the approved design. */
 function ItemList({ items, level = 0 }: { items: NavItem[]; level?: number }) {
@@ -43,7 +60,7 @@ export default function ServicesIndexPage() {
         path={[{ label: "Services" }]}
         title="Everything we do, in one place."
         lead="From SAP enterprise solutions and analytics to cloud, security, digital services and data & AI: the full In2IT EBS service catalogue, each with its own page."
-        media={<HeroObject name="pages/services" />}
+        media={heroPicture("/hero/pages-services.webp", <HeroFigure figureKey="pages/services" />, "Services")}
         exploreId="groups"
       />
       <V2StickyNav
@@ -52,7 +69,7 @@ export default function ServicesIndexPage() {
       <V2Section
         id="groups"
         eyebrow="Service groups"
-        heading="Eight groups, one partner."
+        heading={`${countWord(serviceGroups.length).replace(/^./, (c) => c.toUpperCase())} groups, one partner.`}
         note="Choose a group to see what sits inside it, or go straight to a service."
       >
         <Stagger className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -79,6 +96,7 @@ export default function ServicesIndexPage() {
           ))}
         </Stagger>
       </V2Section>
+      <ToolsBand tone="canvas" />
       <V2Closing body="Tell us where you want to go. We will bring the platforms, the people and the proof, and map your first move in a single conversation." />
     </>
   );

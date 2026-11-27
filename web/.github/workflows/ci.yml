@@ -1,0 +1,127 @@
+# CI for the In2IT EBS website.
+#
+# ── WHY THIS FILE EXISTS ──────────────────────────────────────────────────────────────────────
+# `npm run check` is thorough and was, until now, entirely manual. Five defects shipped or nearly
+# shipped during the rebuild, and three of them would have been caught here:
+#
+#   · Six diagrams went out off-palette because a one-off manual sweep was recorded as clean and
+#     the generator that drew them was never updated. A manual verification records a moment; it
+#     does not hold a standard.
+#   · A commit landed unformatted because the person running the check grepped its output for
+#     "error", and prettier reports "[warn]". The check had passed; the reading of it had not.
+#   · The capability feed was blocked by the site's own robots.txt for eight weeks while three
+#     sentences of the handover described it as published.
+#
+# Every one of those is a check that existed and was trusted without being exercised. A machine
+# does not get tired of exercising it, and does not read its own output optimistically.
+#
+# ── THE RULE ──────────────────────────────────────────────────────────────────────────────────
+# This workflow fails on exit code and nothing else. No step may be marked continue-on-error, and
+# no summary of a step's output is a substitute for its exit status. That is not pedantry; it is
+# the exact mistake listed second above.
+
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+# A second push to the same branch cancels the first. Nothing here has side effects, so there is
+# no reason to pay for a run whose answer is already stale.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Format, lint, types, tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Prettier, eslint --max-warnings 0, tsc --noEmit, and the 143-test suite. The 21 content
+      # and policy gates live inside that suite and in scripts/, so this step is what enforces
+      # the capability review date, the adjective ban, figure provenance, the diagram palette,
+      # the no-photography rule, internal link integrity and the feed's reachability.
+      - name: npm run check
+        run: npm run check
+
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # SITE_ENV is read at build time and decides robots.txt and the X-Robots-Tag header; the
+      # config refuses to build without it. "preview" is correct here — a CI artefact must never
+      # be built as something that would allow indexing if it were ever served.
+      #
+      # No Supabase credentials are set, so getCms() uses the text in content/*.ts. That is the
+      # intended path for CI and it is what makes this build reproducible.
+      #
+      # `postbuild` runs scripts/check-build.mjs automatically: the capability and corporate-fact
+      # review windows, the house-style and figure gates, and the prerender floor.
+      - name: npm run build
+        run: npm run build
+        env:
+          SITE_ENV: preview
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # A critical Next.js advisory — cache poisoning of SSG and ISR pages in exactly this
+      # self-hosted deployment shape — was found by hand during handover. That was luck, not
+      # process.
+      #
+      # TWO THRESHOLDS, because they answer different questions.
+      #
+      # What ships is held to `high`. `--omit=dev` is the dependency set that actually reaches
+      # the Worker, and as of the zod@4 upgrade it carries zero advisories at any severity. There
+      # is no reason to accept a high in code that serves the public, so this one is strict and
+      # should stay strict.
+      #
+      # The build toolchain is held to `critical`. eslint, prettier, playwright and wrangler pull
+      # a long tail of transitive packages whose advisories are mostly denial-of-service via
+      # crafted input that never reaches them here — currently one, brace-expansion, reachable
+      # only through eslint's own glob handling and fixable only by a major bump of
+      # @eslint/eslintrc. Failing the build on that would make CI red for a risk nobody is
+      # carrying, and a CI signal everybody ignores is worse than none.
+      #
+      # If the first of these ever goes red, stop and fix it rather than lowering it.
+      - name: npm audit — what ships
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: npm audit — build toolchain
+        run: npm audit --audit-level=critical

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/container";
+import { Statement } from "@/components/sections/statement";
 import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { Words } from "@/components/motion/words";
@@ -29,6 +30,8 @@ export async function V2Hero({
   lead: pageLead,
   media: pageMedia,
   cta = true,
+  ctaLabel = "Talk to us",
+  ctaHref = site.primaryCta.href,
   exploreId = "overview",
   route,
 }: {
@@ -37,6 +40,9 @@ export async function V2Hero({
   lead?: ReactNode;
   media?: ReactNode;
   cta?: boolean;
+  /** The primary button's words and target; the Advisory pages say "Talk to an advisor". */
+  ctaLabel?: string;
+  ctaHref?: string;
   exploreId?: string | null;
   /** This page's URL path, so an edit made in /admin/pages can replace the title, intro or picture. */
   route?: string;
@@ -70,7 +76,10 @@ export async function V2Hero({
                     <span key={`${crumb.label}-${index}`} className="inline-flex items-center gap-2">
                       {index > 0 ? <span aria-hidden>/</span> : null}
                       {crumb.href && !last ? (
-                        <Link href={crumb.href} className="transition-colors hover:text-action">
+                        <Link
+                          href={crumb.href}
+                          className="inline-flex min-h-6 items-center transition-colors hover:text-action"
+                        >
                           {crumb.label}
                         </Link>
                       ) : (
@@ -90,8 +99,8 @@ export async function V2Hero({
             {cta || exploreId ? (
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 {cta ? (
-                  <Button href={site.primaryCta.href} variant="primary" withArrow>
-                    Talk to Us
+                  <Button href={ctaHref} variant="primary" withArrow>
+                    {ctaLabel}
                   </Button>
                 ) : null}
                 {exploreId ? (
@@ -212,6 +221,35 @@ export function V2Overview({
   );
 }
 
+/**
+ * THE POSITION SLAB.
+ *
+ * ── WHY THIS EXISTS ──────────────────────────────────────────────────────────────────────────
+ * Every service page on this site ended with its best sentence. The `closing[]` paragraphs are
+ * where the writing stops describing the service and states a position — "Depth is a number and a
+ * name. It should not be an adjective anywhere on this site." was the last thing on the SAP page,
+ * below a card grid, where a reader who had already decided would never reach it.
+ *
+ * That is backwards. The sharpest claim is the reason to keep reading, not the reward for having
+ * read. This band takes the first closing paragraph and puts it third on the page, directly after
+ * the overview, on navy, alone.
+ *
+ * ── WHY IT LOOKS LIKE THIS ───────────────────────────────────────────────────────────────────
+ * One column, 60 characters wide, display scale, one Sand hairline above it. No image, no button,
+ * no card, nothing beside it. The constraint is the design: a page that has been alternating
+ * white and off-white sections suddenly goes dark and holds a single thought, and the reader has
+ * nowhere else to look. Add a CTA here and it becomes an advertisement; add an image and it
+ * becomes a banner. It only works while it is the one thing on the screen.
+ *
+ * It renders nothing when a page has no closing paragraph, which is correct — a page with no
+ * position should not be given a slab to put one in.
+ * ─────────────────────────────────────────────────────────────────────────────────────────────
+ */
+export function V2PositionSlab({ children, id }: { children: ReactNode; id?: string }) {
+  // Centred, and read in word by word with the scroll: components/sections/statement.tsx.
+  return <Statement id={id}>{children}</Statement>;
+}
+
 /** A section frame: eyebrow, bloomed heading, optional note on the right, then whatever it holds. */
 export function V2Section({
   id,
@@ -280,8 +318,11 @@ export function V2Rail({
                 className="group flex h-full min-h-32 flex-col justify-between rounded-feature border border-border-subtle/70 bg-surface p-6 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-gold-soft/70 hover:shadow-glass"
               >
                 <span className="text-base font-semibold leading-snug text-foreground">{item.label}</span>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-action">
-                  Open <ArrowRight size={16} aria-hidden className="transition-transform group-hover:translate-x-1" />
+                <span
+                  aria-hidden
+                  className="mt-6 inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-action"
+                >
+                  Open <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
             </StaggerItem>
@@ -318,7 +359,7 @@ export function V2Closing({
   eyebrow = "Looking for Digital Transformation?",
   heading = "Talk to us.",
   body,
-  ctaLabel = "Talk to Us",
+  ctaLabel = "Talk to us",
   ctaHref = site.primaryCta.href,
 }: {
   id?: string;
@@ -351,7 +392,7 @@ export function V2Closing({
               </Button>
               <a
                 href={`mailto:${site.primaryEmail}`}
-                className="text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
+                className="inline-block min-h-6 text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
               >
                 {site.primaryEmail}
               </a>

@@ -1,6 +1,7 @@
 import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
-import { HeroObject } from "@/components/sections/hero-media";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Overview, V2Rail, V2Closing } from "@/components/sections/v2";
 
 export const metadata = pageMetadata("/about/who-we-are/", {
@@ -9,6 +10,18 @@ export const metadata = pageMetadata("/about/who-we-are/", {
     "In2IT EBS provides enterprise technology consulting, cloud, managed services and application engineering in India and internationally.",
 });
 
+/**
+ * The vision and values block was removed in the November 2026 remediation, and this note exists
+ * so that nobody restores it from the legacy site.
+ *
+ * The previous "Vision" text was Ford Motor Company's published vision statement, carried over
+ * from the old site and printed twice on this page. "Mission", "Our Purpose" and "Value" were
+ * generic to the point of saying nothing, and "Support — 24/7" is a service level, not a value.
+ * The hero's "leading authority" claim went with them.
+ *
+ * Nothing replaces any of it until approved copy exists. An empty space is better than someone
+ * else's words, and a buyer who recognises them stops believing the rest of the page.
+ */
 export default function WhoWeArePage() {
   return (
     <>
@@ -18,7 +31,11 @@ export default function WhoWeArePage() {
         path={[{ label: "About", href: "/about/" }, { label: "Who we are" }]}
         title="Who we are"
         lead="In2IT EBS provides enterprise technology consulting, cloud, managed services and application engineering in India and internationally."
-        media={<HeroObject name="about/who-we-are" />}
+        media={heroPicture(
+          "/hero/about-who-we-are.webp",
+          <HeroFigure figureKey="about/who-we-are" />,
+          "Who we are — In2IT EBS enterprise consulting and delivery",
+        )}
       />
       <V2StickyNav
         anchors={[
@@ -40,8 +57,8 @@ export default function WhoWeArePage() {
         heading="More about us."
         items={[
           { label: "Our Leadership", href: "/about/our-leadership/" },
-          { label: "Accreditation", href: "/accreditation-awards/" },
-          { label: "Case Studies", href: "/case-studies/" },
+          { label: "Credentials", href: "/about/credentials/" },
+          { label: "Client work", href: "/case-studies/" },
           { label: "Blogs & Articles", href: "/insights/" },
         ]}
       />

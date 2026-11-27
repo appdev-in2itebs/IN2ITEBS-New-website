@@ -154,7 +154,6 @@ export function toStored(
       key: "list",
       data: items.map((s, i) => ({
         id: String(s.id || `slide-${i + 1}-${slugify(String(s.label))}`),
-        frames: /^slide-[1-5]$/.test(String(s.frames)) ? s.frames : `slide-${(i % 5) + 1}`,
         label: s.label,
         heading: Array.isArray(s.heading) && s.heading.length ? s.heading : [String(s.label)],
         body: s.body,

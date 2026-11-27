@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
  *  (deck-fallback) so the wall stays consistent. Logos are deck-sourced only. */
 export function ClientLogo({ client, className }: { client: Client; className?: string }) {
   if (client.logo) {
-    // The marks show at most 140px wide; this asks for a 1x/2x pair at that size rather than the
+    // The marks show at most 200px wide; this asks for a 1x/2x pair at that size rather than the
     // original file (some are 60KB+). SVGs pass through untouched.
     const {
       props: { src, srcSet },
-    } = getImageProps({ src: client.logo, alt: client.name, width: 140, height: 56 });
+    } = getImageProps({ src: client.logo, alt: client.name, width: 200, height: 80 });
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img

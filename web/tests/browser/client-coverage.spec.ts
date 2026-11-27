@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { clients } from "../../content/clients";
-import { clientEvidenceApproved } from "../../content/compliance";
+import { clientIdentityApproved } from "../../content/compliance";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
@@ -14,7 +14,7 @@ test("every source client has an asset while unapproved evidence stays off the h
     expect(client.logo, client.name).toBeTruthy();
     expect(existsSync(path.join(process.cwd(), "public", client.logo!)), client.name).toBeTruthy();
   }
-  expect(clientEvidenceApproved).toBe(false);
+  expect(clientIdentityApproved).toBe(false);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
   await expect(page.locator(".client-ribbon-list [role=listitem]")).toHaveCount(0);

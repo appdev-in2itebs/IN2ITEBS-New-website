@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight, ChevronDown, Quote } from "lucide-react";
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 import { clients } from "@/content/clients";
 import { site } from "@/content/site";
 import type { Testimonial } from "@/content/types";
@@ -569,7 +569,7 @@ function NavyCta({ p }: { p: P }) {
               </Button>
               <a
                 href={`mailto:${site.primaryEmail}`}
-                className="text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
+                className="inline-block min-h-6 text-sm font-semibold text-on-brand underline decoration-gold-on-brand/50 underline-offset-4"
               >
                 {site.primaryEmail}
               </a>

@@ -24,6 +24,14 @@ export function heroPicture(choice: string | undefined, fallback: ReactNode, alt
   if (/^https:\/\//.test(choice))
     // A PNG upload is usually a cut-out, shown whole; a photograph gets the soft-edged photo treatment.
     return <HeroImage src={choice} alt={alt} kind={/\.png(\?|$)/i.test(choice) ? "object" : "photo"} />;
+  // An industry photograph (public/hero/photos): real-world scenes the owner asked for on the
+  // industry pages (26 Nov 2026), shown at full strength with softly fading edges, not cut out.
+  if (/^\/hero\/photos\/[\w\-./%]+\.(jpe?g|webp|avif)$/i.test(choice))
+    return <HeroImage src={choice} alt={alt} kind="scene" />;
+  // A generated cut-out (public/hero, transparent WebP): shown whole and crisp, the way the
+  // live site shows its hero objects, never with the soft-edged photo mask (owner, 25 Nov 2026).
+  if (/^\/(generated|hero)\/[\w\-./%]+\.(png|webp|avif)$/i.test(choice))
+    return <HeroImage src={choice} alt={alt} kind="object" />;
   // One of the site's own images: drawn the way the pages draw it (by its file type).
   if (/^\/[\w\-./%]+\.(png|jpe?g|webp|avif|svg)$/i.test(choice)) return <HeroImage src={choice} alt={alt} />;
   return fallback;

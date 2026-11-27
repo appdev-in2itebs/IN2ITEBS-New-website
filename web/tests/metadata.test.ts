@@ -51,7 +51,8 @@ test("named case studies carry a summary of at most 155 characters", () => {
   for (const article of insights) assert.ok(article.excerpt.length <= 160, article.slug);
 });
 import sitemap from "../app/sitemap";
-import { contentUpdated } from "../content/site";
+import { contentUpdated, deliveryCentres, stats } from "../content/site";
+import { offices } from "../content/offices";
 test("every sitemap entry has a valid lastModified and the homepage is included", async () => {
   const entries = await sitemap();
   assert.ok(entries.some((e) => e.url === "https://www.in2itebs.com/"));
@@ -88,10 +89,12 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
     ["Home", "Privacy Policy"],
   );
   assert.equal(legal[1].item, "https://www.in2itebs.com/legal/privacy-policy/");
-  const concur = breadcrumbItems("/sap-enterprise-solutions/concur/", undefined, isKnownPage);
+  // Flat service URLs: the pillar groups the page in the menu but is not a path segment, so a
+  // service page has exactly one crumb above it.
+  const sap = breadcrumbItems("/services/sap/", undefined, isKnownPage);
   assert.deepEqual(
-    concur.map((i) => i.name),
-    ["Home", "SAP Enterprise Solutions", "Concur"],
+    sap.map((i) => i.name),
+    ["Home", "Services", "SAP"],
   );
   const study = breadcrumbItems(
     "/case-studies/wipro-infrastructure-engineering/",
@@ -100,27 +103,27 @@ test("breadcrumbs skip intermediate levels that are not pages", () => {
   );
   assert.deepEqual(
     study.map((i) => i.name),
-    ["Home", "Case Studies", "Wipro Infrastructure Engineering"],
+    ["Home", "Client work", "Wipro Infrastructure Engineering"],
   );
 });
 test("nav labels do not depend on collection order", () => {
   // Hash children such as /advisory/#change-assurance must not claim the parent path.
   for (const [p, label] of [
-    ["/advisory/", "Advisory Services"],
-    ["/digital-data-ai/", "Digital, Data & AI"],
-    ["/delivery-excellence/", "Delivery Excellence"],
+    ["/services/advisory/", "Advisory"],
+    ["/services/digital-data-ai/", "Digital, Data & AI"],
+    ["/services/enterprise-platforms/", "Enterprise Platforms"],
   ] as const) {
     assert.deepEqual(
       breadcrumbItems(p).map((i) => i.name),
-      ["Home", label],
+      ["Home", "Services", label],
       p,
     );
   }
   // Deep nav children are still known, so intermediate crumbs survive.
-  assert.ok(isKnownPage("/sap-enterprise-solutions/rise-vs-grow/"));
+  assert.ok(isKnownPage("/services/rise-s4hana/"));
   assert.deepEqual(
-    breadcrumbItems("/sap-enterprise-solutions/rise-vs-grow/").map((i) => i.name),
-    ["Home", "SAP Enterprise Solutions", "RISE vs GROW"],
+    breadcrumbItems("/services/rise-s4hana/").map((i) => i.name),
+    ["Home", "Services", "RISE and S/4HANA"],
   );
   // The default predicate applies the no-404 guard; an explicit passthrough restores the old behaviour.
   assert.deepEqual(
@@ -130,5 +133,108 @@ test("nav labels do not depend on collection order", () => {
   assert.deepEqual(
     breadcrumbItems("/legal/disclaimer/", undefined, () => true).map((i) => i.name),
     ["Home", "Legal", "Disclaimer"],
+  );
+});
+
+/**
+ * Anonymised case studies must actually be anonymous.
+ *
+ * Swapping the client name is not anonymisation. "The 930 km Mombasa–Kisumu mainline" is one
+ * railway; "PepsiCo's second-largest bottling franchisee outside the United States" is one
+ * company. A reader who can reverse it in a single search has been told the client anyway, and
+ * we have signalled that we thought we were hiding them — the worst of both.
+ *
+ * So this walks every field of every published study and fails on a client name or on any token
+ * that identifies one. Add to TELLS whenever a new study is written.
+ */
+test("anonymised case studies leak no client name or identifying detail", async () => {
+  const { caseStudies, publicCaseStudies } = await import("../content/case-studies");
+  const { namedCaseStudiesApproved } = await import("../content/compliance");
+  if (namedCaseStudiesApproved) return; // Named publication is approved; nothing to anonymise.
+
+  const TELLS = [
+    // Proper nouns that identify a single organisation
+    "Telangana",
+    "Andhra Pradesh",
+    "Mombasa",
+    "Kisumu",
+    "PepsiCo",
+    "Navratna",
+    "bauxite",
+    "National Aluminium",
+    "Central Public Procurement Portal",
+    "Odisha",
+    "Delhi",
+    "Gold Category",
+    // Belgium and telecom stay in the published study by decision; the parent group, its listing
+    // and the revenue figure do not, because those three together name the company.
+    "Proximus",
+    "Euronext",
+    "PROX",
+    "EPS",
+    "230M",
+    // Every named client, whole. Distinctive parts of a name are listed by hand rather than split
+    // out mechanically, because "Engineering" and "India" are words an anonymised study is
+    // entitled to use and a test that cries wolf gets deleted.
+    ...caseStudies.filter((c) => c.named).map((c) => c.client),
+    "Wipro",
+    "WayCool",
+    "VAHDAM",
+    "Triveni",
+    "Welspun",
+    "Varun",
+    "NALCO",
+    "TGNPDCL",
+    "APTRANSCO",
+  ];
+
+  const offenders: string[] = [];
+  for (const study of publicCaseStudies) {
+    const haystack = JSON.stringify(study);
+    for (const tell of TELLS)
+      if (new RegExp(`\\b${tell.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(haystack))
+        offenders.push(`${study.slug}: "${tell}"`);
+  }
+  assert.deepEqual([...new Set(offenders)], []);
+});
+
+/**
+ * THE DELIVERY-CENTRE COUNT HAS ONE ANSWER.
+ *
+ * Three places state it — `deliveryCentres` in content/site.ts, the `delivery-centre` tag in
+ * content/offices.ts, and the headline figure — and until 19 November 2026 the second disagreed
+ * with the other two: Singapore, Dubai, Kenya and South Africa were all tagged as delivery
+ * centres, which would have made the count eight.
+ *
+ * Nothing read the tag, so nothing broke. That is exactly why it needed a test: the obvious way
+ * to count them in future is to filter on the tag, and that would have published the number
+ * /about/markets/ exists to refute, in a figure a tender can check against our own bids.
+ *
+ * A delivery centre is somewhere staffed that you can visit. An office is not one and a legal
+ * entity is not one either.
+ */
+test("the delivery centres agree, however you count them", () => {
+  const tagged = offices.filter((o) => o.kind.includes("delivery-centre"));
+  // The two lists name the same places differently — the Delhi NCR centre is the Noida office —
+  // so match on either the office's name or its city rather than demanding one spelling.
+  const unmatched = deliveryCentres.filter(
+    (centre) => !tagged.some((o) => o.name.includes(centre) || o.city.includes(centre) || centre.includes(o.city)),
+  );
+  assert.deepEqual(unmatched, [], "a delivery centre in content/site.ts has no tagged office in content/offices.ts");
+  assert.equal(
+    tagged.length,
+    deliveryCentres.length,
+    `content/offices.ts tags ${tagged.length} delivery centres; content/site.ts lists ${deliveryCentres.length}`,
+  );
+  assert.ok(
+    tagged.every((o) => o.country === "India"),
+    "a delivery centre outside India — the bids, the markets page and the footprint diagram all say there are none",
+  );
+  const headline = stats.find((s) => /delivery centre/i.test(s.label));
+  assert.ok(headline, "no delivery-centre figure in the statistics band");
+  assert.equal(
+    Number(headline.value.replace(/\D/g, "")),
+    tagged.length,
+    `the statistics band says ${headline.value} delivery centres; the data has ${tagged.length}`,
   );
 });

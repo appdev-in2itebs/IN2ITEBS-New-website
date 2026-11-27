@@ -8,12 +8,11 @@ import { Words } from "@/components/motion/words";
 import type { Stat } from "@/content/types";
 
 const statIcons: Record<string, LucideIcon> = {
-  "Years of experience": Award,
+  "Industry groups we publish pages for": Factory,
   Professionals: Users,
   "Global customers": Globe,
   "Countries delivered": MapPin,
   "Industry verticals": Factory,
-  "Industry groups we publish pages for": Factory,
   "Packaged accelerators": Zap,
   "Strategic partners": Handshake,
   "Proprietary accelerators": Cpu,

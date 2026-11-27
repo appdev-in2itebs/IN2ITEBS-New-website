@@ -28,7 +28,7 @@ export function AiDetails({
   return (
     <Card>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-foreground-muted">
+        <h2 className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold uppercase tracking-wider text-foreground-muted">
           <Sparkles size={15} className="text-action" aria-hidden /> Collected by the AI assistant
         </h2>
         <div className="flex flex-wrap gap-2 text-xs">

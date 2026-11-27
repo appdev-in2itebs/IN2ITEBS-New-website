@@ -18,7 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { loadSiteConfig, type SiteConfig } from "./site-config";
+import { loadSiteConfig, type SiteConfig } from "@/components/layout/site-config";
 import {
   ServerSpeaker,
   StreamSpeaker,

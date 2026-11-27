@@ -172,7 +172,10 @@ export function V2Card({ item, index, feature }: { item: BentoItem; index: numbe
         <p
           style={cine(TEXT_AT)}
           className={cn(
-            "cine-focus relative mt-4 text-[0.95rem] leading-relaxed",
+            "cine-focus relative mt-4 max-w-measure text-[0.95rem] leading-relaxed",
+            // A feature card spans the whole grid, so without the cap its paragraph runs to about
+            // 150 characters a line — roughly twice a comfortable measure, and the one place on a
+            // service page where the eye loses the return sweep.
             feature ? "text-on-brand/85 md:text-base" : "text-foreground-muted",
           )}
         >

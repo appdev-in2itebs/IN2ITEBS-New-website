@@ -196,7 +196,7 @@ export default function PrivacyPolicyPage() {
               <h3>How can you exercise your data protection rights?</h3>
               <p>
                 Please direct any requests to exercise your rights to{" "}
-                <a href="mailto:info@in2itebs.com">info@in2itebs.com</a>. For individuals within India, you can also
+                <a href="mailto:legal@in2itebs.com">legal@in2itebs.com</a>. For individuals within India, you can also
                 designate an authorised agent to submit requests to exercise your data protection rights to In2IT EBS.
               </p>
 
@@ -355,7 +355,7 @@ export default function PrivacyPolicyPage() {
 
               <p>
                 For questions about this privacy policy or your personal data, please contact us at{" "}
-                <a href="mailto:info@in2itebs.com">info@in2itebs.com</a>.
+                <a href="mailto:legal@in2itebs.com">legal@in2itebs.com</a>.
               </p>
             </div>
           </Reveal>

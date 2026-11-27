@@ -2,7 +2,8 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { Reveal } from "@/components/motion/reveal";
 import { LinkedInMark } from "@/components/ui/linkedin-mark";
-import { HeroObject } from "@/components/sections/hero-media";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { V2Hero, V2StickyNav, V2Section, V2Rail, V2Closing } from "@/components/sections/v2";
 import { getCms } from "@/lib/cms/content";
 
@@ -28,7 +29,11 @@ export default async function OurLeadershipPage() {
         path={[{ label: "About", href: "/about/" }, { label: "Our Leadership" }]}
         title="Our Leadership"
         lead="Meet Our Leaders"
-        media={<HeroObject name="about/our-leadership" />}
+        media={heroPicture(
+          "/hero/about-our-leadership.webp",
+          <HeroFigure figureKey="about/our-leadership" />,
+          "Leadership at In2IT EBS — Executive briefing",
+        )}
         exploreId="leaders"
       />
       <V2StickyNav
@@ -80,8 +85,8 @@ export default async function OurLeadershipPage() {
         items={[
           { label: "The wider leadership team", href: "/about/#leadership" },
           { label: "Who we are", href: "/about/who-we-are/" },
-          { label: "Accreditation", href: "/accreditation-awards/" },
-          { label: "Case Studies", href: "/case-studies/" },
+          { label: "Credentials", href: "/about/credentials/" },
+          { label: "Client work", href: "/case-studies/" },
         ]}
       />
       <V2Closing body="Tell us where you want to go. We will bring the platforms, the people and the proof, and map your first move in a single conversation." />

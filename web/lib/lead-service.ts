@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { leadSchema, type Lead } from "./lead-schema";
 import { SITE_URL } from "./utils";
 import { supabaseConfigured } from "./supabase";
+import { defaultSettings } from "./cms/settings";
 /** Origins a browser may submit from: the socket origin, the public site (with and without www),
  *  the proxy-forwarded origin when TRUST_PROXY_HEADERS=1, and any ALLOWED_ORIGINS entries. */
 export function allowedOrigins(request: Request): Set<string> {
@@ -73,16 +74,36 @@ async function markDelivered(id: string) {
   const { supabaseAdmin } = await import("./supabase");
   await supabaseAdmin().from("leads").update({ delivered: true, delivered_at: new Date().toISOString() }).eq("id", id);
 }
+/**
+ * Where an enquiry from any form on the site is delivered.
+ *
+ * The recipient was hardcoded to info@, which quietly made the "Contact email" field in
+ * /admin/settings a lie: an administrator could change it, see it change on the contact page and
+ * in the assistant, and never discover that lead delivery was still going somewhere else. It now
+ * reads the configured address, so there is one place to change it and no deploy to do it.
+ *
+ * It reads `contact.salesEmail`, not `contact.email`. The first is where an enquiry GOES; the
+ * second is what the site SHOWS. A visitor writing to us themselves should see the catch-all; a
+ * lead the site captured is new business and belongs with whoever owns the pipeline.
+ *
+ * The default is sales@, live since 18 November 2026. If it stops being watched, change it in
+ * /admin/settings rather than here — and note that nothing in this file can tell whether anybody
+ * is reading the other end. That one needs a person.
+ */
 export async function configuredTransport(lead: Lead, requestId: string) {
   const url = process.env.LEAD_WEBHOOK_URL;
   const token = process.env.LEAD_WEBHOOK_TOKEN;
   if (!url || !token || new URL(url).protocol !== "https:") throw new Error("transport unavailable");
+  const { getSettings } = await import("./cms/store");
+  const recipient = await getSettings()
+    .then((s) => s.contact.salesEmail)
+    .catch(() => defaultSettings.contact.salesEmail);
   const response = await fetch(url, {
     method: "POST",
     redirect: "error",
     signal: AbortSignal.timeout(8000),
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, "Idempotency-Key": requestId },
-    body: JSON.stringify({ requestId, recipient: "info@in2itebs.com", lead }),
+    body: JSON.stringify({ requestId, recipient, lead }),
   });
   if (!response.ok) throw new Error("delivery not accepted");
 }

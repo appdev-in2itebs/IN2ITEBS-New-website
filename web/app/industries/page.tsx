@@ -9,7 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
+import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { CtaSection } from "@/components/sections/cta-section";
 import { industries } from "@/content/industries";
@@ -27,8 +28,22 @@ const howEachPageWorks = [
     body: "An overview, SAP solution offerings and capability sub-sections drawn from our delivery experience in that industry.",
   },
   {
-    title: "Clients in this sector",
-    body: "Logos for that industry only, grouped exactly as they appear in our portfolio — no client is shown on a sector it isn't placed in.",
+    /*
+     * Reworded 19 November 2026. This promised "logos for that industry only, grouped exactly as
+     * they appear in our portfolio" — and not one industry page shows a logo row.
+     *
+     * Not a consent problem: client identity has been approved since 12 November. The row is
+     * driven by `customers` in content/legacy-industries.ts, which is empty on all nine, and the
+     * 116 marks that would fill it sit under the OLD fourteen industry slugs while
+     * legacy-industry-page.tsx builds `/industries/<current slug>/<logo>`. The restructure renamed
+     * every slug and nothing connected the two, so the path cannot resolve for any of them.
+     *
+     * So this page was advertising a section that does not exist on the page it sends you to.
+     * Wiring the marks up is a content decision — which clients, on what evidence — and until it
+     * is taken, this says what the pages actually do. See claude/image-asset-inventory.md.
+     */
+    title: "Who we have delivered for",
+    body: "The named engagements behind each sector, and the clients we publish a reference for — listed on the client page rather than implied by a wall of marks.",
   },
   {
     title: "Case studies, on request",
@@ -42,24 +57,24 @@ const featuredIndustries = [
   {
     name: "Manufacturing",
     detail: "Automotive, heavy engineering and industrial products",
-    href: "/industries/automobiles/",
-    image: "/stock/automobiles.jpg",
+    href: "/industries/manufacturing/",
+    image: "/hero/photos/industries-manufacturing.webp",
     Icon: GitBranch,
     className: "md:col-span-7 md:row-span-2",
   },
   {
     name: "Energy & utilities",
     detail: "Critical infrastructure and public enterprises",
-    href: "/industries/energy-utilities/",
-    image: "/stock/energy-utilities.jpg",
+    href: "/industries/power-utilities/",
+    image: "/hero/photos/industries-power-utilities.webp",
     Icon: Network,
     className: "md:col-span-5",
   },
   {
     name: "Consumer products",
     detail: "Food, beverage and high-velocity supply chains",
-    href: "/industries/fmcg/",
-    image: "/stock/fmcg.jpg",
+    href: "/industries/consumer-goods-distribution/",
+    image: "/hero/photos/industries-consumer-goods-distribution.webp",
     Icon: Building2,
     className: "md:col-span-5",
   },
@@ -77,7 +92,11 @@ export default function IndustriesPage() {
         headline="150+ global enterprises. Across regulated, complex"
         accentWord="industries"
         subhead="Selected clients across the sectors where we've delivered SAP, Salesforce, Workday and application transformation programmes."
-        media={<HeroObject name="pages/industries" />}
+        media={heroPicture(
+          "/hero/pages-industries.webp",
+          <HeroFigure figureKey="pages/industries" />,
+          "Industries served",
+        )}
         frame={false}
       />
 
@@ -142,8 +161,9 @@ export default function IndustriesPage() {
       {/* INDUSTRIES WE SERVE */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Industries we serve"
               lead="Deep delivery experience across each sector — every card links to a dedicated page showing that industry's overview, capabilities and clients."
             >
@@ -159,7 +179,7 @@ export default function IndustriesPage() {
                   className="group glass-card flex h-full flex-col justify-between gap-6 rounded-surface p-7"
                 >
                   <h3 className="text-h3 font-bold leading-snug text-foreground">{ind.name}</h3>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold">
+                  <span className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-gold">
                     See clients in this sector
                     <ArrowUpRight
                       size={16}
@@ -177,8 +197,9 @@ export default function IndustriesPage() {
       {/* HOW EACH INDUSTRY PAGE WORKS */}
       <Section tone="white">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="How each page works"
               lead="Every industry page follows the same structure, so you can move between sectors and find what you need in the same place."
             >

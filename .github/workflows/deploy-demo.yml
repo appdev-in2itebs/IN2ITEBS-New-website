@@ -1,0 +1,66 @@
+name: deploy-demo
+
+# Deploys the `deployment` branch to the review demo on the Azure VM
+# (https://in2it-demo.57-159-30-28.sslip.io/) after the same checks `ci` runs on main. The live site
+# (deploy.yml) is untouched by this workflow: it uses a different key whose forced command can only
+# reach /srv/in2it-demo. Can also be started by hand from the Actions tab.
+on:
+  push:
+    branches: [deployment]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SITE_ENV: preview
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run check
+
+  deploy:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pack the commit
+        run: git archive --format=tar.gz -o site.tar.gz HEAD web
+
+      # DEMO_VM_SSH_KEY is a private key whose public half sits in appuser's authorized_keys on the VM
+      # with a forced command: it can only hand over the tarball and run /srv/in2it-demo/ci-deploy.sh.
+      # The VM's host key is pinned so a DNS or IP hijack cannot receive the code.
+      - name: Deploy to the demo on the Azure VM
+        env:
+          DEMO_VM_SSH_KEY: ${{ secrets.DEMO_VM_SSH_KEY }}
+        run: |
+          if [ -z "$DEMO_VM_SSH_KEY" ]; then
+            echo "::error::The DEMO_VM_SSH_KEY repository secret is not set (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$DEMO_VM_SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          echo "57.159.30.28 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF3sz0kV0/7Llfmwl+xM+mBErNiXCC0UEVuPA4mPueeb" > ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -o ServerAliveInterval=30 -o StrictHostKeyChecking=yes appuser@57.159.30.28 < site.tar.gz
+
+      - name: Check the demo site
+        run: |
+          sleep 5
+          curl -sk --max-time 20 https://in2it-demo.57-159-30-28.sslip.io/api/health/ | tee health.json
+          grep -q '"status":"ok"' health.json
+        continue-on-error: true

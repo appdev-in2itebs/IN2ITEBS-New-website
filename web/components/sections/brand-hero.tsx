@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { FrameSequence } from "@/components/media/frame-sequence";
-import { heroFrames } from "@/content/hero-frames";
+import { HeroStreams } from "@/components/sections/hero-streams";
+import { HeroVideos } from "@/components/sections/hero-videos";
 import { SPLASH_DONE } from "@/components/layout/page-loader";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,9 @@ import { homeHeroSlides, type HeroSlide } from "@/content/home-hero";
 
 /** Milliseconds each slide holds before the next one fades in. */
 const INTERVAL = 4500;
-/** Milliseconds the leaving clip stays mounted under the arriving one (the CSS fade is 700 ms). */
-const FADE = 800;
+// The `leaving`/`next` slide machinery went with the video on 18 November 2026. It existed to keep
+// the outgoing clip mounted under the arriving one and to preload the next frame sequence; the copy
+// itself cross-fades on `isActive` in CSS and never needed it. One piece of state, not three.
 
 const slideContentVariants: Variants = {
   hidden: { opacity: 0 },
@@ -78,16 +79,14 @@ const staticVariants: Variants = {
 };
 
 /**
- * Full-screen brand hero that is itself a five-slide carousel on ambient footage.
+ * Full-screen brand hero: a five-slide carousel of copy on navy, with a drawn ground.
  * Enhanced with staggered Framer Motion text animations, crisp legibility shadows,
  * and interactive slide indicators.
  */
 export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] }) {
-  const [slide, setSlide] = useState<{ active: number; leaving: number | null }>({ active: 0, leaving: null });
+  const [active, setActive] = useState(0);
   const [rotating, setRotating] = useState(false);
   const [offscreen, setOffscreen] = useState(false);
-  /** Bumped each time the hero comes back into view, to remount the copy and replay its entrance. */
-  const [replay, setReplay] = useState(0);
   const [focused, setFocused] = useState(false);
   const root = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
@@ -116,16 +115,10 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
     const apply = () => setRotating(!reduced.matches);
     apply();
     reduced.addEventListener("change", apply);
-    // Coming back to the hero replays the copy. Without this the entrance runs once on load and a
-    // visitor who scrolls down and back up finds a slide that is simply already there. The previous
-    // state is kept in a ref, not read inside a `setState` updater: React may call an updater more
-    // than once, so a bump raised from inside one does not reliably land.
-    let wasOffscreen = false;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (wasOffscreen && entry.isIntersecting) setReplay((n) => n + 1);
-      wasOffscreen = !entry.isIntersecting;
-      setOffscreen(!entry.isIntersecting);
-    });
+    // The copy's entrance runs once per slide. Scrolling back up to the hero does not replay it:
+    // animations play on the way down only (owner's request, 24 November 2026). The observer still
+    // tracks whether the hero is on screen so the slide rotation pauses while it is not.
+    const observer = new IntersectionObserver(([entry]) => setOffscreen(!entry.isIntersecting));
     if (root.current) observer.observe(root.current);
     return () => {
       reduced.removeEventListener("change", apply);
@@ -139,22 +132,10 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
       if (document.hidden || document.documentElement.dataset.motionPaused === "true") return;
       // Held still while the admin's visual editor is editing the page.
       if (document.documentElement.classList.contains("ve-edit")) return;
-      setSlide((current) => ({ active: (current.active + 1) % slides.length, leaving: current.active }));
+      setActive((current) => (current + 1) % slides.length);
     }, INTERVAL);
     return () => clearInterval(timer);
   }, [rotating, offscreen, focused, slides.length]);
-
-  useEffect(() => {
-    if (slide.leaving === null) return;
-    const timer = setTimeout(() => setSlide((current) => ({ ...current, leaving: null })), FADE);
-    return () => clearTimeout(timer);
-  }, [slide.leaving, slide.active]);
-
-  const { active, leaving } = slide;
-  const next = (active + 1) % slides.length;
-  const mounted = [leaving, active, next].filter(
-    (index, at, all) => index !== null && all.indexOf(index) === at,
-  ) as number[];
 
   return (
     <section
@@ -167,33 +148,40 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node)) setFocused(false);
       }}
-      className="on-video relative flex min-h-[100svh] overflow-hidden bg-canvas pt-36 text-foreground md:pt-40"
+      className="theme-on-brand relative flex min-h-[max(26rem,calc(100svh-var(--client-band-height)))] overflow-hidden bg-brand pt-20 text-on-brand [--client-band-height:6.5rem] md:pt-24 md:[--client-band-height:7.25rem]"
     >
-      {/* Clip wrappers with cross-fade opacity */}
-      <div aria-hidden className="absolute inset-0 isolate">
-        {mounted.map((index) => {
-          const item = slides[index];
-          return (
-            <div
-              key={item.id}
-              data-hero-video={item.id}
-              data-active={index === active ? "true" : undefined}
-              className={cn(
-                "absolute inset-0 transition-opacity duration-700 ease-out motion-reduce:transition-none",
-                index === active ? "z-[2] opacity-100" : index === leaving ? "z-[1] opacity-100" : "z-0 opacity-0",
-              )}
-            >
-              <FrameSequence sequence={heroFrames[item.frames] ?? heroFrames["slide-1"]} urgent={index === active} />
-            </div>
-          );
-        })}
-      </div>
-      <div aria-hidden className="video-veil pointer-events-none absolute inset-0" />
+      {/*
+        THE GROUND, WHICH USED TO BE FORTY-TWO MEGABYTES OF VIDEO.
+
+        Five AI-generated clips played as flip-book stills: 1,200 WebP frames, stylised offices
+        with our logo on walls that do not exist, and the generator's watermark deliberately
+        removed. Three problems stacked — a likely breach of the provider's terms, a synthetic
+        office presented as ours on a site whose argument is that its claims are checkable, and a
+        visual style buyers increasingly recognise on sight.
+
+        What replaced it is the claim itself, set large on navy, with the real client logos
+        directly beneath in the next band. That is the stronger move regardless of the licence
+        question: the proof is companies that actually bought from us, not an office we rendered.
+
+        The quiet figure behind it is drawn, not photographed — the same vocabulary as the
+        diagrams, at a few hundred bytes. See components/sections/hero-figure.tsx.
+      */}
+      {/*
+        25 November 2026: the generated homepage picture (four people at a console, seen from
+        behind, nobody identifiable; registered in content/image-licences.ts) sits behind the
+        claim the way the live site's hero frames did, under a navy wash so the words stay first.
+        The drawn figure stays underneath it as the fallback while the picture loads.
+      */}
+      {/* 27 November 2026: the owner chose the "Converged Streams" background (sample C of four):
+          light flowing in from both sides into one core, the picture of "Converged Intelligence".
+          It replaces the faint drawn squares. See components/sections/hero-streams.tsx. */}
+      <HeroStreams className="pointer-events-none absolute inset-0 h-full w-full" />
+      <HeroVideos slides={slides} active={active} reduced={Boolean(reduced)} />
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
 
       <HeroChrome />
 
-      <Container className="relative z-10 flex flex-1 flex-col justify-center gap-10 py-8 md:py-10">
+      <Container className="relative z-10 flex flex-1 flex-col justify-center gap-10 py-4 md:py-6">
         <div className="mx-auto grid w-full max-w-[56rem] text-center">
           {slides.map((item, index) => {
             const isActive = index === active;
@@ -214,7 +202,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
                 )}
               >
                 <motion.div
-                  key={`content-${item.id}-${isActive}-${replay}`}
+                  key={`content-${item.id}-${isActive}`}
                   variants={slideContentVariants}
                   initial="hidden"
                   animate={isActive && entered ? "visible" : "hidden"}
@@ -222,22 +210,20 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
                 >
                   <motion.p
                     variants={enter("top")}
-                    className={cn(
-                      "text-xs font-semibold uppercase tracking-[0.22em] text-on-brand/85 sm:text-sm [text-shadow:_0_1px_8px_rgba(0,0,0,0.85)]",
-                    )}
+                    className={cn("text-xs font-semibold uppercase tracking-[0.22em] text-on-brand/85 sm:text-sm")}
                   >
                     {item.label}
                   </motion.p>
 
                   <Heading
                     id={index === 0 ? "home-hero-title" : undefined}
-                    className="heading-plain mx-auto mt-6 max-w-[22ch] text-balance text-[clamp(2.75rem,5vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-foreground [text-shadow:_0_2px_18px_rgba(0,0,0,0.9)]"
+                    className="heading-plain mx-auto mt-[clamp(0.75rem,2.5svh,1.5rem)] max-w-[22ch] text-balance text-[clamp(2rem,min(5vw,7.5svh),4.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-on-brand"
                   >
                     {item.heading.map((line, lineIndex) => (
                       <motion.span
                         key={line}
                         variants={enter(lineIndex === 0 ? "top" : "left")}
-                        className="block text-foreground"
+                        className="block text-on-brand"
                       >
                         {line}
                       </motion.span>
@@ -246,14 +232,14 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
 
                   <motion.p
                     variants={enter("bottom")}
-                    className="mx-auto mt-7 max-w-[56ch] text-lg leading-relaxed text-foreground [text-shadow:_0_1px_10px_rgba(0,0,0,0.9)] md:text-xl"
+                    className="mx-auto mt-[clamp(0.75rem,2.5svh,1.75rem)] max-w-[56ch] text-base leading-relaxed text-on-brand/85 md:text-[clamp(1rem,2.4svh,1.25rem)]"
                   >
                     {item.body}
                   </motion.p>
 
                   <motion.div
                     variants={enter("ctaRow")}
-                    className="mt-10 flex flex-wrap items-center justify-center gap-4"
+                    className="mt-[clamp(1rem,3.5svh,2.5rem)] flex flex-wrap items-center justify-center gap-4"
                   >
                     <motion.div variants={enter("ctaLeft")}>
                       <Button href={item.cta.href} withArrow>
@@ -263,7 +249,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
                     <motion.div variants={enter("ctaRight")}>
                       <Link
                         href={item.secondary.href}
-                        className="inline-flex min-h-12 items-center gap-3 rounded-full border border-glass/40 bg-glass/40 px-5 text-sm font-semibold text-foreground backdrop-blur-md transition-all duration-300 hover:border-glass/80 hover:bg-glass/80 hover:text-foreground"
+                        className="inline-flex min-h-12 items-center gap-3 rounded-full border border-glass/40 bg-glass/40 px-5 text-sm font-semibold text-on-brand backdrop-blur-md transition-all duration-300 hover:border-glass/80 hover:bg-glass/80 hover:text-on-brand"
                       >
                         {item.secondary.label} <ArrowRight size={17} aria-hidden />
                       </Link>

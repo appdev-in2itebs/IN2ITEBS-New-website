@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 import { pageMetadata } from "@/lib/metadata";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { ServicePageV2 } from "@/components/sections/service-page-v2";
 import { servicePages } from "@/content/legacy-services";
 import { getService } from "@/lib/cms/content";
 
 export async function generateStaticParams() {
-  return servicePages.map((page) => ({ slug: page.slug }));
+  // /services/advisory/ has its own static route (app/services/advisory/page.tsx).
+  return servicePages.filter((page) => page.slug !== "advisory").map((page) => ({ slug: page.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -31,6 +32,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <BreadcrumbJsonLd path={`/services/${page.slug}/`} name={page.name} />
+      <FaqJsonLd route={`/services/${page.slug}/`} />
       <ServicePageV2 page={page} />
     </>
   );

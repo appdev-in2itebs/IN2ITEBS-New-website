@@ -61,7 +61,7 @@ export default async function JobPage({ params }: Props) {
         <Container className="relative">
           <Link
             href="/careers/current-openings/"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted transition-colors hover:text-action"
+            className="inline-flex min-h-6 items-center gap-2 text-sm font-semibold text-foreground-muted transition-colors hover:text-action"
           >
             <ArrowLeft size={16} aria-hidden /> All current openings
           </Link>

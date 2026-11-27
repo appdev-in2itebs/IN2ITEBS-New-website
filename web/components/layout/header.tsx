@@ -2,9 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
-import { primaryNav } from "@/content/nav";
-import { serviceGroups, serviceMenuColumns } from "@/content/legacy-services";
+import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
+import { primaryNav, servicesMenuPractices } from "@/content/nav";
 import type { NavItem } from "@/content/types";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
@@ -446,32 +445,95 @@ function GroupItems({ items, onNavigate, level = 0 }: { items: NavItem[]; onNavi
   );
 }
 
-/** The Services mega-menu: four columns of group headings, each ruled off, with the group's items under it. */
+/**
+ * The Services mega-menu in the owner's "Three practices. One accountable team." layout (27 Nov
+ * 2026, content/nav.ts): a heading row, three numbered practice columns ruled off from it — line,
+ * description, main pages, a way into the pillar — and the named fixed-scope offers underneath.
+ */
 function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
+  const menu = servicesMenuPractices;
   return (
-    <div className="grid grid-cols-4 gap-x-8 gap-y-7">
-      {serviceMenuColumns.map((column, index) => (
-        <div key={index} className="space-y-7">
-          {column.map((slug) => {
-            const group = serviceGroups.find((candidate) => candidate.slug === slug);
-            if (!group) return null;
-            return (
-              <div key={group.slug}>
-                <Link
-                  onClick={onNavigate}
-                  href={group.href}
-                  className="flex min-h-10 items-center border-b border-border-subtle pb-1.5 text-base font-semibold text-foreground transition-colors hover:text-action"
-                >
-                  {group.name}
-                </Link>
-                <div className="mt-2">
-                  <GroupItems items={group.items} onNavigate={onNavigate} />
-                </div>
-              </div>
-            );
-          })}
+    <div>
+      <div className="grid gap-6 border-b border-border-strong/60 pb-6 lg:grid-cols-12 lg:items-end">
+        <div className="lg:col-span-6">
+          <p className="label-caps text-gold">{menu.eyebrow}</p>
+          <p className="mt-2 font-display text-[1.65rem] font-semibold leading-tight tracking-[-0.02em] text-foreground">
+            {menu.heading}
+          </p>
         </div>
-      ))}
+        <p className="text-sm leading-relaxed text-foreground-muted lg:col-span-6">{menu.intro}</p>
+      </div>
+      <div className="grid grid-cols-[1fr_1.7fr_1fr]">
+        {menu.practices.map((practice, i) => (
+          <div
+            key={practice.name}
+            className={cn(
+              "flex flex-col pt-5",
+              i === 0 ? "pr-8" : "border-l border-border-subtle px-8",
+              i === 2 && "pr-0",
+            )}
+          >
+            <span className="label-caps text-gold">{String(i + 1).padStart(2, "0")}</span>
+            <Link
+              onClick={onNavigate}
+              href={practice.href}
+              className="mt-1.5 font-display text-xl font-semibold text-foreground transition-colors hover:text-action"
+            >
+              {practice.name}
+            </Link>
+            <p className="mt-1.5 font-display text-[0.92rem] italic leading-snug text-foreground-muted">
+              {practice.tagline}
+            </p>
+            <p className="mt-2 text-[0.82rem] leading-relaxed text-foreground-muted">{practice.body}</p>
+            <ul
+              className={cn(
+                "mt-3 border-t border-border-subtle",
+                practice.links.length > 6 && "grid grid-flow-col grid-cols-2 gap-x-6",
+              )}
+              style={
+                practice.links.length > 6
+                  ? { gridTemplateRows: `repeat(${Math.ceil(practice.links.length / 2)}, auto)` }
+                  : undefined
+              }
+            >
+              {practice.links.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    onClick={onNavigate}
+                    href={link.href}
+                    className="group flex min-h-9 items-center justify-between gap-3 border-b border-border-subtle py-1.5 text-[0.88rem] font-medium text-foreground transition-colors hover:text-action"
+                  >
+                    {link.label}
+                    <ArrowRight
+                      aria-hidden
+                      size={14}
+                      className="shrink-0 text-foreground-muted group-hover:text-action"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link
+              onClick={onNavigate}
+              href={practice.href}
+              className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[0.85rem] font-semibold text-gold hover:underline"
+            >
+              Explore {practice.name} <ArrowRight aria-hidden size={14} />
+            </Link>
+          </div>
+        ))}
+      </div>
+      <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-2 border-l-2 border-gold bg-surface-subtle px-6 py-4">
+        <p className="font-display text-lg font-semibold text-foreground">{menu.offers.heading}</p>
+        <p className="min-w-[18rem] flex-1 text-[0.82rem] leading-relaxed text-foreground-muted">{menu.offers.body}</p>
+        <Link
+          onClick={onNavigate}
+          href={menu.offers.link.href}
+          className="inline-flex items-center gap-1.5 text-[0.85rem] font-semibold text-gold hover:underline"
+        >
+          {menu.offers.link.label} <ArrowRight aria-hidden size={14} />
+        </Link>
+      </div>
     </div>
   );
 }

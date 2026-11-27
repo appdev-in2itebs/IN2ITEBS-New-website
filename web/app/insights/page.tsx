@@ -2,12 +2,13 @@ import { pageMetadata } from "@/lib/metadata";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import Link from "next/link";
 import Image from "next/image";
+import { heroPicture } from "@/components/sections/hero-override";
+import { HeroFigure } from "@/components/sections/hero-figure";
 import { ArrowRight } from "lucide-react";
 import { Container, Section } from "@/components/ui/container";
 import { Accent, SectionHeading } from "@/components/ui/typography";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { PageHero } from "@/components/sections/page-hero";
-import { HeroObject } from "@/components/sections/hero-media";
 import { CtaSection } from "@/components/sections/cta-section";
 import { getCms } from "@/lib/cms/content";
 
@@ -28,7 +29,11 @@ export default async function InsightsPage() {
         headline="Perspectives on enterprise"
         accentWord="transformation"
         subhead="Points of view from our practices on SAP, SuccessFactors, AI and the technologies reshaping the enterprise."
-        media={<HeroObject name="about/blogs-articles" />}
+        media={heroPicture(
+          "/hero/pages-insights.webp",
+          <HeroFigure figureKey="about/blogs-articles" />,
+          "Perspectives on enterprise transformation — In2IT EBS Insights",
+        )}
         frame={false}
       />
 
@@ -49,7 +54,7 @@ export default async function InsightsPage() {
                 >
                   {/* The article's own image and its date, as the live listing shows them. */}
                   <span className="relative block aspect-[16/10] w-full overflow-hidden bg-surface-subtle">
-                    {a.image && (
+                    {a.image ? (
                       <Image
                         src={a.image}
                         alt=""
@@ -58,6 +63,8 @@ export default async function InsightsPage() {
                         loading={index < 3 ? "eager" : "lazy"}
                         className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
                       />
+                    ) : (
+                      <HeroFigure figureKey={`insights/${a.slug}`} className="absolute inset-0" />
                     )}
                     <span
                       aria-hidden

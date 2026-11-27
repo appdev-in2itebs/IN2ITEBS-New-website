@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 
 /**
  * Frameless hero media (owner, 2026-09-20): the picture sits on the page rather than inside a
@@ -52,11 +52,42 @@ export function HeroImage({
   priority?: boolean;
   className?: string;
   /** Force a treatment; otherwise the file's extension decides. */
-  kind?: "photo" | "logo" | "object";
+  kind?: "photo" | "logo" | "object" | "scene";
   /** The file's own size (object), so the page reserves the right shape before it loads. */
   width?: number;
   height?: number;
 }) {
+  if (kind === "scene") {
+    // A real-world scene (the industry photographs): shown at full strength, 3:2, with only its
+    // outer edges fading into the page, so it stays frameless without dissolving into a faint oval
+    // the way the "photo" ellipse mask does to a busy picture.
+    const fade = "linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)";
+    const fadeY = "linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent)";
+    return (
+      <Motion className={className}>
+        <div className="relative flex h-full w-full items-center justify-center">
+          <div
+            className="relative aspect-[3/2] w-full overflow-hidden"
+            style={{
+              maskImage: `${fade}, ${fadeY}`,
+              WebkitMaskImage: `${fade}, ${fadeY}`,
+              maskComposite: "intersect",
+              WebkitMaskComposite: "source-in",
+            }}
+          >
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+              priority={priority}
+            />
+          </div>
+        </div>
+      </Motion>
+    );
+  }
   if (kind === "object") {
     return (
       <Motion className={className}>
@@ -128,7 +159,7 @@ export function HeroMark({ icon: Icon }: { icon: LucideIcon }) {
 export type HeroImageKey = keyof typeof heroImages;
 
 export function hasHeroImage(key: string): key is HeroImageKey {
-  return key in heroImages;
+  return Object.prototype.hasOwnProperty.call(heroImages, key);
 }
 
 export function HeroObject({ name }: { name: HeroImageKey }) {

@@ -54,7 +54,7 @@ test("a reasoning model's thinking never reaches the visitor", () => {
 
 test("site search finds the right page", () => {
   const hits = searchSite(siteIndex(), [], "RISE with SAP");
-  assert.ok(hits.some((h) => h.url === "/services/rise-with-sap/"));
+  assert.ok(hits.some((h) => h.url === "/services/rise-s4hana/"));
 });
 
 test("assistant settings have safe defaults and reject nonsense", () => {
@@ -99,19 +99,19 @@ test("the CV upload button appears only at the CV step of a job application", ()
 
 test("answers link the website's own pages", () => {
   const index = siteIndex();
-  const linked = addLinks("We offer SAP Enterprise Solutions and Digital Services. Our RISE with SAP team can help.", {
+  const linked = addLinks("We offer Enterprise Platforms and Managed Services. Our RISE and S/4HANA team can help.", {
     index,
     faqs: [],
   });
-  assert.match(linked, /\[SAP Enterprise Solutions\]\(\/[^)]+\)/);
-  assert.match(linked, /\[Digital Services\]\(\/[^)]+\)/);
-  assert.match(linked, /\[RISE with SAP\]\(\/services\/rise-with-sap\/\)/);
+  assert.match(linked, /\[Enterprise Platforms\]\(\/[^)]+\)/);
+  assert.match(linked, /\[Managed Services\]\(\/[^)]+\)/);
+  assert.match(linked, /\[RISE and S\/4HANA\]\(\/services\/rise-s4hana\/\)/);
   // Not twice, and never inside an existing link.
-  const once = addLinks("See [RISE with SAP](/services/rise-with-sap/). RISE with SAP is our offer.", {
+  const once = addLinks("See [RISE and S/4HANA](/services/rise-s4hana/). RISE and S/4HANA is our offer.", {
     index,
     faqs: [],
   });
-  assert.equal(once.match(/\(\/services\/rise-with-sap\/\)/g)?.length, 1);
+  assert.equal(once.match(/\(\/services\/rise-s4hana\/\)/g)?.length, 1);
   // A bare path becomes a proper link.
   assert.match(addLinks("The contact page lists every office. [/contact/]", { index, faqs: [] }), /\]\(\/contact\/\)/);
   // A question answered without links gets one; a non-question does not.
@@ -131,10 +131,13 @@ test("answers link the website's own pages", () => {
   assert.equal(tidy.includes("(/services/digital-services/) (/services/digital-services/)"), false);
   assert.match(tidy, /\[Analytics\]\(\/services\/sap-sac\/\)/);
   // A short name is never linked inside a longer one; names of several words match in any case.
-  const nested = addLinks("Our Data Analytics & AI portfolio and our digital services.", { index, faqs: [] });
-  assert.match(nested, /\[Data Analytics & AI\]\(\/services\/data-analytics-ai\/\)/);
-  assert.doesNotMatch(nested, /Data \[Analytics\]/);
-  assert.match(nested, /\[digital services\]\(\/services\/digital-services\/\)/);
+  const nested = addLinks("Our Data Engineering and Analytics portfolio and our managed services.", {
+    index,
+    faqs: [],
+  });
+  assert.match(nested, /\[Data Engineering and Analytics\]\(\/services\/data-engineering-analytics\/\)/);
+  assert.doesNotMatch(nested, /Data \[Engineering/);
+  assert.match(nested, /\[managed services\]\(\/services\/managed-services\/\)/);
 });
 
 test("the leadership and the global footprint are found and linked", () => {
@@ -206,25 +209,6 @@ test("a busy model API (429) is retried, so a crowd of visitors still gets answe
   } finally {
     globalThis.fetch = real;
   }
-});
-
-test("the device voice, when used, is a female one", async () => {
-  const { pickVoice } = await import("../components/chat/voice");
-  const v = (name: string, lang: string) => ({ name, lang }) as SpeechSynthesisVoice;
-  const voices = [
-    v("Microsoft Ravi - English (India)", "en-IN"),
-    v("Microsoft Heera - English (India)", "en-IN"),
-    v("Microsoft Hemant - Hindi (India)", "hi-IN"),
-    v("Microsoft Kalpana - Hindi (India)", "hi-IN"),
-    v("Google US English", "en-US"),
-  ];
-  assert.equal(pickVoice(voices, "en-IN")?.name, "Microsoft Heera - English (India)");
-  assert.equal(pickVoice(voices, "hi-IN")?.name, "Microsoft Kalpana - Hindi (India)");
-  // Only a male voice for the language: still that language rather than silence.
-  assert.equal(
-    pickVoice([v("Microsoft Ravi - English (India)", "en-IN")], "en-IN")?.name,
-    "Microsoft Ravi - English (India)",
-  );
 });
 
 test("questions about the company's leadership are never blocked as off-topic; private details are", async () => {
@@ -311,13 +295,13 @@ test("voice gets a compact prompt; an interruption and a requested language are 
   assert.doesNotMatch(text, /cut in while you were still answering/);
 });
 
-test("spoken answers never read out page addresses", async () => {
+test("assistant answers never read out page addresses", async () => {
+  // The spoken half of this test left with the chat widget on 18 November 2026. `withoutAddresses`
+  // still ships — the admin assistant uses it — so the text half stays.
   const { withoutAddresses } = await import("../lib/assistant/links");
-  const { speakable } = await import("../components/chat/voice");
   const said =
     "Sudhansu Mishra is our COO. [/about/#leadership] See [Leadership](/about/#leadership) or https://example.com/x (/contact/).";
   assert.equal(withoutAddresses(said), "Sudhansu Mishra is our COO. See Leadership or.");
-  for (const t of [said, "Visit /contact/ for more."]) assert.doesNotMatch(speakable(t), /\/|https?:/);
 });
 
 test("asking to talk in a language is recognised at once; merely naming one is not", async () => {

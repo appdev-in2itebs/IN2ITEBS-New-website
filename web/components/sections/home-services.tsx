@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { HeroFigure } from "@/components/sections/hero-figure";
+import { heroPicture } from "@/components/sections/hero-override";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -148,14 +149,21 @@ export function HomeServices() {
                   tabIndex={copy > 0 ? -1 : undefined}
                   className="service-card glass-card group flex h-full w-full flex-col overflow-hidden rounded-feature focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
                 >
-                  <span className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-brand">
-                    <Image
-                      src={service.image}
-                      alt={copy === 0 ? service.imageAlt : ""}
-                      fill
-                      sizes="(min-width: 640px) 17.5rem, 82vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.045] motion-reduce:transition-none"
-                    />
+                  <span className="relative block aspect-[16/10] w-full shrink-0 overflow-hidden bg-surface p-3">
+                    {heroPicture(
+                      service.heroImage,
+                      <HeroFigure figureKey={`services/${service.slug}`} className="absolute inset-0" />,
+                      service.name,
+                    )}
+                    {service.brand ? (
+                      <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-2 rounded-md border border-border-subtle bg-logo-surface px-2.5 py-1.5 shadow-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={service.brand.logo} alt="SAP" width={46} height={23} className="h-[1.4rem] w-auto" />
+                        <span className="text-[0.78rem] font-semibold leading-none tracking-[-0.01em] text-logo-foreground">
+                          {service.brand.product}
+                        </span>
+                      </span>
+                    ) : null}
                   </span>
 
                   <span className="flex flex-1 flex-col p-5">

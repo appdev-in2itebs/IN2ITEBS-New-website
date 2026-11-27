@@ -32,17 +32,22 @@ const nextConfig = {
   trailingSlash: true,
   async headers() {
     const dev = process.env.NODE_ENV === "development";
+    // Google Tag Manager (container GTM-PWV2BPZH) and whatever GA4 tag it fires. Without these
+    // hosts the browser blocks gtm.js outright and every measurement signal is lost silently —
+    // the page still renders, so nobody notices until a month of analytics is missing.
+    const gtmScript = "https://www.googletagmanager.com";
+    const gtmBeacon = "https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com";
     const csp = [
       "default-src 'self'",
-      "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
-      `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,
+      `frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com ${gtmScript}`,
+      `script-src 'self' 'unsafe-inline' ${gtmScript}${dev ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
       // Uploaded images live in the Supabase "media" bucket (the admin previews them directly).
-      `img-src 'self' data: blob: https://*.supabase.co ${mediaOrigin}`,
+      `img-src 'self' data: blob: https://*.supabase.co ${mediaOrigin} ${gtmBeacon}`,
       "font-src 'self' data:",
       // The chat assistant plays its spoken replies (MP3 from /api/voice/tts) from blob: URLs.
       "media-src 'self' blob:",
-      `connect-src 'self'${dev ? " ws: wss:" : ""}`,
+      `connect-src 'self' ${gtmBeacon}${dev ? " ws: wss:" : ""}`,
       // 'self', not 'none': the admin's visual editor and page builder show this site's own pages
       // in a frame. No other site may frame them.
       "frame-ancestors 'self'",

@@ -49,9 +49,9 @@ test("careers questions list the open roles", () => {
 });
 
 test("questions the FAQs do not cover point to matching site pages", () => {
-  const r = reply("tell me about blockchain", { ...knowledge, faqs: [] });
+  const r = reply("tell me about meter to cash", { ...knowledge, faqs: [] });
   assert.equal(r.intent, "pages");
-  assert.ok(r.links?.some((l) => l.url === "/services/blockchain/"));
+  assert.ok(r.links?.some((l) => l.url === "/services/smart-meter-to-cash/"));
 });
 
 test("anything unknown gets an honest fallback that offers to take the requirement", () => {
@@ -71,9 +71,9 @@ test("tokens drop punctuation and filler words", () => {
   assert.deepEqual(tokens("What is SAP's RISE, please?"), ["sap", "rise"]);
 });
 
-test("the site index covers services, industries, partners and the contact page", () => {
+test("the site index covers services, industries, partnerships and the contact page", () => {
   const urls = siteIndex().map((e) => e.url);
-  for (const url of ["/services/sap-sac/", "/industries/automobiles/", "/partners/oracle/", "/contact/"])
+  for (const url of ["/services/sap/", "/industries/manufacturing/", "/about/partnerships/", "/contact/"])
     assert.ok(urls.includes(url), url);
 });
 

@@ -1,4 +1,4 @@
-import heroImages from "@/content/hero-images.json";
+import heroImages from "@/content/hero-images";
 import { servicePages } from "@/content/legacy-services";
 import { legacyIndustries } from "@/content/legacy-industries";
 import { partnerPages } from "@/content/partner-pages";

@@ -3,7 +3,7 @@ import { legacyIndustries, type LegacyIndustry } from "@/content/legacy-industri
 import { partnerPages, type PartnerPage } from "@/content/partner-pages";
 import { offices as shippedOffices } from "@/content/offices";
 import { leadership as shippedLeadership } from "@/content/leadership";
-import { caseStudies } from "@/content/case-studies";
+import { publicCaseStudies } from "@/content/case-studies";
 import type { Leader, Office } from "@/content/types";
 import { tokens, type SiteEntry } from "./engine";
 
@@ -75,14 +75,53 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
       detail: detailOf(industry.intro, industry.sections),
       keywords: [...tokens(industry.slug.replace(/-/g, " ")), "industry", "sector"],
     });
+  /**
+   * Partnerships are one page now, not ten. Each partner is still indexed by name so a question
+   * about a specific vendor finds us, but every one resolves to /about/partnerships/ — the page
+   * that states the tier, what we deliver under it and where we have delivered it.
+   */
   for (const partner of partners)
     entries.push({
       title: `${partner.name} partnership`,
       summary: clip(partner.intro[0] || ""),
-      url: `/partners/${partner.slug}/`,
+      url: "/about/partnerships/",
       detail: detailOf(partner.intro, partner.sections ?? []),
       keywords: [...tokens(partner.name), "partner", "partnership"],
     });
+  entries.push({
+    title: "Credentials",
+    summary:
+      "SAP Gold Partner, CMMI Level 3 appraised, ISO 9001 and ISO/IEC 27001 certified, with the awards, appraisals and the gaps we do not claim.",
+    url: "/about/credentials/",
+    keywords: tokens("credentials certification accreditation iso cmmi award gold partner audit security"),
+  });
+  entries.push({
+    title: "Where we operate",
+    summary:
+      "Headquartered in Bengaluru, with four delivery centres in India, overseas offices and five legal entities, and the data residency position for each market.",
+    url: "/about/markets/",
+    keywords: tokens(
+      "markets geography countries offices entity delivery centre data residency india kenya south africa singapore dubai",
+    ),
+  });
+  entries.push({
+    title: "Where we stand",
+    summary:
+      "Every capability with one of four statuses — delivered, with a partner, building, or ahead of us — including the ones we do not do.",
+    url: "/about/where-we-stand/",
+    keywords: tokens(
+      "capability status maturity what can you do do you do gaps honest delivered partner building ahead reference experience",
+    ),
+  });
+  entries.push({
+    title: "How we price",
+    summary:
+      "Two commercial models — fixed scope and managed service — with the risk each side carries, what the client supplies, and what counts as a change request.",
+    url: "/services/how-we-price/",
+    keywords: tokens(
+      "price pricing cost commercial model fixed price managed service rate card change request risk sla credits engagement model how much",
+    ),
+  });
   entries.push({
     title: "Contact and offices",
     summary: `Offices in ${[...new Set(offices.map((o) => `${o.city} (${o.country})`))].join(", ")}.`,
@@ -102,8 +141,9 @@ export function siteIndex(sources: Sources = shipped): SiteEntry[] {
       keywords: [...tokens(leader.name), "leadership"],
       aliases: [...tokens(leader.title.replace(/\(.*?\)/g, "")), ...titleShort(leader.title)],
     });
-  // Named case studies have a page of their own (the anonymised ones are only on /case-studies/).
-  for (const c of caseStudies.filter((s) => s.named))
+  // Every published study has a page of its own. publicCaseStudies is what the pages and the sitemap
+  // use, so the assistant shows a client's name only once namedCaseStudiesApproved says it may.
+  for (const c of publicCaseStudies)
     entries.push({
       title: c.client,
       summary: clip(c.summary ?? c.outcome ?? c.scenario),
