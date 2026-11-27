@@ -325,7 +325,7 @@ export const imageLicences: ImageLicence[] = [
     file: "public/hero/case-study-global-engineering-consultancy.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
-    reference: "firefly-image5-2026-11-26-spec63-45 (local 4x enlargement; Firefly Upscaler pending)",
+    reference: "firefly-image5-2026-11-26-spec63-45 (Firefly Upscaler 4x)",
     acquired: "2026-11-26",
     depicts: "A set of steel and pale blue drafting arcs swung from one fixed navy point over an open plane",
     aiGenerated: true,
