@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { HeroStreams } from "@/components/sections/hero-streams";
+import { HeroVideos } from "@/components/sections/hero-videos";
 import { SPLASH_DONE } from "@/components/layout/page-loader";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -175,6 +176,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
           light flowing in from both sides into one core, the picture of "Converged Intelligence".
           It replaces the faint drawn squares. See components/sections/hero-streams.tsx. */}
       <HeroStreams className="pointer-events-none absolute inset-0 h-full w-full" />
+      <HeroVideos slides={slides} active={active} reduced={Boolean(reduced)} />
       <div aria-hidden className="hero-ambient pointer-events-none absolute inset-0" />
 
       <HeroChrome />

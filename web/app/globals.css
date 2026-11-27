@@ -1283,6 +1283,20 @@ html:not([data-motion-ready]) .client-ribbon {
   [data-brand-hero] {
     --video-veil-alpha: var(--video-veil-alpha-hero);
   }
+  /* Homepage hero motion (hero-videos.tsx): each slide's animation fades in over the last one. */
+  .hero-motion-layer {
+    animation: hero-motion-in 1s ease-out both;
+  }
+  @keyframes hero-motion-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-motion-layer {
+      animation: none;
+    }
+  }
   .hero-ambient {
     background-image:
       radial-gradient(circle at 15% 20%, oklch(var(--color-action) / 0.1), transparent 40%),
