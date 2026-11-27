@@ -147,7 +147,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node)) setFocused(false);
       }}
-      className="theme-on-brand relative flex min-h-[max(26rem,calc(100svh-var(--client-band-height)))] overflow-hidden bg-brand pt-20 text-on-brand [--client-band-height:10rem] md:pt-24 md:[--client-band-height:9.25rem]"
+      className="theme-on-brand relative flex min-h-[max(26rem,calc(100svh-var(--client-band-height)))] overflow-hidden bg-brand pt-20 text-on-brand [--client-band-height:6.5rem] md:pt-24 md:[--client-band-height:7.25rem]"
     >
       {/*
         THE GROUND, WHICH USED TO BE FORTY-TWO MEGABYTES OF VIDEO.

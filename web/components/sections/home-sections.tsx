@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { LogoMarquee } from "@/components/sections/logo-marquee";
 import { Testimonials } from "@/components/sections/testimonials";
@@ -30,23 +31,31 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
     // null as an emergency brake; now that client names and logos are approved, the block comes
     // back and LogoMarquee itself honours content/compliance.ts.
     clients: (
-      // 26 Nov 2026 (owner): less white space, larger logos, and the band visible on the first
-      // screen without scrolling. The label and the partners link share one row, and the hero
-      // leaves room for this band (brand-hero.tsx, --client-band-height).
+      // 26-27 Nov 2026 (owner): the band shows on the first screen without scrolling, slimmer,
+      // with no boxes round the logos. Both labels are links (our clients' stories on the left,
+      // the partner ecosystem on the right), and the hero leaves room for this band
+      // (brand-hero.tsx, --client-band-height).
       <section
         aria-label="Selected clients"
-        className="relative border-b border-border-subtle bg-surface pb-2 pt-1.5 md:pb-3 md:pt-2"
+        className="relative border-b border-border-subtle bg-logo-surface py-2.5 md:py-3"
       >
         <Container>
-          <div className="mb-2 flex flex-wrap items-center justify-between gap-x-6 gap-y-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">
-              Trusted in complex operating environments
-            </p>
+          <div className="mb-1.5 flex items-center justify-between gap-x-6">
+            <Link
+              href="/case-studies/"
+              className="inline-flex min-h-7 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-gold hover:underline hover:decoration-gold/40 hover:underline-offset-4 md:text-sm md:tracking-[0.12em]"
+            >
+              <span className="sm:hidden">Our Clients</span>
+              <span className="hidden sm:inline">Our Clients &amp; Their Stories</span>
+              <ArrowRight size={14} aria-hidden />
+            </Link>
             <Link
               href="/about/partnerships/"
-              className="hidden min-h-8 items-center text-sm font-semibold text-gold underline decoration-gold/40 underline-offset-4 sm:inline-flex"
+              className="inline-flex min-h-7 items-center gap-1.5 text-xs font-semibold text-gold underline decoration-gold/40 underline-offset-4 md:text-sm"
             >
-              Partners &amp; technology ecosystem
+              <span className="hidden sm:inline">Partners &amp; Technology Ecosystem</span>
+              <span className="sm:hidden">Partners</span>
+              <ArrowRight size={14} aria-hidden />
             </Link>
           </div>
           <LogoMarquee clients={clients} />
