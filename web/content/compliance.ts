@@ -67,7 +67,14 @@ export const clientTestimonialsApproved = false;
  * exist because the scenarios identified the clients outright, and tests/metadata.test.ts fails
  * the build if a name or an identifying token survives into the published copy.
  */
-export const namedCaseStudiesApproved = false;
+//
+// TURNED ON 27 November 2026, on the instruction of the site owner relayed by Elisaya Nayak: the
+// reference book's client names are to open a named case study page for each client ("if I click
+// TGNPDCL it should take us to a page with TGNPDCL, its industry image and the case study"). The
+// position above is recorded as overridden by that instruction. Clients' written agreements are
+// held by the business, not in this repository; set this back to false to return every study to
+// its anonymous form and slug in one change.
+export const namedCaseStudiesApproved = true;
 
 /**
  * Demo articles shipped with the original theme. Blocked by slug so an old CMS row cannot put a

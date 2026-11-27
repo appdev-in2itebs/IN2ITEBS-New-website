@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ExList, toneClass, type ExplainerBase, type Tone } from "./shared";
 
@@ -18,7 +19,8 @@ export type LayerSpec = {
   tone: Tone;
   bullets?: string[];
   chips?: string[];
-  entries?: { name: string; text: string }[];
+  /** `href` links the name to its case study (only where that reveals no anonymised client). */
+  entries?: { name: string; text: string; href?: string }[];
   cols?: { label: string; text: string }[];
   foot?: { label: string; text: string };
 };
@@ -69,7 +71,13 @@ export function LayersExplainer({ spec }: { spec: LayersSpec }) {
                 <ul className="ex-entries">
                   {l.entries.map((e, k) => (
                     <li key={e.name} data-sr data-sr-delay={(i * 0.08 + 0.14 + k * 0.05).toFixed(2)}>
-                      <b>{e.name}</b>
+                      {e.href ? (
+                        <Link href={e.href} className="ex-entry-link">
+                          <b>{e.name}</b>
+                        </Link>
+                      ) : (
+                        <b>{e.name}</b>
+                      )}
                       <span>{e.text}</span>
                     </li>
                   ))}

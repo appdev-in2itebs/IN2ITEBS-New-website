@@ -931,9 +931,9 @@ export const EXPLAINERS = {
         label: "Power, utilities and energy",
         tone: "navy",
         entries: [
-          { name: "TGNPDCL", text: "State discom · ECC to RISE with S/4HANA" },
-          { name: "APTRANSCO", text: "Transmission · three-year onsite AMS" },
-          { name: "Delhi Transco", text: "Transmission · full-estate AMS" },
+          { name: "TGNPDCL", text: "State discom · ECC to RISE with S/4HANA", href: "/case-studies/tgnpdcl/" },
+          { name: "APTRANSCO", text: "Transmission · three-year onsite AMS", href: "/case-studies/aptransco/" },
+          { name: "Delhi Transco", text: "Transmission · full-estate AMS", href: "/case-studies/delhi-transco/" },
           { name: "POWERGRID", text: "Maharatna PSU · SuccessFactors succession" },
           { name: "A global energy major", text: "Global template · 126 plants, 26 countries" },
         ],
@@ -944,10 +944,22 @@ export const EXPLAINERS = {
         entries: [
           { name: "NMDC Limited", text: "Iron ore, Navratna · S/4HANA and AMS" },
           { name: "NMDC Steel", text: "Integrated steel · S/4HANA" },
-          { name: "NALCO", text: "Aluminium, Navratna · Plant Maintenance, 13 months" },
-          { name: "Welspun Group", text: "Line pipes and textiles · Analytics Cloud" },
-          { name: "Triveni Turbines", text: "Steam turbines · ECC to RISE in five months" },
-          { name: "Wipro Infrastructure Engineering", text: "Water and EPC · greenfield S/4HANA, nine modules" },
+          { name: "NALCO", text: "Aluminium, Navratna · Plant Maintenance, 13 months", href: "/case-studies/nalco/" },
+          {
+            name: "Welspun Group",
+            text: "Line pipes and textiles · Analytics Cloud",
+            href: "/case-studies/welspun-group/",
+          },
+          {
+            name: "Triveni Turbines",
+            text: "Steam turbines · ECC to RISE in five months",
+            href: "/case-studies/triveni-turbines/",
+          },
+          {
+            name: "Wipro Infrastructure Engineering",
+            text: "Water and EPC · greenfield S/4HANA, nine modules",
+            href: "/case-studies/wipro-infrastructure-engineering/",
+          },
         ],
       },
       {
@@ -956,9 +968,13 @@ export const EXPLAINERS = {
         entries: [
           { name: "Hero MotoCorp", text: "Two-wheelers · SuccessFactors, 14,000 staff" },
           { name: "Bata India", text: "Footwear retail · SuccessFactors in six months" },
-          { name: "Varun Beverages", text: "Beverages · Ariba across 14 countries" },
-          { name: "WayCool Foods", text: "Agri-commerce · RISE in eight weeks" },
-          { name: "VAHDAM India", text: "Tea · GROW with SAP, one year" },
+          {
+            name: "Varun Beverages",
+            text: "Beverages · Ariba across 14 countries",
+            href: "/case-studies/varun-beverages/",
+          },
+          { name: "WayCool Foods", text: "Agri-commerce · RISE in eight weeks", href: "/case-studies/waycool-foods/" },
+          { name: "VAHDAM India", text: "Tea · GROW with SAP, one year", href: "/case-studies/vahdam-india/" },
         ],
       },
       {
@@ -966,7 +982,11 @@ export const EXPLAINERS = {
         tone: "plain",
         entries: [
           { name: "Transnet SOC Ltd", text: "State freight, ports and pipelines · ECC 6.0 to S/4HANA on RISE" },
-          { name: "Kenya Railways Corporation", text: "State rail · greenfield SAP ECC, ten months" },
+          {
+            name: "Kenya Railways Corporation",
+            text: "State rail · greenfield SAP ECC, ten months",
+            href: "/case-studies/kenya-railways/",
+          },
           { name: "CEDA, Botswana", text: "Development finance · ECC 6.0 to S/4HANA on RISE" },
         ],
       },
@@ -974,12 +994,20 @@ export const EXPLAINERS = {
         label: "Technology, telecom and services",
         tone: "plain",
         entries: [
-          { name: "Proximus", text: "Belgian telecoms · S/4HANA Public Cloud, IFRS 15" },
+          {
+            name: "Proximus",
+            text: "Belgian telecoms · S/4HANA Public Cloud, IFRS 15",
+            href: "/case-studies/proximus-nxt/",
+          },
           { name: "Tredence", text: "Data science · SuccessFactors, seven countries" },
           { name: "Livspace", text: "Digital design · SuccessFactors and Concur" },
           { name: "AVASO Technology", text: "Global IT services · GROW, RISE and SuccessFactors" },
-          { name: "An EdTech unicorn", text: "Education · GROW with SAP" },
-          { name: "A global engineering consultancy", text: "Infrastructure · GROW, SuccessFactors and C4C" },
+          { name: "An EdTech unicorn", text: "Education · GROW with SAP", href: "/case-studies/edtech-unicorn/" },
+          {
+            name: "A global engineering consultancy",
+            text: "Infrastructure · GROW, SuccessFactors and C4C",
+            href: "/case-studies/global-engineering-consultancy/",
+          },
         ],
       },
     ],
