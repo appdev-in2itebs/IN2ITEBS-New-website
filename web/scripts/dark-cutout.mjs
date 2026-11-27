@@ -29,7 +29,12 @@ const { width: W, height: H } = info;
 
 // Background field: median of small corner patches.
 const samples = [];
-for (const [cx, cy] of [[0, 0], [W - 12, 0], [0, H - 12], [W - 12, H - 12]])
+for (const [cx, cy] of [
+  [0, 0],
+  [W - 12, 0],
+  [0, H - 12],
+  [W - 12, H - 12],
+])
   for (let y = cy; y < cy + 12; y++)
     for (let x = cx; x < cx + 12; x++) {
       const i = (y * W + x) * 3;
@@ -39,17 +44,21 @@ const med = (k) => samples.map((s) => s[k]).sort((a, b) => a - b)[samples.length
 const field = [med(0), med(1), med(2)];
 
 // Colour distance: below LO is background, above HI is solid object (tunable per image).
-const LO = Number(loArg ?? 14), HI = Number(hiArg ?? 34);
+const LO = Number(loArg ?? 14),
+  HI = Number(hiArg ?? 34);
 
 // Pass 1: per-pixel "looks like background" (close to the field colour, or a grey shadow on it).
 const soft = new Float32Array(W * H); // 0 = background, 1 = object
 const bgLike = new Uint8Array(W * H);
 for (let p = 0; p < W * H; p++) {
   const i = p * 3;
-  const r = data[i], g = data[i + 1], b = data[i + 2];
+  const r = data[i],
+    g = data[i + 1],
+    b = data[i + 2];
   const d = Math.hypot(r - field[0], g - field[1], b - field[2]);
   // A shadow on the field is the field colour, only darker and unsaturated.
-  const lum = (r + g + b) / 3, flum = (field[0] + field[1] + field[2]) / 3;
+  const lum = (r + g + b) / 3,
+    flum = (field[0] + field[1] + field[2]) / 3;
   const chroma = Math.max(r, g, b) - Math.min(r, g, b);
   const shadow = lum < flum && chroma < 16 && d < 70;
   soft[p] = shadow ? 0 : d <= LO ? 0 : d >= HI ? 1 : (d - LO) / (HI - LO);
@@ -59,7 +68,8 @@ for (let p = 0; p < W * H; p++) {
 // the object (a white card face, a panel, the glass of an hourglass) stay solid.
 const outside = new Uint8Array(W * H);
 const queue = new Int32Array(W * H);
-let head = 0, tail = 0;
+let head = 0,
+  tail = 0;
 const seed = (p) => {
   if (bgLike[p] && !outside[p]) {
     outside[p] = 1;
@@ -76,7 +86,8 @@ for (let y = 0; y < H; y++) {
 }
 while (head < tail) {
   const p = queue[head++];
-  const x = p % W, y = (p / W) | 0;
+  const x = p % W,
+    y = (p / W) | 0;
   if (x > 0) seed(p - 1);
   if (x < W - 1) seed(p + 1);
   if (y > 0) seed(p - W);
@@ -84,7 +95,8 @@ while (head < tail) {
 }
 const out = Buffer.alloc(W * H * 4);
 for (let p = 0; p < W * H; p++) {
-  const i = p * 3, o = p * 4;
+  const i = p * 3,
+    o = p * 4;
   out[o] = data[i];
   out[o + 1] = data[i + 1];
   out[o + 2] = data[i + 2];
