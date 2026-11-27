@@ -577,7 +577,7 @@ export const imageLicences: ImageLicence[] = [
     file: "public/hero/service-converged-pulse.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
-    reference: "firefly-image5-2026-11-26-spec63-17 (local 4x enlargement; Firefly Upscaler pending)",
+    reference: "firefly-image5-2026-11-26-spec63-17 (Firefly Upscaler 4x)",
     acquired: "2026-11-26",
     depicts: "Concentric navy and blue rings radiating evenly outward from a single bright core",
     aiGenerated: true,
