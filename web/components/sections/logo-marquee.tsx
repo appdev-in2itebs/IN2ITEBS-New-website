@@ -21,18 +21,20 @@ const MAX_W = 184;
  *  little (within 16%), so a black plate and a pale wordmark feel equally present. */
 const MEDIAN_INK = 0.19;
 
-function opticalSize(w: number, h: number, ink: number) {
+function opticalSize(w: number, h: number, ink: number, native: number) {
   const ratio = w / h;
   const weight = Math.min(1.15, Math.max(0.84, Math.pow(MEDIAN_INK / Math.max(ink, 0.01), 0.22)));
   let height = Math.sqrt(AREA / ratio) * weight;
   height = Math.min(height, MAX_H, MAX_W / ratio);
+  // An image file is never shown taller than its source: stretching past that only smudges it.
+  if (native > 0) height = Math.min(height, native);
   return { width: Math.round(height * ratio), height: Math.round(height) };
 }
 
 function RibbonLogo({ client }: { client: Client }) {
   const art = ribbonLogos[client.slug];
   if (!art) return <ClientLogo client={client} className="h-9 max-w-[112px] md:h-11 md:max-w-[148px]" />;
-  const size = opticalSize(art.w, art.h, art.ink);
+  const size = opticalSize(art.w, art.h, art.ink, art.native);
   const {
     props: { src, srcSet },
   } = getImageProps({ src: art.src, alt: client.name, width: size.width * 2, height: size.height * 2 });
