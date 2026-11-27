@@ -37,12 +37,17 @@ tiles. On the far left and right edges, translucent glass modules rise slowly fr
 dock into the grid, linked to the core by thin flowing streams of light. The centre and upper half
 of the frame stay dark, calm and empty. *(+ shared ending)*
 
-## 3 · applications: Living blueprint
-Slow, elegant 3D motion graphic for a corporate website background. A faint blueprint grid on a
-deep navy background. Along the left and right edges, translucent glass interface panels with
-blank rounded bars and blocks draw their outlines in thin glowing lines, assemble, and connect to
-each other with dotted light paths that carry small moving points of light. The centre of the
-frame stays dark, calm and empty. *(+ shared ending)*
+## 3 · applications: App constellation (owner's choice, 27 Nov, from four options)
+Slow, elegant 3D motion graphic for a corporate website background. A gentle constellation of many
+small translucent frosted-glass application cards (blank rounded panels, toggle switches, tiny bar
+charts and circular dials, with no writing) floats at different depths in a deep navy space,
+drifting very slowly towards the camera with soft bokeh in the distance. The cards gather in the far
+left and far right of the frame, small and refined, a few connected by fine glowing lines of light
+with tiny pulses moving along them. The centre of the frame and the top left corner stay dark, calm
+and empty. *(+ shared ending, plus "no large objects near the camera")*
+
+Source: `assets/firefly/hero-video/ff-hero-applications-a.mp4`. The other options tried (v1–v4 and
+b–d) are kept beside it.
 
 ## 4 · platforms: Connected orbits
 Slow, elegant 3D motion graphic for a corporate website background. Three wide, tilted elliptical
