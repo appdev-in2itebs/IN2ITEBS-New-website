@@ -385,7 +385,7 @@ export const imageLicences: ImageLicence[] = [
     file: "public/hero/case-study-state-mining-undertaking-east-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
-    reference: "firefly-image5-2026-11-26-spec63-58 (local 4x enlargement; Firefly Upscaler pending)",
+    reference: "firefly-image5-2026-11-26-spec63-58 (Firefly Upscaler 4x)",
     acquired: "2026-11-26",
     depicts: "A graded stack of plates narrowing as it rises, each layer a different tone of navy and blue",
     aiGenerated: true,
