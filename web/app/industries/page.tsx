@@ -161,8 +161,9 @@ export default function IndustriesPage() {
       {/* INDUSTRIES WE SERVE */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Industries we serve"
               lead="Deep delivery experience across each sector — every card links to a dedicated page showing that industry's overview, capabilities and clients."
             >
@@ -196,8 +197,9 @@ export default function IndustriesPage() {
       {/* HOW EACH INDUSTRY PAGE WORKS */}
       <Section tone="white">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="How each page works"
               lead="Every industry page follows the same structure, so you can move between sectors and find what you need in the same place."
             >

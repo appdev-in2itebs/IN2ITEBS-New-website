@@ -99,8 +99,9 @@ export default async function ContactPage() {
       {/* GLOBAL ENTITIES */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Global entities"
               lead="Registered entities and delivery presence across the Middle East, Africa, South-East Asia and North America."
             >

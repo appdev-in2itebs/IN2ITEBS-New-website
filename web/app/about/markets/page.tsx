@@ -141,7 +141,7 @@ export default function MarketsPage() {
         heading="Answered here rather than in a clarification round"
         tone="canvas"
       >
-        <div className="max-w-measure space-y-4 text-foreground-muted">
+        <div className="text-foreground-muted lg:columns-2 lg:gap-x-12 [&>*]:mb-5 [&>*]:break-inside-avoid">
           <p>
             Where your data sits, and which law governs it, is a procurement question in every market we work in. We
             would rather answer it on a web page than in the third round of a tender.

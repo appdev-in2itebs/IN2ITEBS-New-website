@@ -92,8 +92,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       {/* FACTS STRIP */}
       <Section tone="white">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="At a glance"
               lead="The shape of the engagement — industry, SAP path, scale and reach."
             >
@@ -116,11 +117,13 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       {/* THE CHALLENGE */}
       <Section tone="white">
         <Container>
-          <Reveal className="max-w-3xl">
-            <SectionHeading eyebrow="The challenge">
+          <Reveal className="grid gap-6 lg:grid-cols-12 lg:gap-x-12">
+            <SectionHeading eyebrow="The challenge" className="lg:col-span-5">
               Where they <Accent>started</Accent>.
             </SectionHeading>
-            <p className="mt-6 text-lg leading-relaxed text-foreground-muted md:text-xl">{study.scenario}</p>
+            <p className="text-lg leading-relaxed text-foreground-muted md:text-xl lg:col-span-7 lg:pt-10">
+              {study.scenario}
+            </p>
           </Reveal>
         </Container>
       </Section>
@@ -146,8 +149,9 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       {/* WHAT WE DELIVERED */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="What we delivered"
               lead="The outcomes we built — and the SAP components that delivered them."
             >

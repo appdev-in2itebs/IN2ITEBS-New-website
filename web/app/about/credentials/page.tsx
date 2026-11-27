@@ -228,7 +228,7 @@ export default function CredentialsPage() {
       </V2Section>
 
       <V2Section id="not-claimed" eyebrow="What is not here" heading="What we do not claim" tone="canvas">
-        <div className="max-w-measure space-y-5 text-foreground-muted">
+        <div className="text-foreground-muted lg:columns-2 lg:gap-x-12 [&>*]:mb-5 [&>*]:break-inside-avoid">
           <p>
             <span className="text-foreground">We do not claim an SAP PCE partnership.</span> It appeared in the footer
             credential strip and on this page until 12 November 2026, when it was withdrawn: the designation could not
@@ -252,7 +252,7 @@ export default function CredentialsPage() {
         heading="And where we stand on everything else"
         tone="subtle"
       >
-        <div className="max-w-measure space-y-5 text-foreground-muted">
+        <div className="text-foreground-muted lg:columns-2 lg:gap-x-12 [&>*]:mb-5 [&>*]:break-inside-avoid">
           <p>
             Credentials say what a third party has assessed. They do not say what we can actually build, which varies by
             area and is a separate question with a separate page.

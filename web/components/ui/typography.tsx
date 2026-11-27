@@ -56,7 +56,13 @@ export function Lead({ children, className, onDark }: { children: ReactNode; cla
   );
 }
 
-/** Eyebrow + headline + optional lead, composed. */
+/**
+ * Eyebrow + headline + optional lead, composed.
+ *
+ * `split` (owner's review, 27 Nov 2026: no empty right half): on large screens the headline takes
+ * the left of the row and the lead the right, bottom-aligned, so a section opens across the full
+ * width instead of in a narrow column on the left. Below `lg` it stacks as before.
+ */
 export function SectionHeading({
   eyebrow,
   children,
@@ -65,6 +71,7 @@ export function SectionHeading({
   onDark,
   level = 2,
   plain,
+  split,
 }: {
   eyebrow?: string;
   children: ReactNode;
@@ -73,7 +80,27 @@ export function SectionHeading({
   onDark?: boolean;
   level?: 1 | 2 | 3;
   plain?: boolean;
+  split?: boolean;
 }) {
+  if (split && lead) {
+    return (
+      <div className={cn("grid gap-5 lg:grid-cols-12 lg:items-end lg:gap-x-12", className)}>
+        <div className="flex flex-col gap-5 lg:col-span-7">
+          {eyebrow ? <Eyebrow onDark={onDark}>{eyebrow}</Eyebrow> : null}
+          <Headline
+            level={level}
+            plain={plain}
+            className={level === 3 ? (onDark ? "text-on-brand" : "text-foreground") : undefined}
+          >
+            {children}
+          </Headline>
+        </div>
+        <div className="lg:col-span-5">
+          <Lead onDark={onDark}>{lead}</Lead>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       {eyebrow ? <Eyebrow onDark={onDark}>{eyebrow}</Eyebrow> : null}

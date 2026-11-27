@@ -51,8 +51,9 @@ export default function CareersPage() {
       {/* OUR CULTURE */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Our culture"
               lead="Our performance-oriented culture and responsible approach are the foundations of our success. We keep work appealing and let people find their own rhythm — because creativity, dedication and performance are what our business depends on. We encourage achievement through collaboration and innovation."
             >

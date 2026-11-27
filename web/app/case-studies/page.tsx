@@ -71,8 +71,9 @@ export default function CaseStudiesPage() {
       {/* CASE STUDY GRID */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Case studies"
               lead="Filter by industry and SAP path to see how we have delivered — the scenario, the solution and what set our delivery apart."
             >
@@ -86,23 +87,26 @@ export default function CaseStudiesPage() {
       {/* NDA NOTE */}
       <Section tone="white">
         <Container>
-          <Reveal className="max-w-2xl">
-            <SectionHeading
-              eyebrow="A note on confidentiality"
-              lead="Several of our clients are shown anonymised, with no client name or logo. Their full stories — including named references and detailed outcomes — are available under NDA."
-            >
+          <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end lg:gap-x-12">
+            <SectionHeading eyebrow="A note on confidentiality" className="lg:col-span-6">
               Discretion, by <Accent>default</Accent>.
             </SectionHeading>
-            <p className="mt-6 text-[0.95rem] leading-relaxed text-foreground-muted">
-              To request a named reference or the full version of an anonymised study, get in touch via our{" "}
-              <Link
-                href="/contact/"
-                className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
-              >
-                contact page
-              </Link>
-              .
-            </p>
+            <div className="space-y-4 lg:col-span-6">
+              <p className="text-lg leading-relaxed text-foreground-muted">
+                Several of our clients are shown anonymised, with no client name or logo. Their full stories — including
+                named references and detailed outcomes — are available under NDA.
+              </p>
+              <p className="text-[0.95rem] leading-relaxed text-foreground-muted">
+                To request a named reference or the full version of an anonymised study, get in touch via our{" "}
+                <Link
+                  href="/contact/"
+                  className="inline-block min-h-6 font-semibold text-action underline-offset-4 hover:underline"
+                >
+                  contact page
+                </Link>
+                .
+              </p>
+            </div>
           </Reveal>
         </Container>
       </Section>

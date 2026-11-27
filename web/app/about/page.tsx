@@ -81,8 +81,9 @@ export default async function AboutPage() {
       {/* WHY THIS STRUCTURE WINS */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Why this structure wins"
               lead="Each pillar has distinct ownership, but a common delivery and governance foundation. That is what turns three capabilities into one converged enterprise."
             >
@@ -96,8 +97,9 @@ export default async function AboutPage() {
       {/* GLOBAL FOOTPRINT — 4 delivery centres + 6 sales offices */}
       <Section tone="white" id="footprint">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Global footprint"
               lead="Four India delivery centres anchor follow-the-sun delivery, with sales offices placed close to clients across South Asia, South-East Asia, the Middle East and Africa."
             >
@@ -138,8 +140,9 @@ export default async function AboutPage() {
           /about/credentials/. */}
       <Section tone="light">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Credentials & certifications"
               lead="Partner status and process credentials that underpin every engagement."
             >
@@ -169,8 +172,9 @@ export default async function AboutPage() {
       {/* LEADERSHIP — the shared list in content/leadership.ts, also shown on the homepage. */}
       <Section tone="white" id="leadership">
         <Container>
-          <Reveal className="mb-12 max-w-2xl">
+          <Reveal className="mb-12">
             <SectionHeading
+              split
               eyebrow="Leadership"
               lead="Founder-led, with leadership that has built and scaled enterprise practices across India, the Middle East, Africa and South-East Asia."
             >

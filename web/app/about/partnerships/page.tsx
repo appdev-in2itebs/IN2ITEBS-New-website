@@ -119,7 +119,7 @@ export default function PartnershipsPage() {
       </V2Overview>
 
       <V2Section id="cloud" eyebrow="Cloud" heading="Where RISE runs" tone="subtle">
-        <div className="max-w-measure space-y-4 text-foreground-muted">
+        <div className="text-foreground-muted lg:columns-2 lg:gap-x-12 [&>*]:mb-5 [&>*]:break-inside-avoid">
           <p>
             RISE with SAP is delivered on{" "}
             <span className="text-foreground">Microsoft Azure, Amazon Web Services and Google Cloud</span>. The
@@ -152,7 +152,7 @@ export default function PartnershipsPage() {
         heading="The systems we integrate to, and do not sell"
         tone="subtle"
       >
-        <div className="max-w-measure space-y-4 text-foreground-muted">
+        <div className="text-foreground-muted lg:columns-2 lg:gap-x-12 [&>*]:mb-5 [&>*]:break-inside-avoid">
           <p>
             A utility never runs on SAP alone, and neither does a mine. We integrate, vendor-neutrally, to geographic
             information systems, metering head-ends and meter data management, control and outage management systems,
@@ -168,7 +168,7 @@ export default function PartnershipsPage() {
       </V2Section>
 
       <V2Section id="alliances" eyebrow="Delivery alliances" heading="Working alongside other firms" tone="canvas">
-        <div className="max-w-measure space-y-4 text-foreground-muted">
+        <div className="text-foreground-muted lg:columns-2 lg:gap-x-12 [&>*]:mb-5 [&>*]:break-inside-avoid">
           <p>
             We co-deliver with global and regional system integrators, as prime contractor or as the specialist partner
             inside somebody else&rsquo;s programme. Both are normal for us and we are comfortable in either seat.

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import { primaryNav } from "@/content/nav";
-import { serviceGroups, serviceMenuColumns } from "@/content/legacy-services";
+import { serviceGroups } from "@/content/legacy-services";
 import type { NavItem } from "@/content/types";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
@@ -446,32 +446,67 @@ function GroupItems({ items, onNavigate, level = 0 }: { items: NavItem[]; onNavi
   );
 }
 
-/** The Services mega-menu: four columns of group headings, each ruled off, with the group's items under it. */
+/**
+ * The Services mega-menu, across the full width of the panel (owner's review, 27 Nov 2026: no
+ * empty right half). Twelve columns: Enterprise Platforms takes six, its eleven services in two
+ * columns; Digital, Data & AI takes three; Advisory takes the last three with a pointer for a
+ * visitor who does not yet know which service they need. Every group shows its one-line summary
+ * under the heading, so the panel reads evenly from left to right.
+ */
 function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
+  const group = (slug: string) => serviceGroups.find((candidate) => candidate.slug === slug);
+  const platforms = group("enterprise-platforms");
+  const digital = group("digital-data-ai");
+  const advisory = group("advisory");
+  const heading = (g: NonNullable<ReturnType<typeof group>>) => (
+    <>
+      <Link
+        onClick={onNavigate}
+        href={g.href}
+        className="flex min-h-10 items-center justify-between gap-3 border-b border-border-subtle pb-1.5 text-base font-semibold text-foreground transition-colors hover:text-action"
+      >
+        {g.name}
+        <ChevronRight aria-hidden size={16} className="shrink-0 text-foreground-muted" />
+      </Link>
+      <p className="mt-2 text-[0.82rem] leading-relaxed text-foreground-muted">{g.blurb}</p>
+    </>
+  );
   return (
-    <div className="grid grid-cols-4 gap-x-8 gap-y-7">
-      {serviceMenuColumns.map((column, index) => (
-        <div key={index} className="space-y-7">
-          {column.map((slug) => {
-            const group = serviceGroups.find((candidate) => candidate.slug === slug);
-            if (!group) return null;
-            return (
-              <div key={group.slug}>
-                <Link
-                  onClick={onNavigate}
-                  href={group.href}
-                  className="flex min-h-10 items-center border-b border-border-subtle pb-1.5 text-base font-semibold text-foreground transition-colors hover:text-action"
-                >
-                  {group.name}
-                </Link>
-                <div className="mt-2">
-                  <GroupItems items={group.items} onNavigate={onNavigate} />
-                </div>
-              </div>
-            );
-          })}
+    <div className="grid grid-cols-12 gap-x-10 gap-y-7">
+      {platforms ? (
+        <div className="col-span-6">
+          {heading(platforms)}
+          <div className="mt-3 columns-2 gap-x-10 [&_li]:break-inside-avoid">
+            <GroupItems items={platforms.items} onNavigate={onNavigate} />
+          </div>
         </div>
-      ))}
+      ) : null}
+      {digital ? (
+        <div className="col-span-3">
+          {heading(digital)}
+          <div className="mt-3">
+            <GroupItems items={digital.items} onNavigate={onNavigate} />
+          </div>
+        </div>
+      ) : null}
+      {advisory ? (
+        <div className="col-span-3 flex flex-col">
+          {heading(advisory)}
+          <div className="mt-auto rounded-feature border border-border-subtle bg-surface p-4">
+            <p className="text-sm font-semibold text-foreground">Not sure where to start?</p>
+            <p className="mt-1 text-[0.82rem] leading-relaxed text-foreground-muted">
+              Tell us what you are trying to change and we will point you to the right team.
+            </p>
+            <Link
+              onClick={onNavigate}
+              href="/contact/"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-action hover:underline"
+            >
+              Talk to us <span aria-hidden>↗</span>
+            </Link>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
