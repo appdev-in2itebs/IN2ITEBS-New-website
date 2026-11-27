@@ -147,7 +147,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
       onBlurCapture={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget as Node)) setFocused(false);
       }}
-      className="theme-on-brand relative flex min-h-[calc(100svh-var(--client-band-height))] overflow-hidden bg-brand pt-32 text-on-brand [--client-band-height:0px] md:pt-36 md:[--client-band-height:11rem]"
+      className="theme-on-brand relative flex min-h-[max(26rem,calc(100svh-var(--client-band-height)))] overflow-hidden bg-brand pt-20 text-on-brand [--client-band-height:10rem] md:pt-24 md:[--client-band-height:9.25rem]"
     >
       {/*
         THE GROUND, WHICH USED TO BE FORTY-TWO MEGABYTES OF VIDEO.
@@ -178,7 +178,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
 
       <HeroChrome />
 
-      <Container className="relative z-10 flex flex-1 flex-col justify-center gap-10 py-8 md:py-10">
+      <Container className="relative z-10 flex flex-1 flex-col justify-center gap-10 py-4 md:py-6">
         <div className="mx-auto grid w-full max-w-[56rem] text-center">
           {slides.map((item, index) => {
             const isActive = index === active;
@@ -214,7 +214,7 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
 
                   <Heading
                     id={index === 0 ? "home-hero-title" : undefined}
-                    className="heading-plain mx-auto mt-6 max-w-[22ch] text-balance text-[clamp(2.75rem,5vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-on-brand"
+                    className="heading-plain mx-auto mt-[clamp(0.75rem,2.5svh,1.5rem)] max-w-[22ch] text-balance text-[clamp(2rem,min(5vw,7.5svh),4.75rem)] font-semibold leading-[0.98] tracking-[-0.05em] text-on-brand"
                   >
                     {item.heading.map((line, lineIndex) => (
                       <motion.span
@@ -229,14 +229,14 @@ export function BrandHero({ slides = homeHeroSlides }: { slides?: HeroSlide[] })
 
                   <motion.p
                     variants={enter("bottom")}
-                    className="mx-auto mt-7 max-w-[56ch] text-lg leading-relaxed text-on-brand/85 md:text-xl"
+                    className="mx-auto mt-[clamp(0.75rem,2.5svh,1.75rem)] max-w-[56ch] text-base leading-relaxed text-on-brand/85 md:text-[clamp(1rem,2.4svh,1.25rem)]"
                   >
                     {item.body}
                   </motion.p>
 
                   <motion.div
                     variants={enter("ctaRow")}
-                    className="mt-10 flex flex-wrap items-center justify-center gap-4"
+                    className="mt-[clamp(1rem,3.5svh,2.5rem)] flex flex-wrap items-center justify-center gap-4"
                   >
                     <motion.div variants={enter("ctaLeft")}>
                       <Button href={item.cta.href} withArrow>
