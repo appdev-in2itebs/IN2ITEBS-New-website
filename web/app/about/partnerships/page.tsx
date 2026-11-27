@@ -22,17 +22,20 @@ export const metadata = pageMetadata("/about/partnerships/", {
 const platforms = [
   {
     partner: "SAP",
+    logo: "/logos/partners/sap.svg",
     tier: "Gold Partner · RISE Partnership (BTaaS) · Co-Innovation Partner",
     delivers:
       "RISE with SAP · S/4HANA Cloud Public Edition · Business Technology Platform · SuccessFactors · Ariba · Analytics Cloud · Signavio · Concur",
   },
   {
     partner: "Salesforce",
+    logo: "/logos/partners/salesforce.svg",
     tier: "Partner, India",
     delivers: "Sales Cloud, Service Cloud and Platform — implementation, integration and support",
   },
   {
     partner: "Workday",
+    logo: "/logos/partners/workday.svg",
     tier: "Partner, India",
     delivers: "HCM and Financials — implementation, integration and support",
   },
@@ -95,7 +98,19 @@ export default function PartnershipsPage() {
         <div className="mt-10 space-y-5">
           {platforms.map((p) => (
             <div key={p.partner} className="rounded-card border border-border-subtle bg-surface p-7">
-              <h3 className="font-display text-h3 text-foreground">{p.partner}</h3>
+              {/* Owner, 26 Nov 2026: each platform's mark at a readable size, to the right of its name. */}
+              <div className="flex items-center justify-between gap-6">
+                <h3 className="font-display text-h3 text-foreground">{p.partner}</h3>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={p.logo}
+                  alt={`${p.partner} logo`}
+                  width={160}
+                  height={64}
+                  loading="lazy"
+                  className="h-12 w-auto max-w-[10rem] shrink-0 object-contain md:h-14"
+                />
+              </div>
               <p className="mt-2 text-sm uppercase tracking-label text-foreground-muted">{p.tier}</p>
               <p className="mt-3 text-foreground-muted">{p.delivers}</p>
             </div>

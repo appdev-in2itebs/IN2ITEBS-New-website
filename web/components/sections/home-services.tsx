@@ -155,6 +155,15 @@ export function HomeServices() {
                       <HeroFigure figureKey={`services/${service.slug}`} className="absolute inset-0" />,
                       service.name,
                     )}
+                    {service.brand ? (
+                      <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-2 rounded-md border border-border-subtle bg-logo-surface px-2.5 py-1.5 shadow-sm">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={service.brand.logo} alt="SAP" width={46} height={23} className="h-[1.4rem] w-auto" />
+                        <span className="text-[0.78rem] font-semibold leading-none tracking-[-0.01em] text-logo-foreground">
+                          {service.brand.product}
+                        </span>
+                      </span>
+                    ) : null}
                   </span>
 
                   <span className="flex flex-1 flex-col p-5">

@@ -27,7 +27,15 @@ export type ServiceCard = {
   href: string;
   /** Describes the photograph for anyone who cannot see it; several carry burnt-in wordmarks. */
   heroImage?: string;
+  /**
+   * The vendor's own mark for a service we deliver as their partner (owner, 26 Nov 2026: "for SAP
+   * services put SAP respective logos ... this we are entitled to", as an SAP Gold Partner). SAP's
+   * partner branding pairs the SAP logo with the product name, so the card shows that lockup.
+   */
+  brand?: { logo: string; product: string };
 };
+
+const SAP_LOGO = "/logos/partners/sap.svg";
 
 /**
  * NOTE ON `href` VS `slug`, 18 November 2026.
@@ -46,6 +54,7 @@ export const services: ServiceCard[] = [
     slug: "rise-with-sap",
     heroImage: "/hero/service-rise-s4hana.webp",
     name: "RISE with SAP",
+    brand: { logo: SAP_LOGO, product: "RISE with SAP" },
     blurb:
       "SAP S/4HANA is a real-time enterprise resource management suite for digital business, built on the in-memory SAP HANA platform and deployable on-premise, in the cloud or hybrid.",
     href: "/services/rise-s4hana/",
@@ -54,6 +63,7 @@ export const services: ServiceCard[] = [
     slug: "sap-successfactors",
     heroImage: "/hero/service-successfactors.webp",
     name: "SAP SuccessFactors",
+    brand: { logo: SAP_LOGO, product: "SuccessFactors" },
     blurb:
       "The SAP SuccessFactors HXM Suite provides cloud-based solutions for core HR and payroll, talent management and the everyday experience of working in your organisation.",
     href: "/services/successfactors/",
@@ -62,6 +72,7 @@ export const services: ServiceCard[] = [
     slug: "sap-sac",
     heroImage: "/hero/service-data-engineering.webp",
     name: "SAP SAC",
+    brand: { logo: SAP_LOGO, product: "Analytics Cloud" },
     blurb:
       "SAP Analytics Cloud combines business intelligence, enterprise planning and augmented analytics in one solution on SAP Business Technology Platform, so reporting and planning stop living apart.",
     href: "/services/data-engineering-analytics/",
@@ -70,6 +81,7 @@ export const services: ServiceCard[] = [
     slug: "grow-with-sap",
     heroImage: "/hero/service-converged-pulse.webp",
     name: "Grow with SAP",
+    brand: { logo: SAP_LOGO, product: "GROW with SAP" },
     blurb:
       "S/4HANA Public Cloud on pre-configured industry processes — a fit-to-standard path for the mid-market and for net-new business units, on a quarterly release cadence.",
     href: "/services/converged-pulse/",

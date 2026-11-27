@@ -30,23 +30,23 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
     // null as an emergency brake; now that client names and logos are approved, the block comes
     // back and LogoMarquee itself honours content/compliance.ts.
     clients: (
-      <section
-        aria-label="Selected clients"
-        className="relative border-b border-border-subtle bg-surface py-8 md:py-10"
-      >
+      // 26 Nov 2026 (owner): less white space, larger logos, and the band visible on the first
+      // screen without scrolling. The label and the partners link share one row, and the hero
+      // leaves room for this band (brand-hero.tsx, --client-band-height).
+      <section aria-label="Selected clients" className="relative border-b border-border-subtle bg-surface py-3 md:py-4">
         <Container>
-          <p className="mb-6 text-xs font-semibold uppercase tracking-[0.16em] text-gold">
-            Trusted in complex operating environments
-          </p>
-          <LogoMarquee clients={clients} />
-          <div className="mt-8 flex flex-wrap items-center justify-end gap-4">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">
+              Trusted in complex operating environments
+            </p>
             <Link
               href="/about/partnerships/"
-              className="inline-flex min-h-11 items-center text-sm font-semibold text-gold underline decoration-gold/40 underline-offset-4"
+              className="inline-flex min-h-8 items-center text-sm font-semibold text-gold underline decoration-gold/40 underline-offset-4"
             >
               Partners &amp; technology ecosystem
             </Link>
           </div>
+          <LogoMarquee clients={clients} />
         </Container>
       </section>
     ),

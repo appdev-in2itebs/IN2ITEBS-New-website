@@ -29,9 +29,9 @@ export function LogoMarquee({ clients, duration = clients.length * 2.6 }: { clie
                   key={client.slug}
                   data-client={client.slug}
                   role={copy === 0 ? "listitem" : undefined}
-                  className="group/logo flex h-20 w-44 shrink-0 items-center justify-center rounded-surface border border-glass-line/40 bg-logo-surface px-4 transition-[box-shadow] duration-300 hover:shadow-[0_0_0_1px_oklch(var(--color-gold-soft)/0.9)]"
+                  className="group/logo flex h-24 w-56 shrink-0 items-center justify-center rounded-surface border border-glass-line/40 bg-logo-surface px-4 transition-[box-shadow] duration-300 hover:shadow-[0_0_0_1px_oklch(var(--color-gold-soft)/0.9)]"
                 >
-                  <ClientLogo client={client} />
+                  <ClientLogo client={client} className="h-14 max-w-[190px]" />
                 </div>
               ))}
             </div>
