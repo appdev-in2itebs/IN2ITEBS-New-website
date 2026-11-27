@@ -33,7 +33,10 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
       // 26 Nov 2026 (owner): less white space, larger logos, and the band visible on the first
       // screen without scrolling. The label and the partners link share one row, and the hero
       // leaves room for this band (brand-hero.tsx, --client-band-height).
-      <section aria-label="Selected clients" className="relative border-b border-border-subtle bg-surface py-2 md:py-3">
+      <section
+        aria-label="Selected clients"
+        className="relative border-b border-border-subtle bg-surface pb-2 pt-1.5 md:pb-3 md:pt-2"
+      >
         <Container>
           <div className="mb-2 flex flex-wrap items-center justify-between gap-x-6 gap-y-0">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">
