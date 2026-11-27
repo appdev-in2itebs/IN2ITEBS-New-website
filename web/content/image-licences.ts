@@ -395,7 +395,7 @@ export const imageLicences: ImageLicence[] = [
     file: "public/hero/case-study-state-power-distribution-south-india.webp",
     source: "licensed-generative",
     provider: "Adobe Firefly",
-    reference: "firefly-image5-2026-11-26-spec63-48 (local 4x enlargement; Firefly Upscaler pending)",
+    reference: "firefly-image5-2026-11-26-spec63-48 (Firefly Upscaler 4x)",
     acquired: "2026-11-26",
     depicts:
       "A branching grid of steel and pale blue lines running from one navy source on the left to many endpoints on the right",
