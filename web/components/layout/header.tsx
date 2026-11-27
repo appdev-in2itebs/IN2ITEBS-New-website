@@ -449,9 +449,7 @@ function GroupItems({ items, onNavigate, level = 0 }: { items: NavItem[]; onNavi
 /**
  * The Services mega-menu, across the full width of the panel (owner's review, 27 Nov 2026: no
  * empty right half). Twelve columns, in the owner's order: Enterprise Platforms takes six, its
- * eleven services in two columns; Advisory takes three, with a pointer for a visitor who does not
- * yet know which service they need; Digital, Data & AI takes the last three. Every group shows its one-line summary
- * under the heading, so the panel reads evenly from left to right.
+ * eleven services in two columns; Advisory takes three; Digital, Data & AI takes the last three.
  */
 function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
   const group = (slug: string) => serviceGroups.find((candidate) => candidate.slug === slug);
@@ -468,7 +466,6 @@ function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
         {g.name}
         <ChevronRight aria-hidden size={16} className="shrink-0 text-foreground-muted" />
       </Link>
-      <p className="mt-2 text-[0.82rem] leading-relaxed text-foreground-muted">{g.blurb}</p>
     </>
   );
   return (
@@ -481,24 +478,7 @@ function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
           </div>
         </div>
       ) : null}
-      {advisory ? (
-        <div className="col-span-3 flex flex-col">
-          {heading(advisory)}
-          <div className="mt-auto rounded-feature border border-border-subtle bg-surface p-4">
-            <p className="text-sm font-semibold text-foreground">Not sure where to start?</p>
-            <p className="mt-1 text-[0.82rem] leading-relaxed text-foreground-muted">
-              Tell us what you are trying to change and we will point you to the right team.
-            </p>
-            <Link
-              onClick={onNavigate}
-              href="/contact/"
-              className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-action hover:underline"
-            >
-              Talk to us <span aria-hidden>↗</span>
-            </Link>
-          </div>
-        </div>
-      ) : null}
+      {advisory ? <div className="col-span-3">{heading(advisory)}</div> : null}
       {digital ? (
         <div className="col-span-3">
           {heading(digital)}
