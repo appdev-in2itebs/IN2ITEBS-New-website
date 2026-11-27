@@ -448,9 +448,9 @@ function GroupItems({ items, onNavigate, level = 0 }: { items: NavItem[]; onNavi
 
 /**
  * The Services mega-menu, across the full width of the panel (owner's review, 27 Nov 2026: no
- * empty right half). Twelve columns: Enterprise Platforms takes six, its eleven services in two
- * columns; Digital, Data & AI takes three; Advisory takes the last three with a pointer for a
- * visitor who does not yet know which service they need. Every group shows its one-line summary
+ * empty right half). Twelve columns, in the owner's order: Enterprise Platforms takes six, its
+ * eleven services in two columns; Advisory takes three, with a pointer for a visitor who does not
+ * yet know which service they need; Digital, Data & AI takes the last three. Every group shows its one-line summary
  * under the heading, so the panel reads evenly from left to right.
  */
 function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
@@ -481,14 +481,6 @@ function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
           </div>
         </div>
       ) : null}
-      {digital ? (
-        <div className="col-span-3">
-          {heading(digital)}
-          <div className="mt-3">
-            <GroupItems items={digital.items} onNavigate={onNavigate} />
-          </div>
-        </div>
-      ) : null}
       {advisory ? (
         <div className="col-span-3 flex flex-col">
           {heading(advisory)}
@@ -504,6 +496,14 @@ function MegaMenu({ onNavigate }: { onNavigate: () => void }) {
             >
               Talk to us <span aria-hidden>↗</span>
             </Link>
+          </div>
+        </div>
+      ) : null}
+      {digital ? (
+        <div className="col-span-3">
+          {heading(digital)}
+          <div className="mt-3">
+            <GroupItems items={digital.items} onNavigate={onNavigate} />
           </div>
         </div>
       ) : null}
