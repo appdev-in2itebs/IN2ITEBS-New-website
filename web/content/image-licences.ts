@@ -733,6 +733,17 @@ export const imageLicences: ImageLicence[] = [
     aiGenerated: true,
     approvedBy: "Rudra Shatapathy",
   },
+  {
+    file: "public/hero/manifesto-open-cube.webp",
+    source: "licensed-generative",
+    provider: "Adobe Firefly",
+    reference: "firefly-image5-2026-11-27-claims-03 (2K, cut out solid for a navy band)",
+    acquired: "2026-11-27",
+    depicts:
+      "An open wireframe cube of thin pale-blue rods with three flat layers stacked inside, all visible from outside, sand accents at the corners",
+    aiGenerated: true,
+    approvedBy: "Rudra Shatapathy",
+  },
 ];
 
 /**

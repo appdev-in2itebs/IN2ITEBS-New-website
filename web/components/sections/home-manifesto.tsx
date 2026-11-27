@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/container";
@@ -82,19 +83,34 @@ export function HomeManifesto() {
         className="ambient-orb pointer-events-none absolute -right-20 top-10 h-[26rem] w-[26rem] rounded-full bg-gold/10 blur-[140px]"
       />
       <Container className="relative">
-        <Reveal className="max-w-[46ch]">
-          <span className="label-caps text-gold-on-brand">What only we can say</span>
-          <h2
-            id="manifesto-heading"
-            className="heading-plain mt-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-bold leading-[1.05] tracking-[-0.035em]"
-          >
-            Three claims you can check without asking us.
-          </h2>
-          <p className="mt-6 max-w-[52ch] text-base leading-relaxed text-on-brand/75">
-            Every firm in this market says it is honest. These are the three places you can test whether we are, and
-            each one links to the thing itself rather than to a page about it.
-          </p>
-        </Reveal>
+        {/* 27 Nov 2026 (owner): the empty right of the heading row carries an illustration, an open
+            cube with every layer visible from outside: nothing hidden, the point of the band.
+            Firefly Image 5, cut out solid for a navy band (scripts/dark-cutout.mjs). */}
+        <div className="grid items-center gap-10 lg:grid-cols-12">
+          <Reveal className="max-w-[46ch] lg:col-span-7">
+            <span className="label-caps text-gold-on-brand">What only we can say</span>
+            <h2
+              id="manifesto-heading"
+              className="heading-plain mt-6 font-display text-[clamp(2rem,4vw,3.4rem)] font-bold leading-[1.05] tracking-[-0.035em]"
+            >
+              Three claims you can check without asking us.
+            </h2>
+            <p className="mt-6 max-w-[52ch] text-base leading-relaxed text-on-brand/75">
+              Every firm in this market says it is honest. These are the three places you can test whether we are, and
+              each one links to the thing itself rather than to a page about it.
+            </p>
+          </Reveal>
+          <Reveal className="hidden lg:col-span-5 lg:block" delay={0.1}>
+            <Image
+              src="/hero/manifesto-open-cube.webp"
+              alt=""
+              width={949}
+              height={683}
+              sizes="(min-width: 1024px) 34vw, 0px"
+              className="mx-auto h-auto w-full max-w-[30rem] drop-shadow-[0_24px_40px_rgba(0,0,0,0.45)]"
+            />
+          </Reveal>
+        </div>
 
         {/* Three across, not two: at two columns the third claim sits alone on its own row with a
             blank beside it, which reads as a card somebody forgot to write. */}
