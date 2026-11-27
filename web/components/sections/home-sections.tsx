@@ -43,7 +43,7 @@ export function homeSections(cms: Cms): Record<HomeSection, ReactNode> {
           <div className="mb-1.5 flex items-center justify-between gap-x-6">
             <Link
               href="/case-studies/"
-              className="inline-flex min-h-7 items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-gold hover:underline hover:decoration-gold/40 hover:underline-offset-4 md:text-sm md:tracking-[0.12em]"
+              className="inline-flex min-h-7 items-center gap-1.5 text-xs font-semibold text-gold underline decoration-gold/40 underline-offset-4 md:text-sm"
             >
               <span className="sm:hidden">Our Clients</span>
               <span className="hidden sm:inline">Our Clients &amp; Their Stories</span>
